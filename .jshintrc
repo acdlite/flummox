@@ -1,0 +1,15 @@
+{
+  "indent": 2,
+  "globalstrict": true,
+  "newcap": false,
+
+  "node": true,
+  "browser": true,
+
+  "unused": "vars",
+  "esnext": true,
+
+  "globals": {
+    "Promise": true
+  }
+}
