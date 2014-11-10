@@ -66,7 +66,7 @@ var $__Object$create = Object.create;
 var $__Object$defineProperties = Object.defineProperties;
 'use strict';
 var Dispatcher = require('flux').Dispatcher;
-var EventEmitter = require('wolfy87-eventemitter');
+var EventEmitter = require('events').EventEmitter;
 var DEFAULT_FLUX_NAME = 'DEFAULT';
 
 var Flux = function() {
