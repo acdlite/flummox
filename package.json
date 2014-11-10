@@ -20,7 +20,7 @@
     "gulp-esnext": "^1.2.0"
   },
   "dependencies": {
-    "flux": "^2.0.1",
-    "wolfy87-eventemitter": "^4.2.9"
+    "events": "^1.0.2",
+    "flux": "^2.0.1"
   }
 }
