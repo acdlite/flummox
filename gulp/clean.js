@@ -2,5 +2,5 @@
 
 module.exports = function() {
   var del = require('del');
-  del(['./dist/**/*']);
+  del(['./dist/*']);
 };

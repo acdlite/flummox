@@ -10,6 +10,11 @@
   "esnext": true,
 
   "globals": {
-    "Promise": true
+    "Promise": true,
+    "jest": true,
+    "describe": true,
+    "beforeEach": true,
+    "it": true,
+    "expect": true
   }
 }
