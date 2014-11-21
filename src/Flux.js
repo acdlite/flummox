@@ -4,6 +4,7 @@ var Dispatcher = require('flux').Dispatcher;
 var Store = require('./Store');
 var Constants = require('./Constants');
 var Actions = require('./Actions');
+var watchMixin = require('./watchMixin');
 
 var DEFAULT_FLUX_NAME = 'DEFAULT';
 
@@ -22,6 +23,9 @@ class Flux {
     this.reset();
 
     Flux._fluxi[name] = this;
+
+    // Attach watch mixin
+    this.watchMixin = watchMixin.bind(null, this);
   }
 
   /**
