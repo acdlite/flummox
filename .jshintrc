@@ -8,13 +8,17 @@
 
   "unused": "vars",
   "esnext": true,
+  "laxbreak": true,
+  "expr": true,
 
   "globals": {
     "Promise": true,
-    "jest": true,
+
     "describe": true,
+    "before": true,
+    "after": true,
     "beforeEach": true,
-    "it": true,
-    "expect": true
+    "afterEach": true,
+    "it": true
   }
 }

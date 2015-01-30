@@ -1,25 +1,23 @@
 'use strict';
 
-jest.dontMock('../Store');
+import Store from '../Store';
 
-describe('Store', function() {
-  var Store = require('../Store');
+describe('Store', () => {
 
-  var flux;
+  describe('#getState()', () => {
 
-  beforeEach(function() {
-    flux = require('../Flux');
+    let s = new Store({ foo: 'bar' });
+
+    it('returns state object', () => {
+      expect(s.getState()).to.deep.equal({ foo: 'bar' });
+    });
+
+    it('prevents mutations of state object', () => {
+      let state = s.getState();
+      state.foo = 'changed';
+
+      expect(s.getState()).to.deep.equal({ foo: 'bar' })
+    });
   });
 
-  it('should be an EventEmitter', function() {
-    var store = new Store({ name: 'FooStore' }, flux);
-    expect(typeof store.addListener).toBe('function');
-    expect(typeof store.removeListener).toBe('function');
-    expect(typeof store.emit).toBe('function');
-  });
-
-  it('should have a name', function() {
-    var store = new Store({ name: 'FooStore' }, flux);
-    expect(store.getName()).toBe('FooStore');
-  });
 });
