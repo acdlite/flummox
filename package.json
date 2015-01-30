@@ -18,11 +18,11 @@
     "6to5": "~3.0.10",
     "chai": "~1.10.0",
     "mocha": "~2.1.0",
+    "sinon": "~1.12.2",
     "source-map-support": "~0.2.9"
   },
   "dependencies": {
     "6to5-runtime": "~3.0.11",
-    "constant-case": "~1.1.0",
     "eventemitter3": "~0.1.6",
     "flux": "~2.0.1"
   }
