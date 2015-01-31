@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Actions
  *
@@ -13,6 +11,8 @@
  * converted into actions. The return value of an action is used as the body
  * of the payload sent to the dispatcher.
  */
+
+'use strict';
 
 export default class Actions {
 

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Store
  *
@@ -7,6 +5,8 @@
  * and broadcast change events to listeners, so they can grab the latest data.
  * The key thing to remember is that Store's do not have a set
  */
+
+'use strict';
 
 import EventEmitter from 'eventemitter3';
 
