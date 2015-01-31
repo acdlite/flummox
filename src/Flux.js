@@ -3,6 +3,7 @@
 import Store from './Store';
 import Actions from './Actions';
 import { Dispatcher } from 'flux';
+import EventEmitter from 'eventemitter3';
 
 const defaults = {
   debug: false,
@@ -15,7 +16,7 @@ export default class Flux {
 
     this._stores = new Map();
     this._actions = new Map();
-    this._dispatcher = new Dispatcher();
+    this.dispatcher = new Dispatcher();
     this._tokens = new Map();
   }
 
@@ -29,7 +30,7 @@ export default class Flux {
       );
     }
 
-    let token = this._dispatcher.register(store.handler.bind(store));
+    let token = this.dispatcher.register(store.handler.bind(store));
 
     this._stores.set(key, store);
     this._tokens.set(key, token);
@@ -71,7 +72,7 @@ export default class Flux {
   }
 
   dispatch(actionId, body) {
-    this._dispatcher.dispatch({ actionId, body });
+    this.dispatcher.dispatch({ actionId, body });
   }
 
 }

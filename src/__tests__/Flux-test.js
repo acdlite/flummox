@@ -116,7 +116,7 @@ describe('Flux', () => {
     it('delegates to dispatcher', () => {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux._dispatcher = { dispatch };
+      flux.dispatcher = { dispatch };
       let actionId = Symbol('fake action id');
 
       flux.dispatch(actionId, 'foobar');
