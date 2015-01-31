@@ -1,7 +1,5 @@
 'use strict';
 
-import arrayIncludes from './arrayIncludes';
-
 /**
  * Actions
  *
@@ -15,6 +13,7 @@ import arrayIncludes from './arrayIncludes';
  * converted into actions. The return value of an action is used as the body
  * of the payload sent to the dispatcher.
  */
+
 export default class Actions {
 
   constructor() {
@@ -39,8 +38,8 @@ export default class Actions {
   _getActionMethodNames(instance) {
     return Object.getOwnPropertyNames(this.constructor.prototype)
       .filter(name =>
-        typeof this[name] === 'function' &&
-        !arrayIncludes(RESERVED_METHOD_NAMES, name)
+        name !== 'constructor' &&
+        typeof this[name] === 'function'
       );
   }
 
@@ -88,18 +87,6 @@ export default class Actions {
   }
 
 }
-
-const RESERVED_METHOD_NAMES = [
-  'constructor',
-  '_actions',
-  '_constants',
-  'flux',
-  'getConstants',
-  '_getActionMethodNames',
-  '_wrapAction',
-  '_getActionId',
-  '_dispatch',
-];
 
 function isPromise(value) {
   return value && typeof value.then === 'function';
