@@ -63,7 +63,11 @@ export default class Flux {
   }
 
   getActionIds(key) {
-    return this.getActions(key).getConstants();
+    let actions = this.getActions(key);
+
+    if (!actions) return;
+
+    return actions.getConstants();
   }
 
   dispatch(actionId, body) {
@@ -72,8 +76,11 @@ export default class Flux {
 
 }
 
+let Flummox = Flux;
+
 export {
   Flux,
+  Flummox,
   Store,
   Actions,
 };

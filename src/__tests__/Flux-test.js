@@ -100,12 +100,15 @@ describe('Flux', () => {
       getFoo() {}
     }
 
-    let flux = new Flux();
-    let testActions = new TestActions();
+    it('retrives ids of actions for key', () => {
+      let flux = new Flux();
+      let testActions = new TestActions();
 
-    flux.addActions('TestActions', testActions);
+      flux.addActions('TestActions', testActions);
 
-    expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('symbol');
+      expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('symbol');
+      expect(flux.getActionIds('NonexistentActions')).to.be.undefined;
+    });
   });
 
   describe('#dispatch()', () => {

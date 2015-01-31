@@ -4,12 +4,18 @@ import Store from '../Store';
 import sinon from 'sinon';
 
 describe('Store', () => {
-  class ExampleStore extends Store {}
+  class ExampleStore extends Store {
+    constructor() {
+      super();
+      this.state = { foo: 'bar' };
+    }
+  }
+
   let actionId = Symbol('fake action id');
 
   describe('#getState()', () => {
 
-    let s = new ExampleStore({ foo: 'bar' });
+    let s = new ExampleStore();
 
     it('returns state object', () => {
       expect(s.getState()).to.deep.equal({ foo: 'bar' });
@@ -66,7 +72,7 @@ describe('Store', () => {
 
   describe('#setState()', () => {
     it('shallow merges old state with new state', () => {
-      let store = new ExampleStore({ foo: 'bar' });
+      let store = new ExampleStore();
 
       store.register(actionId, function(body) {
         this.setState({ bar: body });
@@ -92,7 +98,7 @@ describe('Store', () => {
     });
 
     it('batches multiple state updates within action handler', () => {
-      let store = new ExampleStore({ foo: 'bar' });
+      let store = new ExampleStore();
       let listener = sinon.spy();
       store.addListener('change', listener);
 

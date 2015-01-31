@@ -16,8 +16,8 @@ export default class Store extends EventEmitter {
    * Stores are initialized with a reference
    * @type {Object}
    */
-  constructor(state = {}) {
-    this.state = Object.assign({}, state);
+  constructor() {
+    this.state = {};
 
     this._handlers = new Map();
   }
@@ -33,6 +33,8 @@ export default class Store extends EventEmitter {
   }
 
   setState(newState) {
+    if (typeof this.state === 'undefined') this.state = {};
+
     if (this._isHandlingDispatch) {
       this._batchedChanges = Object.assign(this._batchedChanges, newState);
       this._emitChangeAfterHandlingDispatch = true;
