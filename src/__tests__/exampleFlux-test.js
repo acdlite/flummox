@@ -83,17 +83,15 @@ describe('Examples:', () => {
       }
     }
 
-    // Here we go...
-    let flux = new Flux();
-
-
     /**
      * And that's it! No need for singletons or global references -- just create
      * a new instance.
      *
      * Now let's test it.
      */
+
     it('creates new messages', () => {
+      let flux = new Flux();
       let messageStore = flux.getStore('messages');
       let messageActions = flux.getActions('messages');
 
