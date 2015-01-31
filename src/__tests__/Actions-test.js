@@ -13,6 +13,10 @@ describe('Actions', () => {
     getBar() {
       return { bar: 'baz' };
     }
+
+    asyncAction() {
+      return Promise.resolve('foobar');
+    }
   }
 
   describe('#getConstants', () => {
@@ -36,15 +40,43 @@ describe('Actions', () => {
       let body = 'foobar';
       actions._dispatch(Symbol(), body);
 
-      expect(dispatch.getCall(0).args[0].body).to.equal('foobar');
+      expect(dispatch.getCall(0).args[1]).to.equal('foobar');
+    });
+
+    it('throws if actions have not been added to a Flux instance', () => {
+      let actions = new TestActions();
+
+      expect(actions._dispatch.bind(actions, { foo: 'bar' }, 'mockAction'))
+        .to.throw('Attempted to perform action before adding to Flux instance');
     });
   });
 
-  it('throws if actions have not been added to a Flux instance', () => {
-    let actions = new TestActions();
+  describe('#[methodName]', () => {
+    it('dispatches with return value of wrapped method', () => {
+      let actions = new TestActions();
+      let actionId = actions.getConstants().getFoo;
+      let dispatch = sinon.spy();
+      actions._dispatch = dispatch;
 
-    expect(actions._dispatch.bind(actions, { foo: 'bar' }, 'mockAction'))
-      .to.throw('Attempted to perform action before adding to Flux instance');
-  });
+      actions.getFoo();
+
+      expect(dispatch.firstCall.args[0]).to.equal(actionId);
+      expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
+    });
+
+    it('dispatches resolved value if return value is a promise', (done) => {
+      let actions = new TestActions();
+      let actionId = actions.getConstants().asyncAction;
+      let dispatch = sinon.spy();
+      actions._dispatch = dispatch;
+
+      actions.asyncAction()
+        .then(() => {
+          expect(dispatch.firstCall.args[0]).to.equal(actionId);
+          expect(dispatch.firstCall.args[1]).to.equal('foobar');
+          done();
+        });
+    });
+  })
 
 });

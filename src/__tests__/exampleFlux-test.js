@@ -43,10 +43,10 @@ describe('Examples:', () => {
     let messageStore = new MessageStore();
     flux.addStore('MessageStore', messageStore);
 
-    expect(messageStore.getState().messages).to.deep.equal({});
+    expect(messageStore.state.messages).to.deep.equal({});
 
     messageActions.newMessage('Hello, world!');
-    expect(messageStore.getState().messages).to.deep.equal({
+    expect(messageStore.state.messages).to.deep.equal({
       [0]: {
         content: 'Hello, world!',
         id: 0,

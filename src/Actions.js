@@ -48,8 +48,10 @@ export default class Actions {
     let originalMethod = this[methodName];
     let actionId = this._getActionId(methodName);
 
-    let action = (...args) => {
+    async function action(...args) {
       let body = originalMethod.call(this, ...args);
+
+      if (isPromise(body)) body = await body;
 
       try {
         this._dispatch(actionId, body);
@@ -68,9 +70,9 @@ export default class Actions {
           throw error;
         }
       }
-    };
+    }
 
-    this[methodName] = action;
+    this[methodName] = action.bind(this);
   }
 
   _getActionId(methodName) {
@@ -82,7 +84,7 @@ export default class Actions {
       'Attempted to perform action before adding to Flux instance'
     );
 
-    this.flux.dispatch({ actionId, body });
+    this.flux.dispatch(actionId, body);
   }
 
 }
@@ -98,3 +100,7 @@ const RESERVED_METHOD_NAMES = [
   '_getActionId',
   '_dispatch',
 ];
+
+function isPromise(value) {
+  return value && typeof value.then === 'function';
+}

@@ -12,7 +12,7 @@ export default class Flux {
 
   constructor(options) {
     this.options = Object.assign({}, defaults, options);
-    
+
     this._stores = new Map();
     this._actions = new Map();
     this._dispatcher = new Dispatcher();
@@ -66,8 +66,8 @@ export default class Flux {
     return this.getActions(key).getConstants();
   }
 
-  dispatch(...args) {
-    this._dispatcher.dispatch(...args);
+  dispatch(actionId, body) {
+    this._dispatcher.dispatch({ actionId, body });
   }
 
 }

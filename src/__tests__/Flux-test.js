@@ -32,9 +32,9 @@ describe('Flux', () => {
       };
       flux.addStore('ExampleStore', store);
 
-      let payload = { foo: 'bar' };
-      flux.dispatch(payload);
-      expect(spy1.calledWith(payload)).to.be.true;
+      let payload = 'foobar';
+      flux.dispatch(Symbol(), payload);
+      expect(spy1.getCall(0).args[0].body).to.equal('foobar');
       expect(spy2.calledWith('bar')).to.be.true;
     });
   });
@@ -106,6 +106,24 @@ describe('Flux', () => {
     flux.addActions('TestActions', testActions);
 
     expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('symbol');
+  });
+
+  describe('#dispatch()', () => {
+
+    it('delegates to dispatcher', () => {
+      let flux = new Flux();
+      let dispatch = sinon.spy();
+      flux._dispatcher = { dispatch };
+      let actionId = Symbol('fake action id');
+
+      flux.dispatch(actionId, 'foobar');
+
+      expect(dispatch.firstCall.args[0]).to.deep.equal({
+        actionId,
+        body: 'foobar',
+      })
+    });
+
   });
 
 });
