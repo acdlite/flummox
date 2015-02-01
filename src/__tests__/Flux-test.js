@@ -11,9 +11,20 @@ describe('Flux', () => {
 
       flux.createStore('ExampleStore', Store);
       expect(flux.createStore.bind(flux, 'ExampleStore', Store)).to.throw(
-        'You\'ve attempted to add multiple stores with key ExampleStore. Keys must '
-      + 'be unique. Try choosing different keys, or remove an existing store '
-      + 'with Flux#removeStore().'
+        'You\'ve attempted to create multiple stores with key ExampleStore. '
+      + 'Keys must be unique.'
+      );
+    });
+
+    it('throws if Store is not a prototype of class', () => {
+      let flux = new Flux();
+      class ForgotToExtendStore {}
+
+      expect(flux.createStore.bind(flux, 'Flux', ForgotToExtendStore)).to.throw(
+        'You\'ve attempted to create a store from the class '
+      + 'ForgotToExtendStore, which does not have the base Store class in its '
+      + 'prototype chain. Make sure you\'re using the `extends` keyword: '
+      + '`class ForgotToExtendStore extends Store { ... }`'
       );
     });
 
