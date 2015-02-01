@@ -1,10 +1,11 @@
 {
   "name": "flummox",
-  "version": "2.0.1-beta",
+  "version": "2.0.2-beta",
   "description": "An implementation of the Flux architecture.",
   "main": "lib/Flux.js",
   "scripts": {
-    "test": "make fast-build test"
+    "test": "make fast-build test",
+    "prepublish": "npm run test"
   },
   "keywords": [
     "flux",
