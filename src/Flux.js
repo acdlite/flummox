@@ -14,17 +14,27 @@ export default class Flux extends EventEmitter {
     this._tokens = new Map();
   }
 
-  createStore(key, Store, ...constructorArgs) {
-    let store = new Store(...constructorArgs);
+  createStore(key, _Store, ...constructorArgs) {
 
-    if (this._stores.has(key)) {
+    if (!(_Store.prototype instanceof Store) && _Store !== Store) {
+      let className = _Store.prototype.constructor.name;
+
       throw new Error(
-        `You've attempted to add multiple stores with key ${key}. Keys must be `
-      + `unique. Try choosing different keys, or remove an existing store with `
-      + `Flux#removeStore().`
+        `You've attempted to create a store from the class ${className}, which `
+      + `does not have the base Store class in its prototype chain. Make sure `
+      + `you're using the \`extends\` keyword: \`class ${className} extends `
+      + `Store { ... }\``
       );
     }
 
+    if (this._stores.has(key)) {
+      throw new Error(
+        `You've attempted to create multiple stores with key ${key}. Keys must `
+      + `be unique.`
+      );
+    }
+
+    let store = new _Store(...constructorArgs);
     let token = this.dispatcher.register(store.handler.bind(store));
 
     this._stores.set(key, store);
