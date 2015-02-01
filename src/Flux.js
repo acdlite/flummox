@@ -1,3 +1,9 @@
+/**
+ * Flux
+ *
+ * The main Flux class.
+ */
+
 'use strict';
 
 import Store from './Store';
@@ -11,7 +17,6 @@ export default class Flux extends EventEmitter {
     this.dispatcher = new Dispatcher();
     this._stores = new Map();
     this._actions = new Map();
-    this._tokens = new Map();
   }
 
   createStore(key, _Store, ...constructorArgs) {
@@ -37,12 +42,15 @@ export default class Flux extends EventEmitter {
     let store = new _Store(...constructorArgs);
     let token = this.dispatcher.register(store.handler.bind(store));
 
-    this._stores.set(key, store);
-    this._tokens.set(key, token);
+    this._stores.set(key, { store, token });
   }
 
   getStore(key) {
-    return this._stores.get(key);
+    let storeWrapper = this._stores.get(key);
+
+    if (!storeWrapper) return;
+
+    return storeWrapper.store;
   }
 
   removeStore(key) {
