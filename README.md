@@ -57,6 +57,13 @@ app.get("/", function(req, res) {
 });
 ```
 
+Roadmap
+-------
+
+The biggest feature that's currently not implemented the ability to "dehydrate" the entire state into string on the server, then "rehydrate" it on the client. This will be straightforward to implement; I just haven't gotten to it yet.
+
+Number one priority right now is writing the API docs.
+
 Inspiration and thanks
 ----------------------
 
