@@ -7,14 +7,15 @@ import EventEmitter from 'eventemitter3';
 
 export default class Flux extends EventEmitter {
 
-  constructor(options) {
+  constructor() {
     this.dispatcher = new Dispatcher();
     this._stores = new Map();
     this._actions = new Map();
     this._tokens = new Map();
   }
 
-  addStore(key, store) {
+  createStore(key, Store, ...constructorArgs) {
+    let store = new Store(...constructorArgs);
 
     if (this._stores.has(key)) {
       throw new Error(
@@ -38,7 +39,8 @@ export default class Flux extends EventEmitter {
     this._stores.delete(key);
   }
 
-  addActions(key, actions) {
+  createActions(key, Actions, ...constructorArgs) {
+    let actions = new Actions(...constructorArgs);
 
     if (this._actions.has(key)) {
       throw new Error(

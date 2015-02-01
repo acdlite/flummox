@@ -5,14 +5,12 @@ import sinon from 'sinon';
 
 describe('Flux', () => {
 
-  describe('#addStore()', () => {
+  describe('#createStore()', () => {
     it('throws if key already exists', () => {
       let flux = new Flux();
-      let store1 = new Store();
-      let store2 = new Store();
 
-      flux.addStore('ExampleStore', store1);
-      expect(flux.addStore.bind(flux, 'ExampleStore', store1)).to.throw(
+      flux.createStore('ExampleStore', Store);
+      expect(flux.createStore.bind(flux, 'ExampleStore', Store)).to.throw(
         'You\'ve attempted to add multiple stores with key ExampleStore. Keys must '
       + 'be unique. Try choosing different keys, or remove an existing store '
       + 'with Flux#removeStore().'
@@ -20,17 +18,20 @@ describe('Flux', () => {
     });
 
     it('registers store\'s handler with central dispatcher', () => {
-      let flux = new Flux();
-      let store = new Store();
+      class ExampleStore extends Store {}
 
       let spy1 = sinon.spy();
       let spy2 = sinon.spy();
-      store.foo = 'bar';
-      store.handler = function(payload) {
+
+      ExampleStore.prototype.foo = 'bar';
+      ExampleStore.prototype.handler = function(payload) {
         spy1(payload);
         spy2(this.foo);
       };
-      flux.addStore('ExampleStore', store);
+
+      let flux = new Flux();
+      flux.createStore('ExampleStore', ExampleStore);
+      let store = flux.getStore('ExampleStore');
 
       let payload = 'foobar';
       flux.dispatch(Symbol(), payload);
@@ -42,10 +43,9 @@ describe('Flux', () => {
   describe('#getStore()', () => {
     it('retrieves store for key', () => {
       let flux = new Flux();
-      let store = new Store();
 
-      flux.addStore('ExampleStore', store);
-      expect(flux.getStore('ExampleStore')).to.equal(store);
+      flux.createStore('ExampleStore', Store);
+      expect(flux.getStore('ExampleStore')).to.be.an.instanceOf(Store);
       expect(flux.getStore('NonexistentStore')).to.be.undefined;
     });
   });
@@ -53,26 +53,22 @@ describe('Flux', () => {
   describe('#removeStore()', () => {
     it('removes store for key', () => {
       let flux = new Flux();
-      let store = new Store();
 
-      flux.addStore('ExampleStore', store);
-      expect(flux.getStore('ExampleStore')).to.equal(store);
+      flux.createStore('ExampleStore', Store);
+      expect(flux.getStore('ExampleStore')).to.be.an.instanceOf(Store);
       flux.removeStore('ExampleStore');
       expect(flux.getStore('ExampleStore')).to.be.undefined;
     });
   });
 
-  describe('#addActions()', () => {
+  describe('#createActions()', () => {
     class TestActions extends Actions {}
 
     it('throws if key already exists', () => {
       let flux = new Flux();
-      let testActions1 = new TestActions();
-      let testActions2 = new TestActions();
+      flux.createActions('TestActions', Actions);
 
-      flux.addActions('TestActions', testActions1);
-
-      expect(flux.addActions.bind(flux, 'TestActions', testActions2)).to.throw(
+      expect(flux.createActions.bind(flux, 'TestActions', Actions)).to.throw(
         'You\'ve attempted to add multiple actions with key TestActions. Keys '
       + 'must be unique. Try choosing different keys, or remove existing '
       + 'actions with Flux#removeActions().'
@@ -85,11 +81,9 @@ describe('Flux', () => {
 
     it('retrieves actions for key', () => {
       let flux = new Flux();
-      let testActions = new TestActions();
+      flux.createActions('TestActions', Actions);
 
-      flux.addActions('TestActions', testActions);
-
-      expect(flux.getActions('TestActions')).to.equal(testActions);
+      expect(flux.getActions('TestActions')).to.be.an.instanceOf(Actions);
       expect(flux.getActions('NonexistentActions')).to.be.undefined;
     });
 
@@ -102,9 +96,7 @@ describe('Flux', () => {
 
     it('retrives ids of actions for key', () => {
       let flux = new Flux();
-      let testActions = new TestActions();
-
-      flux.addActions('TestActions', testActions);
+      flux.createActions('TestActions', TestActions);
 
       expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('symbol');
       expect(flux.getActionIds('NonexistentActions')).to.be.undefined;

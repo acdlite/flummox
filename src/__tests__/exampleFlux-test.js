@@ -75,11 +75,13 @@ describe('Examples:', () => {
       constructor() {
         super();
 
-        let messageActions = new MessageActions();
-        this.addActions('messages', messageActions);
+        // Create actions first so our store can reference them in
+        // its constructor
+        this.createActions('messages', MessageActions);
 
-        let messageStore = new MessageStore(this);
-        this.addStore('messages', messageStore);
+        // Extra arguments are sent to the store's constructor. Here, we're
+        // padding a reference to this flux instance
+        this.createStore('messages', MessageStore, this);
       }
     }
 
