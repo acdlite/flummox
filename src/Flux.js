@@ -5,18 +5,12 @@ import Actions from './Actions';
 import { Dispatcher } from 'flux';
 import EventEmitter from 'eventemitter3';
 
-const defaults = {
-  debug: false,
-};
-
-export default class Flux {
+export default class Flux extends EventEmitter {
 
   constructor(options) {
-    this.options = Object.assign({}, defaults, options);
-
+    this.dispatcher = new Dispatcher();
     this._stores = new Map();
     this._actions = new Map();
-    this.dispatcher = new Dispatcher();
     this._tokens = new Map();
   }
 
