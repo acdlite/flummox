@@ -49,17 +49,27 @@ export default class Flux extends EventEmitter {
     this._stores.delete(key);
   }
 
-  createActions(key, Actions, ...constructorArgs) {
-    let actions = new Actions(...constructorArgs);
+  createActions(key, _Actions, ...constructorArgs) {
 
-    if (this._actions.has(key)) {
+    if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
+      let className = _Actions.prototype.constructor.name;
+
       throw new Error(
-        `You've attempted to add multiple actions with key ${key}. Keys must `
-      + `be unique. Try choosing different keys, or remove existing actions `
-      + `with Flux#removeActions().`
+        `You've attempted to create actions from the class ${className}, which `
+      + `does not have the base Actions class in its prototype chain. Make `
+      + `sure you're using the \`extends\` keyword: \`class ${className} `
+      + `extends Actions { ... }\``
       );
     }
 
+    if (this._actions.has(key)) {
+      throw new Error(
+        `You've attempted to create multiple actions with key ${key}. Keys `
+      + `must be unique.`
+      );
+    }
+
+    let actions = new _Actions(...constructorArgs);
     actions.flux = this;
 
     this._actions.set(key, actions);

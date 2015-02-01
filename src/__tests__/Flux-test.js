@@ -73,16 +73,26 @@ describe('Flux', () => {
   });
 
   describe('#createActions()', () => {
-    class TestActions extends Actions {}
-
     it('throws if key already exists', () => {
       let flux = new Flux();
-      flux.createActions('TestActions', Actions);
+      flux.createActions('ExampleActions', Actions);
 
-      expect(flux.createActions.bind(flux, 'TestActions', Actions)).to.throw(
-        'You\'ve attempted to add multiple actions with key TestActions. Keys '
-      + 'must be unique. Try choosing different keys, or remove existing '
-      + 'actions with Flux#removeActions().'
+      expect(flux.createActions.bind(flux, 'ExampleActions', Actions)).to.throw(
+        'You\'ve attempted to create multiple actions with key ExampleActions. '
+      + 'Keys must be unique.'
+      );
+    });
+
+    it('throws if Store is not a prototype of class', () => {
+      let flux = new Flux();
+      class ForgotToExtendActions {}
+
+      expect(flux.createActions.bind(flux, 'Flux', ForgotToExtendActions))
+        .to.throw(
+          'You\'ve attempted to create actions from the class '
+        + 'ForgotToExtendActions, which does not have the base Actions class '
+        + 'in its prototype chain. Make sure you\'re using the `extends` '
+        + 'keyword: `class ForgotToExtendActions extends Actions { ... }`'
       );
     });
   });
