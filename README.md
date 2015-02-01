@@ -1,6 +1,6 @@
+[![build status](https://img.shields.io/travis/parisleaf/parisleaf.com.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
+
 flummox
 =======
 
-An implementation of the Flux architecture.
-
-Go away. I'm not done yet.
+Modular, testable, extensible, isomorphic Flux.
