@@ -1,6 +1,6 @@
 {
   "name": "flummox",
-  "version": "2.0.2-beta",
+  "version": "2.0.2",
   "description": "An implementation of the Flux architecture.",
   "main": "lib/Flux.js",
   "scripts": {
