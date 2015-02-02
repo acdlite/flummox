@@ -3,6 +3,10 @@
 flummox
 =======
 
+```
+$ npm install flummox
+```
+
 **API docs are coming soon.**
 
 Idiomatic, modular, testable, isomorphic Flux.
