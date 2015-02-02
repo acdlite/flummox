@@ -97,7 +97,7 @@ describe('Examples:', () => {
       let messageStore = flux.getStore('messages');
       let messageActions = flux.getActions('messages');
 
-      expect(messageStore.state.messages).to.be.undefined;
+      expect(messageStore.state).to.deep.equal({});
 
       messageActions.newMessage('Hello, world!');
       expect(messageStore.state).to.deep.equal({
