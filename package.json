@@ -1,7 +1,7 @@
 {
   "name": "flummox",
-  "version": "2.0.3",
-  "description": "An implementation of the Flux architecture.",
+  "version": "2.1.0",
+  "description": "Idiomatic, modular, testable, isomorphic Flux. 0% singletons, 100% Flux.",
   "main": "lib/Flux.js",
   "scripts": {
     "test": "make fast-build test",
@@ -9,8 +9,9 @@
   },
   "keywords": [
     "flux",
-    "facebook",
     "react",
+    "reactjs",
+    "facebook",
     "es6"
   ],
   "author": "Andrew Clark <acdlite@me.com>",
