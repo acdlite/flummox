@@ -14,6 +14,10 @@ describe('Actions', () => {
       return { bar: 'baz' };
     }
 
+    getBaz() {
+      return;
+    }
+
     asyncAction() {
       return Promise.resolve('foobar');
     }
@@ -76,6 +80,17 @@ describe('Actions', () => {
           expect(dispatch.firstCall.args[1]).to.equal('foobar');
           done();
         });
+    });
+
+    it('skips disptach if return value is undefined', () => {
+      let actions = new TestActions();
+      let actionId = actions.getConstants().getFoo;
+      let dispatch = sinon.spy();
+      actions._dispatch = dispatch;
+
+      actions.getBaz();
+
+      expect(dispatch.called).to.be.false;
     });
   })
 

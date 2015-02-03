@@ -3,13 +3,16 @@
 Flummox
 =======
 
+Idiomatic, modular, testable, isomorphic Flux.
+
+[Quick start quide](/docs/quick-start.md)
+
 **API docs are coming soon.**
 
 ```
 $ npm install --save flummox
 ```
 
-Idiomatic, modular, testable, isomorphic Flux.
 
 The big idea
 ------------

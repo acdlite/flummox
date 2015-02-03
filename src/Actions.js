@@ -50,6 +50,8 @@ export default class Actions {
     async function action(...args) {
       let body = originalMethod.call(this, ...args);
 
+      if (typeof body === 'undefined') return;
+
       if (isPromise(body)) body = await body;
 
       try {
