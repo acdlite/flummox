@@ -5,7 +5,7 @@ Flummox
 
 Idiomatic, modular, testable, isomorphic Flux.
 
-[Quick start quide](/docs/quick-start.md)
+[Quick start quide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
 
 **API docs are coming soon.**
 

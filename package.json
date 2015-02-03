@@ -3,6 +3,12 @@
   "version": "2.1.0",
   "description": "Idiomatic, modular, testable, isomorphic Flux. 0% singletons, 100% Flux.",
   "main": "lib/Flux.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/acdlite/flummox.git"
+  },
+  "homepage": "https://github.com/acdlite/flummox/blob/latest/README.md",
+  "bugs": "https://github.com/acdlite/flummox/issues",
   "scripts": {
     "test": "make fast-build test",
     "prepublish": "npm run test"
