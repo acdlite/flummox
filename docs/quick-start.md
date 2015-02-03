@@ -77,6 +77,8 @@ Stores manage the state of your application. Usually, you have one store per res
 Here's how you create a store in Flummox. Like with Actions, create a class that extends from the base class:
 
 ```js
+import { Store } from 'flummox';
+
 class MessageStore extends Store {
 
   constructor(flux) {
@@ -116,6 +118,8 @@ In this example, the store's constructor expects a single argument, flux. This i
 The Flux class unifies our stores and actions, along with a dispatcher, into a single, self-contained instance.
 
 ```js
+import { Flux } from 'flummox';
+
 class AppFlux extends Flux {
 
   constructor() {
