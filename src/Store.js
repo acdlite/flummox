@@ -53,6 +53,10 @@ export default class Store extends EventEmitter {
     this._handlers.set(actionId, handler.bind(this));
   }
 
+  waitFor(tokensOrStores) {
+    this._waitFor(tokensOrStores);
+  }
+
   handler(payload) {
     this._isHandlingDispatch = true;
     this._batchedChanges = {};

@@ -1,6 +1,6 @@
 'use strict';
 
-import Store from '../Store';
+import { Store, Flux } from '../Flux';
 import sinon from 'sinon';
 
 describe('Store', () => {
@@ -67,6 +67,43 @@ describe('Store', () => {
       store.handler({ body, actionId });
 
       expect(handler.calledWith(body, actionId)).to.be.true;
+    });
+  });
+
+  describe('#waitFor()', () => {
+    it('waits for other stores', () => {
+      let flux = new Flux();
+      let result = [];
+
+      class Store1 extends Store {
+        constructor() {
+          super();
+
+          this.register(actionId, function() {
+            this.waitFor(store2);
+            result.push(1);
+          });
+        }
+      }
+
+      class Store2 extends Store {
+        constructor() {
+          super();
+
+          this.register(actionId, () => {
+            result.push(2);
+          })
+        }
+      }
+
+      flux.createStore('store1', Store1);
+      flux.createStore('store2', Store2);
+
+      let store2 = flux.getStore('store2');
+
+      flux.dispatch(actionId, 'foobar');
+
+      expect(result).to.deep.equal([2, 1]);
     });
   });
 

@@ -42,15 +42,14 @@ export default class Flux extends EventEmitter {
     let store = new _Store(...constructorArgs);
     let token = this.dispatcher.register(store.handler.bind(store));
 
-    this._stores.set(key, { store, token });
+    store._waitFor = this.waitFor.bind(this);
+    store._token = token;
+
+    this._stores.set(key, store);
   }
 
   getStore(key) {
-    let storeWrapper = this._stores.get(key);
-
-    if (!storeWrapper) return;
-
-    return storeWrapper.store;
+    return this._stores.get(key);
   }
 
   removeStore(key) {
@@ -97,6 +96,21 @@ export default class Flux extends EventEmitter {
 
   dispatch(actionId, body) {
     this.dispatcher.dispatch({ actionId, body });
+  }
+
+  waitFor(tokensOrStores) {
+
+    if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
+
+    let ensureIsToken = tokenOrStore => {
+      return tokenOrStore instanceof Store
+        ? tokenOrStore._token
+        : tokenOrStore;
+    };
+
+    let tokens = tokensOrStores.map(ensureIsToken);
+
+    this.dispatcher.waitFor(tokens);
   }
 
 }
