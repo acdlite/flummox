@@ -3,22 +3,26 @@
 Flummox
 =======
 
-```
-$ npm install flummox
-```
-
 **API docs are coming soon.**
+
+```
+$ npm install --save flummox
+```
 
 Idiomatic, modular, testable, isomorphic Flux.
 
-Whoa, so many buzzwords! I'll break it down in more detail below, but here's the big idea that I think separates Flummox from the many other Flux implementations out there: Flummox allows you to encapsulate your entire Flux set-up — stores, actions, constants, and the dispatcher — into a single class, with **zero singletons or global references**. It's as easy as
+The big idea
+------------
+
+There are *sooo* many Flux libraries out there. What makes Flummox special?
+
+Flummox allows you to encapsulate your entire Flux set-up — stores, actions, constants, and the dispatcher — into a single class, with **zero singletons or global references**. It's as easy as
 
 ```js
 let flux = new Flux();
 ```
 
-
-**tl;dr Show me the code!!!** No problem. Check out a full example Flummox's [test suite](https://github.com/acdlite/flummox/blob/master/src/__tests__/exampleFlux-test.js).
+**tl;dr Show me the code!!!** No problem. Check out a full example from Flummox's [test suite](https://github.com/acdlite/flummox/blob/master/src/__tests__/exampleFlux-test.js).
 
 ### Idiomatic
 

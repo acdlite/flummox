@@ -79,11 +79,11 @@ export default class Actions {
   }
 
   _dispatch(actionId, body) {
-    if (!this.flux) throw new ReferenceError(
+    if (!this.dispatch) throw new ReferenceError(
       'Attempted to perform action before adding to Flux instance'
     );
 
-    this.flux.dispatch(actionId, body);
+    this.dispatch(actionId, body);
   }
 
 }

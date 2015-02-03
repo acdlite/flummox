@@ -78,7 +78,7 @@ export default class Flux extends EventEmitter {
     }
 
     let actions = new _Actions(...constructorArgs);
-    actions.flux = this;
+    actions.dispatch = this.dispatch.bind(this);
 
     this._actions.set(key, actions);
   }

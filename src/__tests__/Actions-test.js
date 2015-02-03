@@ -35,7 +35,7 @@ describe('Actions', () => {
 
       // Attach mock flux instance
       let dispatch = sinon.spy();
-      actions.flux = { dispatch };
+      actions.dispatch = dispatch;
 
       let body = 'foobar';
       actions._dispatch(Symbol(), body);
