@@ -130,13 +130,13 @@ class AppFlux extends Flux {
 }
 ```
 
-`createActions(key, ActionsClass, ...args)` and `createStore(key, StoreClass, ...args)` take a unique string key along with the classes we defined in the previous sections. There's not much magic going on here: under the hood, Flummox creates instances of your classes using the `new operator`, then stashes a reference to them internally.
+`createActions(key, ActionsClass, ...args)` and `createStore(key, StoreClass, ...args)` take a unique string key along with the classes we defined in the previous sections. There's not much magic going on here: under the hood, Flummox creates instances of your classes using the `new` operator, then stashes a reference to them internally.
 
 You can access a Flux instance's actions and stores using `getActions(key)` and `getStore(key)`.
 
 There's an additional method for accessing action ids: `getActionIds(key)`. This is the method we used in the MessageStore class we created above, in order to register the store's action handler. That's why we're passing our Flux instance to the constructor of MessageStore. To reiterate, this isn't a requirement; just a recommended pattern.
 
-Each Flux instance comes with its own dispatcher. Like constants, the dispatcher is treated as an implementation detail. The closest you'll come to interacting with it in most cases is the `Store#register(actionId, handler)` method discussed above. However, if you want to access the dispatcher directly, you can use `Flummox#`
+Each Flux instance comes with its own dispatcher. Like constants, the dispatcher is treated as an implementation detail. The closest you'll come to interacting with it in most cases is the `Store#register(actionId, handler)` method discussed above. However, if you want to access the dispatcher directly, you can reference the `dispatcher` property of the Flux instance.
 
 So, now we have a class Flux that encapsulates our entire Flux set-up! Now we just create an instance:
 
@@ -146,13 +146,13 @@ let flux = new AppFlux();
 
 Because everything is self-contained, you can create as many independent instances as you want. The reason this is so cool is that you get isomorphism for free: just create a new instance for each request.
 
-4. Use it in a view
+### 4. Use it in a view
 
 (Flummox/Flux can be used with any view library, of course, but I'm going to assume you're cool and using React.)
 
 So how do you use Flux in your view components? With a traditional Flux library, we'd use a singleton. And if you want to do that, that's perfectly fine. Just create a module that exports a single Flux instance and you're good to go. But again, that's won't do on the server, because you need a way to deal with multiple requests.
 
-The most straightfoward way is to pass your Flux instance down from the root component as a prop. Another way is to use an undocumented (but commonly used) feature of React called *contexts*. You can read more about contexts [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html).
+The most straightfoward way is to pass your Flux instance down from the root component as a prop. Another way is to use an undocumented (but relatively stable) feature of React called *contexts*. You can read more about contexts [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html).
 
 However you choose to do it, once you have a reference to your Flux instance inside your component, accessing the stores and actions is easy. Here's an example (using the props approach):
 
