@@ -5,9 +5,7 @@ Flummox
 
 Idiomatic, modular, testable, isomorphic Flux.
 
-[Quick start quide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
-
-**API docs are coming soon.**
+**Documentation and demos are in progress. In the meantime, you can read the [quick start quide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md) or poke around the [test suite](https://github.com/acdlite/flummox/tree/master/src/__tests__).**
 
 ```
 $ npm install --save flummox
