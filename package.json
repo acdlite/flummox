@@ -23,7 +23,7 @@
   "author": "Andrew Clark <acdlite@me.com>",
   "license": "MIT",
   "devDependencies": {
-    "6to5": "~3.2.0",
+    "6to5": "~3.3.7",
     "chai": "~1.10.0",
     "es6-promise": "~2.0.1",
     "mocha": "~2.1.0",
@@ -31,7 +31,7 @@
     "source-map-support": "~0.2.9"
   },
   "dependencies": {
-    "6to5-runtime": "~3.1.1",
+    "6to5-runtime": "~3.3.9",
     "eventemitter3": "~0.1.6",
     "flux": "~2.0.1"
   }

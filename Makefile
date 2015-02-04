@@ -1,7 +1,7 @@
 6TO5_CMD = node_modules/.bin/6to5
 MOCHA_CMD = node_modules/.bin/mocha
 
-6TO5_ARGS = --experimental --source-maps-inline --runtime --optional selfContained,spec.typeofSymbol
+6TO5_ARGS = --experimental --source-maps-inline --optional selfContained,spec.typeofSymbol
 
 SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))
