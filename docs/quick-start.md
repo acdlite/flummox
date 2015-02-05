@@ -28,7 +28,7 @@ Here's how we'll approach this walkthrough. I like to go in order of Flux data f
 
 ### 1. Create some actions
 
-Actions are groups of functions you call to send data through the dispatcher. (Sometimes these are actually called to as *action creators*, while actions are the data structures that are sent through the dispatcher, but whatever. We're calling going to use *action* to mean the function that triggers the dispatch.)
+Actions are groups of functions you call to send data through the dispatcher. (Sometimes these are actually referred to as *action creators*, while actions are the data structures that are sent through the dispatcher, but whatever. We're calling going to use *action* to mean the function that triggers the dispatch.)
 
 To create actions, just extend from the base Actions class and add some methods:
 
