@@ -95,8 +95,6 @@ export default class Flux extends EventEmitter {
   }
 
   dispatch(actionId, body) {
-    console.log(actionId);
-
     this.dispatcher.dispatch({ actionId, body });
   }
 
