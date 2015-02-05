@@ -45,7 +45,7 @@ describe('Flux', () => {
       let store = flux.getStore('ExampleStore');
 
       let payload = 'foobar';
-      flux.dispatch(Symbol(), payload);
+      flux.dispatch('actionId', payload);
       expect(spy1.getCall(0).args[0].body).to.equal('foobar');
       expect(spy2.calledWith('bar')).to.be.true;
     });
@@ -119,7 +119,7 @@ describe('Flux', () => {
       let flux = new Flux();
       flux.createActions('TestActions', TestActions);
 
-      expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('symbol');
+      expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('string');
       expect(flux.getActionIds('NonexistentActions')).to.be.undefined;
     });
   });
@@ -130,7 +130,7 @@ describe('Flux', () => {
       let flux = new Flux();
       let dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = Symbol('fake action id');
+      let actionId = 'actionId';
 
       flux.dispatch(actionId, 'foobar');
 

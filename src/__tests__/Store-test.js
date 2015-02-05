@@ -11,7 +11,7 @@ describe('Store', () => {
     }
   }
 
-  let actionId = Symbol('fake action id');
+  let actionId = 'actionId';
 
   describe('#getState()', () => {
 

@@ -33,6 +33,7 @@
   "dependencies": {
     "6to5-runtime": "~3.3.9",
     "eventemitter3": "~0.1.6",
-    "flux": "~2.0.1"
+    "flux": "~2.0.1",
+    "uniqueid": "~0.1.0"
   }
 }
