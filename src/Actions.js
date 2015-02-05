@@ -14,25 +14,29 @@
 
 'use strict';
 
+import uniqueId from 'uniqueid';
+
 export default class Actions {
 
   constructor() {
 
+    this._baseId = uniqueId();
+
     this._actions = new Map();
-    this._constants = {};
+    this._actionIds = {};
 
     for (let methodName of this._getActionMethodNames()) {
-      let constant = Symbol(methodName);
+      let constant = this._createActionId(methodName);
 
       this._actions.set(constant, action);
-      this._constants[methodName] = constant;
+      this._actionIds[methodName] = constant;
 
       let action = this._wrapAction(methodName);
     }
   }
 
   getConstants() {
-    return Object.assign({}, this._constants);
+    return Object.assign({}, this._actionIds);
   }
 
   _getActionMethodNames(instance) {
@@ -76,8 +80,16 @@ export default class Actions {
     this[methodName] = action.bind(this);
   }
 
+  /**
+   * Create unique string constant for an action method, using
+   * @param {string} methodName - Name of the action method
+   */
+  _createActionId(methodName) {
+    return `${this._baseId}-${methodName}`;
+  }
+
   _getActionId(methodName) {
-    return this._constants[methodName];
+    return this._actionIds[methodName];
   }
 
   _dispatch(actionId, body) {

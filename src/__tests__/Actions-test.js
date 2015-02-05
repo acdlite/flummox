@@ -24,11 +24,11 @@ describe('Actions', () => {
   }
 
   describe('#getConstants', () => {
-    it('returns symbols corresponding to action method names', () => {
+    it('returns strings corresponding to action method names', () => {
       let actions = new TestActions();
 
-      expect(typeof actions.getConstants().getFoo).to.equal('symbol');
-      expect(typeof actions.getConstants().getBar).to.equal('symbol');
+      expect(typeof actions.getConstants().getFoo).to.equal('string');
+      expect(typeof actions.getConstants().getBar).to.equal('string');
     });
 
   });
@@ -42,7 +42,7 @@ describe('Actions', () => {
       actions.dispatch = dispatch;
 
       let body = 'foobar';
-      actions._dispatch(Symbol(), body);
+      actions._dispatch('actionId', body);
 
       expect(dispatch.getCall(0).args[1]).to.equal('foobar');
     });
