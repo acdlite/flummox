@@ -7,7 +7,7 @@ Idiomatic, modular, testable, isomorphic Flux.
 
 **Documentation and demos are in progress. In the meantime, you can read the [quick start quide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md) or poke around the [test suite](https://github.com/acdlite/flummox/tree/master/src/__tests__).**
 
-Here's a WIP demo of an isomorphic app using Flummox, react-router, and Immutable.js (still needs some work, but feel free to check it out):
+Here's a WIP demo of an isomorphic app using Flummox, React Router, and Immutable.js (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
 
