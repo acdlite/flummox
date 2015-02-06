@@ -110,7 +110,7 @@ describe('Flux', () => {
 
   });
 
-  describe('#getActionIds()', () => {
+  describe('#getActionIds() / #getConstants()', () => {
     class TestActions extends Actions {
       getFoo() {}
     }
@@ -121,6 +121,9 @@ describe('Flux', () => {
 
       expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('string');
       expect(flux.getActionIds('NonexistentActions')).to.be.undefined;
+
+      expect(typeof flux.getConstants('TestActions').getFoo).to.equal('string');
+      expect(flux.getConstants('NonexistentActions')).to.be.undefined;
     });
   });
 

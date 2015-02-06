@@ -33,9 +33,11 @@ export default class Actions {
 
       let action = this._wrapAction(methodName);
     }
+
+    this.getConstants = this.getActionIds;
   }
 
-  getConstants() {
+  getActionIds() {
     return Object.assign({}, this._actionIds);
   }
 

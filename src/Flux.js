@@ -17,6 +17,8 @@ export default class Flux extends EventEmitter {
     this.dispatcher = new Dispatcher();
     this._stores = new Map();
     this._actions = new Map();
+
+    this.getConstants = this.getActionIds;
   }
 
   createStore(key, _Store, ...constructorArgs) {

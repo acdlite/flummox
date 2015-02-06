@@ -23,9 +23,12 @@ describe('Actions', () => {
     }
   }
 
-  describe('#getConstants', () => {
+  describe('#getActionIds / #getConstants', () => {
     it('returns strings corresponding to action method names', () => {
       let actions = new TestActions();
+
+      expect(typeof actions.getActionIds().getFoo).to.equal('string');
+      expect(typeof actions.getActionIds().getBar).to.equal('string');
 
       expect(typeof actions.getConstants().getFoo).to.equal('string');
       expect(typeof actions.getConstants().getBar).to.equal('string');
