@@ -179,7 +179,7 @@ class MessagesView extends React.Component {
     this.messageStore.addListener('change', this.updateMessages);
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     this.messageStore.removeListener('change', this.updateMessages);
   }
 
