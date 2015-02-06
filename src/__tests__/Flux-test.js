@@ -3,6 +3,26 @@
 import { Flux, Store, Actions } from '../Flux';
 import sinon from 'sinon';
 
+class SerializableStore extends Store {
+
+  constructor(serializedState, deserializedState) {
+    super();
+
+    // Don't actually do this! This is just for testing.
+    this.serializedState = serializedState;
+    this.deserializedState = deserializedState;
+  }
+
+  serialize() {
+    return this.serializedState;
+  }
+
+  deserialize() {
+    return this.deserializedState;
+  }
+
+}
+
 describe('Flux', () => {
 
   describe('#createStore()', () => {
@@ -58,17 +78,6 @@ describe('Flux', () => {
       flux.createStore('ExampleStore', Store);
       expect(flux.getStore('ExampleStore')).to.be.an.instanceOf(Store);
       expect(flux.getStore('NonexistentStore')).to.be.undefined;
-    });
-  });
-
-  describe('#removeStore()', () => {
-    it('removes store for key', () => {
-      let flux = new Flux();
-
-      flux.createStore('ExampleStore', Store);
-      expect(flux.getStore('ExampleStore')).to.be.an.instanceOf(Store);
-      flux.removeStore('ExampleStore');
-      expect(flux.getStore('ExampleStore')).to.be.undefined;
     });
   });
 
@@ -138,6 +147,99 @@ describe('Flux', () => {
         actionId,
         body: 'foobar',
       })
+    });
+
+  });
+
+  describe('#serialize()', () => {
+
+    it('returns state of all the stores as a JSON string', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', SerializableStore, 'foo state');
+      flux.createStore('bar', SerializableStore, 'bar state');
+      flux.createStore('baz', SerializableStore, 'baz state');
+
+      expect(JSON.parse(flux.serialize())).to.deep.equal({
+        foo: 'foo state',
+        bar: 'bar state',
+        baz: 'baz state',
+      });
+    });
+
+    it('throws if any stores do not implement #serialize()', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', Store);
+
+      expect(flux.serialize.bind(flux)).to.throw(
+        'Cannot serialize Flux state because the store with key \'foo\' does '
+      + 'not have a `serialize()` method. Check the implementation of the '
+      + 'Store class.'
+      );
+    });
+
+    it('throws if return value of Store#serialize() is not a string', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', SerializableStore, {});
+
+      expect(flux.serialize.bind(flux)).to.throw(
+        '`Store#serialize() must return a string, but the store with key '
+      + '\'foo\' returned a non-string with type \'object\'. Check the '
+      + '`#serialize() method of the SerializableStore class.'
+      );
+    });
+
+  });
+
+  describe('#deserialize()', () => {
+
+    it('converts a serialized string into state and uses it to replace state of stores', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', SerializableStore, null, 'foo state');
+      flux.createStore('bar', SerializableStore, null, 'bar state');
+      flux.createStore('baz', SerializableStore, null, 'baz state');
+
+      // Actual string values here are unimportant, as long as keys match
+      flux.deserialize(`{
+        "foo": "foo",
+        "bar": "bar",
+        "baz": "baz"
+      }`);
+
+      let fooStore = flux.getStore('foo');
+      let barStore = flux.getStore('bar');
+      let bazStore = flux.getStore('baz');
+
+      expect(fooStore.state).to.equal('foo state');
+      expect(barStore.state).to.equal('bar state');
+      expect(bazStore.state).to.equal('baz state');
+    });
+
+    it('throws if passed string is invalid JSON', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', Store);
+
+      expect(flux.deserialize.bind(flux, 'not JSON')).to.throw(
+        'Invalid value passed to `Flux#deserialize()`. Ensure that each of '
+      + 'your store\'s `#serialize()` methods returns a properly '
+      + 'escaped string.'
+      );
+    });
+
+    it('throws if any stores do not implement #deserialize()', () => {
+      let flux = new Flux();
+
+      flux.createStore('foo', Store);
+
+      expect(flux.deserialize.bind(flux, '{ "foo": "bar" }')).to.throw(
+        'Cannot deserialize Flux state because the store with key \'foo\' does '
+      + 'not have a `deserialize()` method. Check the implementation of the '
+      + 'Store class.'
+      );
     });
 
   });
