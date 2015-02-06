@@ -3,7 +3,8 @@
  *
  * Stores hold application state. They respond to actions sent by the dispatcher
  * and broadcast change events to listeners, so they can grab the latest data.
- * The key thing to remember is that Store's do not have a set
+ * The key thing to remember is that the only way stores receive information
+ * from the outside world is via the dispatcher.
  */
 
 'use strict';
@@ -25,7 +26,6 @@ export default class Store extends EventEmitter {
   /**
    * Return a (shallow) copy of the store's internal state, so that it is
    * protected from mutation by the consumer.
-   *
    * @returns {object}
    */
   getState() {
