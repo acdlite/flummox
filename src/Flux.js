@@ -176,7 +176,7 @@ export default class Flux extends EventEmitter {
 
       let storeState = store.deserialize(serializedState);
 
-      store.state = storeState;
+      store.replaceState(storeState);
     }
   }
 

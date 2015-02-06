@@ -198,24 +198,23 @@ describe('Flux', () => {
     it('converts a serialized string into state and uses it to replace state of stores', () => {
       let flux = new Flux();
 
-      flux.createStore('foo', SerializableStore, null, 'foo state');
-      flux.createStore('bar', SerializableStore, null, 'bar state');
-      flux.createStore('baz', SerializableStore, null, 'baz state');
+      flux.createStore('foo', SerializableStore, null, { foo: 'bar' });
+      flux.createStore('bar', SerializableStore, null, { bar: 'baz' });
+      flux.createStore('baz', SerializableStore, null, { baz: 'foo' });
 
-      // Actual string values here are unimportant, as long as keys match
       flux.deserialize(`{
-        "foo": "foo",
-        "bar": "bar",
-        "baz": "baz"
+        "foo": "{}",
+        "bar": "{}",
+        "baz": "{}"
       }`);
 
       let fooStore = flux.getStore('foo');
       let barStore = flux.getStore('bar');
       let bazStore = flux.getStore('baz');
 
-      expect(fooStore.state).to.equal('foo state');
-      expect(barStore.state).to.equal('bar state');
-      expect(bazStore.state).to.equal('baz state');
+      expect(fooStore.state).to.deep.equal({ foo: 'bar' });
+      expect(barStore.state).to.deep.equal({ bar: 'baz' });
+      expect(bazStore.state).to.deep.equal({ baz: 'foo' });
     });
 
     it('throws if passed string is invalid JSON', () => {
