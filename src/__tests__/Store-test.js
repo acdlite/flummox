@@ -111,12 +111,7 @@ describe('Store', () => {
     it('shallow merges old state with new state', () => {
       let store = new ExampleStore();
 
-      store.register(actionId, function(body) {
-        this.setState({ bar: body });
-      });
-
-      // Simulate dispatch
-      store.handler({ actionId, body: 'baz' });
+      store.setState({ bar: 'baz' });
 
       expect(store.state).to.deep.equal({
         foo: 'bar',
@@ -153,6 +148,28 @@ describe('Store', () => {
 
       expect(listener.calledOnce).to.be.true;
       expect(store.state).to.deep.equal({ foo: 'bar', bar: 'baz', baz: 'foo' });
+    });
+  });
+
+  describe('#replaceState()', () => {
+    it('replaces old state with new state', () => {
+      let store = new ExampleStore();
+
+      store.replaceState({ bar: 'baz' });
+
+      expect(store.state).to.deep.equal({
+        bar: 'baz',
+      });
+    });
+
+    it('emits change event', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.replaceState({ foo: 'bar' });
+
+      expect(listener.calledOnce).to.be.true;
     });
   });
 

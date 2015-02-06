@@ -49,6 +49,11 @@ export default class Store extends EventEmitter {
     }
   }
 
+  replaceState(newState) {
+    this.state = Object.assign({}, newState);
+    this.emit('change');
+  }
+
   register(actionId, handler) {
     this._handlers.set(actionId, handler.bind(this));
   }
