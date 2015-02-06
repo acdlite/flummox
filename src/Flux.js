@@ -152,8 +152,6 @@ export default class Flux extends EventEmitter {
     } catch (error) {
       let className = this.constructor.name;
 
-      console.log(serializedState);
-
       throw new Error(
         `Invalid value passed to \`${className}#deserialize()\`. Ensure that `
       + `each of your store's \`#serialize()\` methods returns a properly `
