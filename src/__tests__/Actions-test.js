@@ -18,6 +18,10 @@ describe('Actions', () => {
       return;
     }
 
+    async asyncAction() {
+      return 'foobar';
+    }
+
     asyncAction() {
       return Promise.resolve('foobar');
     }
@@ -30,14 +34,14 @@ describe('Actions', () => {
       expect(typeof actions.getActionIds().getFoo).to.equal('string');
       expect(typeof actions.getActionIds().getBar).to.equal('string');
 
-      expect(typeof actions.getConstants().getFoo).to.equal('string');
-      expect(typeof actions.getConstants().getBar).to.equal('string');
+      expect(typeof actions.getActionIds().getFoo).to.equal('string');
+      expect(typeof actions.getActionIds().getBar).to.equal('string');
     });
 
   });
 
-  describe('#_dispatch', () => {
-    it('delegates to Flux dispatcher', () => {
+  describe('#[methodName]', () => {
+    it('calls Flux dispatcher', () => {
       let actions = new TestActions();
 
       // Attach mock flux instance
@@ -45,23 +49,24 @@ describe('Actions', () => {
       actions.dispatch = dispatch;
 
       let body = 'foobar';
-      actions._dispatch('actionId', body);
+      actions.getFoo();
 
-      expect(dispatch.getCall(0).args[1]).to.equal('foobar');
+      expect(dispatch.getCall(0).args[1]).to.deep.equal({ foo: 'bar' });
     });
 
     it('throws if actions have not been added to a Flux instance', () => {
       let actions = new TestActions();
 
-      expect(actions._dispatch.bind(actions, { foo: 'bar' }, 'mockAction'))
-        .to.throw('Attempted to perform action before adding to Flux instance');
+      expect(actions.getFoo.bind(actions))
+        .to.throw(
+          'You\'ve attempted to perform the action TestActions#getFoo, but it '
+        + 'hasn\'t been added to a Flux instance.'
+        );
     });
-  });
 
-  describe('#[methodName]', () => {
     it('dispatches with return value of wrapped method', () => {
       let actions = new TestActions();
-      let actionId = actions.getConstants().getFoo;
+      let actionId = actions.getActionIds().getFoo;
       let dispatch = sinon.spy();
       actions._dispatch = dispatch;
 
@@ -71,29 +76,47 @@ describe('Actions', () => {
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
-    it('dispatches resolved value if return value is a promise', (done) => {
+    it('dispatches resolved value if return value is a promise', async function() {
       let actions = new TestActions();
-      let actionId = actions.getConstants().asyncAction;
+      let actionId = actions.getActionIds().asyncAction;
       let dispatch = sinon.spy();
       actions._dispatch = dispatch;
 
-      actions.asyncAction()
-        .then(() => {
-          expect(dispatch.firstCall.args[0]).to.equal(actionId);
-          expect(dispatch.firstCall.args[1]).to.equal('foobar');
-          done();
-        });
+      let response = actions.asyncAction();
+
+      expect(typeof response.then).to.equal('function');
+
+      await response;
+
+      expect(dispatch.firstCall.args[0]).to.equal(actionId);
+      expect(dispatch.firstCall.args[1]).to.equal('foobar');
     });
 
     it('skips disptach if return value is undefined', () => {
       let actions = new TestActions();
-      let actionId = actions.getConstants().getFoo;
+      let actionId = actions.getActionIds().getFoo;
       let dispatch = sinon.spy();
       actions._dispatch = dispatch;
 
       actions.getBaz();
 
       expect(dispatch.called).to.be.false;
+    });
+
+    it('it returns undefined if action is synchronous', () => {
+      let actions = new TestActions();
+      let actionId = actions.getActionIds().getFoo;
+      actions._dispatch = function() {};
+
+      expect(actions.getFoo()).to.be.undefined;
+    });
+
+    it('it resolves to undefined if action is asyncronous', async function() {
+      let actions = new TestActions();
+      let actionId = actions.getActionIds().getFoo;
+      actions._dispatch = function() {};
+
+      expect(await actions.asyncAction()).to.be.undefined;
     });
   })
 

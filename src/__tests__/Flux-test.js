@@ -28,9 +28,10 @@ describe('Flux', () => {
   describe('#createStore()', () => {
     it('throws if key already exists', () => {
       let flux = new Flux();
+      class TestStore extends Store {}
 
-      flux.createStore('ExampleStore', Store);
-      expect(flux.createStore.bind(flux, 'ExampleStore', Store)).to.throw(
+      flux.createStore('ExampleStore', TestStore);
+      expect(flux.createStore.bind(flux, 'ExampleStore', TestStore)).to.throw(
         'You\'ve attempted to create multiple stores with key ExampleStore. '
       + 'Keys must be unique.'
       );
@@ -74,8 +75,9 @@ describe('Flux', () => {
   describe('#getStore()', () => {
     it('retrieves store for key', () => {
       let flux = new Flux();
+      class TestStore extends Store {}
 
-      flux.createStore('ExampleStore', Store);
+      flux.createStore('ExampleStore', TestStore);
       expect(flux.getStore('ExampleStore')).to.be.an.instanceOf(Store);
       expect(flux.getStore('NonexistentStore')).to.be.undefined;
     });
@@ -83,8 +85,10 @@ describe('Flux', () => {
 
   describe('#createActions()', () => {
     it('throws if key already exists', () => {
+      class TestActions extends Actions {}
+
       let flux = new Flux();
-      flux.createActions('ExampleActions', Actions);
+      flux.createActions('ExampleActions', TestActions);
 
       expect(flux.createActions.bind(flux, 'ExampleActions', Actions)).to.throw(
         'You\'ve attempted to create multiple actions with key ExampleActions. '
@@ -92,7 +96,7 @@ describe('Flux', () => {
       );
     });
 
-    it('throws if Store is not a prototype of class', () => {
+    it('throws if Actions is not a prototype of class', () => {
       let flux = new Flux();
       class ForgotToExtendActions {}
 
@@ -111,7 +115,7 @@ describe('Flux', () => {
 
     it('retrieves actions for key', () => {
       let flux = new Flux();
-      flux.createActions('TestActions', Actions);
+      flux.createActions('TestActions', TestActions);
 
       expect(flux.getActions('TestActions')).to.be.an.instanceOf(Actions);
       expect(flux.getActions('NonexistentActions')).to.be.undefined;
@@ -172,13 +176,15 @@ describe('Flux', () => {
 
     it('throws if any stores do not implement #serialize()', () => {
       let flux = new Flux();
+      class TestStore extends Store {}
 
-      flux.createStore('foo', Store);
+
+      flux.createStore('foo', TestStore);
 
       expect(flux.serialize.bind(flux)).to.throw(
         'Cannot serialize Flux state because the store with key \'foo\' does '
       + 'not have a `serialize()` method. Check the implementation of the '
-      + 'Store class.'
+      + 'TestStore class.'
       );
     });
 
@@ -222,8 +228,10 @@ describe('Flux', () => {
 
     it('throws if passed string is invalid JSON', () => {
       let flux = new Flux();
+      class TestStore extends Store {}
 
-      flux.createStore('foo', Store);
+
+      flux.createStore('foo', TestStore);
 
       expect(flux.deserialize.bind(flux, 'not JSON')).to.throw(
         'Invalid value passed to `Flux#deserialize()`. Ensure that each of '
@@ -234,13 +242,15 @@ describe('Flux', () => {
 
     it('throws if any stores do not implement #deserialize()', () => {
       let flux = new Flux();
+      class TestStore extends Store {}
 
-      flux.createStore('foo', Store);
+
+      flux.createStore('foo', TestStore);
 
       expect(flux.deserialize.bind(flux, '{ "foo": "bar" }')).to.throw(
         'Cannot deserialize Flux state because the store with key \'foo\' does '
       + 'not have a `deserialize()` method. Check the implementation of the '
-      + 'Store class.'
+      + 'TestStore class.'
       );
     });
 

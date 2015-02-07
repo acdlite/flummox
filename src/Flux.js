@@ -24,7 +24,7 @@ export default class Flux extends EventEmitter {
 
   createStore(key, _Store, ...constructorArgs) {
 
-    if (!(_Store.prototype instanceof Store) && _Store !== Store) {
+    if (!(_Store.prototype instanceof Store)) {
       let className = getClassName(_Store);
 
       throw new Error(

@@ -53,33 +53,23 @@ export default class Actions {
     let originalMethod = this[methodName];
     let actionId = this._getActionId(methodName);
 
-    async function action(...args) {
+    let action = (...args) => {
       let body = originalMethod.call(this, ...args);
 
-      if (typeof body === 'undefined') return;
-
-      if (isPromise(body)) body = await body;
-
-      try {
-        this._dispatch(actionId, body);
-      } catch(error) {
-        if (error.message ===
-          'Attempted to perform action before adding to Flux instance'
-        ) {
-
-          throw new ReferenceError(
-            `You've attempted to perform the action `
-          + `${this.constructor.name}#${methodName}, but it hasn't been added `
-          + `to a Flux instance.`
-          );
-
-        } else {
-          throw error;
-        }
+      if (isPromise(body)) {
+        return body.then(dispatchBody);
+      } else {
+        return dispatchBody(body);
       }
     }
 
-    this[methodName] = action.bind(this);
+    let dispatchBody = (body) => {
+      if (typeof body === 'undefined') return;
+
+      this._dispatch(actionId, body, methodName);
+    }
+
+    this[methodName] = action;
   }
 
   /**
@@ -94,9 +84,11 @@ export default class Actions {
     return this._actionIds[methodName];
   }
 
-  _dispatch(actionId, body) {
+  _dispatch(actionId, body, methodName) {
     if (!this.dispatch) throw new ReferenceError(
-      'Attempted to perform action before adding to Flux instance'
+      `You've attempted to perform the action `
+    + `${this.constructor.name}#${methodName}, but it hasn't been added `
+    + `to a Flux instance.`
     );
 
     this.dispatch(actionId, body);
