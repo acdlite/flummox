@@ -52,6 +52,8 @@ describe('Examples:', () => {
         let messageActionIds = flux.getActionIds('messages');
         this.register(messageActionIds.newMessage, this.handleNewMessage);
         this.messageCounter = 0;
+
+        this.state = {};
       }
 
       handleNewMessage(content) {

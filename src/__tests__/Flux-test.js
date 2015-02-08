@@ -3,25 +3,37 @@
 import { Flux, Store, Actions } from '../Flux';
 import sinon from 'sinon';
 
-class SerializableStore extends Store {
+function createSerializableStore(serializedState, deserializedState) {
+  return class SerializableStore extends Store {
+    static serialize() {
+      return serializedState;
+    }
 
-  constructor(serializedState, deserializedState) {
-    super();
-
-    // Don't actually do this! This is just for testing.
-    this.serializedState = serializedState;
-    this.deserializedState = deserializedState;
+    static deserialize() {
+      return deserializedState;
+    }
   }
-
-  serialize() {
-    return this.serializedState;
-  }
-
-  deserialize() {
-    return this.deserializedState;
-  }
-
 }
+
+// class SerializableStore extends Store {
+//
+//   constructor(serializedState, deserializedState) {
+//     super();
+//
+//     // Don't actually do this! This is just for testing.
+//     this.serializedState = serializedState;
+//     this.deserializedState = deserializedState;
+//   }
+//
+//   serialize() {
+//     return this.serializedState;
+//   }
+//
+//   deserialize() {
+//     return this.deserializedState;
+//   }
+//
+// }
 
 describe('Flux', () => {
 
@@ -132,10 +144,10 @@ describe('Flux', () => {
       let flux = new Flux();
       flux.createActions('TestActions', TestActions);
 
-      expect(typeof flux.getActionIds('TestActions').getFoo).to.equal('string');
+      expect(flux.getActionIds('TestActions').getFoo).to.be.a('string');
       expect(flux.getActionIds('NonexistentActions')).to.be.undefined;
 
-      expect(typeof flux.getConstants('TestActions').getFoo).to.equal('string');
+      expect(flux.getConstants('TestActions').getFoo).to.be.a('string');
       expect(flux.getConstants('NonexistentActions')).to.be.undefined;
     });
   });
@@ -163,9 +175,9 @@ describe('Flux', () => {
     it('returns state of all the stores as a JSON string', () => {
       let flux = new Flux();
 
-      flux.createStore('foo', SerializableStore, 'foo state');
-      flux.createStore('bar', SerializableStore, 'bar state');
-      flux.createStore('baz', SerializableStore, 'baz state');
+      flux.createStore('foo', createSerializableStore('foo state'));
+      flux.createStore('bar', createSerializableStore('bar state'));
+      flux.createStore('baz', createSerializableStore('baz state'));
 
       expect(JSON.parse(flux.serialize())).to.deep.equal({
         foo: 'foo state',
@@ -174,32 +186,56 @@ describe('Flux', () => {
       });
     });
 
-    it('throws if any stores do not implement #serialize()', () => {
+    it('ignores stores whose classes do not implement .serialize()', () => {
       let flux = new Flux();
       class TestStore extends Store {}
 
+      flux.createStore('foo', createSerializableStore('foo state'));
+      flux.createStore('bar', createSerializableStore('bar state'));
+      flux.createStore('baz', TestStore);
 
-      flux.createStore('foo', TestStore);
-
-      expect(flux.serialize.bind(flux)).to.throw(
-        'Cannot serialize Flux state because the store with key \'foo\' does '
-      + 'not have a `serialize()` method. Check the implementation of the '
-      + 'TestStore class.'
-      );
+      expect(JSON.parse(flux.serialize())).to.deep.equal({
+        foo: 'foo state',
+        bar: 'bar state',
+      });
     });
 
-    it('throws if return value of Store#serialize() is not a string', () => {
+    it('warns if any store classes .serialize() returns a non-string', () => {
       let flux = new Flux();
+      let warn = sinon.spy(console, 'warn');
 
-      flux.createStore('foo', SerializableStore, {});
+      flux.createStore('foo', createSerializableStore({}));
+      flux.serialize();
 
-      expect(flux.serialize.bind(flux)).to.throw(
-        '`Store#serialize() must return a string, but the store with key '
-      + '\'foo\' returned a non-string with type \'object\'. Check the '
-      + '`#serialize() method of the SerializableStore class.'
+      expect(warn.firstCall.args[0]).to.equal(
+        'The store with key \'foo\' was not serialized because the static '
+      + 'method `SerializableStore.serialize()` returned a non-string with '
+      + 'type \'object\'.'
       );
+
+      console.warn.restore();
     });
 
+    it('warns and skips stores whose classes do not implement .deserialize()', () => {
+      let flux = new Flux();
+      let warn = sinon.spy(console, 'warn');
+
+      class TestStore extends Store {
+        static serialize() {
+          return 'state string';
+        }
+      }
+
+      flux.createStore('test', TestStore);
+      flux.serialize();
+
+      expect(warn.firstCall.args[0]).to.equal(
+        'The class `TestStore` has a `serialize()` method, but no '
+      + 'corresponding `deserialize()` method.'
+      );
+
+      console.warn.restore();
+    });
   });
 
   describe('#deserialize()', () => {
@@ -207,9 +243,9 @@ describe('Flux', () => {
     it('converts a serialized string into state and uses it to replace state of stores', () => {
       let flux = new Flux();
 
-      flux.createStore('foo', SerializableStore, null, { foo: 'bar' });
-      flux.createStore('bar', SerializableStore, null, { bar: 'baz' });
-      flux.createStore('baz', SerializableStore, null, { baz: 'foo' });
+      flux.createStore('foo', createSerializableStore(null, { foo: 'bar' }));
+      flux.createStore('bar', createSerializableStore(null, { bar: 'baz' }));
+      flux.createStore('baz', createSerializableStore(null, { baz: 'foo' }));
 
       flux.deserialize(`{
         "foo": "{}",
@@ -226,7 +262,7 @@ describe('Flux', () => {
       expect(bazStore.state).to.deep.equal({ baz: 'foo' });
     });
 
-    it('throws if passed string is invalid JSON', () => {
+    it('warns and skips if passed string is invalid JSON', () => {
       let flux = new Flux();
       class TestStore extends Store {}
 
@@ -234,24 +270,52 @@ describe('Flux', () => {
       flux.createStore('foo', TestStore);
 
       expect(flux.deserialize.bind(flux, 'not JSON')).to.throw(
-        'Invalid value passed to `Flux#deserialize()`. Ensure that each of '
-      + 'your store\'s `#serialize()` methods returns a properly '
-      + 'escaped string.'
+        'Invalid value passed to `Flux#deserialize()`: not JSON'
       );
     });
 
-    it('throws if any stores do not implement #deserialize()', () => {
+    it('warns and skips stores whose classes do not implement .serialize()', () => {
+      let flux = new Flux();
+      let warn = sinon.spy(console, 'warn');
+
+      class TestStore extends Store {
+        static deserialize() {
+          return {};
+        }
+      }
+
+      flux.createStore('test', TestStore);
+      flux.deserialize('{"test": "test state"}');
+
+      expect(warn.firstCall.args[0]).to.equal(
+        'The class `TestStore` has a `deserialize()` method, but no '
+      + 'corresponding `serialize()` method.'
+      );
+
+      console.warn.restore();
+    });
+
+    it('ignores stores whose classes do not implement .deserialize()', () => {
       let flux = new Flux();
       class TestStore extends Store {}
 
+      flux.createStore('foo', createSerializableStore(null, { foo: 'bar' }));
+      flux.createStore('bar', createSerializableStore(null, { bar: 'baz' }));
+      flux.createStore('baz', TestStore);
 
-      flux.createStore('foo', TestStore);
+      flux.deserialize(`{
+        "foo": "{}",
+        "bar": "{}",
+        "baz": "{}"
+      }`);
 
-      expect(flux.deserialize.bind(flux, '{ "foo": "bar" }')).to.throw(
-        'Cannot deserialize Flux state because the store with key \'foo\' does '
-      + 'not have a `deserialize()` method. Check the implementation of the '
-      + 'TestStore class.'
-      );
+      let fooStore = flux.getStore('foo');
+      let barStore = flux.getStore('bar');
+      let bazStore = flux.getStore('baz');
+
+      expect(fooStore.state).to.deep.equal({ foo: 'bar' });
+      expect(barStore.state).to.deep.equal({ bar: 'baz' });
+      expect(bazStore.state).to.be.undefined;
     });
 
   });

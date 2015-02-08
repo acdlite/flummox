@@ -31,11 +31,11 @@ describe('Actions', () => {
     it('returns strings corresponding to action method names', () => {
       let actions = new TestActions();
 
-      expect(typeof actions.getActionIds().getFoo).to.equal('string');
-      expect(typeof actions.getActionIds().getBar).to.equal('string');
+      expect(actions.getActionIds().getFoo).to.be.a('string');
+      expect(actions.getActionIds().getBar).to.be.a('string');
 
-      expect(typeof actions.getActionIds().getFoo).to.equal('string');
-      expect(typeof actions.getActionIds().getBar).to.equal('string');
+      expect(actions.getActionIds().getFoo).to.be.a('string');
+      expect(actions.getActionIds().getBar).to.be.a('string');
     });
 
   });
@@ -84,7 +84,7 @@ describe('Actions', () => {
 
       let response = actions.asyncAction();
 
-      expect(typeof response.then).to.equal('function');
+      expect(response.then).to.be.a('function');
 
       await response;
 

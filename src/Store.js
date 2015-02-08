@@ -18,7 +18,7 @@ export default class Store extends EventEmitter {
    * @type {Object}
    */
   constructor() {
-    this.state = {};
+    this.state = undefined;
 
     this._handlers = new Map();
   }
@@ -36,7 +36,7 @@ export default class Store extends EventEmitter {
     if (typeof this.state === 'undefined') this.state = {};
 
     if (this._isHandlingDispatch) {
-      this._batchedChanges = Object.assign(this._batchedChanges, newState);
+      this._pendingState = Object.assign(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
       console.warn(
@@ -50,8 +50,15 @@ export default class Store extends EventEmitter {
   }
 
   replaceState(newState) {
-    this.state = Object.assign({}, newState);
-    this.emit('change');
+    if (typeof this.state === 'undefined') this.state = {};
+
+    if (this._isHandlingDispatch) {
+      this._pendingState = Object.assign({}, newState);
+      this._emitChangeAfterHandlingDispatch = true;
+    } else {
+      this.state = Object.assign({}, newState);
+      this.emit('change');
+    }
   }
 
   register(actionId, handler) {
@@ -64,7 +71,7 @@ export default class Store extends EventEmitter {
 
   handler(payload) {
     this._isHandlingDispatch = true;
-    this._batchedChanges = {};
+    this._pendingState = Object.assign({}, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
@@ -78,12 +85,12 @@ export default class Store extends EventEmitter {
     } finally {
 
       if (this._emitChangeAfterHandlingDispatch) {
-        this.state = Object.assign({}, this.state, this._batchedChanges);
+        this.state = this._pendingState;
         this.emit('change');
       }
 
       this._isHandlingDispatch = false;
-      this._batchedChanges = {};
+      this._pendingState = {};
       this._emitChangeAfterHandlingDispatch = false;
     }
   }

@@ -149,6 +149,20 @@ describe('Store', () => {
       expect(listener.calledOnce).to.be.true;
       expect(store.state).to.deep.equal({ foo: 'bar', bar: 'baz', baz: 'foo' });
     });
+
+    it('warns if called from outside an action handler', () => {
+      let store = new ExampleStore();
+      let warn = sinon.spy(console, 'warn');
+
+      store.setState({ foo: 'bar' });
+
+      expect(warn.firstCall.args[0]).to.equal(
+        'Store#setState() called from outside an action handler. This is '
+      + 'likely a mistake. Flux stores should manage their own state.'
+      );
+
+      console.warn.restore();
+    });
   });
 
   describe('#replaceState()', () => {
@@ -160,6 +174,28 @@ describe('Store', () => {
       expect(store.state).to.deep.equal({
         bar: 'baz',
       });
+    });
+
+    it('batches multiple state updates within action handler', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.register(actionId, function() {
+        this.replaceState({ bar: 'baz' });
+
+        expect(this.state).to.deep.equal({ foo: 'bar' });
+        expect(listener.called).to.be.false;
+
+        this.setState({ foo: 'bar' });
+        this.replaceState({ baz: 'foo' });
+      });
+
+      // Simulate dispatch
+      store.handler({ actionId, body: 'foobar' });
+
+      expect(listener.calledOnce).to.be.true;
+      expect(store.state).to.deep.equal({ baz: 'foo' });
     });
 
     it('emits change event', () => {

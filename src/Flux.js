@@ -20,6 +20,10 @@ export default class Flux extends EventEmitter {
     this._actions = {};
 
     this.getConstants = this.getActionIds;
+
+    // Aliases
+    this.dehydrate = this.serialize;
+    this.hydrate = this.deserialize;
   }
 
   createStore(key, _Store, ...constructorArgs) {
@@ -120,30 +124,33 @@ export default class Flux extends EventEmitter {
 
       let store = this._stores[key];
 
-      if (typeof store.serialize !== 'function') {
-        let className = store.constructor.name;
+      let serialize = store.constructor.serialize;
 
-        throw new Error(
-          `Cannot serialize Flux state because the store with key '${key}' `
-        + `does not have a \`serialize()\` method. Check the implementation of `
-        + `the ${className} class.`
-        );
-      }
+      if (typeof serialize !== 'function') continue;
 
-      let serializedStoreState = store.serialize();
+      let serializedStoreState = serialize(store.state);
 
       if (typeof serializedStoreState !== 'string') {
         let className = store.constructor.name;
 
-        throw new Error(
-          `\`Store#serialize()\ must return a string, but the store with key `
-        + `'${key}' returned a non-string with type `
-        + `'${typeof serializedStoreState}'. Check the \`#serialize()\ method `
-        + `of the ${className} class.`
+        console.warn(
+          `The store with key '${key}' was not serialized because the static `
+        + `method \`${className}.serialize()\` returned a non-string with type `
+        + `'${typeof serializedStoreState}'.`
         );
       }
 
-      stateTree[key] = store.serialize();
+      stateTree[key] = serializedStoreState;
+
+      if (typeof store.constructor.deserialize !== 'function') {
+        let className = store.constructor.name;
+
+        console.warn(
+          `The class \`${className}\` has a \`serialize()\` method, but no `
+        + `corresponding \`deserialize()\` method.`
+        );
+      }
+
     }
 
     return JSON.stringify(stateTree);
@@ -156,9 +163,8 @@ export default class Flux extends EventEmitter {
       let className = this.constructor.name;
 
       throw new Error(
-        `Invalid value passed to \`${className}#deserialize()\`. Ensure that `
-      + `each of your store's \`#serialize()\` methods returns a properly `
-      + `escaped string.`
+        `Invalid value passed to \`${className}#deserialize()\`: `
+      + `${serializedState}`
       );
     }
 
@@ -167,19 +173,22 @@ export default class Flux extends EventEmitter {
 
       let store = this._stores[key];
 
-      if (typeof store.deserialize !== 'function') {
-        let className = store.constructor.name;
+      let deserialize = store.constructor.deserialize;
 
-        throw new Error(
-          `Cannot deserialize Flux state because the store with key '${key}' `
-        + `does not have a \`deserialize()\` method. Check the implementation `
-        + `of the ${className} class.`
-        );
-      }
+      if (typeof deserialize !== 'function') continue;
 
-      let storeState = store.deserialize(serializedState);
+      let storeState = deserialize(serializedState);
 
       store.replaceState(storeState);
+
+      if (typeof store.constructor.serialize !== 'function') {
+        let className = store.constructor.name;
+
+        console.warn(
+          `The class \`${className}\` has a \`deserialize()\` method, but no `
+        + `corresponding \`serialize()\` method.`
+        );
+      }
     }
   }
 
