@@ -78,7 +78,7 @@ Flummox also gives you the ability to serialize the initial state of your applic
 Roadmap
 -------
 
-Flummox is still quite new, but most of the core features that I set out to implement are completed. My main concern right now is improving the documentation, writing guides, and providing examples.
+Flummox is still quite new, but most of the core features that I originally set out to implement are completed. My main concern right now is improving the documentation, writing guides, and providing examples.
 
 Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
 
