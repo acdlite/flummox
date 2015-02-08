@@ -24,11 +24,14 @@
   "license": "MIT",
   "devDependencies": {
     "6to5": "~3.3.7",
+    "6to5-core": "~3.5.0",
+    "6to5-loader": "~3.0.0",
     "chai": "~1.10.0",
     "es6-promise": "~2.0.1",
     "mocha": "~2.1.0",
     "sinon": "~1.12.2",
-    "source-map-support": "~0.2.9"
+    "source-map-support": "~0.2.9",
+    "webpack": "~1.5.3"
   },
   "dependencies": {
     "6to5-runtime": "~3.3.9",
