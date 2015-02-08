@@ -87,6 +87,18 @@ Since Flummox's core innovation is its approach to isomorphism, I would like to 
 Feature requests and PRs are absolutely welcome, as long as they keep with the spirit of a minimal core API. Any additional features (e.g. undo-redo & versioning) are likely to be implemented as mixins.
 
 
+Recommended libraries
+---------------------
+
+Flummox is just Flux. It has no opinion on the rest of your stack. You don't even have to be using React. But in case you're interested, here are some recommended tools and libraries that complement Flummox well:
+
+* [React (of course!)](http://facebook.github.io/react/)
+* [Immutable.js](http://facebook.github.io/immutable-js/) — Using immutable data in your applications not only makes your application more performant, but it also simplifies state management in your stores. No more defensive copying! It also helps ensure isolation between stores by reducing the likelihood that you'll mutate a dispatched payload.
+* [React Router](https://github.com/rackt/react-router) - A complete routing solution for React, with excellent support for isomorphic applications.
+* [superagent](https://github.com/visionmedia/superagent) - An isomorphic AJAX library. Use it for all your data fetching.
+* [6to5](http://6to5.org/) - Use next-generation JavaScript (ES6, and even some ES7) today. Once you've tried it, you'll see that it's the only way to write JavaScript. 6to5 also very conveniently supports JSX compilation.
+
+
 Inspiration and thanks
 ----------------------
 
