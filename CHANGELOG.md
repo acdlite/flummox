@@ -11,13 +11,13 @@ Tags:
 
 ## 2.4.0
 
-- [New Feature]
+- **New Feature**
   - Added browser build using webpack, mostly just so we can keep an eye on bundle size.
-- [Documentation]
+- **Documentation**
   - Updated README.md
   - Added explanation of enforced unidirectional data flow to Actions.md
   - Added recommended libraries section
-- [Internal]
+- **Internal**
   - Removed dependency on ES6 polyfills to reduce bundle size. Library assumes global Promise.
   - Updated Makefile.
 
