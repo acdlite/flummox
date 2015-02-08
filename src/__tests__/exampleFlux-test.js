@@ -32,7 +32,8 @@ describe('Examples:', () => {
      *
      * Stores are automatically registered with the dispatcher, but rather than
      * using a giant `switch` statement to check for specific action types, we
-     * register handlers with action ids.
+     * register handlers with action ids, or with a reference to the action
+     * itself.
      *
      * Stores have a React-inspired API for managing state. Use `this.setState`
      * to update state within your handlers. Multiple calls to `this.setState`
@@ -49,8 +50,8 @@ describe('Examples:', () => {
         // Don't forget to call the super constructor
         super();
 
-        let messageActionIds = flux.getActionIds('messages');
-        this.register(messageActionIds.newMessage, this.handleNewMessage);
+        let messageActions = flux.getActions('messages');
+        this.register(messageActions.newMessage, this.handleNewMessage);
         this.messageCounter = 0;
 
         this.state = {};

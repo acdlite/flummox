@@ -63,6 +63,9 @@ export default class Store extends EventEmitter {
   }
 
   register(actionId, handler) {
+
+    if (typeof actionId === 'function') actionId = actionId._id;
+
     this._handlers[actionId] = handler.bind(this);
   }
 

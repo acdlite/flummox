@@ -1,6 +1,6 @@
 'use strict';
 
-import { Store, Flux } from '../Flux';
+import { Store, Flux, Actions } from '../Flux';
 import sinon from 'sinon';
 
 describe('Store', () => {
@@ -52,6 +52,24 @@ describe('Store', () => {
       store.register(actionId, handler);
 
       expect(store._handlers[actionId]()).to.equal('bar');
+    });
+
+    it('accepts actions instead of action ids', () => {
+      class ExampleActions extends Actions {
+        getFoo() {
+          return 'foo';
+        }
+      }
+
+      let actions = new ExampleActions();
+      let store = new ExampleStore();
+      let handler = sinon.spy();
+      store.register(actions.getFoo, handler);
+
+      let mockArgs = ['foo', 'bar'];
+      store._handlers[actions.getFoo._id](...mockArgs);
+
+      expect(handler.calledWith(...mockArgs)).to.be.true;
     });
 
   });

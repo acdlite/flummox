@@ -373,6 +373,8 @@ var Flummox =
 	    },
 	    register: {
 	      value: function register(actionId, handler) {
+	        if (typeof actionId === "function") actionId = actionId._id;
+
 	        this._handlers[actionId] = handler.bind(this);
 	      },
 	      writable: true,
@@ -454,14 +456,11 @@ var Flummox =
 
 	var uniqueId = _interopRequire(__webpack_require__(7));
 
-	var assign = _interopRequire(__webpack_require__(6));
-
 	var Actions = (function () {
 	  function Actions() {
 	    _classCallCheck(this, Actions);
 
 	    this._baseId = uniqueId();
-	    this._actionIds = {};
 
 	    var methodNames = this._getActionMethodNames();
 	    for (var i = 0; i < methodNames.length; i++) {
@@ -475,7 +474,12 @@ var Flummox =
 	  _prototypeProperties(Actions, null, {
 	    getActionIds: {
 	      value: function getActionIds() {
-	        return _tailCall(assign, [{}, this._actionIds]);
+	        var _this = this;
+	        var _temp;
+	        return _tailCall((_temp = this._getActionMethodNames()).reduce, [function (result, actionName) {
+	          result[actionName] = _this[actionName]._id;
+	          return result;
+	        }, {}], _temp);
 	      },
 	      writable: true,
 	      configurable: true
@@ -496,7 +500,6 @@ var Flummox =
 	        var _this = this;
 	        var originalMethod = this[methodName];
 	        var actionId = this._createActionId(methodName);
-	        this._actionIds[methodName] = actionId;
 
 	        var action = function () {
 	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -517,6 +520,8 @@ var Flummox =
 
 	          _this._dispatch(actionId, body, methodName);
 	        };
+
+	        action._id = actionId;
 
 	        this[methodName] = action;
 	      },

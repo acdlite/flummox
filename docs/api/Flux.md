@@ -50,14 +50,6 @@ createStore(string key, function StoreClass [, ...constructorArgs])
 
 Creates an instance of `StoreClass`, registers the store's handlers with the dispatcher, and saves a reference to it. `constructorArgs` are passed to the constructor of `ActionsClass` on creation.
 
-### getActions
-
-```js
-getActions(string key)
-```
-
-Gets an actions instance by key.
-
 ### getStore
 
 ```js
@@ -65,6 +57,14 @@ getStore(string key)
 ```
 
 Gets an store instance by key.
+
+### getActions
+
+```js
+getActions(string key)
+```
+
+Gets an actions instance by key.
 
 ### getActionIds
 

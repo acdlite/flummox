@@ -13,9 +13,10 @@ class MessageStore extends Store {
     // Don't forget to call the super constructor
     super();
 
-    // Register handlers with the dispatcher using action ids
-    let messageActionIds = flux.getActionIds('messages');
-    this.register(messageActionIds.newMessage, this.handleNewMessage);
+    // Register handlers with the dispatcher using action ids, or the
+    // actions themselves
+    let messageActions = flux.getActions('messages');
+    this.register(messageActions.newMessage, this.handleNewMessage);
 
     // Set initial state using assignment
     this.state = {};
@@ -47,10 +48,12 @@ Methods
 ### register
 
 ```js
-register(string actionId, function handler)
+register(function action | string actionId , function handler)
 ```
 
 Register a handler for a specific action. The handler will be automatically bound to the store instance.
+
+You can register using either the action id or the action itself.
 
 ### setState
 
