@@ -8,7 +8,7 @@ SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))
 
 # Build application
-build: js
+build: js browser
 
 clean:
 	rm -rf lib/
@@ -40,4 +40,4 @@ browser: $(SRC_JS)
 	$(WEBPACK_CMD) src/Flux.js dist/flummox.js
 	COMPRESS=true $(WEBPACK_CMD) src/Flux.js dist/flummox.min.js
 
-.PHONY: build clean test fast-build js fast-js watch-js
+.PHONY: build clean test fast-build js fast-js watch-js browser
