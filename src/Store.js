@@ -20,7 +20,7 @@ export default class Store extends EventEmitter {
   constructor() {
     this.state = undefined;
 
-    this._handlers = new Map();
+    this._handlers = {};
   }
 
   /**
@@ -62,7 +62,7 @@ export default class Store extends EventEmitter {
   }
 
   register(actionId, handler) {
-    this._handlers.set(actionId, handler.bind(this));
+    this._handlers[actionId] = handler.bind(this);
   }
 
   waitFor(tokensOrStores) {
@@ -77,7 +77,7 @@ export default class Store extends EventEmitter {
     try {
       let { body, actionId } = payload;
 
-      let handler = this._handlers.get(actionId);
+      let handler = this._handlers[actionId];
 
       if (typeof handler !== 'function') return;
 

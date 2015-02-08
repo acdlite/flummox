@@ -36,7 +36,7 @@ describe('Store', () => {
       store.register(actionId, handler);
 
       let mockArgs = ['foo', 'bar'];
-      store._handlers.get(actionId)(...mockArgs);
+      store._handlers[actionId](...mockArgs);
 
       expect(handler.calledWith(...mockArgs)).to.be.true;
     });
@@ -51,7 +51,7 @@ describe('Store', () => {
 
       store.register(actionId, handler);
 
-      expect(store._handlers.get(actionId)()).to.equal('bar');
+      expect(store._handlers[actionId]()).to.equal('bar');
     });
 
   });

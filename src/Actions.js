@@ -21,17 +21,10 @@ export default class Actions {
   constructor() {
 
     this._baseId = uniqueId();
-
-    this._actions = new Map();
     this._actionIds = {};
 
     for (let methodName of this._getActionMethodNames()) {
-      let constant = this._createActionId(methodName);
-
-      this._actions.set(constant, action);
-      this._actionIds[methodName] = constant;
-
-      let action = this._wrapAction(methodName);
+      this._wrapAction(methodName);
     }
 
     this.getConstants = this.getActionIds;
@@ -51,7 +44,8 @@ export default class Actions {
 
   _wrapAction(methodName) {
     let originalMethod = this[methodName];
-    let actionId = this._getActionId(methodName);
+    let actionId = this._createActionId(methodName);
+    this._actionIds[methodName] = actionId;
 
     let action = (...args) => {
       let body = originalMethod.call(this, ...args);

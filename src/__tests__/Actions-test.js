@@ -31,11 +31,13 @@ describe('Actions', () => {
     it('returns strings corresponding to action method names', () => {
       let actions = new TestActions();
 
-      expect(actions.getActionIds().getFoo).to.be.a('string');
-      expect(actions.getActionIds().getBar).to.be.a('string');
+      let actionIds = actions.getActionIds();
 
-      expect(actions.getActionIds().getFoo).to.be.a('string');
-      expect(actions.getActionIds().getBar).to.be.a('string');
+      expect(actionIds.getFoo).to.be.a('string');
+      expect(actionIds.getBar).to.be.a('string');
+
+      expect(actionIds.getFoo).to.be.a('string');
+      expect(actionIds.getBar).to.be.a('string');
     });
 
   });
