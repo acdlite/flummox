@@ -9,6 +9,18 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.4.0
+
+- [New Feature]
+  - Added browser build using webpack, mostly just so we can keep an eye on bundle size.
+- [Documentation]
+  - Updated README.md
+  - Added explanation of enforced unidirectional data flow to Actions.md
+  - Added recommended libraries section
+- [Internal]
+  - Removed dependency on ES6 polyfills to reduce bundle size. Library assumes global Promise.
+  - Updated Makefile.
+
 ## 2.3.0
 
 This release does introduce a few minor breaking changes... I contemplated bumping the version to 3.0, but the affected areas are such edge cases (undocumented and unsupported ones, at that) that I decided against it. The fact that the project is only, like, a week old was also a factor. In the future, as the API stablizes and matures, I'll try to be better about this.
