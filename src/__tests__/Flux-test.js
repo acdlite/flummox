@@ -15,26 +15,6 @@ function createSerializableStore(serializedState, deserializedState) {
   }
 }
 
-// class SerializableStore extends Store {
-//
-//   constructor(serializedState, deserializedState) {
-//     super();
-//
-//     // Don't actually do this! This is just for testing.
-//     this.serializedState = serializedState;
-//     this.deserializedState = deserializedState;
-//   }
-//
-//   serialize() {
-//     return this.serializedState;
-//   }
-//
-//   deserialize() {
-//     return this.deserializedState;
-//   }
-//
-// }
-
 describe('Flux', () => {
 
   describe('#createStore()', () => {
