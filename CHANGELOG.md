@@ -12,6 +12,13 @@ Tags:
 ## 2.4.0
 
 - **New Feature**
+  - `Store#register()` now accepts either action ids or actions themselves.
+- **Internal**
+  - Action ids are stored directly on the action instead of in a separate collection.
+
+## 2.4.0
+
+- **New Feature**
   - Added browser build using webpack, mostly just so we can keep an eye on bundle size.
 - **Documentation**
   - Updated README.md
