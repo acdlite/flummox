@@ -3,11 +3,12 @@
 Flummox
 =======
 
-Idiomatic, modular, testable, isomorphic Flux.
+Idiomatic, modular, testable, isomorphic Flux. No singletons required.
 
-**Documentation and demos are in progress. In the meantime, you can read the [quick start quide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md) or poke around the [test suite](https://github.com/acdlite/flummox/tree/master/src/__tests__).**
+* [API documentation](https://github.com/acdlite/flummox/blob/master/docs/api)
+* [Quick start guide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
 
-Here's a WIP demo of an isomorphic app using Flummox, React Router, and Immutable.js (still needs some work, but feel free to check it out):
+Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
 
@@ -26,6 +27,8 @@ Flummox allows you to encapsulate your entire Flux set-up — stores, actions, c
 ```js
 let flux = new Flux();
 ```
+
+There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on the server as well as the client) incredibly straightforward.
 
 **tl;dr Show me the code!!!** No problem. Check out a full example from Flummox's [test suite](https://github.com/acdlite/flummox/blob/master/src/__tests__/exampleFlux-test.js).
 
@@ -70,17 +73,23 @@ app.get("/", function(req, res) {
 });
 ```
 
+Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and deserialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
+
 Roadmap
 -------
 
-~~The biggest feature that's currently not implemented the ability to "dehydrate" the entire state into string on the server, then "rehydrate" it on the client. This will be straightforward to implement; I just haven't gotten to it yet.~~ **Done!** https://github.com/acdlite/flummox/pull/9
+Flummox is still quite new, but most of the core features that I set out to implement are completed. My main concern right now is improving the documentation, writing guides, and providing examples.
 
-Number one priority right now is writing the API docs.
+Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
+
+Feature requests and PRs are absolutely welcome, as long as they keep with the spirit of a minimal core API. Any additional features (e.g. undo-redo & versioning) are likely to be implemented as mixins.
+
 
 Inspiration and thanks
 ----------------------
 
 * Facebook, obviously.
+* Pete Hunt's talk at React.js Conf 2015 ["Full Stack Flux"](https://www.youtube.com/watch?v=KtmjkCuV-EU). The idea of stores as essentially "a reduce() + a change event" was illuminating.
 * [alt](https://github.com/goatslacker/alt), a similar Flux library from which I shamelessly copied (ideas, not code)
 
 License
