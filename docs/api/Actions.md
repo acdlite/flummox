@@ -26,7 +26,7 @@ Methods
 getActionIds()
 ```
 
-Returns the action ids for the Actions instance, keyed by action name. (In most cases, it's probably more convenient to use `Flux#getActionIds()` instead.)
+Returns an object of action ids, keyed by action name. (In most cases, it's probably more convenient to use `Flux#getActionIds()` instead.)
 
 
-Also available as `#getConstants()`
+Also available as `getConstants()`

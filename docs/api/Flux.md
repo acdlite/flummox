@@ -19,7 +19,7 @@ class Flux extends Flummox {
 }
 ```
 
-Encapsulating your stores and actions
+Encapsulate your stores and actions
 -------------------------------------
 
 Flummox is designed to be used without singletons. Instead, create a Flux class that encapsulates the creation of all your application's stores and actions, so that you can create new instances on the fly.
@@ -72,14 +72,14 @@ Gets an store instance by key.
 getActionIds(string key)
 ```
 
-Get the action ids for the actions instance with the given key. Internally calls `Actions#getActionIds`.
+Gets action ids for the given actions key. Internally calls `Actions#getActionIds`.
 
 Also available as `getConstants()`.
 
 Dispatcher methods
 ------------------
 
-Every Flux instance has its own dispatcher. You should try to avoid interacting with the dispatcher directly, but it is available (primarily for testing purposes) at `this.dispatcher`. Some convenience methods are also provided.
+Every Flux instance has its own dispatcher. You should try to avoid interacting with the dispatcher directly, but it is available (primarily for testing purposes) as `this.dispatcher`. Some convenience methods are also provided:
 
 ### dispatch
 ```
@@ -95,7 +95,7 @@ Similar to the `dispatch()` method of the dispatcher itself, except instead of p
 }
 ```
 
-This is used internally by Flummox, as well: the `actionId` field is used to identify the source action, and `body` contains the value passed to store handlers.
+This is used internally by Flummox: the `actionId` field is used to identify the source action, and `body` contains the value passed to store handlers. In your tests, you can use it to simulate a dispatch to your stores.
 
 ### waitFor
 
@@ -122,7 +122,7 @@ serialize()
 
 Returns a JSON string describing the entire state of your Flux application.
 
-Internally, it passes each store's current state to the store's static method `Store.serialize()`. The return value must be string representing the given state. If a store does not have a static method `serialize()`, or if it returns a non-string, it is ignored.
+Internally, it passes each store's current state to the store's static method `Store.serialize()`. The return value must be a string representing the given state. If a store does not have a static method `serialize()`, or if it returns a non-string, it is ignored.
 
 ### deserialize
 
@@ -130,6 +130,6 @@ Internally, it passes each store's current state to the store's static method `S
 deserialize(string stateString)
 ```
 
-Converts a serialized state string (as returned from `Flux#serialize`) to application state and updates the stores.
+Converts a serialized state string (as returned from `Flux#serialize()`) to application state and updates the stores.
 
-Internally, it passes the state string for each store (as returned from `Store#serialize`) to the store's static method `Store.deserialize()`. The return value must be a state object. It will be passed to `Store#replaceState`. If a store does not have a static method `deserialize()`, it is ignored.
+Internally, it passes the state string for each store (as returned from `Store.serialize()`) to the store's static method `Store.deserialize()`. The return value must be a state object. It will be passed to `Store#replaceState()`. If a store does not have a static method `deserialize()`, it is ignored.

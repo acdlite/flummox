@@ -33,11 +33,13 @@ class MessageStore extends Store {
 Managing state
 --------------
 
-In a Flux application, all application state is contained inside stores, and the state of a store only be changed by the store itself. The sole point of entry for data in a store is via the dispatcher, but even then, information sent through the dispatcher should be thought of as messages *describing* data, not data itself. This may seem like a distinction without a difference, but by sticking to this concept, it ensures that your stores remain isolated and free of the complicated dependencies you often find in MVC-style apps.
+In a Flux application, all application state is contained inside stores, and the state of a store can only be changed by the store itself. The sole point of entry for data in a store is via the dispatcher, but information sent through the dispatcher should be thought of not as data, but as messages *describing* data. This may seem like a distinction without a difference, but by sticking to this concept, it ensures that your stores remain isolated and free of the complicated dependencies you often find in MVC-style apps.
 
-Because state is so crucial, Flummox is a little more opinionated than some other Flux libraries about how to manage it: the Store API is heavily influenced by the [React component API](http://facebook.github.io/react/docs/component-api.html). All state mutations must be made via `setState()`. `this.state` is used to access the current state, but it should **never** be mutated directly. Treat `this.state` as if it were immutable.
+Because state is so crucial, Flummox is a little more opinionated than some other Flux libraries about how to manage it: for instance, all state must be stored in the `this.state` object. That being said, Flummox places no restrictions on the types of data you store, so interoperability with libraries like Immutable.js is a non-issue. If this sounds familiar, it's because the store API is heavily influenced by the [React component API](http://facebook.github.io/react/docs/component-api.html):
 
-As in React +0.13, initial state is set by assignment in the constructor.
+* All state mutations must be made via `setState()`.
+* `this.state` is used to access the current state, but it should **never** be mutated directly. Treat `this.state` as if it were immutable.
+* As in React +0.13, initial state is set by assignment in the constructor.
 
 Methods
 -------
@@ -45,7 +47,7 @@ Methods
 ### register
 
 ```js
-register(Store store, function handler)
+register(string actionId, function handler)
 ```
 
 Register a handler for a specific action. The handler will be automatically bound to the store instance.
@@ -94,8 +96,8 @@ someActionHandler() {
 }
 ```
 
-Internally, it calls [`Dispatcher#waitFor()`](http://facebook.github.io/flux/docs/dispatcher.html#content). Instead of a store, you could alternatively pass a dispatcher token.
+Internally, it calls [`Dispatcher#waitFor()`](http://facebook.github.io/flux/docs/dispatcher.html#content).
 
 Instead of passing a store, you can also pass a dispatcher token, or an array of tokens and stores.
 
-**Usage note**: Because this method introduces dependencies between stores, try to avoid using this method whenever possible. Stores should be as isolated from the outside world as possible. If you find yourself relying on `waitFor()` often, consider rethinking how data flows through your app.
+**Usage note**: Because this method introduces dependencies between stores, you should generally try to avoid using it. Stores should be as isolated as possible from the outside world. If you find yourself relying on `waitFor()` often, consider rethinking how data flows through your app.
