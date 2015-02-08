@@ -1,0 +1,31 @@
+# Changelog
+
+Tags:
+
+- [New Feature]
+- [Bug Fix]
+- [Breaking Change]
+- [Documentation]
+- [Internal]
+- [Polish]
+
+## 2.3.0
+
+This release does introduce a few minor breaking changes... I contemplated bumping the version to 3.0, but the affected areas are such edge cases (undocumented and unsupported ones, at that) that I decided against it. The fact that the project is only, like, a week old was also a factor. In the future, as the API stablizes and matures, I'll try to be better about this.
+
+The semver for this project is a little wacky, since the 1.0 version of this library existed for quite a while, but it was only ever used by me and was quite different in many ways. This is all a long-winded, extra cautious, apologetic way of me explaining why you should use (~) (or exact versions) for dependencies in your `package.json` file instead of the default (^) — not just for this package, but for all packages.
+
+(See "Why Semantic Versioning Isn't": https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e)
+
+  - **New Feature**
+    - Serialization / Deserialization
+    - `Store#replaceState()`
+    - Added alias `getConstants()` for `getActionIds()`
+    - Better warning messages.
+  - **Breaking Change**
+    - Calling an action only return promises if the original action method returns a promise. Before, all actions returned promises, even if they were synchronous.
+    - Instantiating a base Store class will now throw an error. This is technically a "breaking" change, since you used to be able to do so, but it's certainly an edge case. More likely to break tests than actual code.
+  - **Documentation**
+    - API docs
+  - **Internal**
+    - Use spies to test warning messages.
