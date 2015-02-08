@@ -1,6 +1,6 @@
 {
   "name": "flummox",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Idiomatic, modular, testable, isomorphic Flux. 0% singletons, 100% Flux.",
   "main": "lib/Flux.js",
   "repository": {
