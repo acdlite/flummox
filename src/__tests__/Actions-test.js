@@ -2,6 +2,7 @@
 
 import Actions from '../Actions';
 import sinon from 'sinon';
+import '6to5-runtime/regenerator/runtime';
 
 describe('Actions', () => {
 

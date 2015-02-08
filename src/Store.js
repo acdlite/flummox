@@ -10,6 +10,7 @@
 'use strict';
 
 import EventEmitter from 'eventemitter3';
+import assign from 'object-assign';
 
 export default class Store extends EventEmitter {
 
@@ -29,14 +30,14 @@ export default class Store extends EventEmitter {
    * @returns {object}
    */
   getState() {
-    return Object.assign({}, this.state);
+    return assign({}, this.state);
   }
 
   setState(newState) {
     if (typeof this.state === 'undefined') this.state = {};
 
     if (this._isHandlingDispatch) {
-      this._pendingState = Object.assign(this._pendingState, newState);
+      this._pendingState = assign(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
       console.warn(
@@ -44,7 +45,7 @@ export default class Store extends EventEmitter {
       + 'a mistake. Flux stores should manage their own state.'
       );
 
-      this.state = Object.assign({}, this.state, newState);
+      this.state = assign({}, this.state, newState);
       this.emit('change');
     }
   }
@@ -53,10 +54,10 @@ export default class Store extends EventEmitter {
     if (typeof this.state === 'undefined') this.state = {};
 
     if (this._isHandlingDispatch) {
-      this._pendingState = Object.assign({}, newState);
+      this._pendingState = assign({}, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
-      this.state = Object.assign({}, newState);
+      this.state = assign({}, newState);
       this.emit('change');
     }
   }
@@ -71,7 +72,7 @@ export default class Store extends EventEmitter {
 
   handler(payload) {
     this._isHandlingDispatch = true;
-    this._pendingState = Object.assign({}, this.state);
+    this._pendingState = assign({}, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {

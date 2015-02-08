@@ -15,6 +15,7 @@
 'use strict';
 
 import uniqueId from 'uniqueid';
+import assign from 'object-assign';
 
 export default class Actions {
 
@@ -23,7 +24,9 @@ export default class Actions {
     this._baseId = uniqueId();
     this._actionIds = {};
 
-    for (let methodName of this._getActionMethodNames()) {
+    let methodNames = this._getActionMethodNames();
+    for (let i = 0; i < methodNames.length; i++) {
+      let methodName = methodNames[i];
       this._wrapAction(methodName);
     }
 
@@ -31,7 +34,7 @@ export default class Actions {
   }
 
   getActionIds() {
-    return Object.assign({}, this._actionIds);
+    return assign({}, this._actionIds);
   }
 
   _getActionMethodNames(instance) {

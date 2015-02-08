@@ -34,6 +34,7 @@
     "6to5-runtime": "~3.3.9",
     "eventemitter3": "~0.1.6",
     "flux": "~2.0.1",
+    "object-assign": "~2.0.0",
     "uniqueid": "~0.1.0"
   }
 }
