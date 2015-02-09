@@ -23,8 +23,8 @@ describe('Actions', () => {
       return 'foobar';
     }
 
-    asyncAction() {
-      return Promise.resolve('foobar');
+    badAsyncAction() {
+      return Promise.reject(new Error('some error'));
     }
   }
 
@@ -106,7 +106,7 @@ describe('Actions', () => {
       expect(dispatch.called).to.be.false;
     });
 
-    it('it returns undefined if action is synchronous', () => {
+    it('returns undefined if action is synchronous', () => {
       let actions = new TestActions();
       let actionId = actions.getActionIds().getFoo;
       actions._dispatch = function() {};
@@ -114,12 +114,21 @@ describe('Actions', () => {
       expect(actions.getFoo()).to.be.undefined;
     });
 
-    it('it resolves to undefined if action is asyncronous', async function() {
+    it('resolves to undefined if action is asyncronous', async function() {
       let actions = new TestActions();
       let actionId = actions.getActionIds().getFoo;
       actions._dispatch = function() {};
 
       expect(await actions.asyncAction()).to.be.undefined;
+    });
+
+    it('rejects with error if asynchroxnous action throws error', done => {
+      let actions = new TestActions();
+      let actionId = actions.getActionIds().badAsyncAction;
+      actions._dispatch = function() {};
+
+      expect(actions.badAsyncAction()).to.be.rejectedWith('some error')
+        .notify(done);
     });
   })
 
