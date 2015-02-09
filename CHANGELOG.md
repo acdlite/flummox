@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 2.4.0
+## 2.5.0
 
 - **New Feature**
   - `Store#register()` now accepts either action ids or actions themselves.
