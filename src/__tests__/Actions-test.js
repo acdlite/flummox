@@ -122,7 +122,7 @@ describe('Actions', () => {
       expect(await actions.asyncAction()).to.be.undefined;
     });
 
-    it('rejects with error if asynchroxnous action throws error', done => {
+    it('rejects with error if asynchronous action throws error', done => {
       let actions = new TestActions();
       let actionId = actions.getActionIds().badAsyncAction;
       actions._dispatch = function() {};
