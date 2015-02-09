@@ -4,7 +4,7 @@ node_js:
   - "0.11"
 before_script: "npm install -g codeclimate-test-reporter"
 script: "make fast-js test-cov"
-after_script: "cat lcov.info | codeclimate"
+after_script: "cat coverage/lcov.info | codeclimate"
 addons:
   code_climate:
     repo_token: 59cf6bc8ac2edd88c1436f101e867b098e5b6b6bb03ac8c50812ca954924e84a
