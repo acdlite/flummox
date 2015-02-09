@@ -398,11 +398,11 @@ var Flummox =
 	          var actionId = payload.actionId;
 
 
-	          var handler = this._handlers[actionId];
+	          var _handler = this._handlers[actionId];
 
-	          if (typeof handler !== "function") return;
+	          if (typeof _handler !== "function") return;
 
-	          handler(body, actionId);
+	          _handler(body, actionId);
 	        } finally {
 	          if (this._emitChangeAfterHandlingDispatch) {
 	            this.state = this._pendingState;
@@ -501,6 +501,12 @@ var Flummox =
 	        var originalMethod = this[methodName];
 	        var actionId = this._createActionId(methodName);
 
+	        var dispatchBody = function (body) {
+	          if (typeof body === "undefined") return;
+
+	          _this._dispatch(actionId, body, methodName);
+	        };
+
 	        var action = function () {
 	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
@@ -513,12 +519,6 @@ var Flummox =
 	          } else {
 	            return _tailCall(dispatchBody, [body]);
 	          }
-	        };
-
-	        var dispatchBody = function (body) {
-	          if (typeof body === "undefined") return;
-
-	          _this._dispatch(actionId, body, methodName);
 	        };
 
 	        action._id = actionId;

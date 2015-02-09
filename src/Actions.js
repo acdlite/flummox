@@ -50,6 +50,12 @@ export default class Actions {
     let originalMethod = this[methodName];
     let actionId = this._createActionId(methodName);
 
+    let dispatchBody = (body) => {
+      if (typeof body === 'undefined') return;
+
+      this._dispatch(actionId, body, methodName);
+    };
+
     let action = (...args) => {
       let body = originalMethod.call(this, ...args);
 
@@ -58,13 +64,7 @@ export default class Actions {
       } else {
         return dispatchBody(body);
       }
-    }
-
-    let dispatchBody = (body) => {
-      if (typeof body === 'undefined') return;
-
-      this._dispatch(actionId, body, methodName);
-    }
+    };
 
     action._id = actionId;
 

@@ -81,11 +81,11 @@ export default class Store extends EventEmitter {
     try {
       let { body, actionId } = payload;
 
-      let handler = this._handlers[actionId];
+      let _handler = this._handlers[actionId];
 
-      if (typeof handler !== 'function') return;
+      if (typeof _handler !== 'function') return;
 
-      handler(body, actionId);
+      _handler(body, actionId);
     } finally {
 
       if (this._emitChangeAfterHandlingDispatch) {
