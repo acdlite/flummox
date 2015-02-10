@@ -13,7 +13,7 @@ class Flux extends Flummox {
     this.createActions('messages', MessageActions);
 
     // Extra arguments are sent to the store's constructor. Here, we're
-    // padding a reference to this flux instance
+    // passing a reference to this Flux instance
     this.createStore('messages', MessageStore, this);
   }
 }
