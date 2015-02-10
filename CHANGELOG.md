@@ -11,7 +11,7 @@ Tags:
 
 ## 2.5.1
 - **Bug Fix**
-  - `Flux#deserialize()` was passing *entire* state string to stores, instead of the state string for each specific store. #15 Thanks (@martintietz)[https://github.com/martintietz] for catching this!
+  - `Flux#deserialize()` was passing *entire* state string to stores, instead of the state string for each specific store. Thanks [@martintietz](https://github.com/martintietz) for catching this! [#15](https://github.com/acdlite/flummox/issues/15)
 - **Internal**
   - Removed file `arrayIncludes.js`, which was no longer being used.
 
