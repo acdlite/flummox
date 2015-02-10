@@ -10,7 +10,7 @@ function createSerializableStore(serializedState, deserializedState) {
     }
 
     static deserialize() {
-      return deserializedState;
+      return deserializedState + ' deserialized';
     }
   }
 }
@@ -228,9 +228,9 @@ describe('Flux', () => {
       flux.createStore('baz', createSerializableStore(null, { baz: 'foo' }));
 
       flux.deserialize(`{
-        "foo": "{}",
-        "bar": "{}",
-        "baz": "{}"
+        "foo": "foostate",
+        "bar": "barstate",
+        "baz": "bazstate"
       }`);
 
       let fooStore = flux.getStore('foo');
