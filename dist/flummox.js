@@ -228,8 +228,10 @@ var Flummox =
 	    },
 	    deserialize: {
 	      value: function deserialize(serializedState) {
+	        var stateMap = undefined;
+
 	        try {
-	          var state = JSON.parse(serializedState);
+	          stateMap = JSON.parse(serializedState);
 	        } catch (error) {
 	          var className = this.constructor.name;
 
@@ -245,7 +247,8 @@ var Flummox =
 
 	          if (typeof deserialize !== "function") continue;
 
-	          var storeState = deserialize(serializedState);
+	          var storeStateString = stateMap[key];
+	          var storeState = deserialize(storeStateString);
 
 	          store.replaceState(storeState);
 

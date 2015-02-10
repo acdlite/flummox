@@ -3,7 +3,7 @@ MOCHA_CMD = node_modules/.bin/mocha
 WEBPACK_CMD = node_modules/.bin/webpack
 
 6TO5_ARGS = --experimental --source-maps-inline
-MOCHA_ARGS = --harmony --require lib/test-init.js lib/**/__tests__/*-test.js
+MOCHA_ARGS = --harmony --require lib/test-init.js lib/**/*-test.js
 
 SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))

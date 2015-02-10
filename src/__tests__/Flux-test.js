@@ -3,16 +3,18 @@
 import { Flux, Store, Actions } from '../Flux';
 import sinon from 'sinon';
 
-function createSerializableStore(serializedState, deserializedState) {
+function createSerializableStore(serializedState) {
   return class SerializableStore extends Store {
     static serialize() {
       return serializedState;
     }
-
-    static deserialize() {
-      return deserializedState + ' deserialized';
+    static deserialize(stateString) {
+      return {
+        stateString,
+        deserialized: true,
+      };
     }
-  }
+  };
 }
 
 describe('Flux', () => {
@@ -223,23 +225,26 @@ describe('Flux', () => {
     it('converts a serialized string into state and uses it to replace state of stores', () => {
       let flux = new Flux();
 
-      flux.createStore('foo', createSerializableStore(null, { foo: 'bar' }));
-      flux.createStore('bar', createSerializableStore(null, { bar: 'baz' }));
-      flux.createStore('baz', createSerializableStore(null, { baz: 'foo' }));
+      flux.createStore('foo', createSerializableStore());
+      flux.createStore('bar', createSerializableStore());
+      flux.createStore('baz', createSerializableStore());
 
       flux.deserialize(`{
-        "foo": "foostate",
-        "bar": "barstate",
-        "baz": "bazstate"
+        "foo": "foo state",
+        "bar": "bar state",
+        "baz": "baz state"
       }`);
 
       let fooStore = flux.getStore('foo');
       let barStore = flux.getStore('bar');
       let bazStore = flux.getStore('baz');
 
-      expect(fooStore.state).to.deep.equal({ foo: 'bar' });
-      expect(barStore.state).to.deep.equal({ bar: 'baz' });
-      expect(bazStore.state).to.deep.equal({ baz: 'foo' });
+      expect(fooStore.state.stateString).to.equal('foo state');
+      expect(fooStore.state.deserialized).to.be.true;
+      expect(barStore.state.stateString).to.equal('bar state');
+      expect(barStore.state.deserialized).to.be.true;
+      expect(bazStore.state.stateString).to.equal('baz state');
+      expect(bazStore.state.deserialized).to.be.true;
     });
 
     it('warns and skips if passed string is invalid JSON', () => {
@@ -279,22 +284,24 @@ describe('Flux', () => {
       let flux = new Flux();
       class TestStore extends Store {}
 
-      flux.createStore('foo', createSerializableStore(null, { foo: 'bar' }));
-      flux.createStore('bar', createSerializableStore(null, { bar: 'baz' }));
+      flux.createStore('foo', createSerializableStore());
+      flux.createStore('bar', createSerializableStore());
       flux.createStore('baz', TestStore);
 
       flux.deserialize(`{
-        "foo": "{}",
-        "bar": "{}",
-        "baz": "{}"
+        "foo": "foo state",
+        "bar": "bar state",
+        "baz": "baz state"
       }`);
 
       let fooStore = flux.getStore('foo');
       let barStore = flux.getStore('bar');
       let bazStore = flux.getStore('baz');
 
-      expect(fooStore.state).to.deep.equal({ foo: 'bar' });
-      expect(barStore.state).to.deep.equal({ bar: 'baz' });
+      expect(fooStore.state.stateString).to.equal('foo state');
+      expect(fooStore.state.deserialized).to.be.true;
+      expect(barStore.state.stateString).to.equal('bar state');
+      expect(barStore.state.deserialized).to.be.true;
       expect(bazStore.state).to.be.undefined;
     });
 

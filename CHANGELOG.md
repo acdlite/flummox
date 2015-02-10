@@ -9,6 +9,12 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.5.1
+- **Bug Fix**
+  - `Flux#deserialize()` was passing *entire* state string to stores, instead of the state string for each specific store. #15 Thanks (@martintietz)[https://github.com/martintietz] for catching this!
+- **Internal**
+  - Removed file `arrayIncludes.js`, which was no longer being used.
+
 ## 2.5.0
 
 - **New Feature**
@@ -36,15 +42,15 @@ The semver for this project is a little wacky, since the 1.0 version of this lib
 
 (See "Why Semantic Versioning Isn't": https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e)
 
-  - **New Feature**
-    - Serialization / Deserialization
-    - `Store#replaceState()`
-    - Added alias `getConstants()` for `getActionIds()`
-    - Better warning messages.
-  - **Breaking Change**
-    - Calling an action only return promises if the original action method returns a promise. Before, all actions returned promises, even if they were synchronous.
-    - Instantiating a base Store class will now throw an error. This is technically a "breaking" change, since you used to be able to do so, but it's certainly an edge case. More likely to break tests than actual code.
-  - **Documentation**
-    - API docs
-  - **Internal**
-    - Use spies to test warning messages.
+- **New Feature**
+  - Serialization / Deserialization
+  - `Store#replaceState()`
+  - Added alias `getConstants()` for `getActionIds()`
+  - Better warning messages.
+- **Breaking Change**
+  - Calling an action only return promises if the original action method returns a promise. Before, all actions returned promises, even if they were synchronous.
+  - Instantiating a base Store class will now throw an error. This is technically a "breaking" change, since you used to be able to do so, but it's certainly an edge case. More likely to break tests than actual code.
+- **Documentation**
+  - API docs
+- **Internal**
+  - Use spies to test warning messages.

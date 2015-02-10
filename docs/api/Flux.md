@@ -120,7 +120,7 @@ This feature is opt-in on a store-by-store basis, and requires some additional s
 serialize()
 ```
 
-Returns a JSON string describing the entire state of your Flux application.
+Returns a serialized string describing the entire state of your Flux application.
 
 Internally, it passes each store's current state to the store's static method `Store.serialize()`. The return value must be a string representing the given state. If a store does not have a static method `serialize()`, or if it returns a non-string, it is ignored.
 

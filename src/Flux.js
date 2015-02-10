@@ -157,8 +157,10 @@ export default class Flux extends EventEmitter {
   }
 
   deserialize(serializedState) {
+    let stateMap;
+
     try {
-      let state = JSON.parse(serializedState);
+      stateMap = JSON.parse(serializedState);
     } catch (error) {
       let className = this.constructor.name;
 
@@ -177,7 +179,8 @@ export default class Flux extends EventEmitter {
 
       if (typeof deserialize !== 'function') continue;
 
-      let storeState = deserialize(serializedState);
+      let storeStateString = stateMap[key];
+      let storeState = deserialize(storeStateString);
 
       store.replaceState(storeState);
 
