@@ -40,7 +40,7 @@ There are many benefits to this approach, but the biggest one is that it makes i
 
 If you know Flux, you know Flummox. If you're not familiar with Flux, there are [many](http://facebook.github.io/flux/docs/overview.html#content) [great](https://medium.com/brigade-engineering/what-is-the-flux-application-architecture-b57ebca85b9e) resources available to get you up to speed.
 
-The primary goal of Flummox is reduce the boilerplate involved in setting up Flux for your application, so the API has been kept as minimal and predictable as possible. It uses Facebook's dispatcher under the hood. It encourages (but does not require) the use of ES6 classes. The state API for stores mirrors the state API for React components. Everything works as you'd probably expect. And like React, Flummox prints helpful warning messages to keep you on track. For instance, if you call `Store#setState()` from outside a store's action handler, you this warning:
+The primary goal of Flummox is reduce the boilerplate involved in setting up Flux for your application, so the API has been kept as minimal and predictable as possible. It uses Facebook's dispatcher under the hood. It encourages (but does not require) the use of ES6 classes. The state API for stores mirrors the state API for React components. Everything works as you'd probably expect. And like React, Flummox prints helpful warning messages to keep you on track. For instance, if you call `Store#setState()` from outside a store's action handler, you get this warning:
 
 ```
 Store#setState() called from outside an action handler. This is likely a mistake. Flux stores should manage their own state.
