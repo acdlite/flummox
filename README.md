@@ -32,7 +32,7 @@ Flummox allows you to encapsulate your entire Flux set-up — stores, actions, c
 let flux = new Flux();
 ```
 
-There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on the server as well as the client) incredibly straightforward.
+There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on both the server and the client) incredibly straightforward.
 
 **Flummox is not a framework.** Rather than forcing a bunch of new concepts and complicated APIs upon you, Flummox embraces existing idioms from Flux, React, and ES6 — without being too prescriptive.
 
