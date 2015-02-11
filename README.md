@@ -6,6 +6,7 @@ Idiomatic, modular, testable, isomorphic Flux. No singletons required.
 [![build status](https://img.shields.io/travis/parisleaf/parisleaf.com.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
 [![Code Climate](https://img.shields.io/codeclimate/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
+[![npm](https://img.shields.io/npm/dm/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
 
 * [API documentation](https://github.com/acdlite/flummox/blob/master/docs/api)
 * [Quick start guide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
