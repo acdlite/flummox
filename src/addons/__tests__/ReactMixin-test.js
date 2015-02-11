@@ -45,10 +45,6 @@ describe('ReactMixin', () => {
   let ContextComponent = React.createClass({
     mixins: [ReactMixin],
 
-    contextTypes: {
-      flux: PropTypes.instanceOf(Flummox).isRequired,
-    },
-
     render() {
       return null;
     }
