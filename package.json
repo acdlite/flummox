@@ -24,7 +24,7 @@
   "author": "Andrew Clark <acdlite@me.com>",
   "license": "MIT",
   "devDependencies": {
-    "6to5": "~3.3.7",
+    "6to5": "~3.5.3",
     "6to5-core": "~3.5.0",
     "6to5-loader": "~3.0.0",
     "6to5-runtime": "~3.3.9",
