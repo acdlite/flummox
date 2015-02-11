@@ -108,7 +108,7 @@ export default {
       let store = this.flux.getStore(key);
 
       if (typeof store === 'undefined') throw new Error(
-        `stayInSyncWithStore(): Store with key '${key}' does not exist.`
+        `connectToStores(): Store with key '${key}' does not exist.`
       );
 
       let storeStateGetter = stateGetterMap[key];
