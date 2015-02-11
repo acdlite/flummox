@@ -194,6 +194,41 @@ describe('ReactMixin', () => {
       });
     });
 
+    it.only('binds state getter to component', () => {
+      let flux = new Flux();
+
+      let Component = React.createClass({
+        mixins: [ReactMixin({
+          test: function(store) {
+            this.someComponentMethod('some arg');
+
+            return {
+              something: store.state.something,
+              custom: true,
+            };
+          },
+        })],
+
+        render() {
+          return null;
+        },
+
+        someComponentMethod(string) {
+          return string;
+        }
+      });
+
+      let component = TestUtils.renderIntoDocument(
+        <Component flux={flux} />
+      );
+
+      let someComponentMethod = sinon.spy(component, 'someComponentMethod');
+      flux.getActions('test').getSomething('foobar');
+
+      expect(someComponentMethod.calledOnce).to.be.true;
+      expect(someComponentMethod.firstCall.args[0]).to.equal('some arg');
+    });
+
     it('accepts object of keys to state getters', () => {
       let flux = new Flux();
 

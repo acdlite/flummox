@@ -1,11 +1,30 @@
 /**
- * ReactMixin
+ * React Mixin
  *
- * Exposes Flux instance as `this.flux`. Requires that flux be passed as either
+ * Exports a function that creates a React component mixin. The mixin exposes
+ * a Flux instance as `this.flux`. This requires that flux be passed as either
  * context or as a prop (prop takes precedence).
  *
- * Adds method `connectToStores`, which handles listening, updating, and
- * unlistening to Flux stores.
+ * It also adds the method `connectToStores()`, which ensures that the component
+ * state stays in sync with the specified Flux stores. See the inline docs
+ * of `connectToStores` for details.
+ *
+ * Any arguments passed to the mixin creator are passed to `connectToStores()`
+ * and used as the return value of `getInitialState()`. This lets you handle
+ * all of the state initialization and updates in a single place, while removing
+ * the burden of manually adding and removing store listeners.
+ *
+ * @example
+ * let Component = React.createClass({
+ *   mixins: [ReactMixin({
+ *     storeA: store => ({
+ *       foo: store.state.a,
+ *     }),
+ *     storeB: store => ({
+ *       bar: store.state.b,
+ *     })
+ *   }]
+ * });
  */
 
 'use strict';
@@ -13,6 +32,7 @@
 import { PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
+
 
 export default function(...args) {
 
@@ -51,40 +71,25 @@ export default function(...args) {
     },
 
     /**
-     * Connect component to stores, updating state on 'change' events. It will
-     * accept a single store key and an optional state getter. The state getter
-     * is a function that takes the store as a parameter and returns the state
-     * that should be passed to the component's `setState()`. If no state getter
-     * is passed, the default getter returns the entire store state.
+     * Connect component to stores, get the combined initial state, and
+     * subscribe to future changes. There are three ways to call it. The
+     * simplest is to pass a single store key and, optionally, a state getter.
+     * The state getter is a function that takes the store as a parameter and
+     * returns the state that should be passed to the component's `setState()`.
+     * If no state getter is specified, the default getter is used, which simply
+     * returns the entire store state.
      *
-     * Also accepts an array of store keys. This form assumes that every store
-     * uses the default getter.
+     * The second form accepts an array of store keys. With this form, every
+     * store uses the default state getter.
      *
-     * Also accepts an object of store keys mapped to getters. If null is passed
-     * as a getter instead of a function, it assumes the default state getter.
+     * The last form accepts an object of store keys mapped to state getters. As
+     * a shortcut, you can pass `null` as a state getter to use the default
+     * state getter.
      *
-     * Returns the combined initial state of all specified stores, so that it can
-     * be used inside `getInitialState()`.
+     * Returns the combined initial state of all specified stores.
      *
      * This way you can write all the initialization and update logic in a single
      * location, without having to mess with adding/removing listeners.
-     *
-     * @example
-     * getInitialState() {
-     *   // Using object syntax, which will probably be most common
-     *   let initialState = this.connectToStore({
-     *     storeA: store => ({
-     *       foo: store.foo
-     *     }),
-     *
-     *     storeB: store => ({
-     *       bar: store.bar
-     *     })
-     *   });
-     *
-     *   // state object with keys `foo` and `bar`
-     *   return initialState;
-     * }
      *
      * @type {string|array|object} stateGetterMap - map of keys to getters
      * @returns {object} Combined initial state of stores
@@ -116,6 +121,8 @@ export default function(...args) {
         let storeStateGetter = stateGetterMap[key];
 
         if (storeStateGetter === null) storeStateGetter = defaultStateGetter;
+
+        storeStateGetter = storeStateGetter.bind(this);
 
         let initialStoreState = storeStateGetter(store);
 
