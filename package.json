@@ -32,10 +32,14 @@
     "chai-as-promised": "~4.1.1",
     "es6-promise": "~2.0.1",
     "istanbul": "~0.3.5",
+    "jsdom": "~3.1.1",
     "mocha": "~2.1.0",
     "sinon": "~1.12.2",
     "source-map-support": "~0.2.9",
     "webpack": "~1.5.3"
+  },
+  "peerDependencies": {
+    "react": "0.12.x"
   },
   "dependencies": {
     "eventemitter3": "~0.1.6",

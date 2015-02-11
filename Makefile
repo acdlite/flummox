@@ -2,11 +2,12 @@
 MOCHA_CMD = node_modules/.bin/mocha
 WEBPACK_CMD = node_modules/.bin/webpack
 
-6TO5_ARGS = --experimental --source-maps-inline
-MOCHA_ARGS = --harmony --require lib/test-init.js lib/**/*-test.js
-
 SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))
+TEST_JS = $(shell find lib -name "*-test.js")
+
+6TO5_ARGS = --experimental --source-maps-inline
+MOCHA_ARGS = --harmony --require lib/test/init.js $(TEST_JS)
 
 # Build application
 build: js browser
@@ -17,8 +18,8 @@ clean:
 
 # Test
 test: js
+	echo $(TEST_JS)
 	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_ARGS)
-
 
 test-cov:
 	@NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- $(MOCHA_ARGS)
