@@ -43,7 +43,7 @@ describe('ReactMixin', () => {
   }
 
   let ContextComponent = React.createClass({
-    mixins: [ReactMixin],
+    mixins: [ReactMixin()],
 
     render() {
       return null;
@@ -51,14 +51,14 @@ describe('ReactMixin', () => {
   });
 
   let PropsComponent = React.createClass({
-    mixins: [ReactMixin],
+    mixins: [ReactMixin()],
 
     render() {
       return null;
     }
   });
 
-  beforeEach(() => {
+  before(() => {
     jsdom();
   })
 
@@ -86,7 +86,54 @@ describe('ReactMixin', () => {
         'ReactMixin: Could not find Flux instance. Ensure that your component '
       + 'has either `this.context.flux` or `this.props.flux`.'
       );
-  })
+  });
+
+  it('uses #connectToStores() to get initial state', () => {
+    let flux = new Flux();
+
+    flux.getActions('test').getSomething('foobar');
+
+    let getterMap = {
+      test: store => ({
+        something: store.state.something,
+        custom: true,
+      }),
+    };
+
+    let mixin = ReactMixin(getterMap);
+
+    let connectToStores = sinon.spy(mixin, 'connectToStores');
+
+    let Component = React.createClass({
+      mixins: [mixin],
+
+      getInitialState() {
+        return {
+          foobar: 'baz',
+        }
+      },
+
+      render() {
+        return null;
+      }
+    });
+
+    let component = TestUtils.renderIntoDocument(
+      <Component flux={flux} />
+    );
+
+    expect(connectToStores.calledOnce).to.be.true;
+    expect(connectToStores.firstCall.args[0]).to.equal(getterMap);
+
+    expect(flux.getStore('test').listeners('change')).to.have.length(1);
+
+    expect(component.state).to.deep.equal({
+      something: 'foobar',
+      custom: true,
+      foobar: 'baz',
+    });
+
+  });
 
   describe('#connectToStores', () => {
 
