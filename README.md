@@ -34,7 +34,7 @@ let flux = new Flux();
 
 There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on the server as well as the client) incredibly straightforward.
 
-**Flummox is not a framework.** The Flummox philosophy is that Flux is a great architecture already, so rather than forcing a bunch of new concepts and complicated APIs upon you, it embraces existing idioms from Flux, React, and ES6 — without being too prescriptive.
+**Flummox is not a framework.** Rather than forcing a bunch of new concepts and complicated APIs upon you, Flummox embraces existing idioms from Flux, React, and ES6 — without being too prescriptive.
 
 **tl;dr Show me the code!!!** No problem. Check out a full example from Flummox's [test suite](https://github.com/acdlite/flummox/blob/master/src/__tests__/exampleFlux-test.js).
 
