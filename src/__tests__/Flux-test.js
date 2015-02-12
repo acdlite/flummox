@@ -8,7 +8,6 @@ function createSerializableStore(serializedState) {
     static serialize() {
       return serializedState;
     }
-
     static deserialize(stateString) {
       return {
         stateString,
