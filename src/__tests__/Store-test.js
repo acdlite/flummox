@@ -102,7 +102,6 @@ describe('Store', () => {
       let actions = flux.getActions('example');
       let store = flux.getStore('example');
 
-
       let handler = sinon.spy();
       store.register(actions.getBar, handler);
 
