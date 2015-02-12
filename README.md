@@ -84,11 +84,11 @@ Flummox also gives you the ability to serialize the initial state of your applic
 Roadmap
 -------
 
-Flummox is still quite new, but most of the core features that I originally set out to implement are completed. My main concern right now is improving the documentation, writing guides, and providing examples.
+Flummox is still quite new, but the core features are mostly there. The next big feature on the horizon is a more elegant solution for integration with React components (rather than manually adding and removing event listeners). **[See this pull request](https://github.com/acdlite/flummox/pull/18) for a look at what we're working on in this area**. I'd love to hear your feedback.
 
-Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
+Another big focus right now is improving the documentation, writing guides, and providing examples. Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
 
-Feature requests and PRs are absolutely welcome, as long as they keep with the spirit of a minimal core API. Any additional features (e.g. undo-redo & versioning) are likely to be implemented as mixins.
+Feature requests and PRs are absolutely welcome, as long as they keep with the spirit of a minimal core API. Any additional features (e.g. undo-redo & versioning) are likely to be implemented as addons, rather than as part of the core.
 
 
 Recommended libraries
