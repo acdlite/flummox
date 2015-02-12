@@ -37,8 +37,8 @@
  *
  *   render() {
  *     <FluxComponent connectToStore="fooStore">
- *       <ChildComponent>
- * 		 </FluxComponent>
+ *       <ChildComponent />
+ *     </FluxComponent>
  *   }
  *
  * }
