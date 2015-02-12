@@ -84,7 +84,7 @@ Flummox also gives you the ability to serialize the initial state of your applic
 Roadmap
 -------
 
-Flummox is still quite new, but the core features are mostly there. The next big feature on the horizon is a more elegant solution for integration with React components (rather than manually adding and removing event listeners). **[See this pull request](https://github.com/acdlite/flummox/pull/18) for a look at what we're working on in this area**. I'd love to hear your feedback.
+Flummox is still quite new, but the core features are already in place. The next upcoming big feature is a more elegant solution for integration with React components (rather than manually adding and removing event listeners). **[See this pull request](https://github.com/acdlite/flummox/pull/18) for a look at what we're working on in this area**. I'd love to hear your feedback.
 
 Another big focus right now is improving the documentation, writing guides, and providing examples. Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
 
