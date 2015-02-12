@@ -60,7 +60,7 @@ describe('ReactMixin', () => {
 
   before(() => {
     jsdom();
-  })
+  });
 
   it('gets flux from either props or context', () => {
     let flux = new Flux();
@@ -76,6 +76,41 @@ describe('ReactMixin', () => {
 
     expect(contextComponent.flux).to.be.an.instanceof(Flummox);
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
+  });
+
+  it('exposes flux as context', () => {
+    let flux = new Flux();
+
+    let Component = React.createClass({
+      mixins: [ReactMixin()],
+
+      render() {
+        return (
+          <div>
+            <ChildComponent />
+          </div>
+        );
+      }
+    });
+
+    let ChildComponent = React.createClass({
+      contextTypes: {
+        flux: PropTypes.instanceOf(Flummox),
+      },
+
+      render() {
+        return <div />;
+      }
+    });
+
+    let tree = TestUtils.renderIntoDocument(<Component flux={flux} />);
+
+    let childComponent = TestUtils.findRenderedComponentWithType(
+      tree,
+      ChildComponent
+    );
+
+    expect(childComponent.context.flux).to.equal(flux);
   });
 
   it('throws error if neither props or context is set', () => {
@@ -194,7 +229,7 @@ describe('ReactMixin', () => {
       });
     });
 
-    it.only('binds state getter to component', () => {
+    it('binds state getter to component', () => {
       let flux = new Flux();
 
       let Component = React.createClass({

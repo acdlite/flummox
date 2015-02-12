@@ -3,7 +3,8 @@
  *
  * Exports a function that creates a React component mixin. The mixin exposes
  * a Flux instance as `this.flux`. This requires that flux be passed as either
- * context or as a prop (prop takes precedence).
+ * context or as a prop (prop takes precedence). Children also are given access
+ * to flux instance as `context.flux`.
  *
  * It also adds the method `connectToStores()`, which ensures that the component
  * state stays in sync with the specified Flux stores. See the inline docs
@@ -40,6 +41,16 @@ export default function(...args) {
 
     contextTypes: {
       flux: PropTypes.instanceOf(Flux),
+    },
+
+    childContextTypes: {
+      flux: PropTypes.instanceOf(Flux),
+    },
+
+    getChildContext() {
+      return {
+        flux: this.flux
+      };
     },
 
     getInitialState() {
