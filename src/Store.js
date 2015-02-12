@@ -22,6 +22,7 @@ export default class Store extends EventEmitter {
     this.state = undefined;
 
     this._handlers = {};
+    this._asyncHandlers = {};
   }
 
   /**
@@ -63,10 +64,18 @@ export default class Store extends EventEmitter {
   }
 
   register(actionId, handler) {
-
-    if (typeof actionId === 'function') actionId = actionId._id;
-
+    actionId = ensureActionId(actionId);
     this._handlers[actionId] = handler.bind(this);
+  }
+
+  registerAsync(actionId, beginHandler, successHandler, failureHandler) {
+    actionId = ensureActionId(actionId);
+
+    this._asyncHandlers[actionId] = {
+      begin: beginHandler.bind(this),
+      success: successHandler.bind(this),
+      failure: failureHandler.bind(this),
+    };
   }
 
   waitFor(tokensOrStores) {
@@ -74,18 +83,51 @@ export default class Store extends EventEmitter {
   }
 
   handler(payload) {
+    let {
+      body,
+      actionId,
+      async: _async,
+      actionArgs,
+      error
+    } = payload;
+
+    let _handler = this._handlers[actionId];
+    let _asyncHandler = this._asyncHandlers[actionId]
+      && this._asyncHandlers[actionId][_async];
+
+    if (_async) {
+      switch (_async) {
+        case 'begin':
+          if (typeof _asyncHandler === 'function') {
+            this._performHandler.apply(this, [_asyncHandler].concat(actionArgs));
+          }
+          return;
+        case 'failure':
+          if (typeof _asyncHandler === 'function') {
+            this._performHandler(_asyncHandler, error);
+          }
+          return;
+        case 'success':
+          if (typeof _asyncHandler === 'function') {
+            _handler = _asyncHandler;
+          }
+          break;
+        default:
+          return;
+      }
+    }
+
+    if (typeof _handler !== 'function') return;
+    this._performHandler(_handler, body);
+  }
+
+  _performHandler(_handler, ...args) {
     this._isHandlingDispatch = true;
     this._pendingState = assign({}, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
-      let { body, actionId } = payload;
-
-      let _handler = this._handlers[actionId];
-
-      if (typeof _handler !== 'function') return;
-
-      _handler(body, actionId);
+      _handler.apply(this, args);
     } finally {
 
       if (this._emitChangeAfterHandlingDispatch) {
@@ -98,4 +140,10 @@ export default class Store extends EventEmitter {
       this._emitChangeAfterHandlingDispatch = false;
     }
   }
+}
+
+function ensureActionId(actionOrActionId) {
+  return typeof actionOrActionId === 'function'
+    ? actionOrActionId._id
+    : actionOrActionId;
 }

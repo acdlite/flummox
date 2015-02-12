@@ -81,6 +81,7 @@ export default class Flux extends EventEmitter {
 
     let actions = new _Actions(...constructorArgs);
     actions.dispatch = this.dispatch.bind(this);
+    actions.dispatchAsync = this.dispatchAsync.bind(this);
 
     this._actions[key] = actions;
   }
@@ -97,8 +98,38 @@ export default class Flux extends EventEmitter {
     return actions.getConstants();
   }
 
-  dispatch(actionId, body) {
+  dispatch(actionId, body, actionArgs) {
     this.dispatcher.dispatch({ actionId, body });
+  }
+
+  dispatchAsync(actionId, promise, actionArgs) {
+    let payload = {
+      actionId,
+      async: 'begin',
+    };
+
+    if (actionArgs) payload.actionArgs = actionArgs;
+
+    this.dispatcher.dispatch(payload);
+
+    return promise.then(
+      body => {
+        this.dispatcher.dispatch({
+          actionId,
+          body,
+          async: 'success'
+        });
+      },
+      error => {
+        this.dispatcher.dispatch({
+          actionId,
+          error,
+          async: 'failure',
+        });
+
+        return Promise.reject(error);
+      }
+    );
   }
 
   waitFor(tokensOrStores) {

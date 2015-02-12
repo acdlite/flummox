@@ -153,6 +153,78 @@ describe('Flux', () => {
 
   });
 
+  describe('#dispatchAsync()', () => {
+
+    it('delegates to dispatcher', async function() {
+      let flux = new Flux();
+      let dispatch = sinon.spy();
+      flux.dispatcher = { dispatch };
+      let actionId = 'actionId';
+
+      await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
+
+      expect(dispatch.callCount).to.equal(2);
+      expect(dispatch.firstCall.args[0]).to.deep.equal({
+        actionId,
+        async: 'begin',
+      });
+      expect(dispatch.secondCall.args[0]).to.deep.equal({
+        actionId,
+        body: 'foobar',
+        async: 'success'
+      });
+    });
+
+    it('resolves to undefined', done => {
+      let flux = new Flux();
+      let dispatch = sinon.spy();
+      flux.dispatcher = { dispatch };
+      let actionId = 'actionId';
+
+      expect(flux.dispatchAsync(actionId, Promise.resolve('foobar')))
+        .to.eventually.be.undefined
+        .notify(done);
+    });
+
+    it('rejects with error if promise rejects', done => {
+      let flux = new Flux();
+      let dispatch = sinon.spy();
+      flux.dispatcher = { dispatch };
+      let actionId = 'actionId';
+
+      expect(flux.dispatchAsync(actionId, Promise.reject(new Error('error'))))
+        .to.be.rejectedWith('error')
+        .notify(done);
+    });
+
+    it('dispatches with error if promise rejects', async function() {
+      let flux = new Flux();
+      let dispatch = sinon.spy();
+      flux.dispatcher = { dispatch };
+      let actionId = 'actionId';
+
+      let error = new Error('error');
+
+      try {
+        await flux.dispatchAsync(actionId, Promise.reject(error));
+      } catch(e) {
+
+      } finally {
+        expect(dispatch.callCount).to.equal(2);
+        expect(dispatch.firstCall.args[0]).to.deep.equal({
+          actionId,
+          async: 'begin',
+        });
+        expect(dispatch.secondCall.args[0]).to.deep.equal({
+          actionId,
+          error,
+          async: 'failure'
+        });
+      }
+    });
+
+  });
+
   describe('#serialize()', () => {
 
     it('returns state of all the stores as a JSON string', () => {

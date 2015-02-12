@@ -19,8 +19,8 @@ describe('Actions', () => {
       return;
     }
 
-    async asyncAction() {
-      return 'foobar';
+    async asyncAction(returnValue) {
+      return returnValue;
     }
 
     badAsyncAction() {
@@ -51,10 +51,8 @@ describe('Actions', () => {
       let dispatch = sinon.spy();
       actions.dispatch = dispatch;
 
-      let body = 'foobar';
       actions.getFoo();
-
-      expect(dispatch.getCall(0).args[1]).to.deep.equal({ foo: 'bar' });
+      expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
     it('throws if actions have not been added to a Flux instance', () => {
@@ -67,11 +65,11 @@ describe('Actions', () => {
         );
     });
 
-    it('dispatches with return value of wrapped method', () => {
+    it('sends return value to Flux dispatch', () => {
       let actions = new TestActions();
       let actionId = actions.getActionIds().getFoo;
       let dispatch = sinon.spy();
-      actions._dispatch = dispatch;
+      actions.dispatch = dispatch;
 
       actions.getFoo();
 
@@ -79,57 +77,48 @@ describe('Actions', () => {
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
-    it('dispatches resolved value if return value is a promise', async function() {
+    it('send async return value to Flux#dispatchAsync', async function() {
       let actions = new TestActions();
       let actionId = actions.getActionIds().asyncAction;
-      let dispatch = sinon.spy();
-      actions._dispatch = dispatch;
+      let dispatch = sinon.stub().returns(Promise.resolve());
+      actions.dispatchAsync = dispatch;
 
-      let response = actions.asyncAction();
+      let response = actions.asyncAction('foobar');
 
       expect(response.then).to.be.a('function');
 
       await response;
 
       expect(dispatch.firstCall.args[0]).to.equal(actionId);
-      expect(dispatch.firstCall.args[1]).to.equal('foobar');
+      expect(dispatch.firstCall.args[1]).to.be.an.instanceOf(Promise);
     });
 
     it('skips disptach if return value is undefined', () => {
       let actions = new TestActions();
-      let actionId = actions.getActionIds().getFoo;
       let dispatch = sinon.spy();
-      actions._dispatch = dispatch;
+      actions.dispatch = dispatch;
 
       actions.getBaz();
 
       expect(dispatch.called).to.be.false;
     });
 
+    it('does not skip async dispatch, even if resolved value is undefined', () => {
+      let actions = new TestActions();
+      let dispatch = sinon.spy();
+      actions.dispatchAsync = dispatch;
+
+      actions.asyncAction(undefined);
+
+      expect(dispatch.called).to.be.true;
+    });
+
     it('returns undefined if action is synchronous', () => {
       let actions = new TestActions();
-      let actionId = actions.getActionIds().getFoo;
-      actions._dispatch = function() {};
+      actions.dispatch = function() {};
 
       expect(actions.getFoo()).to.be.undefined;
     });
-
-    it('resolves to undefined if action is asyncronous', async function() {
-      let actions = new TestActions();
-      let actionId = actions.getActionIds().getFoo;
-      actions._dispatch = function() {};
-
-      expect(await actions.asyncAction()).to.be.undefined;
-    });
-
-    it('rejects with error if asynchronous action throws error', done => {
-      let actions = new TestActions();
-      let actionId = actions.getActionIds().badAsyncAction;
-      actions._dispatch = function() {};
-
-      expect(actions.badAsyncAction()).to.be.rejectedWith('some error')
-        .notify(done);
-    });
-  })
+  });
 
 });
