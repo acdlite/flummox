@@ -25,7 +25,7 @@
  * Additionally, immediate children are given a `flux` prop.
  *
  * The component has an optional prop `connectToStores`, which is -- you guessed
- * it -- passed directly to ReactMixin's `conntectToStores()` function and
+ * it -- passed directly to ReactMixin's `connectToStores()` function and
  * set as the initial state. The component's state is injected as props to
  * child components.
  *
