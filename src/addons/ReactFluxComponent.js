@@ -6,8 +6,8 @@
  *
  * Like ReactMixin, children are given access to the flux instance via
  * `context.flux`. Use this near the top of your app hierarchy and all children
- * will (including, of course, other Flux components!) have easy access to the
- * flux instance:
+ * will have easy access to the flux instance (including, of course, other
+ * Flux components!):
  *
  * <FluxComponent flux={flux}>
  *    ...the rest of your app
