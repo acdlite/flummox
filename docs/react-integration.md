@@ -7,7 +7,7 @@ import FluxComponent from 'flummox/component';
 import FluxMixin from 'flummox/mixin';
 ```
 
-This guide describes how to use FluxComponent to integrate Flummox with React.
+This guide discusses how to use FluxComponent to integrate Flummox with React.
 
 ## Accessing the Flux instance
 
