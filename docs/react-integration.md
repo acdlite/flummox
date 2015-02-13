@@ -41,7 +41,7 @@ If flux is already part of the context, you can omit the flux prop on FluxCompon
 </FluxComponent>
 ```
 
-So if you pass a flux instance as a prop to a FluxComponent near the top of your app hierarchy, and any FluxComponents further down the tree will automatically have access to it.
+So if you pass a flux instance as a prop to a FluxComponent near the top of your app hierarchy, any FluxComponents further down the tree will automatically have access to it.
 
 Pretty simple, right?
 
