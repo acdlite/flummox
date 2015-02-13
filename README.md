@@ -11,6 +11,7 @@ Idiomatic, modular, testable, isomorphic Flux. No singletons required.
 
 * [API documentation](https://github.com/acdlite/flummox/blob/master/docs/api)
 * [Quick start guide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
+* [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md)
 
 Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
@@ -81,12 +82,33 @@ app.get("/", function(req, res) {
 
 Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and deserialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
 
+React integration
+-----------------
+
+Integrating Flummox with React is really easy. Read all about it in the [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md).
+
+Here's an example of how to connect your stores to a React component:
+
+```js
+import FluxComponent from 'flummox/component';
+
+class OuterComponent extends React.Component {
+  render() {
+    return (
+      // Pass an array of store keys
+      <FluxComponent connectToStores=['storeA', 'storeB']>
+        <InnerComponent />
+      </FluxComponent>
+    );
+  }
+}
+```
+
+
 Roadmap
 -------
 
-Flummox is still quite new, but the core features are already in place. The next upcoming big feature is a more elegant solution for integration with React components (rather than manually adding and removing event listeners). **[See this pull request](https://github.com/acdlite/flummox/pull/18) for a look at what we're working on in this area**. I'd love to hear your feedback.
-
-Another big focus right now is improving the documentation, writing guides, and providing examples. Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
+Flummox is still quite new, but the core features are already in place. A big focus right now is improving the documentation, writing guides, and providing examples. Since Flummox's core innovation is its approach to isomorphism, I would like to make it especially easy for newcomers to learn how to use Flummox to create isomorphic applications.
 
 Feature requests and PRs are absolutely welcome, as long as they keep with the spirit of a minimal core API. Any additional features (e.g. undo-redo & versioning) are likely to be implemented as addons, rather than as part of the core.
 

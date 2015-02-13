@@ -9,6 +9,20 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.6.0
+
+- **New Feature**
+  - `Store#registerAsync()` for doing optimistic updates in response to asynchronous actions
+  - FluxComponent and FluxMixin for easy React integration
+- **Documentation**
+  - React integration guide
+  - Minor updates
+- **Internal**
+  - Updated dependencies
+  - Testing on iojs, for jsdom compatibility
+
+Thanks to [@vesparny](https://github.com/vesparny), [@martintietz](https://github.com/martintietz), [@https://github.com/SimonDegraeve](https://github.com/https://github.com/SimonDegraeve) for your input on new features.
+
 ## 2.5.1
 - **Bug Fix**
   - `Flux#deserialize()` was passing *entire* state string to stores, instead of the state string for each specific store. Thanks [@martintietz](https://github.com/martintietz) for catching this! [#15](https://github.com/acdlite/flummox/issues/15)
