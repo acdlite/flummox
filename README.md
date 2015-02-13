@@ -3,6 +3,10 @@ Flummox
 
 Idiomatic, modular, testable, isomorphic Flux. No singletons required.
 
+```
+$ npm install --save flummox
+```
+
 [![build status](https://img.shields.io/travis/parisleaf/parisleaf.com.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
 [![Code Climate](https://img.shields.io/codeclimate/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
@@ -13,13 +17,20 @@ Idiomatic, modular, testable, isomorphic Flux. No singletons required.
 * [Quick start guide](https://github.com/acdlite/flummox/blob/master/docs/quick-start.md)
 * [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md)
 
+Features
+--------
+
+- No singletons = isomorphism for free!
+- Robust yet minimal API inspired by React and ES6
+- Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via FluxMixin and FluxComponent
+- Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
+- Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
+- Serialization/deserialization of stores, for faster page loads.
+- "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
+
 Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
-
-```
-$ npm install --save flummox
-```
 
 
 The big idea
