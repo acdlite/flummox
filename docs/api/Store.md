@@ -42,6 +42,12 @@ Because state is so crucial, Flummox is a little more opinionated than some othe
 * `this.state` is used to access the current state, but it should **never** be mutated directly. Treat `this.state` as if it were immutable.
 * As in React +0.13, initial state is set by assignment in the constructor.
 
+Performing optimistic updates
+-----------------------------
+
+A common pattern when performing server operations is to update the application's UI optimistically — before receiving a response from the server — then responding appropriately if the server returns an error. Use the method `registerAsync` to register separate handlers for the beginning of an asynchronous action and on success and failure. See below for details.
+
+
 Methods
 -------
 
@@ -54,6 +60,24 @@ register(function action | string actionId , function handler)
 Register a handler for a specific action. The handler will be automatically bound to the store instance.
 
 You can register using either the action id or the action itself.
+
+### registerAsync
+
+```js
+register(function action | string actionId [, function begin, function success, function failure])
+```
+
+A register handler specifically for asynchronous actions (actions that return promises).
+
+- `beginHandler` is called at the beginning of the asynchronous action. It receives same arguments that were passed to the action.
+
+- `successHandler` works the same as if you registered an async action with `register()`: it is called if and when the asynchronous action resolves. It receives the resolved value of the promise returned by the action.
+
+- `failureHandler` is called if and when the asynchronous action is rejected. It receives the rejected value of the promise returned by the action (by convention, an error object).
+
+This makes it easy perform to perform optimistic UI updates.
+
+If any of the passed handlers are not functions, they are ignored.
 
 ### setState
 

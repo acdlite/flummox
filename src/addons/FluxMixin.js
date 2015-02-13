@@ -1,5 +1,5 @@
 /**
- * React Mixin
+ * Flux Mixin
  *
  * Exports a function that creates a React component mixin. The mixin exposes
  * a Flux instance as `this.flux`. This requires that flux be passed as either
@@ -17,7 +17,7 @@
  *
  * @example
  * let Component = React.createClass({
- *   mixins: [ReactMixin({
+ *   mixins: [FluxMixin({
  *     storeA: store => ({
  *       foo: store.state.a,
  *     }),
@@ -35,7 +35,7 @@ import { Flux } from '../Flux';
 import assign from 'object-assign';
 
 
-export default function(...args) {
+export default function FluxMixin(...args) {
 
   return {
 
@@ -60,7 +60,7 @@ export default function(...args) {
       if (!(this.flux instanceof Flux)) {
         // TODO: print the actual class name here
         throw new Error(
-          `ReactMixin: Could not find Flux instance. Ensure that your component `
+          `FluxMixin: Could not find Flux instance. Ensure that your component `
         + `has either \`this.context.flux\` or \`this.props.flux\`.`
         );
       }

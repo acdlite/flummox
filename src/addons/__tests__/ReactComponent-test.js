@@ -5,9 +5,9 @@ import { Flummox, Store, Actions } from '../../Flux';
 import React from 'react/addons';
 let { TestUtils } = React.addons;
 
-import FluxComponent from '../ReactFluxComponent';
+import FluxComponent from '../FluxComponent';
 
-describe('ReactFluxComponent', () => {
+describe('FluxComponent', () => {
 
   class TestActions extends Actions {
     getSomething(something) {

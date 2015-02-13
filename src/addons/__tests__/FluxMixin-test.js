@@ -1,6 +1,6 @@
 'use strict';
 
-import ReactMixin from '../ReactMixin';
+import FluxMixin from '../FluxMixin';
 import { Flummox, Store, Actions } from '../../Flux';
 import sinon from 'sinon';
 
@@ -8,7 +8,7 @@ import React from 'react/addons';
 let { PropTypes } = React;
 let { TestUtils } = React.addons;
 
-describe('ReactMixin', () => {
+describe('FluxMixin', () => {
 
   class TestActions extends Actions {
     getSomething(something) {
@@ -43,7 +43,7 @@ describe('ReactMixin', () => {
   }
 
   let ContextComponent = React.createClass({
-    mixins: [ReactMixin()],
+    mixins: [FluxMixin()],
 
     render() {
       return null;
@@ -51,7 +51,7 @@ describe('ReactMixin', () => {
   });
 
   let PropsComponent = React.createClass({
-    mixins: [ReactMixin()],
+    mixins: [FluxMixin()],
 
     render() {
       return null;
@@ -82,7 +82,7 @@ describe('ReactMixin', () => {
     let flux = new Flux();
 
     let Component = React.createClass({
-      mixins: [ReactMixin()],
+      mixins: [FluxMixin()],
 
       render() {
         return (
@@ -118,7 +118,7 @@ describe('ReactMixin', () => {
 
     expect(TestUtils.renderIntoDocument.bind(null, <PropsComponent />))
       .to.throw(
-        'ReactMixin: Could not find Flux instance. Ensure that your component '
+        'FluxMixin: Could not find Flux instance. Ensure that your component '
       + 'has either `this.context.flux` or `this.props.flux`.'
       );
   });
@@ -135,7 +135,7 @@ describe('ReactMixin', () => {
       }),
     };
 
-    let mixin = ReactMixin(getterMap);
+    let mixin = FluxMixin(getterMap);
 
     let connectToStores = sinon.spy(mixin, 'connectToStores');
 
@@ -233,7 +233,7 @@ describe('ReactMixin', () => {
       let flux = new Flux();
 
       let Component = React.createClass({
-        mixins: [ReactMixin({
+        mixins: [FluxMixin({
           test: function(store) {
             this.someComponentMethod('some arg');
 
