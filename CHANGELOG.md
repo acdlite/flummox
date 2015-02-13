@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.6.1
+- **Bug Fix**
+  - Fixes bug with array form of `connectToStores()`. [#4](https://github.com/acdlite/flummox/pull/24)
+ Thanks, [@tomusher](https://github.com/tomusher)
+
 ## 2.6.0
 
 - **New Feature**
