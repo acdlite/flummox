@@ -21,7 +21,7 @@ test: js
 	echo $(TEST_JS)
 	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_ARGS)
 
-test-cov:
+test-cov: js
 	@NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- $(MOCHA_ARGS)
 
 # Build application quickly

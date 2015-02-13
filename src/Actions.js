@@ -50,10 +50,6 @@ export default class Actions {
     let originalMethod = this[methodName];
     let actionId = this._createActionId(methodName);
 
-    let dispatchBody = (body) => {
-      this._dispatch(actionId, body, methodName);
-    };
-
     let action = (...args) => {
       let body = originalMethod.apply(this, args);
 
@@ -76,10 +72,6 @@ export default class Actions {
    */
   _createActionId(methodName) {
     return `${this._baseId}-${methodName}`;
-  }
-
-  _getActionId(methodName) {
-    return this._actionIds[methodName];
   }
 
   _dispatch(actionId, body, args, methodName) {
