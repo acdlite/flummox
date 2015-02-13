@@ -96,9 +96,9 @@ Flummox also gives you the ability to serialize the initial state of your applic
 React integration
 -----------------
 
-Integrating Flummox with React is really easy. Read all about it in the [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md).
+Integrating Flummox with React is really easy. You can do it the long way by manually adding and removing event listeners, but that leads to a lot of boilerplate. Use FluxComponent and/or FluxMixin to subscribe to store changes.
 
-Here's an example of how to connect your stores to a React component:
+Here's a basic example:
 
 ```js
 import FluxComponent from 'flummox/component';
@@ -106,7 +106,7 @@ import FluxComponent from 'flummox/component';
 class OuterComponent extends React.Component {
   render() {
     return (
-      // Pass an array of store keys
+      // Pass an array of store keys, or a map of keys to state getters
       <FluxComponent connectToStores=['storeA', 'storeB']>
         <InnerComponent />
       </FluxComponent>
@@ -114,6 +114,8 @@ class OuterComponent extends React.Component {
   }
 }
 ```
+
+Read all about it in the [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md).
 
 
 Roadmap
