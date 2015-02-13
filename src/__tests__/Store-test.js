@@ -74,6 +74,66 @@ describe('Store', () => {
 
   });
 
+  describe('#registerAsync()', () => {
+    it('registers handlers for begin, success, and failure of async action', async function() {
+      let error = new Error();
+
+      class ExampleActions extends Actions {
+        async getFoo(message, success = true) {
+          if (!success) throw error;
+
+          return message + ' success';
+        }
+
+        async getBar(message) {
+          return message;
+        }
+      }
+
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', ExampleActions);
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      let flux = new ExampleFlux();
+      let actions = flux.getActions('example');
+      let store = flux.getStore('example');
+
+      let handler = sinon.spy();
+      store.register(actions.getBar, handler);
+
+      await actions.getBar('bar');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args).to.deep.equal(['bar']);
+
+      let begin = sinon.spy();
+      let success = sinon.spy();
+      let failure = sinon.spy();
+      store.registerAsync(actions.getFoo, begin, success, failure);
+
+      await actions.getFoo('foo', true);
+      expect(begin.calledOnce).to.be.true;
+      expect(begin.firstCall.args).to.deep.equal(['foo', true]);
+      expect(success.calledOnce).to.be.true;
+      expect(success.firstCall.args[0]).to.equal('foo success');
+      expect(failure.called).to.be.false;
+
+      try {
+        await actions.getFoo('bar', false);
+      } catch (e) {
+
+      } finally {
+        expect(begin.calledTwice).to.be.true;
+        expect(success.calledOnce).to.be.true;
+        expect(failure.calledOnce).to.be.true;
+        expect(failure.firstCall.args[0]).to.equal(error);
+      }
+    });
+  });
+
   describe('#handler()', () => {
     it('delegates dispatches to registered handlers', () => {
       let store = new ExampleStore();
@@ -84,7 +144,7 @@ describe('Store', () => {
       let body = { foo: 'bar' };
       store.handler({ body, actionId });
 
-      expect(handler.calledWith(body, actionId)).to.be.true;
+      expect(handler.calledWith(body)).to.be.true;
     });
   });
 

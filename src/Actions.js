@@ -51,18 +51,17 @@ export default class Actions {
     let actionId = this._createActionId(methodName);
 
     let dispatchBody = (body) => {
-      if (typeof body === 'undefined') return;
-
       this._dispatch(actionId, body, methodName);
     };
 
     let action = (...args) => {
-      let body = originalMethod.call(this, ...args);
+      let body = originalMethod.apply(this, args);
 
       if (isPromise(body)) {
-        return body.then(dispatchBody);
+        let promise = body;
+        return this._dispatchAsync(actionId, promise, args, methodName);
       } else {
-        return dispatchBody(body);
+        return this._dispatch(actionId, body, args, methodName);
       }
     };
 
@@ -83,14 +82,26 @@ export default class Actions {
     return this._actionIds[methodName];
   }
 
-  _dispatch(actionId, body, methodName) {
+  _dispatch(actionId, body, args, methodName) {
     if (!this.dispatch) throw new ReferenceError(
       `You've attempted to perform the action `
     + `${this.constructor.name}#${methodName}, but it hasn't been added `
     + `to a Flux instance.`
     );
 
-    this.dispatch(actionId, body);
+    if (typeof body === 'undefined') return;
+
+    this.dispatch(actionId, body, args);
+  }
+
+  _dispatchAsync(actionId, promise, args, methodName) {
+    if (!this.dispatchAsync) throw new ReferenceError(
+      `You've attempted to perform the asynchronous action `
+    + `${this.constructor.name}#${methodName}, but it hasn't been added `
+    + `to a Flux instance.`
+    );
+
+    return this.dispatchAsync(actionId, promise, args);
   }
 
 }
