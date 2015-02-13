@@ -594,10 +594,6 @@ var Flummox =
 	        var originalMethod = this[methodName];
 	        var actionId = this._createActionId(methodName);
 
-	        var dispatchBody = function (body) {
-	          _this._dispatch(actionId, body, methodName);
-	        };
-
 	        var action = function () {
 	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
@@ -628,13 +624,6 @@ var Flummox =
 	       */
 	      value: function _createActionId(methodName) {
 	        return "" + this._baseId + "-" + methodName;
-	      },
-	      writable: true,
-	      configurable: true
-	    },
-	    _getActionId: {
-	      value: function _getActionId(methodName) {
-	        return this._actionIds[methodName];
 	      },
 	      writable: true,
 	      configurable: true
