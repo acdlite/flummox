@@ -156,48 +156,29 @@ Because everything is self-contained, you can create as many independent instanc
 
 So how do you use Flux in your view components? With a traditional Flux library, we'd use a singleton. And if you want to do that, that's perfectly fine. Just create a module that exports a Flux instance and you're good to go. But again, this won't do on the server, because you need a way to 1) deal with multiple requests, and 2) isolate user-specific data. Instead, with Flummox, we create a new Flux instance for every request.
 
-The most straightfoward way is to pass your Flux instance down from the root component as a prop. Another way is to use an undocumented (but relatively stable) feature of React called *contexts*. You can read more about contexts [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html).
-
-However you choose to do it, once you have a reference to your Flux instance inside your component, accessing the stores and actions is easy. Here's an example (using the props approach):
+However, manually passing your Flux instance as props down the component tree isn't the best solution. Instead, use FluxMixin and/or FluxComponent. Under the hood, they use React context to expose your Flux instance to arbitrarily nested views. They also make it stupidly easy to subscribe to store updates:
 
 ```js
 
 class MessagesView extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    let { flux } = props;
-
-    this.messageStore = flux.getStore('messages');
-    this.state = messageStore.state;
-
-    this.updateMessages = this.updateMessages.bind(this);
-  }
-
-  componentDidMount() {
-    this.messageStore.addListener('change', this.updateMessages);
-  }
-
-  componentWillUnmount() {
-    this.messageStore.removeListener('change', this.updateMessages);
-  }
-
-  updateMessages() {
-    this.setState(this.messageStore.state);
-  }
-
   render() {
     return (
-      <div>
-        <h2>Messages:</h2>
-        <MessageList messages={this.state.messages} />
-      </div>
+      <FluxContainer connectToStores={{
+        messages: store => ({
+          messages: store.messages
+        })
+      }}>
+        // MessageList is injected with a `messages` prop by FluxContainer
+        <MessageList />
+      </FluxContainer>
     );
   }
 
 }
 
 ```
+
+Read more in the [React integration guide](react-integration.md).
 
 And there you go! I hope this guide was helpful.
