@@ -289,6 +289,22 @@ describe('FluxMixin', () => {
       });
     });
 
+    it('converts array of stores to state getter', () => {
+      let flux = new Flux();
+
+      let component = TestUtils.renderIntoDocument(
+        <PropsComponent flux={flux} />
+      );
+
+      component.connectToStores(['test']);
+
+      flux.getActions('test').getSomething('foobar');
+
+      expect(component.state).to.deep.equal({
+        something: 'foobar',
+      });
+    });
+
     it('uses default getter if null is passed as getter', () => {
       let flux = new Flux();
 

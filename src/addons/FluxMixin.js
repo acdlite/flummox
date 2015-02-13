@@ -116,7 +116,7 @@ export default function FluxMixin(...args) {
           [key]: stateGetter,
         };
       } else if (Array.isArray(stateGetterMap)) {
-        stateGetterMap.reduce((result, key) => {
+        stateGetterMap = stateGetterMap.reduce((result, key) => {
           result[key] = stateGetter;
           return result;
         }, {});
