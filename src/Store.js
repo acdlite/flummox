@@ -65,17 +65,34 @@ export default class Store extends EventEmitter {
 
   register(actionId, handler) {
     actionId = ensureActionId(actionId);
+
+    if (typeof handler !== 'function') return;
+
     this._handlers[actionId] = handler.bind(this);
   }
 
   registerAsync(actionId, beginHandler, successHandler, failureHandler) {
     actionId = ensureActionId(actionId);
 
-    this._asyncHandlers[actionId] = {
-      begin: beginHandler.bind(this),
-      success: successHandler.bind(this),
-      failure: failureHandler.bind(this),
+    let asyncHandlers = {
+      begin: beginHandler,
+      success: successHandler,
+      failure: failureHandler,
     };
+
+    for (let key in asyncHandlers) {
+      if (!asyncHandlers.hasOwnProperty(key)) continue;
+
+      let handler = asyncHandlers[key];
+
+      if (typeof handler === 'function') {
+        asyncHandlers[key] = handler.bind(this);
+      } else {
+        delete asyncHandlers[key];
+      }
+    }
+
+    this._asyncHandlers[actionId] = asyncHandlers;
   }
 
   waitFor(tokensOrStores) {

@@ -72,6 +72,11 @@ describe('Store', () => {
       expect(handler.calledWith(...mockArgs)).to.be.true;
     });
 
+    it('ignores non-function handlers', () => {
+      let store = new ExampleStore();
+      expect(store.register.bind(store, null)).not.to.throw();
+    });
+
   });
 
   describe('#registerAsync()', () => {
@@ -131,6 +136,11 @@ describe('Store', () => {
         expect(failure.calledOnce).to.be.true;
         expect(failure.firstCall.args[0]).to.equal(error);
       }
+    });
+
+    it('ignores non-function handlers', () => {
+      let store = new ExampleStore();
+      expect(store.registerAsync.bind(store, null)).not.to.throw();
     });
   });
 

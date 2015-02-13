@@ -148,7 +148,7 @@ export default function(...args) {
           [key]: listener,
         });
 
-        return assign(initialState, initialStoreState);
+        assign(initialState, initialStoreState);
       }
 
       return initialState;
