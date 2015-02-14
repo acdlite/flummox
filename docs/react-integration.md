@@ -71,7 +71,7 @@ class OuterComponent extends React.Component {
 
 If `storeA` has state `{foo: 'bar'}` and `storeB` has state `{bar: 'baz'}`, then InnerComponent has props `foo="bar"` and `bar="baz"`. Whenever the stores change, so do the props.
 
-`connectToStores` will accept a single store key, an array of store keys, or a map of store keys to getter functions. A getter function is a function which takes a single parameter, the store, and returns an object of props to be injected into the children of FluxComponent. If a non-function is specified as a getter, the default getter is used instead, which simply returns the entire store state (like in the example above).
+`connectToStores` will accept a single store key, an array of store keys, or a map of store keys to getter functions. A getter function is a function which takes a single parameter, the store, and returns an object of props to be injected into the children of FluxComponent. If a null is specified as a getter, the default getter is used instead, which simply returns the entire store state (like in the example above).
 
 So, in just a few short lines, we can specify the initialization logic, update logic, and listening/unlistening logic for our component.
 
