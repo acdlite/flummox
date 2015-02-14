@@ -22,6 +22,7 @@ Features
 
 - No singletons = isomorphism for free!
 - Robust yet minimal API inspired by React and ES6
+- The dispatcher and constants are implementation details — no need to interact with them unless you want to.
 - Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via FluxMixin and FluxComponent
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
 - Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
