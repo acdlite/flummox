@@ -61,7 +61,7 @@ class OuterComponent extends React.Component {
   render() {
     return (
       // Pass an array of store keys
-      <FluxComponent connectToStores=['storeA', 'storeB']>
+      <FluxComponent connectToStores={['storeA', 'storeB']}>
         <InnerComponent />
       </FluxComponent>
     );
