@@ -12,7 +12,7 @@ My argument can be broken down into three basic points. Note that these aren't m
 Declarative > imperative
 ------------------------
 
-This is a no brainer. Remember the days before React, when you had to write one piece of code to render your application and another to update it? HAHAHAHA. That was awful. React showed us that expressing our views declaratively leads to better, clearer, more predictable, and less error-prone applications.
+This is a no brainer. Remember the days before React, when you had to write one piece of code to render your application and another to update it? HAHAHAHA. That was awful. React showed us that expressing our views declaratively leads to clearer, more predictable, and less error-prone applications.
 
 You might feel like FluxMixin and FluxComponent are equally declarative. They do have similar interfaces: a single argument/prop, that does (almost) the same thing. Still, as nice as FluxMixin's interface is, there's no beating a component in terms of clarity. A good rule of thumb in React is that everything that can be expressed as a component, should be.
 
