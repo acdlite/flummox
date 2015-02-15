@@ -9,6 +9,8 @@ chai.use(chaiAsPromised);
 import { Promise } from 'es6-promise';
 if (!global.Promise) global.Promise = Promise;
 
+import 'babel-runtime/regenerator/runtime';
+
 import { jsdom as _jsdom } from 'jsdom';
 
 global.jsdom = () => {

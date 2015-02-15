@@ -1,4 +1,4 @@
-6TO5_CMD = node_modules/.bin/6to5
+BABEL_CMD = node_modules/.bin/babel
 MOCHA_CMD = node_modules/.bin/mocha
 WEBPACK_CMD = node_modules/.bin/webpack
 
@@ -6,7 +6,7 @@ SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))
 TEST_JS = $(shell find lib -name "*-test.js")
 
-6TO5_ARGS = --experimental --source-maps-inline
+BABEL_ARGS = --experimental --source-maps-inline
 MOCHA_ARGS = --harmony --require lib/test/init.js $(TEST_JS)
 
 # Build application
@@ -28,18 +28,18 @@ test-cov: js
 # Faster on first build, but not after that
 fast-build: fast-js build
 
-# Transpile JavaScript using 6to5
+# Transpile JavaScript using Babel
 js: $(LIB_JS)
 
 $(LIB_JS): lib/%.js: src/%.js
 	mkdir -p $(dir $@)
-	$(6TO5_CMD) $< -o $@ $(6TO5_ARGS)
+	$(BABEL_CMD) $< -o $@ $(BABEL_ARGS)
 
 fast-js:
-	$(6TO5_CMD) src -d lib $(6TO5_ARGS)
+	$(BABEL_CMD) src -d lib $(BABEL_ARGS)
 
 watch-js:
-	$(6TO5_CMD) src -d lib $(6TO5_ARGS) -w
+	$(BABEL_CMD) src -d lib $(BABEL_ARGS) -w
 
 browser: $(SRC_JS)
 	mkdir -p dist
