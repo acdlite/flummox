@@ -132,7 +132,7 @@ let BlogPostPage = React.createClass({
           posts: store => ({
             post: store.getPost(this.props.id),
           })
-        }}/>
+        }}>
           <BlogPost />
         </FluxComponent>
       </MainContentArea>
