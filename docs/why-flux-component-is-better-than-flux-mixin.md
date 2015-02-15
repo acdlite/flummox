@@ -22,9 +22,9 @@ Composition > inheritance
 
 React has a very clear opinion on composition vs. inheritance: composition wins. Pretty much everything awesome about React — components, unidirectional data flow, the reconciliation process — derives from the fact that a React app is just a giant tree of components composed of other components.
 
-Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the parent*.
+Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the owner*.
 
-However, when you use FluxMixin, you're introducing data into your component that comes not from the parent, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
+However, when you use FluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
 
 For instance, here's a component that renders a single blog post, based on the id of the post.
 
@@ -47,9 +47,9 @@ let BlogPost = React.createClass({
 
 Can you spot the problem? What happens when you want to re-use this same component to display list of blog posts on your home page? Does it really make sense for each BlogPost component to separately retrieve its own post data from the store? Nope, not really.
 
-Consider that the parent component (BlogRoll, let's say) has to pass down an `id` prop in order for BlogPost to work properly. Where do you think BlogRoll going to get that id from? The store, of course. Now you have BlogRoll *and* each of its children getting data from the store, each with their own event listeners, and each calling `setState()` every time the store changes. D'oh!
+Consider that the owner component (BlogRoll, let's say) has to pass down an `id` prop in order for BlogPost to work properly. Where do you think BlogRoll going to get that id from? The store, of course. Now you have BlogRoll *and* each of its children getting data from the store, each with their own event listeners, and each calling `setState()` every time the store changes. D'oh!
 
-A better approach is to separate the data fetching logic from the logic of rendering the post. Instead of having a prop `id`, BlogPost should have a prop `post`. It shouldn't concern itself with how the data is retrieved — that's the concern of the parent.
+A better approach is to separate the data fetching logic from the logic of rendering the post. Instead of having a prop `id`, BlogPost should have a prop `post`. It shouldn't concern itself with how the data is retrieved — that's the concern of the owner.
 
 After we rewrite BlogPost, it looks something like this:
 
@@ -64,7 +64,7 @@ let BlogPost = React.createClass({
 });
 ```
 
-And its parent looks something like this:
+And its owner looks something like this:
 
 ```js
 let BlogPostPage = React.createClass({
