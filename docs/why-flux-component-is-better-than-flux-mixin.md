@@ -1,7 +1,7 @@
 Why FluxComponent > FluxMixin
 =============================
 
-In the [React integration guide](react-integration-guide.md), I suggest that using FluxComponent is better than using FluxMixin, even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
+In the [React integration guide](react-integration.md), I suggest that using FluxComponent is better than using FluxMixin, even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
 
 My argument can be broken down into three basic points. Note that these aren't my original ideas, nor are they unique to Flummox — they are the "React Way":
 
@@ -12,7 +12,7 @@ My argument can be broken down into three basic points. Note that these aren't m
 Declarative > imperative
 ------------------------
 
-This is a no brainer. Remember the days before React, when you had to write one piece of code to render your application and another to update it? HAHAHAHA. That was awful. React showed us that expressing our views declaratively leads to better, clearer, more predictable, and less error-prone applications.
+This is a no brainer. Remember the days before React, when you had to write one piece of code to render your application and another to update it? HAHAHAHA. That was awful. React showed us that expressing our views declaratively leads to clearer, more predictable, and less error-prone applications.
 
 You might feel like FluxMixin and FluxComponent are equally declarative. They do have similar interfaces: a single argument/prop, that does (almost) the same thing. Still, as nice as FluxMixin's interface is, there's no beating a component in terms of clarity. A good rule of thumb in React is that everything that can be expressed as a component, should be.
 
@@ -22,9 +22,9 @@ Composition > inheritance
 
 React has a very clear opinion on composition vs. inheritance: composition wins. Pretty much everything awesome about React — components, unidirectional data flow, the reconciliation process — derives from the fact that a React app is just a giant tree of components composed of other components.
 
-Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the parent*.
+Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the owner*.
 
-However, when you use FluxMixin, you're introducing data into your component that comes not from the parent, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
+However, when you use FluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
 
 For instance, here's a component that renders a single blog post, based on the id of the post.
 
@@ -45,11 +45,11 @@ let BlogPost = React.createClass({
 });
 ```
 
-Can you spot the problem? What happens when you want to re-use this same component to display list of blog posts on your home page? Does it really make sense for each BlogPost component to separately retrieve its own post data from the store? Nope, not really.
+Can you spot the problem? What happens when you want to re-use this same component to display a list of blog posts on your home page? Does it really make sense for each BlogPost component to separately retrieve its own post data from the store? Nope, not really.
 
-Consider that the parent component (BlogRoll, let's say) has to pass down an `id` prop in order for BlogPost to work properly. Where do you think BlogRoll going to get that id from? The store, of course. Now you have BlogRoll *and* each of its children getting data from the store, each with their own event listeners, and each calling `setState()` every time the store changes. D'oh!
+Consider that the owner component (BlogRoll, let's say) has to pass down an `id` prop in order for BlogPost to work properly. Where do you think BlogRoll is going to get that id from? The store, of course. Now you have BlogRoll *and* each of its children getting data from the store, each with their own event listeners, and each calling `setState()` every time the store changes. D'oh!
 
-A better approach is to separate the data fetching logic from the logic of rendering the post. Instead of having a prop `id`, BlogPost should have a prop `post`. It shouldn't concern itself with how the data is retrieved — that's the concern of the parent.
+A better approach is to separate the data fetching logic from the logic of rendering the post. Instead of having a prop `id`, BlogPost should have a prop `post`. It shouldn't concern itself with how the data is retrieved — that's the concern of the owner.
 
 After we rewrite BlogPost, it looks something like this:
 
@@ -64,7 +64,7 @@ let BlogPost = React.createClass({
 });
 ```
 
-And its parent looks something like this:
+And its owner looks something like this:
 
 ```js
 let BlogPostPage = React.createClass({
@@ -118,7 +118,7 @@ let BlogPostWrapper = React.createClass({
 
 This works. But it's kind of tedious, right? Imagine creating a wrapper like this for every single component that requires data from a store.
 
-Wouldn't it be great if there were a shortcut for this pattern — a convenient way to update specific parts of your app, without triggering unnecessary re-renders?
+Wouldn't it be great if there were a shortcut for this pattern — a convenient way to update specific parts of your app, without triggering unnecessary renders?
 
 Yep! It's called FluxComponent.
 
@@ -146,7 +146,7 @@ let BlogPostPage = React.createClass({
 Do what's right
 ---------------
 
-If I'm leaving you unconvinced, just do what you feel is right. I think mixins are generally preferable to components, but as with any rule, there are exceptions. For instance, [React Tween State](https://github.com/chenglou/react-tween-state) is a great project that wouldn't make sense as a component.
+If I'm leaving you unconvinced, just do what you feel is right. I think components are generally preferable to mixins, but as with any rule, there are exceptions. For instance, [React Tween State](https://github.com/chenglou/react-tween-state) is a great project that wouldn't make sense as a component.
 
 Either way, both FluxMixin and FluxComponent are available for you to use, and both are pretty great :)
 
