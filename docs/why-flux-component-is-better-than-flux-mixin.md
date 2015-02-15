@@ -45,7 +45,7 @@ let BlogPost = React.createClass({
 });
 ```
 
-Can you spot the problem? What happens when you want to re-use this same component to display list of blog posts on your home page? Does it really make sense for each BlogPost component to separately retrieve its own post data from the store? Nope, not really.
+Can you spot the problem? What happens when you want to re-use this same component to display a list of blog posts on your home page? Does it really make sense for each BlogPost component to separately retrieve its own post data from the store? Nope, not really.
 
 Consider that the owner component (BlogRoll, let's say) has to pass down an `id` prop in order for BlogPost to work properly. Where do you think BlogRoll going to get that id from? The store, of course. Now you have BlogRoll *and* each of its children getting data from the store, each with their own event listeners, and each calling `setState()` every time the store changes. D'oh!
 
