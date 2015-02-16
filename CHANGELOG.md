@@ -34,7 +34,7 @@ Tags:
   - Updated dependencies
   - Testing on iojs, for jsdom compatibility
 
-Thanks to [@vesparny](https://github.com/vesparny), [@martintietz](https://github.com/martintietz), [@https://github.com/SimonDegraeve](https://github.com/https://github.com/SimonDegraeve) for your input on new features.
+Thanks to [@vesparny](https://github.com/vesparny), [@martintietz](https://github.com/martintietz), [@SimonDegraeve](https://github.com/https://github.com/SimonDegraeve) for your input on new features.
 
 ## 2.5.1
 - **Bug Fix**
