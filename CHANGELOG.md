@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.7.2
+- **Bugfix**
+  - Fix React peer dependency version so it works on 0.13
+
 ## 2.7.0
 - **New Feature**
   - `createActions()` and `createStores()` now return the new Store/Actions instance. [#4](https://github.com/acdlite/flummox/pull/27) [@tappleby](https://github.com/tappleby)
