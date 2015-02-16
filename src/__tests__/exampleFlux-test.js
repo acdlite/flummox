@@ -1,6 +1,7 @@
 'use strict';
 
 import { Flummox, Store, Actions } from '../Flux';
+import { TestActions } from '../addons/TestUtils';
 
 describe('Examples:', () => {
 
@@ -108,6 +109,93 @@ describe('Examples:', () => {
           content: 'Hello, world!',
           id: 0,
         },
+      });
+    });
+  });
+
+  /**
+   * An example testing using the TestActions util
+   */
+  describe('MessageStore async', () => {
+    class MessageStore extends Store {
+
+      // Note that passing a flux instance to the constructor is not required;
+      // we do it here so we have access to any action ids we're interested in.
+      constructor(flux) {
+
+        // Don't forget to call the super constructor
+        super();
+
+        let messageActions = flux.getActions('messages');
+        this.registerAsync(
+          messageActions.newMessage, 
+          this.handleNewMessageBegin,
+          this.handleNewMessageComplete,
+          this.handleNewMessageFailed
+        );
+        this.messageCounter = 0;
+        this.state = {
+          saving: false,
+          messages: {}
+        };
+      }
+
+      handleNewMessageBegin() {
+        this.setState({
+          saving: true,
+          error: null
+        });
+      }
+
+      handleNewMessageComplete(content) {
+        let state = this.getState();
+        let id = this.messageCounter++;
+
+        state.saving = false;
+        state.messages[id] = { id, content };
+
+        this.setState(state);
+      }
+
+      handleNewMessageFailed(error) {
+        this.setState({
+          saving: false,
+          error: error
+        });
+      }
+    }
+
+    describe('#newMessage action', () => {
+      beforeEach(function() {
+        this.flux = new Flummox();
+        this.messageActions = this.flux.createActions('messages', TestActions, ['newMessage']);
+        this.messageStore = this.flux.createStore('messages', MessageStore, this.flux);
+      });
+
+      it('sets saving true', function () {
+        let action = this.messageActions.newMessage();
+        expect(this.messageStore.state.saving).to.be.true;
+      });
+
+      it('creates new message on success', function () {
+        let action = this.messageActions.newMessage();
+        action.success('Hello, world!');
+
+        expect(this.messageStore.state.saving).to.be.false;
+        expect(this.messageStore.state.messages).to.deep.equal({
+          [0]: {
+            content: 'Hello, world!',
+            id: 0,
+          },
+        });
+      });
+
+      it('sets error on failure', function () {
+        let action = this.messageActions.newMessage();
+        action.fail('failed to create message.');
+        
+        expect(this.messageStore.state.saving).to.be.false;
+        expect(this.messageStore.state.error).to.equal('failed to create message.');
       });
     });
   });
