@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.7.0
+- **New Feature**
+  - `createActions()` and `createStores()` now return the new Store/Actions instance. [#4](https://github.com/acdlite/flummox/pull/27) [@tappleby](https://github.com/tappleby)
+
 ## 2.6.1
 - **Bug Fix**
   - Fixes bug with array form of `connectToStores()`. [#4](https://github.com/acdlite/flummox/pull/24)
