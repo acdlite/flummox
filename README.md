@@ -26,15 +26,16 @@ Features
 - Robust yet minimal API inspired by React and ES6
 - The dispatcher and constants are implementation details — no need to interact with them unless you want to.
 - Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via FluxMixin and FluxComponent
-- Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
+- Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.*
 - Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
 - Serialization/deserialization of stores, for faster page loads.
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
+*Not officially supported until stable 0.13 release, but it should work
+
 Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
-
 
 The big idea
 ------------
