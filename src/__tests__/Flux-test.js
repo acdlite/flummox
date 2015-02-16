@@ -64,6 +64,14 @@ describe('Flux', () => {
       expect(spy1.getCall(0).args[0].body).to.equal('foobar');
       expect(spy2.calledWith('bar')).to.be.true;
     });
+
+    it('returns the created store instance', () => {
+      class ExampleStore extends Store {}
+
+      let flux = new Flux();
+      let store = flux.createStore('ExampleStore', ExampleStore);
+      expect(store).to.be.an.instanceOf(ExampleStore);
+    });
   });
 
   describe('#getStore()', () => {
@@ -101,6 +109,14 @@ describe('Flux', () => {
         + 'in its prototype chain. Make sure you\'re using the `extends` '
         + 'keyword: `class ForgotToExtendActions extends Actions { ... }`'
       );
+    });
+
+    it('returns the created action\'s instance', () => {
+      class TestActions extends Actions {}
+
+      let flux = new Flux();
+      let actions = flux.createActions('TestActions', TestActions);
+      expect(actions).to.be.an.instanceOf(TestActions);
     });
   });
 

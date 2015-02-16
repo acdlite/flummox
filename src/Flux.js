@@ -53,6 +53,8 @@ export default class Flux extends EventEmitter {
     store._token = token;
 
     this._stores[key] = store;
+
+    return store;
   }
 
   getStore(key) {
@@ -84,6 +86,8 @@ export default class Flux extends EventEmitter {
     actions.dispatchAsync = this.dispatchAsync.bind(this);
 
     this._actions[key] = actions;
+
+    return actions;
   }
 
   getActions(key) {
