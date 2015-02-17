@@ -33,12 +33,12 @@ Here's an example of a state getter map you would pass to either `FluxMixin()` o
 FluxMixin({
   // Can't use arrow functions because we need `this` to be bound to component
   // Yet another reason FluxComponent is better :)
-  posts: function() (
+  posts: function(store) (
     return {
       storeA: store.getPost(this.props.post.id),
     };
   ),
-  comments: function() (
+  comments: function(store) (
     return {
       comments: store.getCommentsForPost(this.props.post.id),
     };
