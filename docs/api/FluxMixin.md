@@ -55,6 +55,19 @@ The same cannot be said for `this.state` — there's no reliable way to sync sto
 
 To solve this problem and ensure that stores always stay in sync, specify a unique `key` prop on the component, which will signal React to mount a new instance whenever the key changes (which shouldn't be often, if you're worried about performance issues).
 
+Access flux with `this.flux`
+----------------------------
+
+You can access the Flux instance with `this.flux`. For example, to perform an action:
+
+```js
+onClick(e) {
+  e.preventDefault();
+  this.flux.getActions('actionsKey').someAction();
+}
+```
+
+
 Methods
 -------
 
