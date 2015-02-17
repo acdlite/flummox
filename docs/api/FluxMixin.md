@@ -49,7 +49,7 @@ FluxMixin({
 Use `key` to ensure stores stay in sync
 ---------------------------------------
 
-State getters are bound the the component instance, so you can reference props the normal way as `this.props`. When a prop change is detected (by doing a shallow comparison of props in `componentDidUpdate()`), the state from the stores is updated.
+State getters are bound to the component instance, so you can reference props the normal way as `this.props`. When a prop change is detected (by doing a shallow comparison of props in `componentDidUpdate()`), the state from the stores is updated.
 
 The same cannot be said for `this.state` — there's no reliable way to sync store state in response to component state changes without causing an infinite update cycle (at least that I know of).
 
