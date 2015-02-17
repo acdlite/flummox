@@ -68,11 +68,13 @@ describe('FluxMixin', () => {
     let contextComponent, propsComponent;
 
     React.withContext({ flux }, () => {
-      contextComponent = TestUtils.renderIntoDocument(<ContextComponent />);
+      contextComponent = TestUtils.renderIntoDocument(
+        <ContextComponent keys="test" />
+      );
     });
 
     propsComponent = TestUtils.renderIntoDocument(
-      <PropsComponent flux={flux} />
+      <PropsComponent key="test" flux={flux} />
     );
 
     expect(contextComponent.flux).to.be.an.instanceof(Flummox);
@@ -88,7 +90,7 @@ describe('FluxMixin', () => {
       render() {
         return (
           <div>
-            <ChildComponent />
+            <ChildComponent key="test" />
           </div>
         );
       }
@@ -155,7 +157,7 @@ describe('FluxMixin', () => {
     });
 
     let component = TestUtils.renderIntoDocument(
-      <Component flux={flux} />
+      <Component key="test" flux={flux} />
     );
 
     expect(connectToStores.calledOnce).to.be.true;
@@ -177,7 +179,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       let initialState = component.connectToStores('test');
@@ -191,7 +193,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -209,7 +211,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -255,7 +257,7 @@ describe('FluxMixin', () => {
       });
 
       let component = TestUtils.renderIntoDocument(
-        <Component flux={flux} />
+        <Component key="test" flux={flux} />
       );
 
       let someComponentMethod = sinon.spy(component, 'someComponentMethod');
@@ -283,7 +285,7 @@ describe('FluxMixin', () => {
       });
 
       let component = TestUtils.renderIntoDocument(
-        <Component flux={flux} foo="bar" />
+        <Component key="test" flux={flux} foo="bar" />
       );
 
       expect(component.state.foo).to.equal('foo is bar');
@@ -297,7 +299,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -322,7 +324,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.connectToStores(['test']);
@@ -338,7 +340,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -350,8 +352,7 @@ describe('FluxMixin', () => {
       expect(component.state).to.deep.equal({
         something: 'foobar',
         otherThing: 'barbaz',
-      });
-    });
+      });    });
 
     it('removes listener before unmounting', () => {
       let flux = new Flux();
@@ -374,7 +375,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent flux={flux} />
+        <PropsComponent key="test" flux={flux} />
       );
 
       component.connectToStores({
