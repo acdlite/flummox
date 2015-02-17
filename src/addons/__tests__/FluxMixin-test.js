@@ -39,6 +39,7 @@ describe('FluxMixin', () => {
 
       this.createActions('test', TestActions);
       this.createStore('test', TestStore, this);
+      this.createStore('test2', TestStore, this);
     }
   }
 
@@ -264,6 +265,34 @@ describe('FluxMixin', () => {
       expect(someComponentMethod.firstCall.args[0]).to.equal('some arg');
     });
 
+    it('syncs with store after prop change', () => {
+      let flux = new Flux();
+
+      let Component = React.createClass({
+        mixins: [FluxMixin({
+          test: function(store) {
+            return {
+              foo: 'foo is ' + this.props.foo,
+            };
+          },
+        })],
+
+        render() {
+          return null;
+        }
+      });
+
+      let component = TestUtils.renderIntoDocument(
+        <Component flux={flux} foo="bar" />
+      );
+
+      expect(component.state.foo).to.equal('foo is bar');
+
+      component.setProps({ foo: 'baz' });
+
+      expect(component.state.foo).to.equal('foo is baz');
+    });
+
     it('accepts object of keys to state getters', () => {
       let flux = new Flux();
 
@@ -338,6 +367,32 @@ describe('FluxMixin', () => {
       expect(store.listeners('change').length).to.equal(0);
     });
 
+  });
+
+  describe('#getStoreState', () => {
+    it('gets combined state of connected stores', () => {
+      let flux = new Flux();
+
+      let component = TestUtils.renderIntoDocument(
+        <PropsComponent flux={flux} />
+      );
+
+      component.connectToStores({
+        test: store => ({
+          foo: 'bar',
+        }),
+        test2: store => ({
+          bar: 'baz'
+        })
+      });
+
+      component.setState({ baz: 'foo' });
+
+      expect(component.getStoreState()).to.deep.equal({
+        foo: 'bar',
+        bar: 'baz'
+      });
+    });
   });
 
 });

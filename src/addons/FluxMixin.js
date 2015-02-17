@@ -33,7 +33,7 @@
 import { PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
-
+import shallowEqual from 'react/lib/shallowEqual';
 
 export default function FluxMixin(...args) {
 
@@ -54,7 +54,9 @@ export default function FluxMixin(...args) {
     },
 
     getInitialState() {
+      this._flux_stateGetters = {};
       this._flux_listeners = {};
+      this._flux_didSyncStoreState = false;
       this.flux = this.props.flux || this.context.flux;
 
       if (!(this.flux instanceof Flux)) {
@@ -79,6 +81,32 @@ export default function FluxMixin(...args) {
 
         store.removeListener('change', listener);
       }
+    },
+
+    componentDidUpdate(prevProps) {
+      if (!shallowEqual(prevProps, this.props)) {
+        this.updateStores();
+      }
+    },
+
+    updateStores() {
+      let state = this.getStoreState();
+      this.setState(state);
+    },
+
+    getStoreState() {
+      let state = {};
+
+      for (let key in this._flux_stateGetters) {
+        let storeStateGetter = this._flux_stateGetters[key];
+        let store = this.flux.getStore(key);
+
+        let storeState = storeStateGetter(store);
+
+        assign(state, storeState);
+      }
+
+      return state;
     },
 
     /**
@@ -134,6 +162,7 @@ export default function FluxMixin(...args) {
         if (storeStateGetter === null) storeStateGetter = defaultStateGetter;
 
         storeStateGetter = storeStateGetter.bind(this);
+        this._flux_stateGetters[key] = storeStateGetter;
 
         let initialStoreState = storeStateGetter(store);
 
@@ -143,10 +172,7 @@ export default function FluxMixin(...args) {
         };
 
         store.addListener('change', listener);
-
-        assign(this._flux_listeners, {
-          [key]: listener,
-        });
+        this._flux_listeners[key] = listener;
 
         assign(initialState, initialStoreState);
       }
