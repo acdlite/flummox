@@ -9,6 +9,14 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.8.0
+- [New Feature]
+  - `getStoreState()` in FluxMixin returns current combined state of connected stores.
+- [Bugfix]
+  - FluxMixin/FluxComponent will now updated when a prop change is detected, but not state. [#29](https://github.com/acdlite/flummox/issues/29)
+- [Documentation]
+  - Add API docs for FluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement FluxMixin.
+
 ## 2.7.2
 - **Bugfix**
   - Fix React peer dependency version so it works on 0.13
