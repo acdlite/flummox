@@ -9,6 +9,9 @@ Tags:
 - [Internal]
 - [Polish]
 
+- [Documentation]
+  - Add sections clarifying how to access flux instance (e.g. to perform actions) using FluxMixin/FluxComponent
+
 ## 2.8.0
 - [New Feature]
   - `getStoreState()` in FluxMixin returns current combined state of connected stores.
