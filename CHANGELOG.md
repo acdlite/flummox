@@ -9,6 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
 - [Documentation]
   - Add sections clarifying how to access flux instance (e.g. to perform actions) using FluxMixin/FluxComponent
 
