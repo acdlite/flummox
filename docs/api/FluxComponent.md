@@ -30,6 +30,18 @@ Use `key` to ensure stores stay in sync
 
 Refer to [FluxMixin](FluxMixin.md)
 
+Access flux with `this.props.flux`
+----------------------------------
+
+In the child component, you can access the Flux instance with `this.props.flux`. For example, to perform an action:
+
+```js
+onClick(e) {
+  e.preventDefault();
+  this.props.flux.getActions('actionsKey').someAction();
+}
+```
+
 Props
 -----
 
