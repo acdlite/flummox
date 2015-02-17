@@ -49,9 +49,9 @@ FluxMixin({
 Use `key` to ensure stores stay in sync
 ---------------------------------------
 
-State getters are bound the the component instance, so you can reference props the normal way as `this.props`. When a prop change is detected (by doing a shallow comparison of props in `componentDidUpdate()`), the store state is updated.
+State getters are bound the the component instance, so you can reference props the normal way as `this.props`. When a prop change is detected (by doing a shallow comparison of props in `componentDidUpdate()`), the state from the stores is updated.
 
-The same cannot be said for state — there's no reliable way to sync store state in response to component state changes without causing an infinite update cycle (at least that I know of).
+The same cannot be said for `this.state` — there's no reliable way to sync store state in response to component state changes without causing an infinite update cycle (at least that I know of).
 
 To solve this problem and ensure that stores always stay in sync, specify a unique `key` prop on the component, which will signal React to mount a new instance whenever the key changes (which shouldn't be often, if you're worried about performance issues).
 
