@@ -71,19 +71,10 @@ describe('TestUtils', () => {
 
     it('creates sync actions', () => {
       let flux = new Flux();
-      let fooSpy = sinon.spy();
-
-      let actions = flux.createActions('actions', TestActions([], {
-        foo1: fooSpy,
-        foo2: 123
-      }));
+      let actions = flux.createActions('actions', TestActions([], ['foo1', 'foo2']));
 
       expect(actions.foo1).to.be.a('function');
       expect(actions.foo2).to.be.a('function');
-
-      actions.foo1('arg1', 'arg2');
-
-      expect(fooSpy.withArgs('arg1', 'arg2').calledOnce);
     });
   });
 });
