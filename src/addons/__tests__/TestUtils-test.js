@@ -19,8 +19,7 @@ describe('TestUtils', () => {
       asyncResp.then(success);
       asyncResp.success('foo');
 
-      expect(success.calledOnce).to.be.true;
-      expect(success.firstCall.args[0]).to.equal('foo');
+      expect(success.withArgs('foo').calledOnce).to.be.true;
     });
 
     it('calls fail handler', () => {
@@ -29,8 +28,7 @@ describe('TestUtils', () => {
       asyncResp.then(null, fail);
       asyncResp.fail('foo');
 
-      expect(fail.calledOnce).to.be.true;
-      expect(fail.firstCall.args[0]).to.equal('foo');
+      expect(fail.withArgs('foo').calledOnce).to.be.true;
     });
 
     it('supports multiple then handlers', () => {
@@ -46,25 +44,21 @@ describe('TestUtils', () => {
       asyncResp.success('foo');
       asyncResp.fail('foo');
 
-      expect(success1.calledOnce).to.be.true;
-      expect(success1.firstCall.args[0]).to.equal('foo');
-      expect(fail1.calledOnce).to.be.true;
-      expect(fail1.firstCall.args[0]).to.equal('foo');
+      expect(success1.withArgs('foo').calledOnce).to.be.true;
+      expect(fail1.withArgs('foo').calledOnce).to.be.true;
 
-      expect(success2.calledOnce).to.be.true;
-      expect(success2.firstCall.args[0]).to.equal('foo');
-      expect(fail2.calledOnce).to.be.true;
-      expect(fail2.firstCall.args[0]).to.equal('foo');
-
+      expect(success2.withArgs('foo').calledOnce).to.be.true;
+      expect(fail2.withArgs('foo').calledOnce).to.be.true;
     });
   });
 
   describe('TestActions', () => {
     it('creates async actions', () => {
       let actions = new TestActions(['foo1', 'foo2']);
+      
       expect(actions.foo1).to.be.a('function');
       expect(actions.foo2).to.be.a('function');
-    })
+    });
 
     it('returns async action helper class', () => {
       let flux = new Flux();
@@ -72,6 +66,6 @@ describe('TestUtils', () => {
       let fooResp = actions.foo();
 
       expect(fooResp).to.be.an.instanceof(TestActionsAsyncResponse);
-    })
+    });
   });
 });
