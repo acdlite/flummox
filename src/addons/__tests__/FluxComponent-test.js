@@ -150,7 +150,7 @@ describe('FluxComponent', () => {
     ).to.throw('Did not find exactly one match for tag:span');
   });
 
-  it.only('allows for nested FluxComponents', () => {
+  it('allows for nested FluxComponents', () => {
     let flux = new Flux();
     let actions = flux.getActions('test');
 
