@@ -62,7 +62,7 @@ The practical upshot of this that is it allows you to nest FluxComponents:
     mostRecentPost: store.getMostRecentPost(),
   })
 }}>
-  <FluxComponent connectToStore={{ // has prop "mostRecentPost"
+  <FluxComponent connectToStores={{ // has prop "mostRecentPost"
     comments: function(store) { // can't use arrow function because we want `this` to refer to nested component
       return {
         mostRecentComments: store.getMostRecentComments(this.props.mostRecentPost.id)
