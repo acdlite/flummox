@@ -38,17 +38,25 @@ describe('TestUtils', () => {
       let fail1 = sinon.spy();
       let fail2 = sinon.spy();
 
-      asyncResp.then(success1, fail1);
-      asyncResp.then(success2, fail2);
+      asyncResp
+        .then(success1)
+        .then(success2);
 
       asyncResp.success('foo');
+
+      asyncResp = new TestActionsSyncPromise();
+      asyncResp
+        .then(null, fail1)
+        .then(null, fail2);
+
       asyncResp.fail('foo');
 
       expect(success1.withArgs('foo').calledOnce).to.be.true;
-      expect(fail1.withArgs('foo').calledOnce).to.be.true;
-
       expect(success2.withArgs('foo').calledOnce).to.be.true;
+
+      expect(fail1.withArgs('foo').calledOnce).to.be.true;
       expect(fail2.withArgs('foo').calledOnce).to.be.true;
+
     });
   });
 

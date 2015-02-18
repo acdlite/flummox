@@ -49,6 +49,10 @@ export function TestActions(asyncActions, syncActions) {
 
 class TestActionsSyncPromise {
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this._success = [];
     this._fail = [];
   }
@@ -66,11 +70,13 @@ class TestActionsSyncPromise {
   }
 
   success(...successArgs) {
-    this._success.forEach(callback => callback.apply(this, successArgs));
+    this._success.forEach(callback => callback(...successArgs));
+    this.reset();
   }
 
   fail(...failArgs) {
-    this._fail.forEach(callback => callback.apply(this, failArgs));
+    this._fail.forEach(callback => callback(...failArgs));
+    this.reset();
   }
 }
 
