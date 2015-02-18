@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 2.9.0
+## 2.9.1
 - [New Feature]
   - Extra props set on FluxComponent will be injected into children. This lets you nest FluxComponents, so store getters on an inner FluxComponent can use props retrieved by an outer FluxComponent.
   - FluxComponent no longer wraps a single child in a `span`. It only wraps if there are multiple children.
