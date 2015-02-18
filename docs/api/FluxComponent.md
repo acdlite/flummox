@@ -42,6 +42,40 @@ onClick(e) {
 }
 ```
 
+Nested FluxComponents
+---------------------
+
+In addition to injecting store state as props into its children, FluxComponent also injects its own props:
+
+```js
+<FluxComponent someProp="hello">
+  <Innercomponent /> // has "someProp" prop equal to "hello"
+</FluxComponent>
+```
+
+The practical upshot of this that is it allows you to nest FluxComponents:
+
+```js
+// Example: get the most recent comments on the most recent post
+<FluxComponent connectToStores={{
+  posts: store => ({
+    mostRecentPost: store.getMostRecentPost(),
+  })
+}}>
+  <FluxComponent connectToStore={{ // has prop "mostRecentPost"
+    comments: function(store) { // can't use arrow function because we want `this` to refer to nested component
+      return {
+        mostRecentComments: store.getMostRecentComments(this.props.mostRecentPost.id)
+      };
+    }
+  }}>
+    <ChildComponent /> // has props "mostRecentPosts" and "mostRecentComments"
+  </FluxComponent>
+</FluxComponent>
+```
+
+You may not want to rely on this pattern too heavily, but it's available as an option.
+
 Props
 -----
 
