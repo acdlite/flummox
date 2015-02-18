@@ -1,6 +1,6 @@
 {
   "name": "flummox",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Idiomatic, modular, testable, isomorphic Flux. No singletons required.",
   "main": "lib/Flux.js",
   "repository": {
@@ -32,13 +32,10 @@
     "istanbul": "~0.3.5",
     "jsdom": "~3.1.1",
     "mocha": "~2.1.0",
-    "react": "0.12.x",
+    "react": ">=0.12.0",
     "sinon": "~1.12.2",
     "source-map-support": "~0.2.9",
     "webpack": "~1.5.3"
-  },
-  "peerDependencies": {
-    "react": "0.12.x"
   },
   "dependencies": {
     "eventemitter3": "~0.1.6",

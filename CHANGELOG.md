@@ -9,6 +9,22 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
+- [Documentation]
+  - Add sections clarifying how to access flux instance (e.g. to perform actions) using FluxMixin/FluxComponent
+
+## 2.8.0
+- [New Feature]
+  - `getStoreState()` in FluxMixin returns current combined state of connected stores.
+- [Bugfix]
+  - FluxMixin/FluxComponent will now updated when a prop change is detected, but not state. [#29](https://github.com/acdlite/flummox/issues/29)
+- [Documentation]
+  - Add API docs for FluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement FluxMixin.
+
+## 2.7.2
+- **Bugfix**
+  - Fix React peer dependency version so it works on 0.13
+
 ## 2.7.0
 - **New Feature**
   - `createActions()` and `createStores()` now return the new Store/Actions instance. [#4](https://github.com/acdlite/flummox/pull/27) [@tappleby](https://github.com/tappleby)
@@ -30,7 +46,7 @@ Tags:
   - Updated dependencies
   - Testing on iojs, for jsdom compatibility
 
-Thanks to [@vesparny](https://github.com/vesparny), [@martintietz](https://github.com/martintietz), [@https://github.com/SimonDegraeve](https://github.com/https://github.com/SimonDegraeve) for your input on new features.
+Thanks to [@vesparny](https://github.com/vesparny), [@martintietz](https://github.com/martintietz), [@SimonDegraeve](https://github.com/https://github.com/SimonDegraeve) for your input on new features.
 
 ## 2.5.1
 - **Bug Fix**

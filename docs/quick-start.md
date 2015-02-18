@@ -164,14 +164,14 @@ class MessagesView extends React.Component {
 
   render() {
     return (
-      <FluxContainer connectToStores={{
+      <FluxComponent connectToStores={{
         messages: store => ({
           messages: store.messages
         })
       }}>
         // MessageList is injected with a `messages` prop by FluxContainer
         <MessageList />
-      </FluxContainer>
+      </FluxComponent>
     );
   }
 
