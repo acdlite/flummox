@@ -61,7 +61,7 @@ describe('FluxComponent', () => {
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
   });
 
-  it('passes connectToStore prop to ReactMixin\'s connectToStores()', () => {
+  it('passes connectToStore prop to FluxMixin\'s connectToStores()', () => {
     let flux = new Flux();
     let actions = flux.getActions('test');
 
@@ -97,6 +97,68 @@ describe('FluxComponent', () => {
     let tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test">
         <div />
+      </FluxComponent>
+    );
+
+    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    actions.getSomething('something good');
+    expect(div.props.something).to.equal('something good');
+    actions.getSomething('something else');
+    expect(div.props.something).to.equal('something else');
+  });
+
+  it('injects children with any extra props', () => {
+    let flux = new Flux();
+
+    let tree = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux} extraProp="hello">
+        <div />
+      </FluxComponent>
+    );
+
+    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    expect(div.props.extraProp).to.equal('hello');
+    expect(Object.keys(div.props)).to.deep.equal(['flux', 'extraProp']);
+  });
+
+  it('wraps multiple children in span tag', () => {
+    let flux = new Flux();
+
+    let tree = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux}>
+        <div />
+        <div />
+      </FluxComponent>
+    );
+
+    let wrapper = TestUtils.findRenderedDOMComponentWithTag(tree, 'span');
+  });
+
+  it('does not wrap single child in span tag', () => {
+    let flux = new Flux();
+
+    let tree = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux}>
+        <div />
+      </FluxComponent>
+    );
+
+    expect(
+      TestUtils.findRenderedDOMComponentWithTag.bind(TestUtils, tree, 'span')
+    ).to.throw('Did not find exactly one match for tag:span');
+  });
+
+  it.only('allows for nested FluxComponents', () => {
+    let flux = new Flux();
+    let actions = flux.getActions('test');
+
+    let tree = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux} connectToStores="test">
+        <FluxComponent>
+          <div />
+        </FluxComponent>
       </FluxComponent>
     );
 

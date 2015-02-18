@@ -61,17 +61,25 @@ let FluxComponent = React.createClass({
     return this.connectToStores(this.props.connectToStores);
   },
 
+  wrapChild(child) {
+    let { children, connectToStores, ...props } = this.props;
+
+    return React.addons.cloneWithProps(child, assign({
+      flux: this.flux,
+    }, this.state, props));
+  },
+
   render() {
+    let { children } = this.props;
+
     if (!this.props.children) return null;
 
-    let children = React.Children.map(this.props.children, child =>
-      React.addons.cloneWithProps(child, assign({
-        key: child.key || undefined,
-        flux: this.flux,
-      }, this.state))
-    );
-
-    return <span>{children}</span>;
+    if (React.Children.count(children) === 1) {
+      let child = children;
+      return this.wrapChild(child);
+    } else {
+      return <span>React.Children.map(children, this.wrapChild)</span>;
+    }
   }
 
 });

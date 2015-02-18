@@ -57,8 +57,6 @@ var Flummox =
 
 	var _applyConstructor = function (Constructor, args) { var instance = Object.create(Constructor.prototype); var result = Constructor.apply(instance, args); return result != null && (typeof result == "object" || typeof result == "function") ? result : instance; };
 
-	var _toArray = function (arr) { return Array.isArray(arr) ? arr : Array.from(arr); };
-
 	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
 	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
@@ -107,13 +105,15 @@ var Flummox =
 	          throw new Error("You've attempted to create multiple stores with key " + key + ". Keys must " + "be unique.");
 	        }
 
-	        var store = _applyConstructor(_Store, _toArray(constructorArgs));
+	        var store = _applyConstructor(_Store, constructorArgs);
 	        var token = this.dispatcher.register(store.handler.bind(store));
 
 	        store._waitFor = this.waitFor.bind(this);
 	        store._token = token;
 
 	        this._stores[key] = store;
+
+	        return store;
 	      },
 	      writable: true,
 	      configurable: true
@@ -141,11 +141,13 @@ var Flummox =
 	          throw new Error("You've attempted to create multiple actions with key " + key + ". Keys " + "must be unique.");
 	        }
 
-	        var actions = _applyConstructor(_Actions, _toArray(constructorArgs));
+	        var actions = _applyConstructor(_Actions, constructorArgs);
 	        actions.dispatch = this.dispatch.bind(this);
 	        actions.dispatchAsync = this.dispatchAsync.bind(this);
 
 	        this._actions[key] = actions;
+
+	        return actions;
 	      },
 	      writable: true,
 	      configurable: true
@@ -161,9 +163,9 @@ var Flummox =
 	      value: function getActionIds(key) {
 	        var actions = this.getActions(key);
 
-	        if (!actions) return;
-
-	        return actions.getConstants();
+	        if (!actions) {
+	          return;
+	        }return actions.getConstants();
 	      },
 	      writable: true,
 	      configurable: true
@@ -337,7 +339,7 @@ var Flummox =
 
 	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var assign = _interopRequire(__webpack_require__(6));
+	var assign = _interopRequire(__webpack_require__(7));
 
 	var Store = (function (EventEmitter) {
 	  /**
@@ -405,9 +407,9 @@ var Flummox =
 	      value: function register(actionId, handler) {
 	        actionId = ensureActionId(actionId);
 
-	        if (typeof handler !== "function") return;
-
-	        this._handlers[actionId] = handler.bind(this);
+	        if (typeof handler !== "function") {
+	          return;
+	        }this._handlers[actionId] = handler.bind(this);
 	      },
 	      writable: true,
 	      configurable: true
@@ -479,8 +481,9 @@ var Flummox =
 	          }
 	        }
 
-	        if (typeof _handler !== "function") return;
-	        this._performHandler(_handler, body);
+	        if (typeof _handler !== "function") {
+	          return;
+	        }this._performHandler(_handler, body);
 	      },
 	      writable: true,
 	      configurable: true
@@ -549,7 +552,7 @@ var Flummox =
 
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-	var uniqueId = _interopRequire(__webpack_require__(7));
+	var uniqueId = _interopRequire(__webpack_require__(6));
 
 	var Actions = (function () {
 	  function Actions() {
@@ -632,9 +635,9 @@ var Flummox =
 	      value: function _dispatch(actionId, body, args, methodName) {
 	        if (!this.dispatch) throw new ReferenceError("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
 
-	        if (typeof body === "undefined") return;
-
-	        this.dispatch(actionId, body, args);
+	        if (typeof body === "undefined") {
+	          return;
+	        }this.dispatch(actionId, body, args);
 	      },
 	      writable: true,
 	      configurable: true
@@ -1173,38 +1176,6 @@ var Flummox =
 
 	'use strict';
 
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 
 	var count = 0;
 
@@ -1257,6 +1228,38 @@ var Flummox =
 	id.reset = function() {
 	  return count = 0;
 	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
 
 /***/ },
 /* 8 */
