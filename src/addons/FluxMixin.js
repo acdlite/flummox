@@ -167,8 +167,10 @@ export default function FluxMixin(...args) {
         let initialStoreState = storeStateGetter(store);
 
         let listener = () => {
-          let state = storeStateGetter(store);
-          this.setState(state);
+          if (this.isMounted()) {
+            let state = storeStateGetter(store);
+            this.setState(state);
+          }
         };
 
         store.addListener('change', listener);
