@@ -1,20 +1,20 @@
 'use strict';
 
-import { TestActionsAsyncResponse, TestActions } from '../TestUtils';
+import { TestActionsSyncPromise, TestActions } from '../TestUtils';
 import { Flux } from '../../Flux';
 import sinon from 'sinon';
 
 describe('TestUtils', () => {
-  describe('TestActionsAsyncResponse', () => {
+  describe('TestActionsSyncPromise', () => {
     it('then returns self', () => {
-      let asyncResp = new TestActionsAsyncResponse();
+      let asyncResp = new TestActionsSyncPromise();
       let self = asyncResp.then();
 
       expect(self).to.equal(asyncResp);
     });
 
     it('calls success handler', () => {
-      let asyncResp = new TestActionsAsyncResponse();
+      let asyncResp = new TestActionsSyncPromise();
       let success = sinon.spy();
       asyncResp.then(success);
       asyncResp.success('foo');
@@ -23,7 +23,7 @@ describe('TestUtils', () => {
     });
 
     it('calls fail handler', () => {
-      let asyncResp = new TestActionsAsyncResponse();
+      let asyncResp = new TestActionsSyncPromise();
       let fail = sinon.spy();
       asyncResp.then(null, fail);
       asyncResp.fail('foo');
@@ -32,7 +32,7 @@ describe('TestUtils', () => {
     });
 
     it('supports multiple then handlers', () => {
-      let asyncResp = new TestActionsAsyncResponse();
+      let asyncResp = new TestActionsSyncPromise();
       let success1 = sinon.spy();
       let success2 = sinon.spy();
       let fail1 = sinon.spy();
@@ -66,7 +66,7 @@ describe('TestUtils', () => {
       let actions = flux.createActions('actions', TestActions(['foo']));
       let fooResp = actions.foo();
 
-      expect(fooResp).to.be.an.instanceof(TestActionsAsyncResponse);
+      expect(fooResp).to.be.an.instanceof(TestActionsSyncPromise);
     });
 
     it('creates sync actions', () => {

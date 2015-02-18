@@ -34,7 +34,7 @@ export function TestActions(asyncActions, syncActions) {
 
   if (Array.isArray(asyncActions)) {
     asyncActions.forEach(actionName => 
-      TestActionsClass.prototype[actionName] = TestActionsAsyncResponse.defaultResponse
+      TestActionsClass.prototype[actionName] = () => new TestActionsSyncPromise
     );
   }
 
@@ -47,7 +47,7 @@ export function TestActions(asyncActions, syncActions) {
   return TestActionsClass;
 }
 
-class TestActionsAsyncResponse {
+class TestActionsSyncPromise {
   constructor() {
     this._success = [];
     this._fail = [];
@@ -72,10 +72,6 @@ class TestActionsAsyncResponse {
   fail(...failArgs) {
     this._fail.forEach(callback => callback.apply(this, failArgs));
   }
-
-  static defaultResponse() {
-    return new TestActionsAsyncResponse();
-  }
 }
 
 function isFunc(func) {
@@ -83,5 +79,5 @@ function isFunc(func) {
 }
 
 export {
-  TestActionsAsyncResponse
+  TestActionsSyncPromise
 };
