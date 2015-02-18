@@ -126,6 +126,33 @@ describe('FluxMixin', () => {
       );
   });
 
+  it('ignores change event after unmounted', () => {
+    let flux = new Flux();
+    flux.getActions('test').getSomething('foo');
+
+    let getterMap = {
+      test: store => ({ something: store.state.something })
+    };
+    let Component = React.createClass({
+      mixins: [FluxMixin(getterMap)],
+
+      render() {
+        return null;
+      }
+    });
+
+    let container = document.createElement('div');
+    let component = React.render(<Component flux={flux} />, container);
+    let listener = flux.getStore('test').listeners('change')[0];
+
+    React.unmountComponentAtNode(container);
+
+    flux.getActions('test').getSomething('bar');
+    listener();
+
+    expect(component.state.something).to.equal('foo');
+  });
+
   it('uses #connectToStores() to get initial state', () => {
     let flux = new Flux();
 
