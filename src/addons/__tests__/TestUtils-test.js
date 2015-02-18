@@ -62,8 +62,8 @@ describe('TestUtils', () => {
   describe('TestActions', () => {
     it('creates async actions', () => {
       let actions = new TestActions(['foo1', 'foo2']);
-      expect(actions.foo1).to.be.ok;
-      expect(actions.foo2).to.be.ok;
+      expect(actions.foo1).to.be.a('function');
+      expect(actions.foo2).to.be.a('function');
     })
 
     it('returns async action helper class', () => {
