@@ -127,17 +127,28 @@ describe('Examples:', () => {
         super();
 
         let messageActions = flux.getActions('messages');
+
         this.registerAsync(
           messageActions.newMessage, 
           this.handleNewMessageBegin,
           this.handleNewMessageComplete,
           this.handleNewMessageFailed
         );
+
+        this.register(messageActions.clear, this.handleClearMessages);
+
         this.messageCounter = 0;
         this.state = {
           saving: false,
           messages: {}
         };
+      }
+
+      handleClearMessages() {
+        this.replaceState({
+          saving: false,
+          messages: {}
+        });
       }
 
       handleNewMessageBegin() {
@@ -168,7 +179,9 @@ describe('Examples:', () => {
     describe('#newMessage action', () => {
       beforeEach(function() {
         this.flux = new Flummox();
-        this.messageActions = this.flux.createActions('messages', TestActions(['newMessage']));
+        this.messageActions = this.flux.createActions('messages', TestActions(['newMessage'], {
+          clear: true
+        }));
         this.messageStore = this.flux.createStore('messages', MessageStore, this.flux);
       });
 
@@ -196,6 +209,16 @@ describe('Examples:', () => {
         
         expect(this.messageStore.state.saving).to.be.false;
         expect(this.messageStore.state.error).to.equal('failed to create message.');
+      });
+
+      it('clears messages', function () {
+        let action = this.messageActions.newMessage();
+        action.success('Hello, world!');
+
+        this.messageActions.clear();
+
+        expect(this.messageStore.state.saving).to.be.false;
+        expect(this.messageStore.state.messages).to.deep.equal({});
       });
     });
   });
