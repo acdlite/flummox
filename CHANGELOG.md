@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.9.2
+- [Bug Fix]
+  - Check if FluxComponent is mounted before updating. [#36](https://github.com/acdlite/flummox/pull/36) [@conradz](https://github.com/conradz)
+
 ## 2.9.1
 - [New Feature]
   - Extra props set on FluxComponent will be injected into children. This lets you nest FluxComponents, so store getters on an inner FluxComponent can use props retrieved by an outer FluxComponent.
