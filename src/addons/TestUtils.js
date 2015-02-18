@@ -33,11 +33,21 @@ class TestActionsAsyncResponse {
   }
 }
 
-class TestActions extends Actions {
-  constructor(asyncActions) {
-    asyncActions.forEach(action => this.constructor.prototype[action] = TestActionsAsyncResponse.defaultResponse);
-    super();
+
+export function TestActions(asyncActions) {
+  class TestActionsClass extends Actions {
+    constructor() {
+      super();
+    }
   }
+
+  if (Array.isArray(asyncActions)) {
+    asyncActions.forEach(action => 
+      TestActionsClass.prototype[action] = TestActionsAsyncResponse.defaultResponse
+    );
+  }
+
+  return TestActionsClass;
 }
 
 function isFunc(func) {
@@ -45,6 +55,5 @@ function isFunc(func) {
 }
 
 export {
-  TestActionsAsyncResponse,
-  TestActions,
+  TestActionsAsyncResponse
 };

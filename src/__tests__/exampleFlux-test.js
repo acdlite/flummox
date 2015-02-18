@@ -168,7 +168,7 @@ describe('Examples:', () => {
     describe('#newMessage action', () => {
       beforeEach(function() {
         this.flux = new Flummox();
-        this.messageActions = this.flux.createActions('messages', TestActions, ['newMessage']);
+        this.messageActions = this.flux.createActions('messages', TestActions(['newMessage']));
         this.messageStore = this.flux.createStore('messages', MessageStore, this.flux);
       });
 

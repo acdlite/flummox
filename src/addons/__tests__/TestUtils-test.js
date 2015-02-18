@@ -54,15 +54,16 @@ describe('TestUtils', () => {
 
   describe('TestActions', () => {
     it('creates async actions', () => {
-      let actions = new TestActions(['foo1', 'foo2']);
-      
+      let TestActionsClass = TestActions(['foo1', 'foo2']);
+      let actions = new TestActionsClass();
+
       expect(actions.foo1).to.be.a('function');
       expect(actions.foo2).to.be.a('function');
     });
 
     it('returns async action helper class', () => {
       let flux = new Flux();
-      let actions = flux.createActions('actions', TestActions, ['foo']);
+      let actions = flux.createActions('actions', TestActions(['foo']));
       let fooResp = actions.foo();
 
       expect(fooResp).to.be.an.instanceof(TestActionsAsyncResponse);
