@@ -240,6 +240,31 @@ describe('Flux', () => {
 
   });
 
+  describe('#removeAllStoreListeners', () => {
+    it('removes all listeners from stores', () => {
+      class TestStore extends Store {}
+
+      let flux = new Flux();
+      let storeA = flux.createStore('storeA', TestStore);
+      let storeB = flux.createStore('storeB', TestStore);
+
+      let listener = function() {};
+
+      storeA.addListener('change', listener);
+      storeA.addListener('change', listener);
+      storeB.addListener('change', listener);
+      storeB.addListener('change', listener);
+
+      expect(storeA.listeners('change').length).to.equal(2);
+      expect(storeB.listeners('change').length).to.equal(2);
+
+      flux.removeAllStoreListeners();
+
+      expect(storeA.listeners('change').length).to.equal(0);
+      expect(storeB.listeners('change').length).to.equal(0);
+    })
+  });
+
   describe('#serialize()', () => {
 
     it('returns state of all the stores as a JSON string', () => {

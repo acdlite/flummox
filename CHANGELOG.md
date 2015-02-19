@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
+- [New Features]
+  - `Flux#removeAllStoreListeners()` removes all listeners from all stores.
+
 ## 2.9.2
 - [Bug Fix]
   - Check if FluxComponent is mounted before updating. [#36](https://github.com/acdlite/flummox/pull/36) [@conradz](https://github.com/conradz)

@@ -151,6 +151,16 @@ export default class Flux extends EventEmitter {
     this.dispatcher.waitFor(tokens);
   }
 
+  removeAllStoreListeners(event) {
+    for (let key in this._stores) {
+      if (!this._stores.hasOwnProperty(key)) continue;
+
+      let store = this._stores[key];
+
+      store.removeAllListeners(event);
+    }
+  }
+
   serialize() {
     let stateTree = {};
 
