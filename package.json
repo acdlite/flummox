@@ -24,9 +24,9 @@
   "author": "Andrew Clark <acdlite@me.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "~4.0.1",
+    "babel": "~4.3.0",
     "babel-loader": "~4.0.0",
-    "babel-runtime": "~4.0.1",
+    "babel-runtime": "~4.3.0",
     "chai": "~1.10.0",
     "chai-as-promised": "~4.1.1",
     "es6-promise": "~2.0.1",

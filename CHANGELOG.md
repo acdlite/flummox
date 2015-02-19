@@ -10,26 +10,28 @@ Tags:
 - [Polish]
 
 ## Pending release
-- [New Features]
+- **New Features**
   - `Flux#removeAllStoreListeners()` removes all listeners from all stores.
+- **Internal**
+  - Updated Babel to 4.3.0
 
 ## 2.9.2
-- [Bug Fix]
+- **Bug Fix**
   - Check if FluxComponent is mounted before updating. [#36](https://github.com/acdlite/flummox/pull/36) [@conradz](https://github.com/conradz)
 
 ## 2.9.1
-- [New Feature]
+- **New Feature**
   - Extra props set on FluxComponent will be injected into children. This lets you nest FluxComponents, so store getters on an inner FluxComponent can use props retrieved by an outer FluxComponent.
   - FluxComponent no longer wraps a single child in a `span`. It only wraps if there are multiple children.
 - [Documentation]
   - Add sections clarifying how to access flux instance (e.g. to perform actions) using FluxMixin/FluxComponent
 
 ## 2.8.0
-- [New Feature]
+- **New Feature**
   - `getStoreState()` in FluxMixin returns current combined state of connected stores.
-- [Bugfix]
+- **Bug Fix**
   - FluxMixin/FluxComponent will now updated when a prop change is detected, but not state. [#29](https://github.com/acdlite/flummox/issues/29)
-- [Documentation]
+- **Documentation**
   - Add API docs for FluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement FluxMixin.
 
 ## 2.7.2
