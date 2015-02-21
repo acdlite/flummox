@@ -28,8 +28,6 @@
  * });
  */
 
-'use strict';
-
 import { PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';

@@ -1,5 +1,3 @@
-'use strict';
-
 import { Flux, Store, Actions } from '../Flux';
 import sinon from 'sinon';
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import { Flummox, Store, Actions } from '../Flux';
 
 describe('Examples:', () => {

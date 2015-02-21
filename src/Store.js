@@ -7,8 +7,6 @@
  * from the outside world is via the dispatcher.
  */
 
-'use strict';
-
 import EventEmitter from 'eventemitter3';
 import assign from 'object-assign';
 

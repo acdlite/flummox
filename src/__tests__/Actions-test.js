@@ -1,5 +1,3 @@
-'use strict';
-
 import Actions from '../Actions';
 import sinon from 'sinon';
 

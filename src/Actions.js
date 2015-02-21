@@ -12,8 +12,6 @@
  * of the payload sent to the dispatcher.
  */
 
-'use strict';
-
 import uniqueId from 'uniqueid';
 
 export default class Actions {

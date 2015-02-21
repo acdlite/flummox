@@ -4,8 +4,6 @@
  * The main Flux class.
  */
 
-'use strict';
-
 import Store from './Store';
 import Actions from './Actions';
 import { Dispatcher } from 'flux';
