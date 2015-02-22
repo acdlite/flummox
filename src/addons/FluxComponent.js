@@ -78,7 +78,7 @@ let FluxComponent = React.createClass({
       let child = children;
       return this.wrapChild(child);
     } else {
-      return <span>React.Children.map(children, this.wrapChild)</span>;
+      return <span>{React.Children.map(children, this.wrapChild)}</span>;
     }
   }
 
