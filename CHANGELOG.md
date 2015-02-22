@@ -12,6 +12,8 @@ Tags:
 ## Pending release
 - **New Features**
   - `Flux#removeAllStoreListeners()` removes all listeners from all stores.
+- **Bug Fix**
+  - FluxComponents with multiple children no longer improperly output a string. [#39](https://github.com/acdlite/flummox/pull/39) [@K4orta](https://github.com/K4orta)
 - **Internal**
   - Updated Babel to 4.3.0
 

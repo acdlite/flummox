@@ -134,6 +134,9 @@ describe('FluxComponent', () => {
     );
 
     let wrapper = TestUtils.findRenderedDOMComponentWithTag(tree, 'span');
+    let divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div');
+
+    expect(divs.length).to.equal(2);
   });
 
   it('does not wrap single child in span tag', () => {
