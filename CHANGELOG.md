@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Pending release
+## 2.9.3
 - **New Features**
   - `Flux#removeAllStoreListeners()` removes all listeners from all stores.
 - **Bug Fix**
