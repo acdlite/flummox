@@ -78,7 +78,7 @@ let BlogPostPage = React.createClass({
     <div>
       <SiteNavigation />
       <MainContentArea>
-        <BlogPost post={this.state.post />
+        <BlogPost post={this.state.post} />
       </MainContentArea>
       <SiteSidebar />
       <SiteFooter />
