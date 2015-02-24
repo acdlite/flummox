@@ -28,6 +28,7 @@ Features
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.*
 - Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
 - Serialization/deserialization of stores, for faster page loads.
+- Centralized [debugging](https://github.com/acdlite/flummox/blob/master/docs/api/Flux.md#debugging).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
 *Not officially supported until stable 0.13 release, but it should work
