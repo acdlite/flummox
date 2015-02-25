@@ -5,7 +5,14 @@ API: `TestUtils`
 import * as FluxTestUtils from 'flummox/testutils';
 ```
 
-TODO:
-- simulateAction
-- simulateActionAsync
-- note about testing waitFor
+
+Methods
+-------
+
+### simulateAction
+
+### simulateActionAsync
+
+Testing stores using `waitFor`
+---------------------------------------
+
