@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.11.0
+- **New Features**
+  - TestUtils, for simulating actions to test store handlers. [#44](https://github.com/acdlite/flummox/pull/44)  Thanks, [@tappleby](https://github.com/tappleby)!
+
 ## 2.10.0
 - **New Features**
   - Flux emits `dispatch` event on dispatch, with payload passed to listeners.
