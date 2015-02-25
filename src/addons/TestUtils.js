@@ -10,6 +10,8 @@ export function simulateAction(store, action, body) {
 /**
  * Used for simulating asynchronous actions on stores when testing.
  *
+ * asyncAction must be one of the following: begin, success or failure.
+ * 
  * When simulating the 'begin' action, all arguments after 'begin' will
  * be passed to the action handler in the store.
  *
