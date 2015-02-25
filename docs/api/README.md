@@ -33,5 +33,5 @@ Refer to the [React integration guide](../react-integration.md) for details on h
 ```js
 import FluxMixin from 'flummox/mixin';
 import FluxComponent from 'flummox/component';
-import * as FluxTestUtils from 'flummox/testutils';
+import * as FluxTestUtils from 'flummox/test-utils';
 ```

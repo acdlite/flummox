@@ -2,7 +2,7 @@ API: `TestUtils`
 ===============
 
 ```js
-import * as FluxTestUtils from 'flummox/testutils';
+import * as FluxTestUtils from 'flummox/test-utils';
 ```
 
 
