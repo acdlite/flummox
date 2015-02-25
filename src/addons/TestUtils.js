@@ -3,8 +3,8 @@
  *
  */
 export function simulateAction(store, action, body) {
-	const actionId = ensureActionId(action);
-	store.handler({ actionId, body });
+  const actionId = ensureActionId(action);
+  store.handler({ actionId, body });
 }
 
 /**
@@ -22,33 +22,33 @@ export function simulateAction(store, action, body) {
  * TestUtils.simulateActionAsync(store, 'actionId', 'failure', new Error('action failed'));
  */
 export function simulateActionAsync(store, action, asyncAction, ...args) {
-	const actionId = ensureActionId(action);
-	let payload = { 
-		actionId, async: asyncAction
-	};
+  const actionId = ensureActionId(action);
+  let payload = { 
+    actionId, async: asyncAction
+  };
 
-	switch(asyncAction) {
-		case 'begin':
-			if (args.length) {
-				payload.actionArgs = args;
-			}
-			break;
-		case 'success':
-			payload.body = args[0];
-			break;
-		case 'failure':
-			payload.error = args[0];
-			break;
-		default:
-			throw new Error('asyncAction must be one of: begin, success or failure');
-			break;
-	}
+  switch(asyncAction) {
+    case 'begin':
+      if (args.length) {
+        payload.actionArgs = args;
+      }
+      break;
+    case 'success':
+      payload.body = args[0];
+      break;
+    case 'failure':
+      payload.error = args[0];
+      break;
+    default:
+      throw new Error('asyncAction must be one of: begin, success or failure');
+      break;
+  }
 
-	store.handler(payload);
+  store.handler(payload);
 }
 
 function ensureActionId(actionOrActionId) {
-	return typeof actionOrActionId === 'function'
-		? actionOrActionId._id
-		: actionOrActionId;
+  return typeof actionOrActionId === 'function'
+    ? actionOrActionId._id
+    : actionOrActionId;
 }
