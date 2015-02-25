@@ -84,7 +84,7 @@ describe('TestUtils', () => {
 			let store = mockStore();
 			let simulate = () => TestUtils.simulateActionAsync(store, 'foo', 'fizbin');
 
-			expect(simulate).to.throw('asyncAction must be one of: begin, success, failure');
+			expect(simulate).to.throw('asyncAction must be one of: begin, success or failure');
 		});
 	});
 });

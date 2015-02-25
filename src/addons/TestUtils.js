@@ -40,7 +40,7 @@ export function simulateActionAsync(store, action, asyncAction, ...args) {
 			payload.error = args[0];
 			break;
 		default:
-			throw new Error('asyncAction must be one of: begin, success, failure');
+			throw new Error('asyncAction must be one of: begin, success or failure');
 			break;
 	}
 
