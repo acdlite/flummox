@@ -1,8 +1,24 @@
+/**
+ * Used for simulating actions on stores when testing.
+ *
+ */
 export function simulateAction(store, action, body) {
 	const actionId = ensureActionId(action);
 	store.handler({ actionId, body });
 }
 
+/**
+ * Used for simulating asynchronous actions on stores when testing.
+ *
+ * When simulating the 'begin' action, all arguments after 'begin' will
+ * be passed to the action handler in the store.
+ *
+ * @example
+ *
+ * TestUtils.simulateActionAsync(store, 'actionId', 'begin', 'arg1', 'arg2');
+ * TestUtils.simulateActionAsync(store, 'actionId', 'success', { foo: 'bar' });
+ * TestUtils.simulateActionAsync(store, 'actionId', 'failure', new Error('action failed'));
+ */
 export function simulateActionAsync(store, action, asyncAction, ...args) {
 	const actionId = ensureActionId(action);
 	let payload = { 
@@ -11,7 +27,9 @@ export function simulateActionAsync(store, action, asyncAction, ...args) {
 
 	switch(asyncAction) {
 		case 'begin':
-			payload.actionArgs = args;
+			if (args.length) {
+				payload.actionArgs = args;
+			}
 			break;
 		case 'success':
 			payload.body = args[0];
@@ -28,7 +46,7 @@ export function simulateActionAsync(store, action, asyncAction, ...args) {
 }
 
 function ensureActionId(actionOrActionId) {
-  return typeof actionOrActionId === 'function'
-    ? actionOrActionId._id
-    : actionOrActionId;
+	return typeof actionOrActionId === 'function'
+		? actionOrActionId._id
+		: actionOrActionId;
 }
