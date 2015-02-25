@@ -13,6 +13,6 @@ Methods
 
 ### simulateActionAsync
 
-Testing stores using `waitFor`
+Testing stores that use `waitFor`
 ---------------------------------------
 
