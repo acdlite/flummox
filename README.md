@@ -2,7 +2,6 @@ Flummox
 =======
 
 [![build status](https://img.shields.io/travis/parisleaf/parisleaf.com.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
-[![Code Climate](https://img.shields.io/codeclimate/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![npm downloads](https://img.shields.io/npm/dm/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
 [![npm version](https://img.shields.io/npm/v/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
@@ -29,6 +28,7 @@ Features
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.*
 - Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
 - Serialization/deserialization of stores, for faster page loads.
+- Centralized [debugging](https://github.com/acdlite/flummox/blob/master/docs/api/Flux.md#debugging).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
 *Not officially supported until stable 0.13 release, but it should work

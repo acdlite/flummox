@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.10.0
+- **New Features**
+  - Flux emits `dispatch` event on dispatch, with payload passed to listeners.
+
 ## 2.9.3
 - **New Features**
   - `Flux#removeAllStoreListeners()` removes all listeners from all stores.

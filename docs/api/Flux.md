@@ -31,6 +31,17 @@ let flux = new Flux();
 (Note that there's nothing technically stopping you from using singletons if you wish, but why would you want to?)
 
 
+Debugging
+---------
+
+Like Stores, Flux instances are EventEmitters. A `dispatch` event is emitted on every dispatch. Listeners are sent the dispatched payload. This can be used during development for debugging.
+
+```js
+flux.addListener('dispatch', payload => {
+  console.log('Dispatch: ' + payload);
+});
+```
+
 Methods
 -------
 

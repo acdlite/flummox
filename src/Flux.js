@@ -101,7 +101,7 @@ export default class Flux extends EventEmitter {
   }
 
   dispatch(actionId, body, actionArgs) {
-    this.dispatcher.dispatch({ actionId, body });
+    this._dispatch({ actionId, body });
   }
 
   dispatchAsync(actionId, promise, actionArgs) {
@@ -112,18 +112,18 @@ export default class Flux extends EventEmitter {
 
     if (actionArgs) payload.actionArgs = actionArgs;
 
-    this.dispatcher.dispatch(payload);
+    this._dispatch(payload);
 
     return promise.then(
       body => {
-        this.dispatcher.dispatch({
+        this._dispatch({
           actionId,
           body,
           async: 'success'
         });
       },
       error => {
-        this.dispatcher.dispatch({
+        this._dispatch({
           actionId,
           error,
           async: 'failure',
@@ -132,6 +132,11 @@ export default class Flux extends EventEmitter {
         return Promise.reject(error);
       }
     );
+  }
+
+  _dispatch(payload) {
+    this.dispatcher.dispatch(payload);
+    this.emit('dispatch', payload);
   }
 
   waitFor(tokensOrStores) {

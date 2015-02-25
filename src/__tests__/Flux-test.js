@@ -164,6 +164,22 @@ describe('Flux', () => {
       })
     });
 
+    it('emits dispatch event', () => {
+      let flux = new Flux();
+      let listener = sinon.spy();
+
+      flux.addListener('dispatch', listener);
+
+      let actionId = 'actionId';
+
+      flux.dispatch(actionId, 'foobar');
+
+      expect(listener.calledOnce).to.be.true;
+      expect(listener.firstCall.args[0]).to.deep.equal({
+        actionId,
+        body: 'foobar'
+      });
+    });
   });
 
   describe('#dispatchAsync()', () => {
@@ -185,6 +201,28 @@ describe('Flux', () => {
         actionId,
         body: 'foobar',
         async: 'success'
+      });
+    });
+
+    it('emits dispatch event', async function() {
+      let flux = new Flux();
+      let listener = sinon.spy();
+
+      flux.addListener('dispatch', listener);
+
+      let actionId = 'actionId';
+
+      await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
+
+      expect(listener.calledTwice).to.be.true;
+      expect(listener.firstCall.args[0]).to.deep.equal({
+        actionId,
+        async: 'begin',
+      });
+      expect(listener.secondCall.args[0]).to.deep.equal({
+        actionId,
+        async: 'success',
+        body: 'foobar',
       });
     });
 
