@@ -26,6 +26,7 @@ Flummox also comes with some addons. These are not part of the main export. That
 
 * [`FluxMixin`](FluxMixin.md)
 * [`FluxComponent`](FluxComponent.md)
+* [`TestUtils`](TestUtils.md)
 
 Refer to the [React integration guide](../react-integration.md) for details on how to use FluxComponent and FluxMixin in your application.
 
