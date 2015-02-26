@@ -119,7 +119,7 @@ class OuterComponent extends React.Component {
 }
 ```
 
-Read all about it in the [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md).
+You can subscribe to subsets of store state using custom state getters. Read all about it in the [React integration guide](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md).
 
 
 Roadmap
