@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.12.0
+- **New Features**
+  - Flux emits an `error` event when errors occur as the result of an async action. This includes errors that occur inside the actions themselves and errors that occur in response to store state changes -- previously, these were being swallowed by the async action's promise, which made it difficult to debug. [#50](https://github.com/acdlite/flummox/issues/50)
+  - Action return values are now returned to the original caller, in addition to being dispatched. [#46](https://github.com/acdlite/flummox/issues/46)
+
 ## 2.11.0
 - **New Features**
   - TestUtils, for simulating actions to test store handlers. [#44](https://github.com/acdlite/flummox/pull/44)  Thanks, [@tappleby](https://github.com/tappleby)!

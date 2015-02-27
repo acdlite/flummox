@@ -194,11 +194,17 @@ var Flummox =
 	            body: body,
 	            async: "success"
 	          });
+
+	          return body;
 	        }, function (error) {
 	          _this._dispatch({
 	            actionId: actionId,
 	            error: error,
 	            async: "failure" });
+
+	          return Promise.reject(error);
+	        })["catch"](function (error) {
+	          _this.emit("error", error);
 
 	          return Promise.reject(error);
 	        });
@@ -659,6 +665,8 @@ var Flummox =
 	        if (typeof body === "undefined") {
 	          return;
 	        }this.dispatch(actionId, body, args);
+
+	        return body;
 	      },
 	      writable: true,
 	      configurable: true
