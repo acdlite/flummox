@@ -1,5 +1,6 @@
 BABEL_CMD = node_modules/.bin/babel
 MOCHA_CMD = node_modules/.bin/mocha
+ESLINT_CMD = node_modules/.bin/eslint
 WEBPACK_CMD = node_modules/.bin/webpack
 
 SRC_JS = $(shell find src -name "*.js")
@@ -24,6 +25,10 @@ test: js
 test-cov: js
 	@NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- $(MOCHA_ARGS)
 
+lint:
+	$(ESLINT_CMD) $(SRC_JS)
+
+
 # Build application quickly
 # Faster on first build, but not after that
 fast-build: fast-js build
@@ -46,4 +51,4 @@ browser: $(SRC_JS)
 	$(WEBPACK_CMD) src/Flux.js dist/flummox.js
 	COMPRESS=true $(WEBPACK_CMD) src/Flux.js dist/flummox.min.js
 
-.PHONY: build clean test fast-build js fast-js watch-js browser
+.PHONY: build clean test test-cov lin fast-build js fast-js watch-js browser
