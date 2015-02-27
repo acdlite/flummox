@@ -226,14 +226,14 @@ describe('Flux', () => {
       });
     });
 
-    it('resolves to undefined', done => {
+    it('resolves to value of given promise', done => {
       let flux = new Flux();
       let dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
       let actionId = 'actionId';
 
       expect(flux.dispatchAsync(actionId, Promise.resolve('foobar')))
-        .to.eventually.be.undefined
+        .to.eventually.equal('foobar')
         .notify(done);
     });
 

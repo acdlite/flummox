@@ -1,4 +1,4 @@
-import Actions from '../Actions';
+import { Flux, Actions } from '../Flux';
 import sinon from 'sinon';
 
 describe('Actions', () => {
@@ -111,11 +111,8 @@ describe('Actions', () => {
     });
 
     it('returns value from wrapped action', async function() {
-      let actions = new TestActions();
-      actions.dispatch = function() {};
-      actions.dispatchAsync = function(actionId, promise, args) {
-        return promise;
-      };
+      let flux = new Flux;
+      let actions = flux.createActions('test', TestActions);
 
       expect(actions.getFoo()).to.deep.equal({ foo: 'bar' });
       await expect(actions.asyncAction('async result'))

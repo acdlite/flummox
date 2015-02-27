@@ -122,6 +122,8 @@ export default class Flux extends EventEmitter {
             body,
             async: 'success'
           });
+
+          return body;
         },
         error => {
           this._dispatch({
