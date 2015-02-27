@@ -52,14 +52,18 @@ describe('Actions', () => {
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
-    it('throws if actions have not been added to a Flux instance', () => {
+    it('warns if actions have not been added to a Flux instance', () => {
       let actions = new TestActions();
+      let warn = sinon.spy(console, 'warn');
 
-      expect(actions.getFoo.bind(actions))
-        .to.throw(
-          'You\'ve attempted to perform the action TestActions#getFoo, but it '
-        + 'hasn\'t been added to a Flux instance.'
-        );
+      actions.getFoo();
+
+      expect(warn.firstCall.args[0]).to.equal(
+        'You\'ve attempted to perform the action TestActions#getFoo, but it '
+      + 'hasn\'t been added to a Flux instance.'
+      );
+
+      console.warn.restore();
     });
 
     it('sends return value to Flux dispatch', () => {
