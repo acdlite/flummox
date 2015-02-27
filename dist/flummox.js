@@ -660,11 +660,13 @@ var Flummox =
 	    },
 	    _dispatch: {
 	      value: function _dispatch(actionId, body, args, methodName) {
-	        if (!this.dispatch) throw new ReferenceError("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
-
-	        if (typeof body === "undefined") {
-	          return;
-	        }this.dispatch(actionId, body, args);
+	        if (typeof this.dispatch === "function") {
+	          if (typeof body !== "undefined") {
+	            this.dispatch(actionId, body, args);
+	          }
+	        } else {
+	          if (!this.dispatch) console.warn("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
+	        }
 
 	        return body;
 	      },

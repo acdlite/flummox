@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.12.1
+- **Bug Fix**
+  - Performing an action that hasn't been added to a Flux instance now warns instead throwing an error. [#46](https://github.com/acdlite/flummox/issues/46)
+
 ## 2.12.0
 - **New Features**
   - Flux emits an `error` event when errors occur as the result of an async action. This includes errors that occur inside the actions themselves and errors that occur in response to store state changes -- previously, these were being swallowed by the async action's promise, which made it difficult to debug. [#50](https://github.com/acdlite/flummox/issues/50)
