@@ -274,6 +274,54 @@ describe('Flux', () => {
       }
     });
 
+    it('emits error if promise rejects', async function() {
+      class ExampleStore extends Store {}
+
+      let flux = new Flux();
+      let listener = sinon.spy();
+      flux.addListener('error', listener);
+
+      let actionId = 'actionId';
+
+      await expect(flux.dispatchAsync(actionId, Promise.reject(new Error('foobar'))))
+        .to.be.rejectedWith('foobar');
+
+      expect(listener.calledOnce).to.be.true;
+      expect(listener.firstCall.args[0].message).to.equal('foobar');
+    });
+
+    it('emit errors that occur as result of dispatch', async function() {
+      class ExampleStore extends Store {}
+
+      let flux = new Flux();
+      let listener = sinon.spy();
+      flux.addListener('error', listener);
+
+      let actionId = 'actionId';
+      let store = flux.createStore('example', ExampleStore);
+
+      store.registerAsync(
+        actionId,
+        null,
+        () => {
+          throw new Error('success error');
+        },
+        () => {
+          throw new Error('failure error');
+        }
+      );
+
+      await expect(flux.dispatchAsync(actionId, Promise.resolve('foobar')))
+        .to.be.rejectedWith('success error');
+      expect(listener.calledOnce).to.be.true;
+      expect(listener.firstCall.args[0].message).to.equal('success error');
+
+      await expect(flux.dispatchAsync(actionId, Promise.reject(new Error('foobar'))))
+        .to.be.rejectedWith('failure error');
+      expect(listener.calledTwice).to.be.true;
+      expect(listener.secondCall.args[0].message).to.equal('failure error');
+    });
+
   });
 
   describe('#removeAllStoreListeners', () => {
@@ -457,3 +505,10 @@ describe('Flux', () => {
   });
 
 });
+
+
+function wait(timeout) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, timeout);
+  });
+}
