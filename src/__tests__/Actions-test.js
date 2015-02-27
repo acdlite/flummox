@@ -110,11 +110,16 @@ describe('Actions', () => {
       expect(dispatch.called).to.be.true;
     });
 
-    it('returns undefined if action is synchronous', () => {
+    it('returns value from wrapped action', async function() {
       let actions = new TestActions();
       actions.dispatch = function() {};
+      actions.dispatchAsync = function(actionId, promise, args) {
+        return promise;
+      };
 
-      expect(actions.getFoo()).to.be.undefined;
+      expect(actions.getFoo()).to.deep.equal({ foo: 'bar' });
+      await expect(actions.asyncAction('async result'))
+        .to.eventually.equal('async result');
     });
   });
 

@@ -82,6 +82,8 @@ export default class Actions {
     if (typeof body === 'undefined') return;
 
     this.dispatch(actionId, body, args);
+
+    return body;
   }
 
   _dispatchAsync(actionId, promise, args, methodName) {
