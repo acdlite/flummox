@@ -63,6 +63,14 @@ describe('Actions', () => {
       + 'hasn\'t been added to a Flux instance.'
       );
 
+      actions.asyncAction();
+
+      expect(warn.secondCall.args[0]).to.equal(
+        `You've attempted to perform the asynchronous action `
+      + `TestActions#asyncAction, but it hasn't been added `
+      + `to a Flux instance.`
+      );
+
       console.warn.restore();
     });
 

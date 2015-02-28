@@ -78,7 +78,7 @@ export default class Actions {
         this.dispatch(actionId, body, args);
       }
     } else {
-      if (!this.dispatch) console.warn(
+      console.warn(
         `You've attempted to perform the action `
       + `${this.constructor.name}#${methodName}, but it hasn't been added `
       + `to a Flux instance.`
@@ -89,13 +89,18 @@ export default class Actions {
   }
 
   _dispatchAsync(actionId, promise, args, methodName) {
-    if (!this.dispatchAsync) throw new ReferenceError(
-      `You've attempted to perform the asynchronous action `
-    + `${this.constructor.name}#${methodName}, but it hasn't been added `
-    + `to a Flux instance.`
-    );
+    if (typeof this.dispatchAsync === 'function') {
+      return this.dispatchAsync(actionId, promise, args);
+    } else {
+      console.warn(
+        `You've attempted to perform the asynchronous action `
+      + `${this.constructor.name}#${methodName}, but it hasn't been added `
+      + `to a Flux instance.`
+      );
 
-    return this.dispatchAsync(actionId, promise, args);
+      return promise;
+    }
+
   }
 
 }
