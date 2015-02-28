@@ -30,7 +30,21 @@ class MessageActions extends Actions {
 Testing
 -------
 
-The return value of an action is dispatched automatically. It's also returned to the caller. This means it's possible to test actions completely independently from a Flux or Store instance.
+The return value of an action is dispatched automatically. It's also returned to the caller. This means it's possible to test actions completely independently from a Flux or Store instance. Here's how you'd test the example MessageActions from above:
+
+```js
+// Using mocha and chai-as-promised
+let actions = new MessageActions();
+
+expect(actions.newMessage('Hello world!')).to.equal('Hello world');
+
+// Assuming `serverCreateMessage()` has been mocked
+expect(actions.createMessage('Hello world!')).to.eventually.deep.equal({
+  id: 1,
+  content: 'Hello world!',
+});
+```
+
 
 Asynchronous actions
 --------------------
