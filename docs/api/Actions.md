@@ -10,7 +10,7 @@ class MessageActions extends Actions {
   newMessage(content) {
 
     // The return value from the action is sent to the dispatcher.
-    // To enforce unidirectional data flow, it is *not* returned to the caller.
+    // It is also returned to the caller.
     return content;
   }
 
@@ -27,10 +27,10 @@ class MessageActions extends Actions {
 }
 ```
 
-Enforce unidirectional data flow
---------------------------------
+Testing
+-------
 
-Actions are "wrapped" upon instantiation. When you fire an action, the return value isn't sent to the caller, but instead to the dispatcher. In other words, calling an action always returns undefined (or if the action is asynchronous, a promise that resolves to undefined — more below). This may seem weird, but it's designed this way to enforce unidirectional data flow. If this absolutely doesn't work for you, you can always use a helper function that calls the action internally while also returning a value to the original caller — just know this is an anti-pattern.
+The return value of an action is dispatched automatically. It's also returned to the caller. This means it's possible to test actions completely independently from a Flux or Store instance.
 
 Asynchronous actions
 --------------------
