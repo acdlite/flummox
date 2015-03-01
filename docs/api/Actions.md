@@ -51,8 +51,6 @@ Asynchronous actions
 
 Asynchronous actions are actions that return promises. Unlike synchronous actions, async actions fire the dispatcher twice: at the beginning and at the end of the action. Refer to the [Store API](Store.md) for information on how to register handlers for asynchronous actions.
 
-The reason that asynchronous actions return a promises that resolve to undefined is so the caller can know when the action is complete and it's safe to continue. On the server, you can use this feature to wait for data fetching operations to finish before rendering your app.
-
 Methods
 -------
 
