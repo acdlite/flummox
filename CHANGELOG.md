@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
+- **Internal**
+  - Lint with eslint and babel-eslint.
+
 ## 2.12.2
 - **Bug Fix**
   - Performing an action that hasn't been added to a Flux instance now warns instead throwing an error. [#46](https://github.com/acdlite/flummox/issues/46)
