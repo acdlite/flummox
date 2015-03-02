@@ -43,15 +43,15 @@ Tags:
   - Extra props set on FluxComponent will be injected into children. This lets you nest FluxComponents, so store getters on an inner FluxComponent can use props retrieved by an outer FluxComponent.
   - FluxComponent no longer wraps a single child in a `span`. It only wraps if there are multiple children.
 - [Documentation]
-  - Add sections clarifying how to access flux instance (e.g. to perform actions) using FluxMixin/FluxComponent
+  - Add sections clarifying how to access flux instance (e.g. to perform actions) using fluxMixin/FluxComponent
 
 ## 2.8.0
 - **New Feature**
-  - `getStoreState()` in FluxMixin returns current combined state of connected stores.
+  - `getStoreState()` in fluxMixin returns current combined state of connected stores.
 - **Bug Fix**
-  - FluxMixin/FluxComponent will now updated when a prop change is detected, but not state. [#29](https://github.com/acdlite/flummox/issues/29)
+  - fluxMixin/FluxComponent will now updated when a prop change is detected, but not state. [#29](https://github.com/acdlite/flummox/issues/29)
 - **Documentation**
-  - Add API docs for FluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement FluxMixin.
+  - Add API docs for fluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement fluxMixin.
 
 ## 2.7.2
 - **Bugfix**
@@ -70,7 +70,7 @@ Tags:
 
 - **New Feature**
   - `Store#registerAsync()` for doing optimistic updates in response to asynchronous actions
-  - FluxComponent and FluxMixin for easy React integration
+  - FluxComponent and fluxMixin for easy React integration
 - **Documentation**
   - React integration guide
   - Minor updates

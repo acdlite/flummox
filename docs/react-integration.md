@@ -1,10 +1,10 @@
 # React integration guide
 
-If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](api/FluxComponent.md) and [FluxMixin](api/FluxMixin.md). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).)
+If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](api/FluxComponent.md) and [fluxMixin](api/fluxMixin.md). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).)
 
 ```js
 import FluxComponent from 'flummox/component';
-import FluxMixin from 'flummox/mixin';
+import fluxMixin from 'flummox/mixin';
 ```
 
 This guide discusses how to use FluxComponent to integrate Flummox with React.
@@ -91,32 +91,32 @@ So, in just a few short lines, we can specify the initialization logic, update l
 
 In this example, InnerComponent has props `post` and `comments`.
 
-## Using FluxMixin
+## Using fluxMixin
 
 **tl;dr** Just use FluxComponent. (Unless you don't want to. Up to you.) Read a longer explanation for [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).
 
 ***
 
-FluxComponent is really just a wrapper around FluxMixin. (Seriously, check out the source.) But if you want to use FluxMixin directly, you can.
+FluxComponent is really just a wrapper around fluxMixin. (Seriously, check out the source.) But if you want to use fluxMixin directly, you can.
 
-Like FluxComponent, FluxMixin expects that the component you're mixing it into has access to a Flux instance via either a prop or context. It adds the Flux instance to the child context.
+Like FluxComponent, fluxMixin expects that the component you're mixing it into has access to a Flux instance via either a prop or context. It adds the Flux instance to the child context.
 
 Unlike FluxComponent, it does not inject props into its children. You can, however, access the instance with `this.flux`.
 
-FluxMixin adds a single method, `connectToStores()`. This is exactly like the `connectToStores` prop of FluxComponent. You can pass a single store key, an array of store keys, or a map of store keys to getter functions. In the single store key form, you can also pass a getter function as the second argument. (This form is not available to FluxComponent because props are single values.)
+fluxMixin adds a single method, `connectToStores()`. This is exactly like the `connectToStores` prop of FluxComponent. You can pass a single store key, an array of store keys, or a map of store keys to getter functions. In the single store key form, you can also pass a getter function as the second argument. (This form is not available to FluxComponent because props are single values.)
 
-FluxMixin does not inject store state as props into its children. Instead, it merges it into component state using `setState()`.
+fluxMixin does not inject store state as props into its children. Instead, it merges it into component state using `setState()`.
 
 When you call `connectToStores()`, it returns the current combined state of the stores (as specified by the getters). This is so you can use it within `getInitialState()`.
 
-However, there is a better way. FluxMixin is actually a function that returns a mixin object. Arguments passed to `FluxMixin()` are automatically sent to `connectToStores()` and used to set the initial state of the component.
+However, there is a better way. fluxMixin is actually a function that returns a mixin object. Arguments passed to `fluxMixin()` are automatically sent to `connectToStores()` and used to set the initial state of the component.
 
 ```js
 
 let MyComponent = React.createClass({
 
   // Remember, you can also use the single key or object forms
-  mixins[FluxMixin(['storeA', 'storeB'])],
+  mixins[fluxMixin(['storeA', 'storeB'])],
 
   ...
 });

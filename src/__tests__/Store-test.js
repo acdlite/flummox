@@ -23,7 +23,7 @@ describe('Store', () => {
       let state = s.getState();
       state.foo = 'changed';
 
-      expect(s.getState()).to.deep.equal({ foo: 'bar' })
+      expect(s.getState()).to.deep.equal({ foo: 'bar' });
     });
   });
 
@@ -82,8 +82,8 @@ describe('Store', () => {
       let error = new Error();
 
       class ExampleActions extends Actions {
-        async getFoo(message, success = true) {
-          if (!success) throw error;
+        async getFoo(message, _success = true) {
+          if (!_success) throw error;
 
           return message + ' success';
         }
@@ -124,16 +124,12 @@ describe('Store', () => {
       expect(success.firstCall.args[0]).to.equal('foo success');
       expect(failure.called).to.be.false;
 
-      try {
-        await actions.getFoo('bar', false);
-      } catch (e) {
+      await expect(actions.getFoo('bar', false)).to.be.rejected;
 
-      } finally {
-        expect(begin.calledTwice).to.be.true;
-        expect(success.calledOnce).to.be.true;
-        expect(failure.calledOnce).to.be.true;
-        expect(failure.firstCall.args[0]).to.equal(error);
-      }
+      expect(begin.calledTwice).to.be.true;
+      expect(success.calledOnce).to.be.true;
+      expect(failure.calledOnce).to.be.true;
+      expect(failure.firstCall.args[0]).to.equal(error);
     });
 
     it('ignores non-function handlers', () => {
@@ -161,6 +157,8 @@ describe('Store', () => {
       let flux = new Flux();
       let result = [];
 
+      let store2;
+
       class Store1 extends Store {
         constructor() {
           super();
@@ -178,14 +176,14 @@ describe('Store', () => {
 
           this.register(actionId, () => {
             result.push(2);
-          })
+          });
         }
       }
 
       flux.createStore('store1', Store1);
       flux.createStore('store2', Store2);
 
-      let store2 = flux.getStore('store2');
+      store2 = flux.getStore('store2');
 
       flux.dispatch(actionId, 'foobar');
 

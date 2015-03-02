@@ -1,6 +1,34 @@
 {
   "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
   "rules": {
-    "strict": 0
+    "strict": 0,
+    "quotes": [2, "single"],
+    "curly": [2, "multi-line"],
+    "no-underscore-dangle": 0,
+    "no-comma-dangle": 0,
+    "consistent-return": 0,
+    
+    // Doesn't work inside ES6 template strings
+    "comma-spacing": 0,
+
+    // Doesn't work with await
+    // https://github.com/babel/babel-eslint/issues/22
+    "no-unused-expressions": 0,
+
+    // Doesn't work with ES6 classes
+    // https://github.com/babel/babel-eslint/issues/8
+    "no-unused-vars": 0,
+
+    "no-empty": 0,
+    "no-use-before-define": [2, "nofunc"]
+  },
+  "globals": {
+    "expect": true,
+    "jsdom": true
   }
 }

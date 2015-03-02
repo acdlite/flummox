@@ -1,6 +1,6 @@
 BABEL_CMD = node_modules/.bin/babel
 MOCHA_CMD = node_modules/.bin/mocha
-ESLINT_CMD = node_modules/.bin/eslint
+ESLINT_CMD = eslint
 WEBPACK_CMD = node_modules/.bin/webpack
 
 SRC_JS = $(shell find src -name "*.js")
@@ -18,7 +18,7 @@ clean:
 	rm -rf dist/
 
 # Test
-test: js
+test: lint js
 	echo $(TEST_JS)
 	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_ARGS)
 

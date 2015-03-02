@@ -156,7 +156,7 @@ Because everything is self-contained, you can create as many independent instanc
 
 So how do you use Flux in your view components? With a traditional Flux library, we'd use a singleton. And if you want to do that, that's perfectly fine. Just create a module that exports a Flux instance and you're good to go. But again, this won't do on the server, because you need a way to 1) deal with multiple requests, and 2) isolate user-specific data. Instead, with Flummox, we create a new Flux instance for every request.
 
-However, manually passing your Flux instance as props down the component tree isn't the best solution. Instead, use FluxMixin and/or FluxComponent. Under the hood, they use React context to expose your Flux instance to arbitrarily nested views. They also make it stupidly easy to subscribe to store updates:
+However, manually passing your Flux instance as props down the component tree isn't the best solution. Instead, use fluxMixin and/or FluxComponent. Under the hood, they use React context to expose your Flux instance to arbitrarily nested views. They also make it stupidly easy to subscribe to store updates:
 
 ```js
 

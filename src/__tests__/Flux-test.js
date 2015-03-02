@@ -48,14 +48,13 @@ describe('Flux', () => {
       let spy2 = sinon.spy();
 
       ExampleStore.prototype.foo = 'bar';
-      ExampleStore.prototype.handler = function(payload) {
-        spy1(payload);
+      ExampleStore.prototype.handler = function(_payload) {
+        spy1(_payload);
         spy2(this.foo);
       };
 
       let flux = new Flux();
       flux.createStore('ExampleStore', ExampleStore);
-      let store = flux.getStore('ExampleStore');
 
       let payload = 'foobar';
       flux.dispatch('actionId', payload);
@@ -161,7 +160,7 @@ describe('Flux', () => {
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
         body: 'foobar',
-      })
+      });
     });
 
     it('emits dispatch event', () => {
@@ -256,22 +255,19 @@ describe('Flux', () => {
 
       let error = new Error('error');
 
-      try {
-        await flux.dispatchAsync(actionId, Promise.reject(error));
-      } catch(e) {
+      await expect(flux.dispatchAsync(actionId, Promise.reject(error)))
+        .to.be.rejected;
 
-      } finally {
-        expect(dispatch.callCount).to.equal(2);
-        expect(dispatch.firstCall.args[0]).to.deep.equal({
-          actionId,
-          async: 'begin',
-        });
-        expect(dispatch.secondCall.args[0]).to.deep.equal({
-          actionId,
-          error,
-          async: 'failure'
-        });
-      }
+      expect(dispatch.callCount).to.equal(2);
+      expect(dispatch.firstCall.args[0]).to.deep.equal({
+        actionId,
+        async: 'begin',
+      });
+      expect(dispatch.secondCall.args[0]).to.deep.equal({
+        actionId,
+        error,
+        async: 'failure'
+      });
     });
 
     it('emits error if promise rejects', async function() {
@@ -346,7 +342,7 @@ describe('Flux', () => {
 
       expect(storeA.listeners('change').length).to.equal(0);
       expect(storeB.listeners('change').length).to.equal(0);
-    })
+    });
   });
 
   describe('#serialize()', () => {
@@ -505,10 +501,3 @@ describe('Flux', () => {
   });
 
 });
-
-
-function wait(timeout) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, timeout);
-  });
-}

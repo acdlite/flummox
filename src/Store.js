@@ -144,7 +144,6 @@ export default class Store extends EventEmitter {
     try {
       _handler.apply(this, args);
     } finally {
-
       if (this._emitChangeAfterHandlingDispatch) {
         this.state = this._pendingState;
         this.emit('change');
