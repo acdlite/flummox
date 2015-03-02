@@ -64,7 +64,7 @@ You can register using either the action id or the action itself.
 ### registerAsync
 
 ```js
-register(function action | string actionId [, function begin, function success, function failure])
+registerAsync(function action | string actionId [, function begin, function success, function failure])
 ```
 
 A register handler specifically for asynchronous actions (actions that return promises).
