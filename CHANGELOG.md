@@ -9,9 +9,12 @@ Tags:
 - [Internal]
 - [Polish]
 
-## Pending release
+## 2.12.1
 - **Internal**
+  - Updated tests to be compatible with React 0.13. Should be ready for final 0.13 release.
   - Lint with eslint and babel-eslint.
+- **Polish**
+  - Wrapped warnings in environment checks so they can be stripped in production, like React. [#52](https://github.com/acdlite/flummox/issues/52)
 
 ## 2.12.2
 - **Bug Fix**
