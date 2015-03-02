@@ -16,12 +16,6 @@ export default class Flux extends EventEmitter {
 
     this._stores = {};
     this._actions = {};
-
-    this.getConstants = this.getActionIds;
-
-    // Aliases
-    this.dehydrate = this.serialize;
-    this.hydrate = this.deserialize;
   }
 
   createStore(key, _Store, ...constructorArgs) {
@@ -260,6 +254,11 @@ export default class Flux extends EventEmitter {
   }
 
 }
+
+// Aliases
+Flux.prototype.getConstants = Flux.prototype.getActionIds;
+Flux.prototype.dehydrate = Flux.prototype.serialize;
+Flux.prototype.hydrate = Flux.prototype.deserialize;
 
 function getClassName(Class) {
   return Class.prototype.constructor.name;
