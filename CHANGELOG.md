@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 2.12.1
+## 2.12.3
 - **Internal**
   - Updated tests to be compatible with React 0.13. Should be ready for final 0.13 release.
   - Lint with eslint and babel-eslint.
