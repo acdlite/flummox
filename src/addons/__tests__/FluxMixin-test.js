@@ -1,6 +1,6 @@
 'use strict';
 
-import FluxMixin from '../FluxMixin';
+import fluxMixin from '../fluxMixin';
 import { Flummox, Store, Actions } from '../../Flux';
 import sinon from 'sinon';
 
@@ -8,7 +8,7 @@ import React from 'react/addons';
 let { PropTypes } = React;
 let { TestUtils } = React.addons;
 
-describe('FluxMixin', () => {
+describe('fluxMixin', () => {
 
   class TestActions extends Actions {
     getSomething(something) {
@@ -44,7 +44,7 @@ describe('FluxMixin', () => {
   }
 
   let ContextComponent = React.createClass({
-    mixins: [FluxMixin()],
+    mixins: [fluxMixin()],
 
     render() {
       return null;
@@ -52,7 +52,7 @@ describe('FluxMixin', () => {
   });
 
   let PropsComponent = React.createClass({
-    mixins: [FluxMixin()],
+    mixins: [fluxMixin()],
 
     render() {
       return null;
@@ -84,18 +84,6 @@ describe('FluxMixin', () => {
   it('exposes flux as context', () => {
     let flux = new Flux();
 
-    let Component = React.createClass({
-      mixins: [FluxMixin()],
-
-      render() {
-        return (
-          <div>
-            <ChildComponent key="test" />
-          </div>
-        );
-      }
-    });
-
     let ChildComponent = React.createClass({
       contextTypes: {
         flux: PropTypes.instanceOf(Flummox),
@@ -103,6 +91,18 @@ describe('FluxMixin', () => {
 
       render() {
         return <div />;
+      }
+    });
+
+    let Component = React.createClass({
+      mixins: [fluxMixin()],
+
+      render() {
+        return (
+          <div>
+            <ChildComponent key="test" />
+          </div>
+        );
       }
     });
 
@@ -121,7 +121,7 @@ describe('FluxMixin', () => {
 
     expect(TestUtils.renderIntoDocument.bind(null, <PropsComponent />))
       .to.throw(
-        'FluxMixin: Could not find Flux instance. Ensure that your component '
+        'fluxMixin: Could not find Flux instance. Ensure that your component '
       + 'has either `this.context.flux` or `this.props.flux`.'
       );
   });
@@ -134,7 +134,7 @@ describe('FluxMixin', () => {
       test: store => ({ something: store.state.something })
     };
     let Component = React.createClass({
-      mixins: [FluxMixin(getterMap)],
+      mixins: [fluxMixin(getterMap)],
 
       render() {
         return null;
@@ -165,7 +165,7 @@ describe('FluxMixin', () => {
       }),
     };
 
-    let mixin = FluxMixin(getterMap);
+    let mixin = fluxMixin(getterMap);
 
     let connectToStores = sinon.spy(mixin, 'connectToStores');
 
@@ -175,7 +175,7 @@ describe('FluxMixin', () => {
       getInitialState() {
         return {
           foobar: 'baz',
-        }
+        };
       },
 
       render() {
@@ -263,7 +263,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let Component = React.createClass({
-        mixins: [FluxMixin({
+        mixins: [fluxMixin({
           test: function(store) {
             this.someComponentMethod('some arg');
 
@@ -298,7 +298,7 @@ describe('FluxMixin', () => {
       let flux = new Flux();
 
       let Component = React.createClass({
-        mixins: [FluxMixin({
+        mixins: [fluxMixin({
           test: function(store) {
             return {
               foo: 'foo is ' + this.props.foo,
@@ -379,7 +379,8 @@ describe('FluxMixin', () => {
       expect(component.state).to.deep.equal({
         something: 'foobar',
         otherThing: 'barbaz',
-      });    });
+      });
+    });
 
     it('removes listener before unmounting', () => {
       let flux = new Flux();

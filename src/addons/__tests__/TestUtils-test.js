@@ -6,7 +6,7 @@ describe('TestUtils', () => {
   describe('#simulateAction', () => {
     it('calls the stores handler', () => {
       let store = mockStore();
-      let actionFunc = function() {}
+      let actionFunc = function() {};
       actionFunc._id = 'actionFunc';
 
       TestUtils.simulateAction(store, 'foo', 'foo body');
@@ -92,5 +92,5 @@ describe('TestUtils', () => {
 function mockStore() {
   return {
     handler: sinon.spy()
-  }
+  };
 }

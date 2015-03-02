@@ -11,7 +11,7 @@ export function simulateAction(store, action, body) {
  * Used for simulating asynchronous actions on stores when testing.
  *
  * asyncAction must be one of the following: begin, success or failure.
- * 
+ *
  * When simulating the 'begin' action, all arguments after 'begin' will
  * be passed to the action handler in the store.
  *
@@ -23,7 +23,7 @@ export function simulateAction(store, action, body) {
  */
 export function simulateActionAsync(store, action, asyncAction, ...args) {
   const actionId = ensureActionId(action);
-  let payload = { 
+  let payload = {
     actionId, async: asyncAction
   };
 
@@ -41,7 +41,6 @@ export function simulateActionAsync(store, action, asyncAction, ...args) {
       break;
     default:
       throw new Error('asyncAction must be one of: begin, success or failure');
-      break;
   }
 
   store.handler(payload);

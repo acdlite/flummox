@@ -1,7 +1,7 @@
-Why FluxComponent > FluxMixin
+Why FluxComponent > fluxMixin
 =============================
 
-In the [React integration guide](react-integration.md), I suggest that using [FluxComponent](api/FluxComponent.md) is better than using [FluxMixin](api/FluxMixin.md), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
+In the [React integration guide](react-integration.md), I suggest that using [FluxComponent](api/FluxComponent.md) is better than using [fluxMixin](api/fluxMixin.md), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
 
 My argument can be broken down into three basic points. Note that these aren't my original ideas, nor are they unique to Flummox — they are the "React Way":
 
@@ -14,7 +14,7 @@ Declarative > imperative
 
 This is a no brainer. Remember the days before React, when you had to write one piece of code to render your application and another to update it? HAHAHAHA. That was awful. React showed us that expressing our views declaratively leads to clearer, more predictable, and less error-prone applications.
 
-You might feel like FluxMixin and FluxComponent are equally declarative. They do have similar interfaces: a single argument/prop, that does (almost) the same thing. Still, as nice as FluxMixin's interface is, there's no beating a component in terms of clarity. A good rule of thumb in React is that everything that can be expressed as a component, should be.
+You might feel like fluxMixin and FluxComponent are equally declarative. They do have similar interfaces: a single argument/prop, that does (almost) the same thing. Still, as nice as fluxMixin's interface is, there's no beating a component in terms of clarity. A good rule of thumb in React is that everything that can be expressed as a component, should be.
 
 
 Composition > inheritance
@@ -24,13 +24,13 @@ React has a very clear opinion on composition vs. inheritance: composition wins.
 
 Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the owner*.
 
-However, when you use FluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
+However, when you use fluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
 
 For instance, here's a component that renders a single blog post, based on the id of the post.
 
 ```js
 let BlogPost = React.createClass({
-  mixins: [FluxMixin({
+  mixins: [fluxMixin({
     posts: function(store) ({
       post: store.getPost(this.props.id),
     })
@@ -68,7 +68,7 @@ And its owner looks something like this:
 
 ```js
 let BlogPostPage = React.createClass({
-  mixins: [FluxMixin({
+  mixins: [fluxMixin({
     posts: function(store) ({
       post: store.getPost(this.props.id),
     })
@@ -89,7 +89,7 @@ let BlogPostPage = React.createClass({
 
 *For the sake of this example, let's just assume the `id` prop magically exists and is derived from the URL. In reality, we'd use something like React Router's [State mixin]( https://github.com/rackt/react-router/blob/master/docs/api/mixins/State.md).*
 
-There's another problem, though. Every time the store changes, FluxMixin calls `setState()` on BlogPostPage, triggering a re-render of the *entire* component.
+There's another problem, though. Every time the store changes, fluxMixin calls `setState()` on BlogPostPage, triggering a re-render of the *entire* component.
 
 Which brings us to the final point...
 
@@ -100,11 +100,11 @@ Once you've grokked the basics, this is perhaps the most important thing to know
 
 On an even more practical level, every time the state of a component changes, the entire component sub-tree is re-rendered. In our example from the previous section, BlogPostPage updates every time the `posts` store changes — including SiteNavigation, SiteSidebar, and SiteFooter, which don't need to re-render. Only BlogPost does. Imagine if you're listening to more than just one store. The problem is compounded.
 
-Alright, so we need to refactor once again so that FluxMixin is only updating what needs to be updated. We already learned that we shouldn't put the mixin inside BlogPost itself, because that makes the component less reusable. Our remaining option is to create a new component that wraps around BlogPost:
+Alright, so we need to refactor once again so that fluxMixin is only updating what needs to be updated. We already learned that we shouldn't put the mixin inside BlogPost itself, because that makes the component less reusable. Our remaining option is to create a new component that wraps around BlogPost:
 
 ```js
 let BlogPostWrapper = React.createClass({
-  mixins: [FluxMixin({
+  mixins: [fluxMixin({
     posts: function(store) ({
       post: store.getPost(this.props.id),
     })
@@ -148,6 +148,6 @@ Do what's right
 
 If I'm leaving you unconvinced, just do what you feel is right. I think components are generally preferable to mixins, but as with any rule, there are exceptions. For instance, [React Tween State](https://github.com/chenglou/react-tween-state) is a great project that wouldn't make sense as a component.
 
-Either way, both FluxMixin and FluxComponent are available for you to use, and both are pretty great :)
+Either way, both fluxMixin and FluxComponent are available for you to use, and both are pretty great :)
 
 If you have any suggestions for how they could be improved, please let me know by submitting an issue.

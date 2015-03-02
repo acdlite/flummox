@@ -1,5 +1,5 @@
 /**
- * Flux Mixin
+ * fluxMixin
  *
  * Exports a function that creates a React component mixin. The mixin exposes
  * a Flux instance as `this.flux`. This requires that flux be passed as either
@@ -17,7 +17,7 @@
  *
  * @example
  * let Component = React.createClass({
- *   mixins: [FluxMixin({
+ *   mixins: [fluxMixin({
  *     storeA: store => ({
  *       foo: store.state.a,
  *     }),
@@ -33,7 +33,7 @@ import { Flux } from '../Flux';
 import assign from 'object-assign';
 import shallowEqual from 'react/lib/shallowEqual';
 
-export default function FluxMixin(...args) {
+export default function fluxMixin(...args) {
 
   return {
 
@@ -52,15 +52,15 @@ export default function FluxMixin(...args) {
     },
 
     getInitialState() {
-      this._flux_stateGetters = {};
-      this._flux_listeners = {};
-      this._flux_didSyncStoreState = false;
+      this._fluxStateGetters = {};
+      this._fluxListeners = {};
+      this._fluxDidSyncStoreState = false;
       this.flux = this.props.flux || this.context.flux;
 
       if (!(this.flux instanceof Flux)) {
         // TODO: print the actual class name here
         throw new Error(
-          `FluxMixin: Could not find Flux instance. Ensure that your component `
+          `fluxMixin: Could not find Flux instance. Ensure that your component `
         + `has either \`this.context.flux\` or \`this.props.flux\`.`
         );
       }
@@ -69,13 +69,13 @@ export default function FluxMixin(...args) {
     },
 
     componentWillUnmount() {
-      for (let key in this._flux_listeners) {
-        if (!this._flux_listeners.hasOwnProperty(key)) continue;
+      for (let key in this._fluxListeners) {
+        if (!this._fluxListeners.hasOwnProperty(key)) continue;
 
         let store = this.flux.getStore(key);
         if (typeof store === 'undefined') continue;
 
-        let listener = this._flux_listeners[key];
+        let listener = this._fluxListeners[key];
 
         store.removeListener('change', listener);
       }
@@ -95,8 +95,8 @@ export default function FluxMixin(...args) {
     getStoreState() {
       let state = {};
 
-      for (let key in this._flux_stateGetters) {
-        let storeStateGetter = this._flux_stateGetters[key];
+      for (let key in this._fluxStateGetters) {
+        let storeStateGetter = this._fluxStateGetters[key];
         let store = this.flux.getStore(key);
 
         let storeState = storeStateGetter(store);
@@ -151,28 +151,26 @@ export default function FluxMixin(...args) {
       for (let key in stateGetterMap) {
         let store = this.flux.getStore(key);
 
-        if (typeof store === 'undefined') throw new Error(
-          `connectToStores(): Store with key '${key}' does not exist.`
-        );
+        if (typeof store === 'undefined') {
+          throw new Error(
+            `connectToStores(): Store with key '${key}' does not exist.`
+          );
+        }
 
         let storeStateGetter = stateGetterMap[key];
 
         if (storeStateGetter === null) storeStateGetter = defaultStateGetter;
 
         storeStateGetter = storeStateGetter.bind(this);
-        this._flux_stateGetters[key] = storeStateGetter;
+        this._fluxStateGetters[key] = storeStateGetter;
 
         let initialStoreState = storeStateGetter(store);
 
-        let listener = () => {
-          if (this.isMounted()) {
-            let state = storeStateGetter(store);
-            this.setState(state);
-          }
-        };
+        let listener = createStoreListener(this, store, storeStateGetter)
+          .bind(this);
 
         store.addListener('change', listener);
-        this._flux_listeners[key] = listener;
+        this._fluxListeners[key] = listener;
 
         assign(initialState, initialStoreState);
       }
@@ -180,9 +178,18 @@ export default function FluxMixin(...args) {
       return initialState;
     }
 
-  }
+  };
 
 };
+
+function createStoreListener(component, store, storeStateGetter) {
+  return function() {
+    if (this.isMounted()) {
+      let state = storeStateGetter(store);
+      this.setState(state);
+    }
+  };
+}
 
 function defaultStateGetter(store) {
   return store.state;

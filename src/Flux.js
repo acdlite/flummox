@@ -100,7 +100,7 @@ export default class Flux extends EventEmitter {
     return actions.getConstants();
   }
 
-  dispatch(actionId, body, actionArgs) {
+  dispatch(actionId, body) {
     this._dispatch({ actionId, body });
   }
 

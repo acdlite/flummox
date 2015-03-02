@@ -68,6 +68,7 @@ var Flummox =
 	var Actions = _interopRequire(__webpack_require__(2));
 
 	var Dispatcher = __webpack_require__(3).Dispatcher;
+
 	var EventEmitter = _interopRequire(__webpack_require__(4));
 
 	var Flux = (function (EventEmitter) {
@@ -171,7 +172,7 @@ var Flummox =
 	      configurable: true
 	    },
 	    dispatch: {
-	      value: function dispatch(actionId, body, actionArgs) {
+	      value: function dispatch(actionId, body) {
 	        this._dispatch({ actionId: actionId, body: body });
 	      },
 	      writable: true,
@@ -180,6 +181,7 @@ var Flummox =
 	    dispatchAsync: {
 	      value: function dispatchAsync(actionId, promise, actionArgs) {
 	        var _this = this;
+
 	        var payload = {
 	          actionId: actionId,
 	          async: "begin" };
@@ -222,6 +224,7 @@ var Flummox =
 	    },
 	    waitFor: {
 	      value: function waitFor(tokensOrStores) {
+
 	        if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
 
 	        var ensureIsToken = function (tokenOrStore) {
@@ -326,7 +329,6 @@ var Flummox =
 
 	exports["default"] = Flux;
 
-
 	function getClassName(Class) {
 	  return Class.prototype.constructor.name;
 	}
@@ -366,13 +368,15 @@ var Flummox =
 
 	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var assign = _interopRequire(__webpack_require__(7));
+	var assign = _interopRequire(__webpack_require__(6));
 
 	var Store = (function (EventEmitter) {
+
 	  /**
 	   * Stores are initialized with a reference
 	   * @type {Object}
 	   */
+
 	  function Store() {
 	    _classCallCheck(this, Store);
 
@@ -392,6 +396,7 @@ var Flummox =
 	       * protected from mutation by the consumer.
 	       * @returns {object}
 	       */
+
 	      value: function getState() {
 	        return assign({}, this.state);
 	      },
@@ -482,7 +487,6 @@ var Flummox =
 	        var actionArgs = payload.actionArgs;
 	        var error = payload.error;
 
-
 	        var _handler = this._handlers[actionId];
 	        var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
 
@@ -548,7 +552,6 @@ var Flummox =
 
 	module.exports = Store;
 
-
 	function ensureActionId(actionOrActionId) {
 	  return typeof actionOrActionId === "function" ? actionOrActionId._id : actionOrActionId;
 	}
@@ -579,7 +582,7 @@ var Flummox =
 	 * of the payload sent to the dispatcher.
 	 */
 
-	var uniqueId = _interopRequire(__webpack_require__(6));
+	var uniqueId = _interopRequire(__webpack_require__(7));
 
 	var Actions = (function () {
 	  function Actions() {
@@ -600,6 +603,7 @@ var Flummox =
 	    getActionIds: {
 	      value: function getActionIds() {
 	        var _this = this;
+
 	        return this._getActionMethodNames().reduce(function (result, actionName) {
 	          result[actionName] = _this[actionName]._id;
 	          return result;
@@ -611,6 +615,7 @@ var Flummox =
 	    _getActionMethodNames: {
 	      value: function _getActionMethodNames(instance) {
 	        var _this = this;
+
 	        return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
 	          return name !== "constructor" && typeof _this[name] === "function";
 	        });
@@ -621,6 +626,7 @@ var Flummox =
 	    _wrapAction: {
 	      value: function _wrapAction(methodName) {
 	        var _this = this;
+
 	        var originalMethod = this[methodName];
 	        var actionId = this._createActionId(methodName);
 
@@ -652,6 +658,7 @@ var Flummox =
 	       * Create unique string constant for an action method, using
 	       * @param {string} methodName - Name of the action method
 	       */
+
 	      value: function _createActionId(methodName) {
 	        return "" + this._baseId + "-" + methodName;
 	      },
@@ -692,7 +699,6 @@ var Flummox =
 	})();
 
 	module.exports = Actions;
-
 
 	function isPromise(value) {
 	  return value && typeof value.then === "function";
@@ -1211,6 +1217,38 @@ var Flummox =
 
 	'use strict';
 
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 
 	var count = 0;
 
@@ -1263,38 +1301,6 @@ var Flummox =
 	id.reset = function() {
 	  return count = 0;
 	};
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
 
 /***/ },
 /* 8 */

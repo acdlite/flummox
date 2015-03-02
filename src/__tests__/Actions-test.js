@@ -123,7 +123,7 @@ describe('Actions', () => {
     });
 
     it('returns value from wrapped action', async function() {
-      let flux = new Flux;
+      let flux = new Flux();
       let actions = flux.createActions('test', TestActions);
 
       expect(actions.getFoo()).to.deep.equal({ foo: 'bar' });
