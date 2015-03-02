@@ -46,7 +46,7 @@
  * ChildComponent in this example has prop `flux` containing the flux instance,
  * and props that sync with each of the state keys of fooStore.
  */
- 
+
 import React from 'react';
 import fluxMixin from './fluxMixin';
 import assign from 'object-assign';
