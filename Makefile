@@ -1,6 +1,6 @@
 BABEL_CMD = node_modules/.bin/babel
 MOCHA_CMD = node_modules/.bin/mocha
-ESLINT_CMD = eslint
+ESLINT_CMD = node_modules/.bin/eslint
 WEBPACK_CMD = node_modules/.bin/webpack
 
 SRC_JS = $(shell find src -name "*.js")
