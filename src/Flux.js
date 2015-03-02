@@ -189,11 +189,13 @@ export default class Flux extends EventEmitter {
       if (typeof serializedStoreState !== 'string') {
         let className = store.constructor.name;
 
-        console.warn(
-          `The store with key '${key}' was not serialized because the static `
-        + `method \`${className}.serialize()\` returned a non-string with type `
-        + `'${typeof serializedStoreState}'.`
-        );
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(
+            `The store with key '${key}' was not serialized because the static `
+          + `method \`${className}.serialize()\` returned a non-string with type `
+          + `'${typeof serializedStoreState}'.`
+          );
+        }
       }
 
       stateTree[key] = serializedStoreState;
@@ -201,10 +203,12 @@ export default class Flux extends EventEmitter {
       if (typeof store.constructor.deserialize !== 'function') {
         let className = store.constructor.name;
 
-        console.warn(
-          `The class \`${className}\` has a \`serialize()\` method, but no `
-        + `corresponding \`deserialize()\` method.`
-        );
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(
+            `The class \`${className}\` has a \`serialize()\` method, but no `
+          + `corresponding \`deserialize()\` method.`
+          );
+        }
       }
 
     }
@@ -220,10 +224,12 @@ export default class Flux extends EventEmitter {
     } catch (error) {
       let className = this.constructor.name;
 
-      throw new Error(
-        `Invalid value passed to \`${className}#deserialize()\`: `
-      + `${serializedState}`
-      );
+      if (process.env.NODE_ENV !== 'production') {
+        throw new Error(
+          `Invalid value passed to \`${className}#deserialize()\`: `
+        + `${serializedState}`
+        );
+      }
     }
 
     for (let key in this._stores) {
@@ -243,10 +249,12 @@ export default class Flux extends EventEmitter {
       if (typeof store.constructor.serialize !== 'function') {
         let className = store.constructor.name;
 
-        console.warn(
-          `The class \`${className}\` has a \`deserialize()\` method, but no `
-        + `corresponding \`serialize()\` method.`
-        );
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(
+            `The class \`${className}\` has a \`deserialize()\` method, but no `
+          + `corresponding \`serialize()\` method.`
+          );
+        }
       }
     }
   }

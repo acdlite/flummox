@@ -78,11 +78,13 @@ export default class Actions {
         this.dispatch(actionId, body, args);
       }
     } else {
-      console.warn(
-        `You've attempted to perform the action `
-      + `${this.constructor.name}#${methodName}, but it hasn't been added `
-      + `to a Flux instance.`
-      );
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `You've attempted to perform the action `
+        + `${this.constructor.name}#${methodName}, but it hasn't been added `
+        + `to a Flux instance.`
+        );
+      }
     }
 
     return body;
@@ -92,11 +94,13 @@ export default class Actions {
     if (typeof this.dispatchAsync === 'function') {
       return this.dispatchAsync(actionId, promise, args);
     } else {
-      console.warn(
-        `You've attempted to perform the asynchronous action `
-      + `${this.constructor.name}#${methodName}, but it hasn't been added `
-      + `to a Flux instance.`
-      );
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          `You've attempted to perform the asynchronous action `
+        + `${this.constructor.name}#${methodName}, but it hasn't been added `
+        + `to a Flux instance.`
+        );
+      }
 
       return promise;
     }

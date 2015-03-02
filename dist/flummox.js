@@ -67,9 +67,9 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(3).Dispatcher;
+	var Dispatcher = __webpack_require__(4).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
 	var Flux = (function (EventEmitter) {
 	  function Flux() {
@@ -269,7 +269,9 @@ var Flummox =
 	          if (typeof serializedStoreState !== "string") {
 	            var className = store.constructor.name;
 
-	            console.warn("The store with key '" + key + "' was not serialized because the static " + ("method `" + className + ".serialize()` returned a non-string with type ") + ("'" + typeof serializedStoreState + "'."));
+	            if ((undefined) !== "production") {
+	              console.warn("The store with key '" + key + "' was not serialized because the static " + ("method `" + className + ".serialize()` returned a non-string with type ") + ("'" + typeof serializedStoreState + "'."));
+	            }
 	          }
 
 	          stateTree[key] = serializedStoreState;
@@ -277,7 +279,9 @@ var Flummox =
 	          if (typeof store.constructor.deserialize !== "function") {
 	            var className = store.constructor.name;
 
-	            console.warn("The class `" + className + "` has a `serialize()` method, but no " + "corresponding `deserialize()` method.");
+	            if ((undefined) !== "production") {
+	              console.warn("The class `" + className + "` has a `serialize()` method, but no " + "corresponding `deserialize()` method.");
+	            }
 	          }
 	        }
 
@@ -295,7 +299,9 @@ var Flummox =
 	        } catch (error) {
 	          var className = this.constructor.name;
 
-	          throw new Error("Invalid value passed to `" + className + "#deserialize()`: " + ("" + serializedState));
+	          if ((undefined) !== "production") {
+	            throw new Error("Invalid value passed to `" + className + "#deserialize()`: " + ("" + serializedState));
+	          }
 	        }
 
 	        for (var key in this._stores) {
@@ -315,7 +321,9 @@ var Flummox =
 	          if (typeof store.constructor.serialize !== "function") {
 	            var className = store.constructor.name;
 
-	            console.warn("The class `" + className + "` has a `deserialize()` method, but no " + "corresponding `serialize()` method.");
+	            if ((undefined) !== "production") {
+	              console.warn("The class `" + className + "` has a `deserialize()` method, but no " + "corresponding `serialize()` method.");
+	            }
 	          }
 	        }
 	      },
@@ -366,9 +374,9 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
-	var assign = _interopRequire(__webpack_require__(6));
+	var assign = _interopRequire(__webpack_require__(5));
 
 	var Store = (function (EventEmitter) {
 
@@ -411,7 +419,10 @@ var Flummox =
 	          this._pendingState = assign(this._pendingState, newState);
 	          this._emitChangeAfterHandlingDispatch = true;
 	        } else {
-	          console.warn("Store#setState() called from outside an action handler. This is likely " + "a mistake. Flux stores should manage their own state.");
+
+	          if ((undefined) !== "production") {
+	            console.warn("Store#setState() called from outside an action handler. This is likely " + "a mistake. Flux stores should manage their own state.");
+	          }
 
 	          this.state = assign({}, this.state, newState);
 	          this.emit("change");
@@ -672,7 +683,9 @@ var Flummox =
 	            this.dispatch(actionId, body, args);
 	          }
 	        } else {
-	          console.warn("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
+	          if ((undefined) !== "production") {
+	            console.warn("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
+	          }
 	        }
 
 	        return body;
@@ -685,7 +698,9 @@ var Flummox =
 	        if (typeof this.dispatchAsync === "function") {
 	          return this.dispatchAsync(actionId, promise, args);
 	        } else {
-	          console.warn("You've attempted to perform the asynchronous action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
+	          if ((undefined) !== "production") {
+	            console.warn("You've attempted to perform the asynchronous action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
+	          }
 
 	          return promise;
 	        }
@@ -706,22 +721,6 @@ var Flummox =
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(5)
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -956,7 +955,55 @@ var Flummox =
 
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(6)
+
+
+/***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1209,38 +1256,6 @@ var Flummox =
 
 
 	module.exports = Dispatcher;
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
 
 
 /***/ },

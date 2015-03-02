@@ -39,10 +39,13 @@ export default class Store extends EventEmitter {
       this._pendingState = assign(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
-      console.warn(
-        'Store#setState() called from outside an action handler. This is likely '
-      + 'a mistake. Flux stores should manage their own state.'
-      );
+
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(
+          'Store#setState() called from outside an action handler. This is likely '
+        + 'a mistake. Flux stores should manage their own state.'
+        );
+      }
 
       this.state = assign({}, this.state, newState);
       this.emit('change');

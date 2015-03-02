@@ -49,6 +49,6 @@ watch-js:
 browser: $(SRC_JS)
 	mkdir -p dist
 	$(WEBPACK_CMD) src/Flux.js dist/flummox.js
-	COMPRESS=true $(WEBPACK_CMD) src/Flux.js dist/flummox.min.js
+	NODE_ENV=production $(WEBPACK_CMD) src/Flux.js dist/flummox.min.js
 
 .PHONY: build clean test test-cov lin fast-build js fast-js watch-js browser
