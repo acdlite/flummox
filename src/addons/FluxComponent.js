@@ -49,7 +49,7 @@
 
 'use strict';
 
-import React from 'react/addons';
+import React from 'react';
 import fluxMixin from './fluxMixin';
 import assign from 'object-assign';
 

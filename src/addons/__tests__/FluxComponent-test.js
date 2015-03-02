@@ -41,10 +41,6 @@ describe('FluxComponent', () => {
     }
   }
 
-  before(() => {
-    jsdom();
-  });
-
   it('gets Flux property from either props or context', () => {
     let flux = new Flux();
     let contextComponent, propsComponent;

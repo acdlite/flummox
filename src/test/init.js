@@ -11,7 +11,6 @@ import 'babel-runtime/regenerator/runtime';
 
 import { jsdom as _jsdom } from 'jsdom';
 
-global.jsdom = () => {
-  global.document = _jsdom('<!doctype html><html><body></body></html>');
-  global.window = document.parentWindow;
-};
+global.document = _jsdom('<!doctype html><html><body></body></html>');
+global.window = document.parentWindow;
+global.navigator = window.navigator;

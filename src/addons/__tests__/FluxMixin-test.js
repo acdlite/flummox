@@ -43,38 +43,34 @@ describe('fluxMixin', () => {
     }
   }
 
-  let ContextComponent = React.createClass({
+  let ComponentWithFluxMixin = React.createClass({
     mixins: [fluxMixin()],
 
     render() {
       return null;
     }
-  });
-
-  let PropsComponent = React.createClass({
-    mixins: [fluxMixin()],
-
-    render() {
-      return null;
-    }
-  });
-
-  before(() => {
-    jsdom();
   });
 
   it('gets flux from either props or context', () => {
     let flux = new Flux();
     let contextComponent, propsComponent;
 
-    React.withContext({ flux }, () => {
-      contextComponent = TestUtils.renderIntoDocument(
-        <ContextComponent keys="test" />
-      );
-    });
+    let ContextComponent = addContext(
+      ComponentWithFluxMixin,
+      { flux },
+      { flux: React.PropTypes.instanceOf(Flummox) }
+    );
+
+    let tree = TestUtils.renderIntoDocument(
+      <ContextComponent keys="test" />
+    );
+
+    contextComponent = TestUtils.findRenderedComponentWithType(
+      tree, ComponentWithFluxMixin
+    );
 
     propsComponent = TestUtils.renderIntoDocument(
-      <PropsComponent key="test" flux={flux} />
+      <ComponentWithFluxMixin key="test" flux={flux} />
     );
 
     expect(contextComponent.flux).to.be.an.instanceof(Flummox);
@@ -119,7 +115,7 @@ describe('fluxMixin', () => {
   it('throws error if neither props or context is set', () => {
     let flux = new Flux();
 
-    expect(TestUtils.renderIntoDocument.bind(null, <PropsComponent />))
+    expect(TestUtils.renderIntoDocument.bind(null, <ComponentWithFluxMixin />))
       .to.throw(
         'fluxMixin: Could not find Flux instance. Ensure that your component '
       + 'has either `this.context.flux` or `this.props.flux`.'
@@ -206,7 +202,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       let initialState = component.connectToStores('test');
@@ -220,7 +216,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -238,7 +234,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -326,7 +322,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -351,7 +347,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.connectToStores(['test']);
@@ -367,7 +363,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.setState({ otherThing: 'barbaz' });
@@ -386,7 +382,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
       let div = document.createElement('div');
 
-      let component = React.render(<PropsComponent flux={flux} />, div);
+      let component = React.render(<ComponentWithFluxMixin flux={flux} />, div);
 
       let store = flux.getStore('test');
       component.connectToStores('test');
@@ -403,7 +399,7 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <PropsComponent key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
       component.connectToStores({
@@ -425,3 +421,17 @@ describe('fluxMixin', () => {
   });
 
 });
+
+function addContext(Component, context, contextTypes) {
+  return React.createClass({
+    childContextTypes: contextTypes,
+
+    getChildContext() {
+      return context;
+    },
+
+    render() {
+      return <Component {...this.props} />;
+    }
+  });
+}

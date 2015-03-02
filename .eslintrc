@@ -28,7 +28,6 @@
     "no-use-before-define": [2, "nofunc"]
   },
   "globals": {
-    "expect": true,
-    "jsdom": true
+    "expect": true
   }
 }
