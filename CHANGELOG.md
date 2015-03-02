@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.12.4
+- **Bugfix**
+  - Fix bug when single item array is child of FluxComponent. [#53](https://github.com/acdlite/flummox/issues/53)
+
 ## 2.12.3
 - **Internal**
   - Updated tests to be compatible with React 0.13. Should be ready for final 0.13 release.

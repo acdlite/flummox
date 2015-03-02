@@ -70,9 +70,9 @@ let FluxComponent = React.createClass({
   render() {
     let { children } = this.props;
 
-    if (!this.props.children) return null;
+    if (!children) return null;
 
-    if (React.Children.count(children) === 1) {
+    if (!Array.isArray(children)) {
       let child = children;
       return this.wrapChild(child);
     } else {
