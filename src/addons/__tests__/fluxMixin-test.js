@@ -1,5 +1,3 @@
-'use strict';
-
 import fluxMixin from '../fluxMixin';
 import { Flummox, Store, Actions } from '../../Flux';
 import sinon from 'sinon';
