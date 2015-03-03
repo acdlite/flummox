@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.12.5
+- **Bugfix**
+  - Fix requiring normal React instead of React with addons in FluxComponent.
+
 ## 2.12.4
 - **Bugfix**
   - Fix bug when single item array is child of FluxComponent. [#53](https://github.com/acdlite/flummox/issues/53)
