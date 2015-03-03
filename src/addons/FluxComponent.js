@@ -47,7 +47,7 @@
  * and props that sync with each of the state keys of fooStore.
  */
 
-import React from 'react';
+import React from 'react/addons';
 import fluxMixin from './fluxMixin';
 import assign from 'object-assign';
 
