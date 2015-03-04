@@ -64,6 +64,14 @@ export default class Store extends EventEmitter {
     }
   }
 
+  forceUpdate() {
+    if (this._isHandlingDispatch) {
+      this._emitChangeAfterHandlingDispatch = true;
+    } else {
+      this.emit('change');
+    }
+  }
+
   register(actionId, handler) {
     actionId = ensureActionId(actionId);
 

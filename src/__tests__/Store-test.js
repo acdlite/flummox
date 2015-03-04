@@ -293,4 +293,40 @@ describe('Store', () => {
     });
   });
 
+  describe('#forceUpdate()', () => {
+    it('emits change event', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.forceUpdate();
+
+      expect(listener.calledOnce).to.be.true;
+    });
+
+    it('doesn\'t modify existing state', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.register(actionId, function() {
+        this.replaceState({ bar: 'baz' });
+        this.forceUpdate();
+
+        expect(this.state).to.deep.equal({ foo: 'bar' });
+        expect(listener.called).to.be.false;
+
+        this.setState({ foo: 'bar' });
+        this.forceUpdate();
+        this.replaceState({ baz: 'foo' });
+      });
+
+      // Simulate dispatch
+      store.handler({ actionId, body: 'foobar' });
+
+      expect(listener.calledOnce).to.be.true;
+      expect(store.state).to.deep.equal({ baz: 'foo' });
+    });
+  });
+
 });
