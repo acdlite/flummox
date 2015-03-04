@@ -97,6 +97,16 @@ replaceState(object nextState)
 
 Like `setState()` but deletes any pre-existing state keys that are not in nextState.
 
+### forceUpdate
+
+```js
+forceUpdate()
+```
+
+Emits change event.
+
+**Usage note**: If you can, use `setState()` instead.
+
 
 EventEmitter methods
 --------------------

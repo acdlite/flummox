@@ -9,12 +9,16 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.13.0
+- **New Features**
+  - `Store#forceUpdate()` like React
+
 ## 2.12.5
-- **Bugfix**
+- **Bug Fix**
   - Fix requiring normal React instead of React with addons in FluxComponent.
 
 ## 2.12.4
-- **Bugfix**
+- **Bug Fix**
   - Fix bug when single item array is child of FluxComponent. [#53](https://github.com/acdlite/flummox/issues/53)
 
 ## 2.12.3
@@ -69,7 +73,7 @@ Tags:
   - Add API docs for fluxMixin and FluxComponent. Included section explaining why a "key" prop should be passed to components that implement fluxMixin.
 
 ## 2.7.2
-- **Bugfix**
+- **Bug Fix**
   - Fix React peer dependency version so it works on 0.13
 
 ## 2.7.0
