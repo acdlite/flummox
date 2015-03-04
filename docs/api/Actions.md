@@ -17,11 +17,8 @@ class MessageActions extends Actions {
   // Asynchronous functions are also supported: just return a promise
   // This is easy using async-await
   async createMessage(messageContent) {
-    try {
-      return await serverCreateMessage(messageContent);
-    } catch (error) {
-      // handle error somehow
-    }
+    let response = await serverCreateMessage(messageContent);
+    return response.body;
   }
 
 }
