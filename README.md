@@ -23,6 +23,7 @@ Features
 
 - No singletons = isomorphism for free!
 - Robust yet minimal API inspired by React and ES6
+- Tiny. **~3.8kb (compressed and gzipped)**.
 - The dispatcher and constants are implementation details — no need to interact with them unless you want to.
 - Async actions [made simple with promises](https://github.com/acdlite/flummox/blob/master/docs/api/Actions.md#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
 - Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via fluxMixin and FluxComponent
