@@ -61,6 +61,8 @@ Register a handler for a specific action. The handler will be automatically boun
 
 You can register using either the action id or the action itself.
 
+**Usage note**: `register()` works for both async and sync actions. In the case of async actions, it receives the resolved value of the promise returned by the action.
+
 ### registerAsync
 
 ```js
@@ -78,6 +80,8 @@ A register handler specifically for asynchronous actions (actions that return pr
 This makes it easy perform to perform optimistic UI updates.
 
 If any of the passed handlers are not functions, they are ignored.
+
+**Usage note**: `registerAsync(null, handler, null)` is functionally equivalent to `register(handler)`. If you don't need to respond to the beginning of an async action or respond to errors, then just use `register()`.
 
 ### setState
 
