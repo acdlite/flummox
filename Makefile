@@ -1,5 +1,6 @@
 BABEL_CMD = node_modules/.bin/babel
 MOCHA_CMD = node_modules/.bin/mocha
+ISTANBUL_CMD = node_modules/.bin/istanbul
 ESLINT_CMD = node_modules/.bin/eslint
 WEBPACK_CMD = node_modules/.bin/webpack
 
@@ -23,7 +24,7 @@ test: lint js
 	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_ARGS)
 
 test-cov: js
-	@NODE_ENV=test node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- $(MOCHA_ARGS)
+	@NODE_ENV=test $(ISTANBUL_CMD) cover node_modules/.bin/_mocha -- $(MOCHA_ARGS)
 
 lint:
 	$(ESLINT_CMD) $(SRC_JS)
