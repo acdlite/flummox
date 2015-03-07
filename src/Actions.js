@@ -53,7 +53,8 @@ export default class Actions {
 
       if (isPromise(body)) {
         let promise = body;
-        return this._dispatchAsync(actionId, promise, args, methodName);
+        this._dispatchAsync(actionId, promise, args, methodName);
+        return promise;
       } else {
         return this._dispatch(actionId, body, args, methodName);
       }

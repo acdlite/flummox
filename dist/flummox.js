@@ -67,9 +67,9 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(3).Dispatcher;
+	var Dispatcher = __webpack_require__(4).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
 	var Flux = (function (EventEmitter) {
 	  function Flux() {
@@ -373,7 +373,7 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
 	var assign = _interopRequire(__webpack_require__(6));
 
@@ -660,7 +660,8 @@ var Flummox =
 
 	          if (isPromise(body)) {
 	            var promise = body;
-	            return _this._dispatchAsync(actionId, promise, args, methodName);
+	            _this._dispatchAsync(actionId, promise, args, methodName);
+	            return promise;
 	          } else {
 	            return _this._dispatch(actionId, body, args, methodName);
 	          }
@@ -731,22 +732,6 @@ var Flummox =
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(5)
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -978,6 +963,22 @@ var Flummox =
 	// Expose the module.
 	//
 	module.exports = EventEmitter;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(5)
 
 
 /***/ },
