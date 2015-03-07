@@ -11,7 +11,7 @@ Tags:
 
 ## 2.13.1
 - **Bug Fix**
-  - Small update to async actions so returned promise does not gobble errors that occur in store handlers.
+  - Small update to async actions so returned promise does not reject due to errors that occur in store handlers.
 
 ## 2.13.0
 - **New Features**
