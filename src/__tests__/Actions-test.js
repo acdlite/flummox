@@ -130,6 +130,7 @@ describe('Actions', () => {
       await expect(actions.asyncAction('async result'))
         .to.eventually.equal('async result');
     });
+
   });
 
 });

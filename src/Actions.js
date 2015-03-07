@@ -54,10 +54,12 @@ export default class Actions {
       if (isPromise(body)) {
         let promise = body;
         this._dispatchAsync(actionId, promise, args, methodName);
-        return promise;
       } else {
-        return this._dispatch(actionId, body, args, methodName);
+        this._dispatch(actionId, body, args, methodName);
       }
+
+      // Return original method's return value to caller
+      return body;
     };
 
     action._id = actionId;
