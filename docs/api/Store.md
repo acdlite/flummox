@@ -142,3 +142,15 @@ Internally, it calls [`Dispatcher#waitFor()`](http://facebook.github.io/flux/doc
 Instead of passing a store, you can also pass a dispatcher token, or an array of tokens and stores.
 
 **Usage note**: Because this method introduces dependencies between stores, you should generally try to avoid using it. Stores should be as isolated as possible from the outside world. If you find yourself relying on `waitFor()` often, consider rethinking how data flows through your app.
+
+Static Methods
+-------
+
+### serialize(state)
+
+If you use `Flux.serialize`, Flummox will try to call the static method `serialize` on all your stores. Flummox will pass the state object of the store to the method and expects a String
+
+### deserialize(state)
+
+If you use `Flux.deserialize`, Flummox will try to call the static method `deserialize` on all your stores. Flummox will pass the appropriate serialized representation and expects an object, with which Flummox will call `replaceState` on your store.
+
