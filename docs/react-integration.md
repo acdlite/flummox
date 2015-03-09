@@ -77,7 +77,7 @@ So, in just a few short lines, we can specify the initialization logic, update l
 
 ```js
 // Pass an object of store keys mapped to getter functions
-<FluxComponent key={this.props.post.id} connectToStores={{
+<FluxComponent connectToStores={{
   posts: store => ({
     post: store.getPost(this.props.post.id),
   }),
