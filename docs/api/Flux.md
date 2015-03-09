@@ -42,6 +42,8 @@ flux.addListener('dispatch', payload => {
 });
 ```
 
+Additionally, an `error` event is emitted when errors occur as a result of an async action. This is both for convenience and to prevent error gobbling.
+
 Methods
 -------
 
