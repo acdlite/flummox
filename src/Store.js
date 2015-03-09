@@ -23,20 +23,9 @@ export default class Store extends EventEmitter {
     this._asyncHandlers = {};
   }
 
-  /**
-   * Return a (shallow) copy of the store's internal state, so that it is
-   * protected from mutation by the consumer.
-   * @returns {object}
-   */
-  getState() {
-    return assign({}, this.state);
-  }
-
   setState(newState) {
-    if (typeof this.state === 'undefined') this.state = {};
-
     if (this._isHandlingDispatch) {
-      this._pendingState = assign(this._pendingState, newState);
+      this._pendingState = this.constructor.mergeState(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
 
@@ -46,22 +35,23 @@ export default class Store extends EventEmitter {
         + 'a mistake. Flux stores should manage their own state.'
         );
       }
-
-      this.state = assign({}, this.state, newState);
+      this.state = this.constructor.mergeState(this.state, newState);
       this.emit('change');
     }
   }
 
   replaceState(newState) {
-    if (typeof this.state === 'undefined') this.state = {};
-
     if (this._isHandlingDispatch) {
-      this._pendingState = assign({}, newState);
+      this._pendingState = this.constructor.mergeState(undefined, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
-      this.state = assign({}, newState);
+      this.state = this.constructor.mergeState(undefined, newState);
       this.emit('change');
     }
+  }
+
+  static mergeState(oldState = {}, newState) {
+    return assign({}, oldState, newState);
   }
 
   forceUpdate() {
@@ -149,7 +139,7 @@ export default class Store extends EventEmitter {
 
   _performHandler(_handler, ...args) {
     this._isHandlingDispatch = true;
-    this._pendingState = assign({}, this.state);
+    this._pendingState = this.constructor.mergeState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
@@ -161,7 +151,7 @@ export default class Store extends EventEmitter {
       }
 
       this._isHandlingDispatch = false;
-      this._pendingState = {};
+      this._pendingState = undefined;
       this._emitChangeAfterHandlingDispatch = false;
     }
   }

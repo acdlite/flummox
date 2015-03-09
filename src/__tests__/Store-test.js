@@ -11,22 +11,6 @@ describe('Store', () => {
 
   let actionId = 'actionId';
 
-  describe('#getState()', () => {
-
-    let s = new ExampleStore();
-
-    it('returns state object', () => {
-      expect(s.getState()).to.deep.equal({ foo: 'bar' });
-    });
-
-    it('prevents mutations of state object', () => {
-      let state = s.getState();
-      state.foo = 'changed';
-
-      expect(s.getState()).to.deep.equal({ foo: 'bar' });
-    });
-  });
-
   describe('#register()', () => {
     it('adds handler to internal collection of handlers', () => {
       let store = new ExampleStore();
@@ -191,6 +175,42 @@ describe('Store', () => {
     });
   });
 
+  describe('#forceUpdate()', () => {
+    it('emits change event', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.forceUpdate();
+
+      expect(listener.calledOnce).to.be.true;
+    });
+
+    it('doesn\'t modify existing state', () => {
+      let store = new ExampleStore();
+      let listener = sinon.spy();
+      store.addListener('change', listener);
+
+      store.register(actionId, function() {
+        this.replaceState({ bar: 'baz' });
+        this.forceUpdate();
+
+        expect(this.state).to.deep.equal({ foo: 'bar' });
+        expect(listener.called).to.be.false;
+
+        this.setState({ foo: 'bar' });
+        this.forceUpdate();
+        this.replaceState({ baz: 'foo' });
+      });
+
+      // Simulate dispatch
+      store.handler({ actionId, body: 'foobar' });
+
+      expect(listener.calledOnce).to.be.true;
+      expect(store.state).to.deep.equal({ baz: 'foo' });
+    });
+  });
+
   describe('#setState()', () => {
     it('shallow merges old state with new state', () => {
       let store = new ExampleStore();
@@ -290,42 +310,6 @@ describe('Store', () => {
       store.replaceState({ foo: 'bar' });
 
       expect(listener.calledOnce).to.be.true;
-    });
-  });
-
-  describe('#forceUpdate()', () => {
-    it('emits change event', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
-      store.addListener('change', listener);
-
-      store.forceUpdate();
-
-      expect(listener.calledOnce).to.be.true;
-    });
-
-    it('doesn\'t modify existing state', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
-      store.addListener('change', listener);
-
-      store.register(actionId, function() {
-        this.replaceState({ bar: 'baz' });
-        this.forceUpdate();
-
-        expect(this.state).to.deep.equal({ foo: 'bar' });
-        expect(listener.called).to.be.false;
-
-        this.setState({ foo: 'bar' });
-        this.forceUpdate();
-        this.replaceState({ baz: 'foo' });
-      });
-
-      // Simulate dispatch
-      store.handler({ actionId, body: 'foobar' });
-
-      expect(listener.calledOnce).to.be.true;
-      expect(store.state).to.deep.equal({ baz: 'foo' });
     });
   });
 
