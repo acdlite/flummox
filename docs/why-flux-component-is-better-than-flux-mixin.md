@@ -31,9 +31,11 @@ For instance, here's a component that renders a single blog post, based on the i
 ```js
 let BlogPost = React.createClass({
   mixins: [fluxMixin({
-    posts: function(store) ({
-      post: store.getPost(this.props.id),
-    })
+    posts: function(store) {
+      return {
+        post: store.getPost(this.props.id),
+      }
+    }
   })],
 
   render() {
@@ -70,7 +72,9 @@ And its owner looks something like this:
 let BlogPostPage = React.createClass({
   mixins: [fluxMixin({
     posts: function(store) ({
-      post: store.getPost(this.props.id),
+      return {
+        post: store.getPost(this.props.id),
+      };
     })
   })],
 
@@ -106,7 +110,9 @@ Alright, so we need to refactor once again so that fluxMixin is only updating wh
 let BlogPostWrapper = React.createClass({
   mixins: [fluxMixin({
     posts: function(store) ({
-      post: store.getPost(this.props.id),
+      return {
+        post: store.getPost(this.props.id),
+      };
     })
   ]
 
