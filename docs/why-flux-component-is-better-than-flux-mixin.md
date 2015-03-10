@@ -71,7 +71,7 @@ And its owner looks something like this:
 ```js
 let BlogPostPage = React.createClass({
   mixins: [fluxMixin({
-    posts: function(store) ({
+    posts: function(store) {
       return {
         post: store.getPost(this.props.id),
       };
