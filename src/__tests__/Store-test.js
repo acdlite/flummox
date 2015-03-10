@@ -61,6 +61,11 @@ describe('Store', () => {
 
   });
 
+  it('default state is null', () => {
+    const store = new Store();
+    expect(store.state).to.be.null;
+  });
+
   describe('#registerAsync()', () => {
     it('registers handlers for begin, success, and failure of async action', async function() {
       let error = new Error();
@@ -310,6 +315,30 @@ describe('Store', () => {
       store.replaceState({ foo: 'bar' });
 
       expect(listener.calledOnce).to.be.true;
+    });
+  });
+
+  describe('.mergeState', () => {
+    it('can be overridden to enable custom state types', () => {
+      class StringStore extends Store {
+        static mergeState(prevState, nextState) {
+          return [prevState, nextState]
+            .filter(state => typeof state === 'string')
+            .join('');
+        }
+      }
+
+      const store = new StringStore();
+
+      expect(store.state).to.be.null;
+      store.setState('a');
+      expect(store.state).to.equal('a');
+      store.setState('b');
+      expect(store.state).to.equal('ab');
+      store.replaceState('xyz');
+      expect(store.state).to.equal('xyz');
+      store.setState('zyx');
+      expect(store.state).to.equal('xyzzyx');
     });
   });
 

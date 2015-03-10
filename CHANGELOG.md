@@ -11,7 +11,7 @@ Tags:
 
 ## 3.0.0
 - [Breaking Change]
-  - Stores no longer use empty object as default state.
+  - Stores no longer use empty object as default state. Default state is null, like React.
 - [Internal]
   - Remove undocumented method `Store#getState()`.
 

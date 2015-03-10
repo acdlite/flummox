@@ -17,7 +17,7 @@ export default class Store extends EventEmitter {
    * @type {Object}
    */
   constructor() {
-    this.state = undefined;
+    this.state = null;
 
     this._handlers = {};
     this._asyncHandlers = {};
