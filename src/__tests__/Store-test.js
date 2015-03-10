@@ -228,6 +228,17 @@ describe('Store', () => {
       });
     });
 
+    it('supports transactional updates', () => {
+      const store = new Store();
+      store.state = { a: 1 };
+      store.setState(state => ({ a: state.a + 1 }));
+      expect(store.state.a).to.equal(2);
+      store.setState(state => ({ a: state.a + 1 }));
+      expect(store.state.a).to.equal(3);
+      store.setState(state => ({ a: state.a + 1 }));
+      expect(store.state.a).to.equal(4);
+    });
+
     it('emits change event', () => {
       let store = new ExampleStore();
       let listener = sinon.spy();

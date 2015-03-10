@@ -24,6 +24,15 @@ export default class Store extends EventEmitter {
   }
 
   setState(newState) {
+    // Do a transactional state update if a function is passed
+    if (typeof newState === 'function') {
+      const prevState = this._isHandlingDispatch
+        ? this._pendingState
+        : this.state;
+
+      newState = newState(prevState);
+    }
+
     if (this._isHandlingDispatch) {
       this._pendingState = this.constructor.mergeState(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
