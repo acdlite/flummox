@@ -329,10 +329,10 @@ describe('Store', () => {
     });
   });
 
-  describe('.mergeState', () => {
+  describe('.assignState', () => {
     it('can be overridden to enable custom state types', () => {
       class StringStore extends Store {
-        static mergeState(prevState, nextState) {
+        static assignState(prevState, nextState) {
           return [prevState, nextState]
             .filter(state => typeof state === 'string')
             .join('');

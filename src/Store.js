@@ -34,7 +34,7 @@ export default class Store extends EventEmitter {
     }
 
     if (this._isHandlingDispatch) {
-      this._pendingState = this.constructor.mergeState(this._pendingState, newState);
+      this._pendingState = this.constructor.assignState(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
 
@@ -44,22 +44,22 @@ export default class Store extends EventEmitter {
         + 'a mistake. Flux stores should manage their own state.'
         );
       }
-      this.state = this.constructor.mergeState(this.state, newState);
+      this.state = this.constructor.assignState(this.state, newState);
       this.emit('change');
     }
   }
 
   replaceState(newState) {
     if (this._isHandlingDispatch) {
-      this._pendingState = this.constructor.mergeState(undefined, newState);
+      this._pendingState = this.constructor.assignState(undefined, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
-      this.state = this.constructor.mergeState(undefined, newState);
+      this.state = this.constructor.assignState(undefined, newState);
       this.emit('change');
     }
   }
 
-  static mergeState(oldState = {}, newState) {
+  static assignState(oldState = {}, newState) {
     return assign({}, oldState, newState);
   }
 
@@ -148,7 +148,7 @@ export default class Store extends EventEmitter {
 
   _performHandler(_handler, ...args) {
     this._isHandlingDispatch = true;
-    this._pendingState = this.constructor.mergeState(undefined, this.state);
+    this._pendingState = this.constructor.assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
