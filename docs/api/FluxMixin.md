@@ -75,11 +75,13 @@ Methods
 
 ```js
 connectToStores(string storeKey [, function stateGetter])
-connectToStores(Array<string> storeKeys)
-connectToStores(object stateGetterMap)
+connectToStores(Array<string> storeKeys [, function stateGetter])
+connectToStores(object stateGetterMap [, function stateGetter])
 ```
 
-Synchronize component state with state from Flux stores. Pass a single store key, an array of store keys, or a map of store keys to getter functions. In the single store key form, you can also specific a custom state getter as the second argument.
+Synchronize component state with state from Flux stores. Pass a single store key, an array of store keys, or a map of store keys to getter functions. You can also specify a custom state getter as the second argument, the default state getter will return the entire store state (a reduce is performed on the entire store state when using an array or store keys).
+
+When using an array of store keys, the custom state getter is called with an array of store instances (same order as keys) as the first argument. Otherwise only a single store instance is passed to the custom state getter.
 
 Returns the initial combined state of the specified stores.
 

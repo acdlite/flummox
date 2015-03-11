@@ -52,7 +52,7 @@ export default function fluxMixin(...args) {
     },
 
     getInitialState() {
-      this._fluxStateGetters = {};
+      this._fluxStateGetters = [];
       this._fluxListeners = {};
       this._fluxDidSyncStoreState = false;
       this.flux = this.props.flux || this.context.flux;
@@ -93,18 +93,10 @@ export default function fluxMixin(...args) {
     },
 
     getStoreState() {
-      let state = {};
-
-      for (let key in this._fluxStateGetters) {
-        let storeStateGetter = this._fluxStateGetters[key];
-        let store = this.flux.getStore(key);
-
-        let storeState = storeStateGetter(store);
-
-        assign(state, storeState);
-      }
-
-      return state;
+      return this._fluxStateGetters.reduce(
+        (result, stateGetter) => assign(result, stateGetter.getter(stateGetter.stores)),
+        {}
+      );
     },
 
     /**
@@ -116,8 +108,10 @@ export default function fluxMixin(...args) {
      * If no state getter is specified, the default getter is used, which simply
      * returns the entire store state.
      *
-     * The second form accepts an array of store keys. With this form, every
-     * store uses the default state getter.
+     * The second form accepts an array of store keys. With this form, the state
+     * getter is called once with an array of store instances (in the same order
+     * as the store keys). the default getter performance a reduce on the entire
+     * state for each store.
      *
      * The last form accepts an object of store keys mapped to state getters. As
      * a shortcut, you can pass `null` as a state getter to use the default
@@ -131,24 +125,8 @@ export default function fluxMixin(...args) {
      * @type {string|array|object} stateGetterMap - map of keys to getters
      * @returns {object} Combined initial state of stores
      */
-    connectToStores(stateGetterMap = {}, stateGetter = defaultStateGetter) {
-      let initialState = {};
-
-      // Ensure that stateGetterMap is an object
-      if (typeof stateGetterMap === 'string') {
-        let key = stateGetterMap;
-
-        stateGetterMap = {
-          [key]: stateGetter,
-        };
-      } else if (Array.isArray(stateGetterMap)) {
-        stateGetterMap = stateGetterMap.reduce((result, key) => {
-          result[key] = stateGetter;
-          return result;
-        }, {});
-      }
-
-      for (let key in stateGetterMap) {
+    connectToStores(stateGetterMap = {}, stateGetter = null) {
+      let getStore = (key) => {
         let store = this.flux.getStore(key);
 
         if (typeof store === 'undefined') {
@@ -157,25 +135,57 @@ export default function fluxMixin(...args) {
           );
         }
 
-        let storeStateGetter = stateGetterMap[key];
+        return store;
+      };
 
-        if (storeStateGetter === null) storeStateGetter = defaultStateGetter;
+      if (typeof stateGetterMap === 'string') {
+        let key = stateGetterMap;
+        let store = getStore(key);
+        let getter = stateGetter || defaultStateGetter;
 
-        storeStateGetter = storeStateGetter.bind(this);
-        this._fluxStateGetters[key] = storeStateGetter;
+        getter = getter.bind(this);
 
-        let initialStoreState = storeStateGetter(store);
-
-        let listener = createStoreListener(this, store, storeStateGetter)
-          .bind(this);
+        this._fluxStateGetters.push({ stores: store, getter });
+        let listener = createStoreListener(this, store, getter)
+            .bind(this);
 
         store.addListener('change', listener);
         this._fluxListeners[key] = listener;
+      } else if (Array.isArray(stateGetterMap)) {
+        let stores = stateGetterMap.map(getStore);
+        let getter = stateGetter || defaultReduceStateGetter;
 
-        assign(initialState, initialStoreState);
+        getter = getter.bind(this);
+
+        this._fluxStateGetters.push({ stores, getter });
+
+        let listener = createStoreListener(this, stores, getter)
+            .bind(this);
+
+        stateGetterMap.forEach((key, index) => {
+          let store = stores[index];
+          store.addListener('change', listener);
+          this._fluxListeners[key] = listener;
+        });
+
+      } else {
+        for (let key in stateGetterMap) {
+          let store = getStore(key);
+          let getter = stateGetterMap[key] || defaultStateGetter;
+
+          getter = getter.bind(this);
+
+          this._fluxStateGetters.push({ stores: store, getter });
+
+          let listener = createStoreListener(this, store, getter)
+            .bind(this);
+
+          store.addListener('change', listener);
+          this._fluxListeners[key] = listener;
+        }
       }
 
-      return initialState;
+      return this.getStoreState();
     }
 
   };
@@ -193,4 +203,11 @@ function createStoreListener(component, store, storeStateGetter) {
 
 function defaultStateGetter(store) {
   return store.state;
+}
+
+function defaultReduceStateGetter(stores) {
+  return stores.reduce(
+    (result, store) => assign(result, store.state),
+    {}
+  );
 }
