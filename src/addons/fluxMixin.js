@@ -108,8 +108,10 @@ export default function fluxMixin(...args) {
      * If no state getter is specified, the default getter is used, which simply
      * returns the entire store state.
      *
-     * The second form accepts an array of store keys. With this form, every
-     * store uses the default state getter.
+     * The second form accepts an array of store keys. With this form, the state
+     * getter is called once with an array of store instances (in the same order
+     * as the store keys). the default getter performance a reduce on the entire
+     * state for each store.
      *
      * The last form accepts an object of store keys mapped to state getters. As
      * a shortcut, you can pass `null` as a state getter to use the default
