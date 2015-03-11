@@ -104,6 +104,16 @@ export default class Store extends EventEmitter {
     this._asyncHandlers[actionId] = asyncHandlers;
   }
 
+  registerAll(handler) {
+    if (typeof handler !== 'function') return;
+
+    let actionIds = this._getAllActionIds();
+
+    for (let actionId of actionIds) {
+      this.register(actionId, handler);
+    }
+  }
+
   waitFor(tokensOrStores) {
     this._waitFor(tokensOrStores);
   }
