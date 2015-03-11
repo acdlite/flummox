@@ -35,7 +35,9 @@ Features
 - Centralized [debugging](https://github.com/acdlite/flummox/blob/master/docs/api/Flux.md#debugging).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
-*Not officially supported until stable 0.13 release, but it should work
+*~~Not officially supported until stable 0.13 release, but it should work~~
+
+**Version 3.0 with official support for React 0.13 is [imminent](https://github.com/acdlite/flummox/milestones/3.0).**
 
 Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
