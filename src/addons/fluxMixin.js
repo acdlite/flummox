@@ -93,8 +93,8 @@ export default function fluxMixin(...args) {
     },
 
     getStoreState() {
-      return this._fluxStateGetters.reduce((result, stateGetter) =>
-        assign(result, stateGetter.getter(stateGetter.stores)),
+      return this._fluxStateGetters.reduce(
+        (result, stateGetter) => assign(result, stateGetter.getter(stateGetter.stores)),
         {}
       );
     },
@@ -206,8 +206,8 @@ function defaultStateGetter(store) {
 }
 
 function defaultReduceStateGetter(stores) {
-  return stores.reduce((result, store) =>
-    assign(result, store.state),
+  return stores.reduce(
+    (result, store) => assign(result, store.state),
     {}
   );
 }
