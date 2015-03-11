@@ -147,6 +147,32 @@ describe('Flux', () => {
     });
   });
 
+  describe('#getAllActionIds() / #getAllConstants()', () => {
+    class TestFooActions extends Actions {
+      getFoo() {}
+      getBar() {}
+    }
+
+    class TestBarActions extends Actions {
+      getFoo() {}
+      getBar() {}
+    }
+
+    it('retrives ids of all actions', () => {
+      let flux = new Flux();
+      flux.createActions('TestFooActions', TestFooActions);
+      flux.createActions('TestBarActions', TestBarActions);
+
+      expect(flux.getAllActionIds()).to.be.an('array');
+      expect(flux.getAllActionIds()[0]).to.be.a('string');
+      expect(flux.getAllActionIds()).to.have.length(4);
+
+      expect(flux.getAllConstants()).to.be.an('array');
+      expect(flux.getAllConstants()[0]).to.be.a('string');
+      expect(flux.getAllConstants()).to.have.length(4);
+    });
+  });
+
   describe('#dispatch()', () => {
 
     it('delegates to dispatcher', () => {
