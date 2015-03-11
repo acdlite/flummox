@@ -31,7 +31,6 @@
 import { PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
-import shallowEqual from 'react/lib/shallowEqual';
 
 export default function fluxMixin(...args) {
 
@@ -46,16 +45,24 @@ export default function fluxMixin(...args) {
     },
 
     getChildContext() {
+      let flux = this.getFlux();
+
+      if (!flux) return {};
+
       return {
-        flux: this.flux
+        flux: this.getFlux()
       };
+    },
+
+    getFlux() {
+      return this.props.flux || this.context.flux;
     },
 
     getInitialState() {
       this._fluxStateGetters = [];
       this._fluxListeners = {};
       this._fluxDidSyncStoreState = false;
-      this.flux = this.props.flux || this.context.flux;
+      this.flux = this.getFlux();
 
       if (!(this.flux instanceof Flux)) {
         // TODO: print the actual class name here
@@ -69,10 +76,12 @@ export default function fluxMixin(...args) {
     },
 
     componentWillUnmount() {
+      let flux = this.getFlux();
+
       for (let key in this._fluxListeners) {
         if (!this._fluxListeners.hasOwnProperty(key)) continue;
 
-        let store = this.flux.getStore(key);
+        let store = flux.getStore(key);
         if (typeof store === 'undefined') continue;
 
         let listener = this._fluxListeners[key];
@@ -81,14 +90,12 @@ export default function fluxMixin(...args) {
       }
     },
 
-    componentDidUpdate(prevProps) {
-      if (!shallowEqual(prevProps, this.props)) {
-        this.updateStores();
-      }
+    componentWillReceiveProps(nextProps) {
+      this.updateStores(nextProps);
     },
 
-    updateStores() {
-      let state = this.getStoreState();
+    updateStores(props = this.props) {
+      let state = this.getStoreState(props);
       this.setState(state);
     },
 
@@ -129,8 +136,10 @@ export default function fluxMixin(...args) {
      * @returns {object} Combined initial state of stores
      */
     connectToStores(stateGetterMap = {}, stateGetter = null) {
+      let flux = this.getFlux();
+
       let getStore = (key) => {
-        let store = this.flux.getStore(key);
+        let store = flux.getStore(key);
 
         if (typeof store === 'undefined') {
           throw new Error(

@@ -47,7 +47,7 @@
  * and props that sync with each of the state keys of fooStore.
  */
 
-import React from 'react/addons';
+import React from 'react';
 import fluxMixin from './fluxMixin';
 import assign from 'object-assign';
 
@@ -62,9 +62,14 @@ let FluxComponent = React.createClass({
   wrapChild(child) {
     let { children, connectToStores, ...props } = this.props;
 
-    return React.addons.cloneWithProps(child, assign({
-      flux: this.flux,
-    }, this.state, props));
+    return React.cloneElement(
+      child,
+      assign(
+        { flux: this.flux },
+        this.state,
+        props
+      )
+    );
   },
 
   render() {

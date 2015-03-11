@@ -10,8 +10,13 @@ Tags:
 - [Polish]
 
 ## 3.0.0
+- [New Feature]
+  - Transactional state updates: `this.setState(state => ({ foo: state.foo + 1 }))`.
+  - A new static method `Store.assignState()` can be overridden to customize the top-level state type.
 - [Breaking Change]
   - Stores no longer use empty object as default state. Default state is null, like React.
+  - The array form of `connectToStore()` accepts a single state getter as the second parameter, which is passed an array of stores corresponding to the passed keys.
+  - State getters are no longer auto-bound to the component. Props are passed as the second parameter.
 - [Internal]
   - Remove undocumented method `Store#getState()`.
 

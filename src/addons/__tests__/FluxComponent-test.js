@@ -1,4 +1,5 @@
 import { Flummox, Store, Actions } from '../../Flux';
+import addContext from './addContext';
 
 import React from 'react/addons';
 let { TestUtils } = React.addons;
@@ -43,9 +44,17 @@ describe('FluxComponent', () => {
     let flux = new Flux();
     let contextComponent, propsComponent;
 
-    React.withContext({ flux }, () => {
-      contextComponent = TestUtils.renderIntoDocument(<FluxComponent />);
-    });
+    let ContextComponent = addContext(
+      FluxComponent,
+      { flux },
+      { flux: React.PropTypes.instanceOf(Flummox) }
+    );
+
+    let tree = TestUtils.renderIntoDocument(<ContextComponent />);
+
+    contextComponent = TestUtils.findRenderedComponentWithType(
+      tree, FluxComponent
+    );
 
     propsComponent = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} />

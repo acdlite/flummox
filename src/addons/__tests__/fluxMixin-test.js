@@ -1,5 +1,6 @@
 import fluxMixin from '../fluxMixin';
 import { Flummox, Store, Actions } from '../../Flux';
+import addContext from './addContext';
 import sinon from 'sinon';
 
 import React from 'react/addons';
@@ -410,17 +411,3 @@ describe('fluxMixin', () => {
   });
 
 });
-
-function addContext(Component, context, contextTypes) {
-  return React.createClass({
-    childContextTypes: contextTypes,
-
-    getChildContext() {
-      return context;
-    },
-
-    render() {
-      return <Component {...this.props} />;
-    }
-  });
-}
