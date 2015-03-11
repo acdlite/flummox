@@ -341,19 +341,47 @@ describe('fluxMixin', () => {
       });
     });
 
-    it('converts array of stores to state getter', () => {
+    it('calls default state getter once with array of stores', () => {
       let flux = new Flux();
+
+      flux.getStore('test2').setState({ otherThing: 'barbaz' });
 
       let component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
-      component.connectToStores(['test']);
+      component.connectToStores(['test', 'test2']);
 
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
         something: 'foobar',
+        otherThing: 'barbaz'
+      });
+    });
+
+    it('calls custom state getter once with array of stores', () => {
+      let flux = new Flux();
+      let testStore = flux.getStore('test');
+      let test2Store = flux.getStore('test2');
+
+      testStore._testId = 'test';
+      test2Store._testId = 'test2';
+
+      let component = TestUtils.renderIntoDocument(
+        <ComponentWithFluxMixin key="test" flux={flux} />
+      );
+
+      let stateGetter = sinon.stub().returns({ foo: 'bar' });
+      let state = component.connectToStores(['test', 'test2'], stateGetter);
+
+      expect(stateGetter.calledOnce).to.be.true;
+      // Use _testId as unique identefier on store.
+      expect(stateGetter.firstCall.args[0][0]._testId).to.equal('test');
+      expect(stateGetter.firstCall.args[0][1]._testId).to.equal('test2');
+
+      expect(state).to.deep.equal({
+        foo: 'bar'
       });
     });
 
