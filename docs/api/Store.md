@@ -47,6 +47,23 @@ Performing optimistic updates
 
 A common pattern when performing server operations is to update the application's UI optimistically — before receiving a response from the server — then responding appropriately if the server returns an error. Use the method `registerAsync` to register separate handlers for the beginning of an asynchronous action and on success and failure. See below for details.
 
+Customizing top-level state type
+--------------------------------
+
+The default top-level state type (`this.state`) is a plain object. You can add any type of data to this structure, as in React. However, if you want even more control over state management, you can customize the top-level state type by overriding the static Store method `Store.assignState()`. This method is used internally to perform state changes. The default implementation is essentially a wrapper around `Object.assign()`:
+
+```js
+// Default implementation
+static assignState(oldState, newState) {
+  return Object.assign({}, oldState, newState);
+}
+```
+
+Things to keep in mind when overriding `assignState()`:
+
+- Should be non-mutative.
+- `assignState(null, newState)` should not throw and should return a copy of `newState`.
+
 
 Methods
 -------
@@ -153,4 +170,3 @@ If you use `Flux.serialize`, Flummox will try to call the static method `seriali
 ### deserialize(state)
 
 If you use `Flux.deserialize`, Flummox will try to call the static method `deserialize` on all your stores. Flummox will pass the appropriate serialized representation and expects an object, with which Flummox will call `replaceState` on your store.
-
