@@ -59,7 +59,7 @@ export default class Store extends EventEmitter {
     }
   }
 
-  static assignState(oldState = {}, newState) {
+  static assignState(oldState, newState) {
     return assign({}, oldState, newState);
   }
 
