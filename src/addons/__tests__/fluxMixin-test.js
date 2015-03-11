@@ -376,7 +376,7 @@ describe('fluxMixin', () => {
       let state = component.connectToStores(['test', 'test2'], stateGetter);
 
       expect(stateGetter.calledOnce).to.be.true;
-      // Use _testId as unique identefier on store.
+      // Use _testId as unique identifier on store.
       expect(stateGetter.firstCall.args[0][0]._testId).to.equal('test');
       expect(stateGetter.firstCall.args[0][1]._testId).to.equal('test2');
 
