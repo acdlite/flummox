@@ -15,15 +15,7 @@
  import { Flux } from '../Flux';
  import assign from 'object-assign';
 
- const reactComponentMethods = {
-
-   contextTypes: {
-     flux: PropTypes.instanceOf(Flux),
-   },
-
-   childContextTypes: {
-     flux: PropTypes.instanceOf(Flux),
-   },
+ const instanceMethods = {
 
    getChildContext() {
      let flux = this.getFlux();
@@ -170,7 +162,17 @@
 
  };
 
- export default reactComponentMethods;
+ const staticProperties = {
+   contextTypes: {
+     flux: PropTypes.instanceOf(Flux),
+   },
+
+   childContextTypes: {
+     flux: PropTypes.instanceOf(Flux),
+   },
+ };
+
+ export { instanceMethods, staticProperties };
 
  function createStoreListener(component, store, storeStateGetter) {
    return function() {

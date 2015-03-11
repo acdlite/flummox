@@ -24,7 +24,7 @@
 
 import { PropTypes } from 'react';
 import { Flux } from '../Flux';
-import reactComponentMethods from './reactComponentMethods';
+import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
 export default function fluxMixin(...args) {
@@ -35,6 +35,7 @@ export default function fluxMixin(...args) {
         return this.connectToStores(...args);
       }
     },
-    reactComponentMethods
+    instanceMethods,
+    staticProperties
   );
 };
