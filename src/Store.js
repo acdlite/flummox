@@ -17,26 +17,24 @@ export default class Store extends EventEmitter {
    * @type {Object}
    */
   constructor() {
-    this.state = undefined;
+    this.state = null;
 
     this._handlers = {};
     this._asyncHandlers = {};
   }
 
-  /**
-   * Return a (shallow) copy of the store's internal state, so that it is
-   * protected from mutation by the consumer.
-   * @returns {object}
-   */
-  getState() {
-    return assign({}, this.state);
-  }
-
   setState(newState) {
-    if (typeof this.state === 'undefined') this.state = {};
+    // Do a transactional state update if a function is passed
+    if (typeof newState === 'function') {
+      const prevState = this._isHandlingDispatch
+        ? this._pendingState
+        : this.state;
+
+      newState = newState(prevState);
+    }
 
     if (this._isHandlingDispatch) {
-      this._pendingState = assign(this._pendingState, newState);
+      this._pendingState = this.constructor.assignState(this._pendingState, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
 
@@ -46,22 +44,23 @@ export default class Store extends EventEmitter {
         + 'a mistake. Flux stores should manage their own state.'
         );
       }
-
-      this.state = assign({}, this.state, newState);
+      this.state = this.constructor.assignState(this.state, newState);
       this.emit('change');
     }
   }
 
   replaceState(newState) {
-    if (typeof this.state === 'undefined') this.state = {};
-
     if (this._isHandlingDispatch) {
-      this._pendingState = assign({}, newState);
+      this._pendingState = this.constructor.assignState(undefined, newState);
       this._emitChangeAfterHandlingDispatch = true;
     } else {
-      this.state = assign({}, newState);
+      this.state = this.constructor.assignState(undefined, newState);
       this.emit('change');
     }
+  }
+
+  static assignState(oldState, newState) {
+    return assign({}, oldState, newState);
   }
 
   forceUpdate() {
@@ -149,7 +148,7 @@ export default class Store extends EventEmitter {
 
   _performHandler(_handler, ...args) {
     this._isHandlingDispatch = true;
-    this._pendingState = assign({}, this.state);
+    this._pendingState = this.constructor.assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
@@ -161,7 +160,7 @@ export default class Store extends EventEmitter {
       }
 
       this._isHandlingDispatch = false;
-      this._pendingState = {};
+      this._pendingState = undefined;
       this._emitChangeAfterHandlingDispatch = false;
     }
   }

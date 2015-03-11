@@ -495,7 +495,7 @@ describe('Flux', () => {
       expect(fooStore.state.deserialized).to.be.true;
       expect(barStore.state.stateString).to.equal('bar state');
       expect(barStore.state.deserialized).to.be.true;
-      expect(bazStore.state).to.be.undefined;
+      expect(bazStore.state).to.be.null;
     });
 
   });

@@ -9,6 +9,12 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.0.0
+- [Breaking Change]
+  - Stores no longer use empty object as default state. Default state is null, like React.
+- [Internal]
+  - Remove undocumented method `Store#getState()`.
+
 ## 2.13.1
 - **Bug Fix**
   - Small update to async actions so returned promise does not reject due to errors that occur in store handlers.
