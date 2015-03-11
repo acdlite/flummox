@@ -232,60 +232,23 @@ describe('fluxMixin', () => {
       let flux = new Flux();
 
       let component = TestUtils.renderIntoDocument(
-        <ComponentWithFluxMixin key="test" flux={flux} />
+        <ComponentWithFluxMixin key="test" flux={flux} bar="baz" />
       );
 
       component.setState({ otherThing: 'barbaz' });
 
-      component.connectToStores('test', store => {
-        return {
-          something: store.state.something,
-          custom: true,
-        };
-      });
+      component.connectToStores('test', (store, props) => ({
+        something: store.state.something,
+        barbaz: 'bar' + props.bar,
+      }));
 
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
         something: 'foobar',
         otherThing: 'barbaz',
-        custom: true,
+        barbaz: 'barbaz',
       });
-    });
-
-    it('binds state getter to component', () => {
-      let flux = new Flux();
-
-      let Component = React.createClass({
-        mixins: [fluxMixin({
-          test: function(store) {
-            this.someComponentMethod('some arg');
-
-            return {
-              something: store.state.something,
-              custom: true,
-            };
-          },
-        })],
-
-        render() {
-          return null;
-        },
-
-        someComponentMethod(string) {
-          return string;
-        }
-      });
-
-      let component = TestUtils.renderIntoDocument(
-        <Component key="test" flux={flux} />
-      );
-
-      let someComponentMethod = sinon.spy(component, 'someComponentMethod');
-      flux.getActions('test').getSomething('foobar');
-
-      expect(someComponentMethod.calledOnce).to.be.true;
-      expect(someComponentMethod.firstCall.args[0]).to.equal('some arg');
     });
 
     it('syncs with store after prop change', () => {
@@ -293,9 +256,9 @@ describe('fluxMixin', () => {
 
       let Component = React.createClass({
         mixins: [fluxMixin({
-          test: function(store) {
+          test: function(store, props) {
             return {
-              foo: 'foo is ' + this.props.foo,
+              foo: 'foo is ' + props.foo,
             };
           },
         })],

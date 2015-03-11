@@ -92,10 +92,13 @@ export default function fluxMixin(...args) {
       this.setState(state);
     },
 
-    getStoreState() {
+    getStoreState(props = this.props) {
       return this._fluxStateGetters.reduce(
-        (result, stateGetter) => assign(result, stateGetter.getter(stateGetter.stores)),
-        {}
+        (result, stateGetter) => {
+          const { getter, stores } = stateGetter;
+          const stateFromStores = getter(stores, props);
+          return assign(result, stateFromStores);
+        }, {}
       );
     },
 
@@ -143,11 +146,8 @@ export default function fluxMixin(...args) {
         let store = getStore(key);
         let getter = stateGetter || defaultStateGetter;
 
-        getter = getter.bind(this);
-
         this._fluxStateGetters.push({ stores: store, getter });
-        let listener = createStoreListener(this, store, getter)
-            .bind(this);
+        let listener = createStoreListener(this, store, getter);
 
         store.addListener('change', listener);
         this._fluxListeners[key] = listener;
@@ -155,12 +155,8 @@ export default function fluxMixin(...args) {
         let stores = stateGetterMap.map(getStore);
         let getter = stateGetter || defaultReduceStateGetter;
 
-        getter = getter.bind(this);
-
         this._fluxStateGetters.push({ stores, getter });
-
-        let listener = createStoreListener(this, stores, getter)
-            .bind(this);
+        let listener = createStoreListener(this, stores, getter);
 
         stateGetterMap.forEach((key, index) => {
           let store = stores[index];
@@ -173,12 +169,8 @@ export default function fluxMixin(...args) {
           let store = getStore(key);
           let getter = stateGetterMap[key] || defaultStateGetter;
 
-          getter = getter.bind(this);
-
           this._fluxStateGetters.push({ stores: store, getter });
-
-          let listener = createStoreListener(this, store, getter)
-            .bind(this);
+          let listener = createStoreListener(this, store, getter);
 
           store.addListener('change', listener);
           this._fluxListeners[key] = listener;
@@ -195,10 +187,10 @@ export default function fluxMixin(...args) {
 function createStoreListener(component, store, storeStateGetter) {
   return function() {
     if (this.isMounted()) {
-      let state = storeStateGetter(store);
+      let state = storeStateGetter(store, this.props);
       this.setState(state);
     }
-  };
+  }.bind(component);
 }
 
 function defaultStateGetter(store) {
