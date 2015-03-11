@@ -43,6 +43,7 @@ export default class Flux extends EventEmitter {
 
     store._waitFor = this.waitFor.bind(this);
     store._token = token;
+    store._getAllActionIds = this.getAllActionIds.bind(this);
 
     this._stores[key] = store;
 
@@ -92,6 +93,20 @@ export default class Flux extends EventEmitter {
     if (!actions) return;
 
     return actions.getConstants();
+  }
+
+  getAllActionIds() {
+    let actionIds = [];
+
+    for (let key in this._actions) {
+      if (!this._actions.hasOwnProperty(key)) continue;
+
+      let actionConstants = this._actions[key].getConstants();
+
+      actionIds = actionIds.concat(getValues(actionConstants));
+    }
+
+    return actionIds;
   }
 
   dispatch(actionId, body) {
@@ -257,11 +272,24 @@ export default class Flux extends EventEmitter {
 
 // Aliases
 Flux.prototype.getConstants = Flux.prototype.getActionIds;
+Flux.prototype.getAllConstants = Flux.prototype.getAllActionIds;
 Flux.prototype.dehydrate = Flux.prototype.serialize;
 Flux.prototype.hydrate = Flux.prototype.deserialize;
 
 function getClassName(Class) {
   return Class.prototype.constructor.name;
+}
+
+function getValues(object) {
+  let values = [];
+
+  for (let key in object) {
+    if (!object.hasOwnProperty(key)) continue;
+
+    values.push(object[key]);
+  }
+
+  return values;
 }
 
 let Flummox = Flux;
