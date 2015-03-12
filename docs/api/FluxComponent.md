@@ -66,9 +66,9 @@ With FluxComponent, state from your stores is automatically passed as props to i
       post: store.getPost(props.postId),
     })
   }}
-  render={props => {
+  render={storeState => {
     // Render whatever you want
-    return <InnerComponent {...props} />;
+    return <InnerComponent {...storeState} />;
   }}
 />
 ```
