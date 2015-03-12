@@ -21,6 +21,7 @@ export default class Store extends EventEmitter {
 
     this._handlers = {};
     this._asyncHandlers = {};
+    this._catchAllHandler = null;
   }
 
   setState(newState) {
@@ -110,11 +111,7 @@ export default class Store extends EventEmitter {
   registerAll(handler) {
     if (typeof handler !== 'function') return;
 
-    let actionIds = this._getAllActionIds();
-
-    for (let actionId of actionIds) {
-      this.register(actionId, handler);
-    }
+    this._catchAllHandler = handler;
   }
 
   waitFor(tokensOrStores) {
@@ -130,34 +127,41 @@ export default class Store extends EventEmitter {
       error
     } = payload;
 
-    let _handler = this._handlers[actionId];
+    const _allHandler = this._catchAllHandler;
+    const _handler = this._handlers[actionId];
+
+    const _allAsyncHandler = this._catchAllAsyncHandler
+      && this._catchAllAsyncHandler[_async];
     const _asyncHandler = this._asyncHandlers[actionId]
       && this._asyncHandlers[actionId][_async];
 
     if (_async) {
       switch (_async) {
         case 'begin':
-          if (typeof _asyncHandler === 'function') {
-            this._performHandler.apply(this, [_asyncHandler].concat(actionArgs));
-          }
+          this._performHandlers([_allAsyncHandler, _asyncHandler], actionArgs);
           return;
         case 'failure':
-          if (typeof _asyncHandler === 'function') {
-            this._performHandler(_asyncHandler, error);
-          }
+          this._performHandlers([_allAsyncHandler, _asyncHandler], [error]);
           return;
         case 'success':
-          if (typeof _asyncHandler === 'function') {
-            _handler = _asyncHandler;
-          }
-          break;
+          this._performHandlers([
+            _allAsyncHandler,
+            (_asyncHandler || _handler)
+          ], [body]);
+          return;
         default:
           return;
       }
     }
 
-    if (typeof _handler !== 'function') return;
-    this._performHandler(_handler, body);
+    this._performHandlers([_allHandler, _handler], [body]);
+  }
+
+  _performHandlers(_handlers, args) {
+    _handlers.forEach(function(_handler) {
+      if (typeof _handler !== 'function') return;
+      this._performHandler.apply(this, [_handler].concat(args));
+    }.bind(this));
   }
 
   _performHandler(_handler, ...args) {
