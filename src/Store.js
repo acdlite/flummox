@@ -88,23 +88,11 @@ export default class Store extends EventEmitter {
   registerAsync(actionId, beginHandler, successHandler, failureHandler) {
     actionId = ensureActionId(actionId);
 
-    const asyncHandlers = {
+    const asyncHandlers = this._bindAsyncHandlers({
       begin: beginHandler,
       success: successHandler,
       failure: failureHandler,
-    };
-
-    for (let key in asyncHandlers) {
-      if (!asyncHandlers.hasOwnProperty(key)) continue;
-
-      const handler = asyncHandlers[key];
-
-      if (typeof handler === 'function') {
-        asyncHandlers[key] = handler.bind(this);
-      } else {
-        delete asyncHandlers[key];
-      }
-    }
+    });
 
     this._asyncHandlers[actionId] = asyncHandlers;
   }
@@ -116,12 +104,16 @@ export default class Store extends EventEmitter {
   }
 
   registerAllAsync(beginHandler, successHandler, failureHandler) {
-    const asyncHandlers = {
+    const asyncHandlers = this._bindAsyncHandlers({
       begin: beginHandler,
       success: successHandler,
       failure: failureHandler,
-    };
+    });
 
+    this._catchAllHandlers = asyncHandlers;
+  }
+
+  _bindAsyncHandlers(asyncHandlers) {
     for (let key in asyncHandlers) {
       if (!asyncHandlers.hasOwnProperty(key)) continue;
 
@@ -134,7 +126,7 @@ export default class Store extends EventEmitter {
       }
     }
 
-    this._catchAllHandlers = asyncHandlers;
+    return asyncHandlers;
   }
 
   waitFor(tokensOrStores) {
