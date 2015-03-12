@@ -42,39 +42,34 @@ onClick(e) {
 }
 ```
 
-Nested FluxComponents
----------------------
+Custom rendering
+----------------
 
-In addition to injecting store state as props into its children, FluxComponent also injects its own props:
-
-```js
-<FluxComponent someProp="hello">
-  <Innercomponent /> // has "someProp" prop equal to "hello"
-</FluxComponent>
-```
-
-The practical upshot of this that is it allows you to nest FluxComponents:
+With FluxComponent, state from your stores is automatically passed as props to its children. This is nice for simple cases, especially when there's only a single child. But for more complex cases, or if you want direct control over rendering, now you can pass a custom render function prop to FluxComponent:
 
 ```js
-// Example: get the most recent comments on the most recent post
+// Using children
 <FluxComponent connectToStores={{
-  posts: store => ({
-    mostRecentPost: store.getMostRecentPost(),
+  posts: (store, props) => ({
+    post: store.getPost(props.postId),
   })
 }}>
-  <FluxComponent connectToStores={{ // has prop "mostRecentPost"
-    comments: function(store) { // can't use arrow function because we want `this` to refer to nested component
-      return {
-        mostRecentComments: store.getMostRecentComments(this.props.mostRecentPost.id)
-      };
-    }
-  }}>
-    <ChildComponent /> // has props "mostRecentPosts" and "mostRecentComments"
-  </FluxComponent>
+  <InnerComponent />
 </FluxComponent>
-```
 
-You may not want to rely on this pattern too heavily, but it's available as an option.
+// Using custom `render` function
+<FluxComponent
+  connectToStores={{
+    posts: (store, props) => ({
+      post: store.getPost(props.postId),
+    })
+  }}
+  render={props => {
+    // Render whatever you want
+    return <InnerComponent {...props} />;
+  }}
+/>
+```
 
 Props
 -----

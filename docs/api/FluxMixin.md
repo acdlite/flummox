@@ -31,29 +31,14 @@ Here's an example of a state getter map you would pass to either `fluxMixin()` o
 
 ```js
 fluxMixin({
-  // Can't use arrow functions because we need `this` to be bound to component
-  // Yet another reason FluxComponent is better :)
-  posts: function(store) (
-    return {
-      storeA: store.getPost(this.props.post.id),
-    };
-  ),
-  comments: function(store) (
-    return {
-      comments: store.getCommentsForPost(this.props.post.id),
-    };
-  )
+  posts: (store, props) =>({
+    storeA: store.getPost(props.post.id),
+  }),
+  comments: (store, props) => ({
+    comments: store.getCommentsForPost(props.post.id),
+  })
 });
 ```
-
-Use `key` to ensure stores stay in sync
----------------------------------------
-
-State getters are bound to the component instance, so you can reference props the normal way as `this.props`. When a prop change is detected (by doing a shallow comparison of props in `componentDidUpdate()`), the state from the stores is updated.
-
-The same cannot be said for `this.state` — there's no reliable way to sync store state in response to component state changes without causing an infinite update cycle (at least that I know of).
-
-To solve this problem and ensure that stores always stay in sync, specify a unique `key` prop on the component, which will signal React to mount a new instance whenever the key changes (which shouldn't be often, if you're worried about performance issues).
 
 Access flux with `this.flux`
 ----------------------------

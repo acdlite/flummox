@@ -31,11 +31,9 @@ For instance, here's a component that renders a single blog post, based on the i
 ```js
 let BlogPost = React.createClass({
   mixins: [fluxMixin({
-    posts: function(store) {
-      return {
-        post: store.getPost(this.props.id),
-      }
-    }
+    posts: (store, props) => ({
+      post: store.getPost(props.id),
+    })
   })],
 
   render() {
@@ -71,10 +69,8 @@ And its owner looks something like this:
 ```js
 let BlogPostPage = React.createClass({
   mixins: [fluxMixin({
-    posts: function(store) {
-      return {
-        post: store.getPost(this.props.id),
-      };
+    posts: (store, props) => ({
+      post: store.getPost(props.id),
     })
   })],
 
@@ -109,10 +105,8 @@ Alright, so we need to refactor once again so that fluxMixin is only updating wh
 ```js
 let BlogPostWrapper = React.createClass({
   mixins: [fluxMixin({
-    posts: function(store) ({
-      return {
-        post: store.getPost(this.props.id),
-      };
+    posts: (store, props) => ({
+      post: store.getPost(props.id),
     })
   ]
 
@@ -134,13 +128,40 @@ let BlogPostPage = React.createClass({
     <div>
       <SiteNavigation />
       <MainContentArea>
-        <FluxComponent key={this.props.postId} connectToStores={{
-          posts: store => ({
-            post: store.getPost(this.props.postId),
+        <FluxComponent connectToStores={{
+          posts: (store, props) => ({
+            post: store.getPost(props.postId),
           })
         }}>
           <BlogPost />
         </FluxComponent>
+      </MainContentArea>
+      <SiteSidebar />
+      <SiteFooter />
+    </div>
+  }
+});
+```
+
+The state fetched by `connectToStores()` is transferred to the children of FluxComponent. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead:
+
+```js
+let BlogPostPage = React.createClass({
+  render() {
+    <div>
+      <SiteNavigation />
+      <MainContentArea>
+        <FluxComponent
+          connectToStores={{
+            posts: (store, props) => ({
+              post: store.getPost(props.postId),
+            })
+          }}
+          render={props => {
+            // render whatever you want
+            return <BlogPost {...props} />;
+          }}
+        />
       </MainContentArea>
       <SiteSidebar />
       <SiteFooter />
