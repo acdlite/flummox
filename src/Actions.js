@@ -20,9 +20,9 @@ export default class Actions {
 
     this._baseId = uniqueId();
 
-    let methodNames = this._getActionMethodNames();
+    const methodNames = this._getActionMethodNames();
     for (let i = 0; i < methodNames.length; i++) {
-      let methodName = methodNames[i];
+      const methodName = methodNames[i];
       this._wrapAction(methodName);
     }
 
@@ -45,14 +45,14 @@ export default class Actions {
   }
 
   _wrapAction(methodName) {
-    let originalMethod = this[methodName];
-    let actionId = this._createActionId(methodName);
+    const originalMethod = this[methodName];
+    const actionId = this._createActionId(methodName);
 
-    let action = (...args) => {
-      let body = originalMethod.apply(this, args);
+    const action = (...args) => {
+      const body = originalMethod.apply(this, args);
 
       if (isPromise(body)) {
-        let promise = body;
+        const promise = body;
         this._dispatchAsync(actionId, promise, args, methodName);
       } else {
         this._dispatch(actionId, body, args, methodName);

@@ -48,7 +48,7 @@ describe('Examples:', () => {
         // Don't forget to call the super constructor
         super();
 
-        let messageActions = flux.getActions('messages');
+        const messageActions = flux.getActions('messages');
         this.register(messageActions.newMessage, this.handleNewMessage);
         this.messageCounter = 0;
 
@@ -56,7 +56,7 @@ describe('Examples:', () => {
       }
 
       handleNewMessage(content) {
-        let id = this.messageCounter++;
+        const id = this.messageCounter++;
 
         this.setState({
           [id]: {
@@ -94,9 +94,9 @@ describe('Examples:', () => {
      */
 
     it('creates new messages', () => {
-      let flux = new Flux();
-      let messageStore = flux.getStore('messages');
-      let messageActions = flux.getActions('messages');
+      const flux = new Flux();
+      const messageStore = flux.getStore('messages');
+      const messageActions = flux.getActions('messages');
 
       expect(messageStore.state).to.deep.equal({});
 

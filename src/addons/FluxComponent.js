@@ -63,7 +63,7 @@ class FluxComponent extends React.Component {
   }
 
   wrapChild(child) {
-    let { children, connectToStores, ...extraProps } = this.props;
+    const { children, connectToStores, ...extraProps } = this.props;
 
     return React.cloneElement(
       child,
@@ -72,7 +72,7 @@ class FluxComponent extends React.Component {
   }
 
   getChildProps() {
-    let { children, render, ...extraProps } = this.props;
+    const { children, render, ...extraProps } = this.props;
 
     return assign(
       { flux: this.getFlux() },
@@ -82,14 +82,14 @@ class FluxComponent extends React.Component {
   }
 
   render() {
-    let { children, render, ...extraProps } = this.props;
+    const { children, render, ...extraProps } = this.props;
 
     if (typeof render === 'function') return render(this.getChildProps());
 
     if (!children) return null;
 
     if (!Array.isArray(children)) {
-      let child = children;
+      const child = children;
       return this.wrapChild(child);
     } else {
       return <span>{React.Children.map(children, this.wrapChild)}</span>;

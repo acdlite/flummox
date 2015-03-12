@@ -27,9 +27,9 @@ describe('Actions', () => {
 
   describe('#getActionIds / #getConstants', () => {
     it('returns strings corresponding to action method names', () => {
-      let actions = new TestActions();
+      const actions = new TestActions();
 
-      let actionIds = actions.getActionIds();
+      const actionIds = actions.getActionIds();
 
       expect(actionIds.getFoo).to.be.a('string');
       expect(actionIds.getBar).to.be.a('string');
@@ -42,10 +42,10 @@ describe('Actions', () => {
 
   describe('#[methodName]', () => {
     it('calls Flux dispatcher', () => {
-      let actions = new TestActions();
+      const actions = new TestActions();
 
       // Attach mock flux instance
-      let dispatch = sinon.spy();
+      const dispatch = sinon.spy();
       actions.dispatch = dispatch;
 
       actions.getFoo();
@@ -53,8 +53,8 @@ describe('Actions', () => {
     });
 
     it('warns if actions have not been added to a Flux instance', () => {
-      let actions = new TestActions();
-      let warn = sinon.spy(console, 'warn');
+      const actions = new TestActions();
+      const warn = sinon.spy(console, 'warn');
 
       actions.getFoo();
 
@@ -75,9 +75,9 @@ describe('Actions', () => {
     });
 
     it('sends return value to Flux dispatch', () => {
-      let actions = new TestActions();
-      let actionId = actions.getActionIds().getFoo;
-      let dispatch = sinon.spy();
+      const actions = new TestActions();
+      const actionId = actions.getActionIds().getFoo;
+      const dispatch = sinon.spy();
       actions.dispatch = dispatch;
 
       actions.getFoo();
@@ -87,12 +87,12 @@ describe('Actions', () => {
     });
 
     it('send async return value to Flux#dispatchAsync', async function() {
-      let actions = new TestActions();
-      let actionId = actions.getActionIds().asyncAction;
-      let dispatch = sinon.stub().returns(Promise.resolve());
+      const actions = new TestActions();
+      const actionId = actions.getActionIds().asyncAction;
+      const dispatch = sinon.stub().returns(Promise.resolve());
       actions.dispatchAsync = dispatch;
 
-      let response = actions.asyncAction('foobar');
+      const response = actions.asyncAction('foobar');
 
       expect(response.then).to.be.a('function');
 
@@ -103,8 +103,8 @@ describe('Actions', () => {
     });
 
     it('skips disptach if return value is undefined', () => {
-      let actions = new TestActions();
-      let dispatch = sinon.spy();
+      const actions = new TestActions();
+      const dispatch = sinon.spy();
       actions.dispatch = dispatch;
 
       actions.getBaz();
@@ -113,8 +113,8 @@ describe('Actions', () => {
     });
 
     it('does not skip async dispatch, even if resolved value is undefined', () => {
-      let actions = new TestActions();
-      let dispatch = sinon.spy();
+      const actions = new TestActions();
+      const dispatch = sinon.spy();
       actions.dispatchAsync = dispatch;
 
       actions.asyncAction(undefined);
@@ -123,8 +123,8 @@ describe('Actions', () => {
     });
 
     it('returns value from wrapped action', async function() {
-      let flux = new Flux();
-      let actions = flux.createActions('test', TestActions);
+      const flux = new Flux();
+      const actions = flux.createActions('test', TestActions);
 
       expect(actions.getFoo()).to.deep.equal({ foo: 'bar' });
       await expect(actions.asyncAction('async result'))

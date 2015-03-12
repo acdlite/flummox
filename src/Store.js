@@ -82,7 +82,7 @@ export default class Store extends EventEmitter {
   registerAsync(actionId, beginHandler, successHandler, failureHandler) {
     actionId = ensureActionId(actionId);
 
-    let asyncHandlers = {
+    const asyncHandlers = {
       begin: beginHandler,
       success: successHandler,
       failure: failureHandler,
@@ -91,7 +91,7 @@ export default class Store extends EventEmitter {
     for (let key in asyncHandlers) {
       if (!asyncHandlers.hasOwnProperty(key)) continue;
 
-      let handler = asyncHandlers[key];
+      const handler = asyncHandlers[key];
 
       if (typeof handler === 'function') {
         asyncHandlers[key] = handler.bind(this);
@@ -108,7 +108,7 @@ export default class Store extends EventEmitter {
   }
 
   handler(payload) {
-    let {
+    const {
       body,
       actionId,
       async: _async,
@@ -117,7 +117,7 @@ export default class Store extends EventEmitter {
     } = payload;
 
     let _handler = this._handlers[actionId];
-    let _asyncHandler = this._asyncHandlers[actionId]
+    const _asyncHandler = this._asyncHandlers[actionId]
       && this._asyncHandlers[actionId][_async];
 
     if (_async) {

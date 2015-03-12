@@ -23,7 +23,7 @@ export function simulateAction(store, action, body) {
  */
 export function simulateActionAsync(store, action, asyncAction, ...args) {
   const actionId = ensureActionId(action);
-  let payload = {
+  const payload = {
     actionId, async: asyncAction
   };
 

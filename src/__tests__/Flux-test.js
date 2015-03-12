@@ -19,7 +19,7 @@ describe('Flux', () => {
 
   describe('#createStore()', () => {
     it('throws if key already exists', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class TestStore extends Store {}
 
       flux.createStore('ExampleStore', TestStore);
@@ -30,7 +30,7 @@ describe('Flux', () => {
     });
 
     it('throws if Store is not a prototype of class', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class ForgotToExtendStore {}
 
       expect(flux.createStore.bind(flux, 'Flux', ForgotToExtendStore)).to.throw(
@@ -44,8 +44,8 @@ describe('Flux', () => {
     it('registers store\'s handler with central dispatcher', () => {
       class ExampleStore extends Store {}
 
-      let spy1 = sinon.spy();
-      let spy2 = sinon.spy();
+      const spy1 = sinon.spy();
+      const spy2 = sinon.spy();
 
       ExampleStore.prototype.foo = 'bar';
       ExampleStore.prototype.handler = function(_payload) {
@@ -53,10 +53,10 @@ describe('Flux', () => {
         spy2(this.foo);
       };
 
-      let flux = new Flux();
+      const flux = new Flux();
       flux.createStore('ExampleStore', ExampleStore);
 
-      let payload = 'foobar';
+      const payload = 'foobar';
       flux.dispatch('actionId', payload);
       expect(spy1.getCall(0).args[0].body).to.equal('foobar');
       expect(spy2.calledWith('bar')).to.be.true;
@@ -65,15 +65,15 @@ describe('Flux', () => {
     it('returns the created store instance', () => {
       class ExampleStore extends Store {}
 
-      let flux = new Flux();
-      let store = flux.createStore('ExampleStore', ExampleStore);
+      const flux = new Flux();
+      const store = flux.createStore('ExampleStore', ExampleStore);
       expect(store).to.be.an.instanceOf(ExampleStore);
     });
   });
 
   describe('#getStore()', () => {
     it('retrieves store for key', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class TestStore extends Store {}
 
       flux.createStore('ExampleStore', TestStore);
@@ -86,7 +86,7 @@ describe('Flux', () => {
     it('throws if key already exists', () => {
       class TestActions extends Actions {}
 
-      let flux = new Flux();
+      const flux = new Flux();
       flux.createActions('ExampleActions', TestActions);
 
       expect(flux.createActions.bind(flux, 'ExampleActions', Actions)).to.throw(
@@ -96,7 +96,7 @@ describe('Flux', () => {
     });
 
     it('throws if Actions is not a prototype of class', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class ForgotToExtendActions {}
 
       expect(flux.createActions.bind(flux, 'Flux', ForgotToExtendActions))
@@ -111,8 +111,8 @@ describe('Flux', () => {
     it('returns the created action\'s instance', () => {
       class TestActions extends Actions {}
 
-      let flux = new Flux();
-      let actions = flux.createActions('TestActions', TestActions);
+      const flux = new Flux();
+      const actions = flux.createActions('TestActions', TestActions);
       expect(actions).to.be.an.instanceOf(TestActions);
     });
   });
@@ -121,7 +121,7 @@ describe('Flux', () => {
     class TestActions extends Actions {}
 
     it('retrieves actions for key', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       flux.createActions('TestActions', TestActions);
 
       expect(flux.getActions('TestActions')).to.be.an.instanceOf(Actions);
@@ -136,7 +136,7 @@ describe('Flux', () => {
     }
 
     it('retrives ids of actions for key', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       flux.createActions('TestActions', TestActions);
 
       expect(flux.getActionIds('TestActions').getFoo).to.be.a('string');
@@ -150,10 +150,10 @@ describe('Flux', () => {
   describe('#dispatch()', () => {
 
     it('delegates to dispatcher', () => {
-      let flux = new Flux();
-      let dispatch = sinon.spy();
+      const flux = new Flux();
+      const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       flux.dispatch(actionId, 'foobar');
 
@@ -164,12 +164,12 @@ describe('Flux', () => {
     });
 
     it('emits dispatch event', () => {
-      let flux = new Flux();
-      let listener = sinon.spy();
+      const flux = new Flux();
+      const listener = sinon.spy();
 
       flux.addListener('dispatch', listener);
 
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       flux.dispatch(actionId, 'foobar');
 
@@ -184,10 +184,10 @@ describe('Flux', () => {
   describe('#dispatchAsync()', () => {
 
     it('delegates to dispatcher', async function() {
-      let flux = new Flux();
-      let dispatch = sinon.spy();
+      const flux = new Flux();
+      const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
 
@@ -204,12 +204,12 @@ describe('Flux', () => {
     });
 
     it('emits dispatch event', async function() {
-      let flux = new Flux();
-      let listener = sinon.spy();
+      const flux = new Flux();
+      const listener = sinon.spy();
 
       flux.addListener('dispatch', listener);
 
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
 
@@ -226,10 +226,10 @@ describe('Flux', () => {
     });
 
     it('resolves to value of given promise', done => {
-      let flux = new Flux();
-      let dispatch = sinon.spy();
+      const flux = new Flux();
+      const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       expect(flux.dispatchAsync(actionId, Promise.resolve('foobar')))
         .to.eventually.equal('foobar')
@@ -237,10 +237,10 @@ describe('Flux', () => {
     });
 
     it('rejects with error if promise rejects', done => {
-      let flux = new Flux();
-      let dispatch = sinon.spy();
+      const flux = new Flux();
+      const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       expect(flux.dispatchAsync(actionId, Promise.reject(new Error('error'))))
         .to.be.rejectedWith('error')
@@ -248,12 +248,12 @@ describe('Flux', () => {
     });
 
     it('dispatches with error if promise rejects', async function() {
-      let flux = new Flux();
-      let dispatch = sinon.spy();
+      const flux = new Flux();
+      const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
-      let error = new Error('error');
+      const error = new Error('error');
 
       await expect(flux.dispatchAsync(actionId, Promise.reject(error)))
         .to.be.rejected;
@@ -273,11 +273,11 @@ describe('Flux', () => {
     it('emits error if promise rejects', async function() {
       class ExampleStore extends Store {}
 
-      let flux = new Flux();
-      let listener = sinon.spy();
+      const flux = new Flux();
+      const listener = sinon.spy();
       flux.addListener('error', listener);
 
-      let actionId = 'actionId';
+      const actionId = 'actionId';
 
       await expect(flux.dispatchAsync(actionId, Promise.reject(new Error('foobar'))))
         .to.be.rejectedWith('foobar');
@@ -289,12 +289,12 @@ describe('Flux', () => {
     it('emit errors that occur as result of dispatch', async function() {
       class ExampleStore extends Store {}
 
-      let flux = new Flux();
-      let listener = sinon.spy();
+      const flux = new Flux();
+      const listener = sinon.spy();
       flux.addListener('error', listener);
 
-      let actionId = 'actionId';
-      let store = flux.createStore('example', ExampleStore);
+      const actionId = 'actionId';
+      const store = flux.createStore('example', ExampleStore);
 
       store.registerAsync(
         actionId,
@@ -324,11 +324,11 @@ describe('Flux', () => {
     it('removes all listeners from stores', () => {
       class TestStore extends Store {}
 
-      let flux = new Flux();
-      let storeA = flux.createStore('storeA', TestStore);
-      let storeB = flux.createStore('storeB', TestStore);
+      const flux = new Flux();
+      const storeA = flux.createStore('storeA', TestStore);
+      const storeB = flux.createStore('storeB', TestStore);
 
-      let listener = function() {};
+      const listener = function() {};
 
       storeA.addListener('change', listener);
       storeA.addListener('change', listener);
@@ -348,7 +348,7 @@ describe('Flux', () => {
   describe('#serialize()', () => {
 
     it('returns state of all the stores as a JSON string', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
       flux.createStore('foo', createSerializableStore('foo state'));
       flux.createStore('bar', createSerializableStore('bar state'));
@@ -362,7 +362,7 @@ describe('Flux', () => {
     });
 
     it('ignores stores whose classes do not implement .serialize()', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class TestStore extends Store {}
 
       flux.createStore('foo', createSerializableStore('foo state'));
@@ -376,8 +376,8 @@ describe('Flux', () => {
     });
 
     it('warns if any store classes .serialize() returns a non-string', () => {
-      let flux = new Flux();
-      let warn = sinon.spy(console, 'warn');
+      const flux = new Flux();
+      const warn = sinon.spy(console, 'warn');
 
       flux.createStore('foo', createSerializableStore({}));
       flux.serialize();
@@ -392,8 +392,8 @@ describe('Flux', () => {
     });
 
     it('warns and skips stores whose classes do not implement .deserialize()', () => {
-      let flux = new Flux();
-      let warn = sinon.spy(console, 'warn');
+      const flux = new Flux();
+      const warn = sinon.spy(console, 'warn');
 
       class TestStore extends Store {
         static serialize() {
@@ -416,7 +416,7 @@ describe('Flux', () => {
   describe('#deserialize()', () => {
 
     it('converts a serialized string into state and uses it to replace state of stores', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
       flux.createStore('foo', createSerializableStore());
       flux.createStore('bar', createSerializableStore());
@@ -428,9 +428,9 @@ describe('Flux', () => {
         "baz": "baz state"
       }`);
 
-      let fooStore = flux.getStore('foo');
-      let barStore = flux.getStore('bar');
-      let bazStore = flux.getStore('baz');
+      const fooStore = flux.getStore('foo');
+      const barStore = flux.getStore('bar');
+      const bazStore = flux.getStore('baz');
 
       expect(fooStore.state.stateString).to.equal('foo state');
       expect(fooStore.state.deserialized).to.be.true;
@@ -441,7 +441,7 @@ describe('Flux', () => {
     });
 
     it('warns and skips if passed string is invalid JSON', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class TestStore extends Store {}
 
 
@@ -453,8 +453,8 @@ describe('Flux', () => {
     });
 
     it('warns and skips stores whose classes do not implement .serialize()', () => {
-      let flux = new Flux();
-      let warn = sinon.spy(console, 'warn');
+      const flux = new Flux();
+      const warn = sinon.spy(console, 'warn');
 
       class TestStore extends Store {
         static deserialize() {
@@ -474,7 +474,7 @@ describe('Flux', () => {
     });
 
     it('ignores stores whose classes do not implement .deserialize()', () => {
-      let flux = new Flux();
+      const flux = new Flux();
       class TestStore extends Store {}
 
       flux.createStore('foo', createSerializableStore());
@@ -487,9 +487,9 @@ describe('Flux', () => {
         "baz": "baz state"
       }`);
 
-      let fooStore = flux.getStore('foo');
-      let barStore = flux.getStore('bar');
-      let bazStore = flux.getStore('baz');
+      const fooStore = flux.getStore('foo');
+      const barStore = flux.getStore('bar');
+      const bazStore = flux.getStore('baz');
 
       expect(fooStore.state.stateString).to.equal('foo state');
       expect(fooStore.state.deserialized).to.be.true;

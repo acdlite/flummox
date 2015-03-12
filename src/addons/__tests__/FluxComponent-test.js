@@ -2,7 +2,7 @@ import { Flummox, Store, Actions } from '../../Flux';
 import addContext from './addContext';
 
 import React from 'react/addons';
-let { TestUtils } = React.addons;
+const { TestUtils } = React.addons;
 
 import FluxComponent from '../FluxComponent';
 
@@ -18,7 +18,7 @@ describe('FluxComponent', () => {
     constructor(flux) {
       super();
 
-      let testActions = flux.getActions('test');
+      const testActions = flux.getActions('test');
       this.register(testActions.getSomething, this.handleGetSomething);
 
       this.state = {
@@ -41,16 +41,16 @@ describe('FluxComponent', () => {
   }
 
   it('gets Flux property from either props or context', () => {
-    let flux = new Flux();
+    const flux = new Flux();
     let contextComponent, propsComponent;
 
-    let ContextComponent = addContext(
+    const ContextComponent = addContext(
       FluxComponent,
       { flux },
       { flux: React.PropTypes.instanceOf(Flummox) }
     );
 
-    let tree = TestUtils.renderIntoDocument(<ContextComponent />);
+    const tree = TestUtils.renderIntoDocument(<ContextComponent />);
 
     contextComponent = TestUtils.findRenderedComponentWithType(
       tree, FluxComponent
@@ -65,10 +65,10 @@ describe('FluxComponent', () => {
   });
 
   it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
-    let flux = new Flux();
-    let actions = flux.getActions('test');
+    const flux = new Flux();
+    const actions = flux.getActions('test');
 
-    let component = TestUtils.renderIntoDocument(
+    const component = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test" />
     );
 
@@ -79,31 +79,31 @@ describe('FluxComponent', () => {
   });
 
   it('injects children with flux prop', () => {
-    let flux = new Flux();
-    let actions = flux.getActions('test');
+    const flux = new Flux();
+    const actions = flux.getActions('test');
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux}>
         <div />
       </FluxComponent>
     );
 
-    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     expect(div.props.flux).to.equal(flux);
   });
 
   it('injects children with props corresponding to component state', () => {
-    let flux = new Flux();
-    let actions = flux.getActions('test');
+    const flux = new Flux();
+    const actions = flux.getActions('test');
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test">
         <div />
       </FluxComponent>
     );
 
-    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     actions.getSomething('something good');
     expect(div.props.something).to.equal('something good');
@@ -112,40 +112,40 @@ describe('FluxComponent', () => {
   });
 
   it('injects children with any extra props', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} extraProp="hello">
         <div />
       </FluxComponent>
     );
 
-    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     expect(div.props.extraProp).to.equal('hello');
     expect(Object.keys(div.props)).to.deep.equal(['flux', 'extraProp']);
   });
 
   it('wraps multiple children in span tag', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux}>
         <div />
         <div />
       </FluxComponent>
     );
 
-    let wrapper = TestUtils.findRenderedDOMComponentWithTag(tree, 'span');
-    let divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div');
+    const wrapper = TestUtils.findRenderedDOMComponentWithTag(tree, 'span');
+    const divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div');
 
     expect(divs.length).to.equal(2);
   });
 
   it('does not wrap single child in span tag', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux}>
         <div />
       </FluxComponent>
@@ -157,10 +157,10 @@ describe('FluxComponent', () => {
   });
 
   it('allows for nested FluxComponents', () => {
-    let flux = new Flux();
-    let actions = flux.getActions('test');
+    const flux = new Flux();
+    const actions = flux.getActions('test');
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test">
         <FluxComponent>
           <div />
@@ -168,7 +168,7 @@ describe('FluxComponent', () => {
       </FluxComponent>
     );
 
-    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     actions.getSomething('something good');
     expect(div.props.something).to.equal('something good');
@@ -177,10 +177,10 @@ describe('FluxComponent', () => {
   });
 
   it('uses `render` prop for custom rendering, if it exists', () => {
-    let flux = new Flux();
-    let actions = flux.getActions('test');
+    const flux = new Flux();
+    const actions = flux.getActions('test');
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
         connectToStores="test"
@@ -190,7 +190,7 @@ describe('FluxComponent', () => {
       />
     );
 
-    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     actions.getSomething('something good');
     expect(div.props.something).to.equal('something good');

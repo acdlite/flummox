@@ -4,8 +4,8 @@ import addContext from './addContext';
 import sinon from 'sinon';
 
 import React from 'react/addons';
-let { PropTypes } = React;
-let { TestUtils } = React.addons;
+const { PropTypes } = React;
+const { TestUtils } = React.addons;
 
 describe('fluxMixin', () => {
 
@@ -19,7 +19,7 @@ describe('fluxMixin', () => {
     constructor(flux) {
       super();
 
-      let testActions = flux.getActions('test');
+      const testActions = flux.getActions('test');
       this.register(testActions.getSomething, this.handleGetSomething);
 
       this.state = {
@@ -42,7 +42,7 @@ describe('fluxMixin', () => {
     }
   }
 
-  let ComponentWithFluxMixin = React.createClass({
+  const ComponentWithFluxMixin = React.createClass({
     mixins: [fluxMixin()],
 
     render() {
@@ -51,16 +51,16 @@ describe('fluxMixin', () => {
   });
 
   it('gets flux from either props or context', () => {
-    let flux = new Flux();
+    const flux = new Flux();
     let contextComponent, propsComponent;
 
-    let ContextComponent = addContext(
+    const ContextComponent = addContext(
       ComponentWithFluxMixin,
       { flux },
       { flux: React.PropTypes.instanceOf(Flummox) }
     );
 
-    let tree = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ContextComponent keys="test" />
     );
 
@@ -77,9 +77,9 @@ describe('fluxMixin', () => {
   });
 
   it('exposes flux as context', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
-    let ChildComponent = React.createClass({
+    const ChildComponent = React.createClass({
       contextTypes: {
         flux: PropTypes.instanceOf(Flummox),
       },
@@ -89,7 +89,7 @@ describe('fluxMixin', () => {
       }
     });
 
-    let Component = React.createClass({
+    const Component = React.createClass({
       mixins: [fluxMixin()],
 
       render() {
@@ -101,9 +101,9 @@ describe('fluxMixin', () => {
       }
     });
 
-    let tree = TestUtils.renderIntoDocument(<Component flux={flux} />);
+    const tree = TestUtils.renderIntoDocument(<Component flux={flux} />);
 
-    let childComponent = TestUtils.findRenderedComponentWithType(
+    const childComponent = TestUtils.findRenderedComponentWithType(
       tree,
       ChildComponent
     );
@@ -112,7 +112,7 @@ describe('fluxMixin', () => {
   });
 
   it('throws error if neither props or context is set', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
     expect(TestUtils.renderIntoDocument.bind(null, <ComponentWithFluxMixin />))
       .to.throw(
@@ -122,13 +122,13 @@ describe('fluxMixin', () => {
   });
 
   it('ignores change event after unmounted', () => {
-    let flux = new Flux();
+    const flux = new Flux();
     flux.getActions('test').getSomething('foo');
 
-    let getterMap = {
+    const getterMap = {
       test: store => ({ something: store.state.something })
     };
-    let Component = React.createClass({
+    const Component = React.createClass({
       mixins: [fluxMixin(getterMap)],
 
       render() {
@@ -136,9 +136,9 @@ describe('fluxMixin', () => {
       }
     });
 
-    let container = document.createElement('div');
-    let component = React.render(<Component flux={flux} />, container);
-    let listener = flux.getStore('test').listeners('change')[0];
+    const container = document.createElement('div');
+    const component = React.render(<Component flux={flux} />, container);
+    const listener = flux.getStore('test').listeners('change')[0];
 
     React.unmountComponentAtNode(container);
 
@@ -149,22 +149,22 @@ describe('fluxMixin', () => {
   });
 
   it('uses #connectToStores() to get initial state', () => {
-    let flux = new Flux();
+    const flux = new Flux();
 
     flux.getActions('test').getSomething('foobar');
 
-    let getterMap = {
+    const getterMap = {
       test: store => ({
         something: store.state.something,
         custom: true,
       }),
     };
 
-    let mixin = fluxMixin(getterMap);
+    const mixin = fluxMixin(getterMap);
 
-    let connectToStores = sinon.spy(mixin, 'connectToStores');
+    const connectToStores = sinon.spy(mixin, 'connectToStores');
 
-    let Component = React.createClass({
+    const Component = React.createClass({
       mixins: [mixin],
 
       getInitialState() {
@@ -178,7 +178,7 @@ describe('fluxMixin', () => {
       }
     });
 
-    let component = TestUtils.renderIntoDocument(
+    const component = TestUtils.renderIntoDocument(
       <Component key="test" flux={flux} />
     );
 
@@ -198,13 +198,13 @@ describe('fluxMixin', () => {
   describe('#connectToStores', () => {
 
     it('returns initial state', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
-      let initialState = component.connectToStores('test');
+      const initialState = component.connectToStores('test');
 
       expect(initialState).to.deep.equal({
         something: null,
@@ -212,9 +212,9 @@ describe('fluxMixin', () => {
     });
 
     it('merges store state with component state on change', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
@@ -230,9 +230,9 @@ describe('fluxMixin', () => {
     });
 
     it('uses custom state getter, if given', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} bar="baz" />
       );
 
@@ -253,9 +253,9 @@ describe('fluxMixin', () => {
     });
 
     it('syncs with store after prop change', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let Component = React.createClass({
+      const Component = React.createClass({
         mixins: [fluxMixin({
           test: function(store, props) {
             return {
@@ -269,7 +269,7 @@ describe('fluxMixin', () => {
         }
       });
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <Component key="test" flux={flux} foo="bar" />
       );
 
@@ -281,9 +281,9 @@ describe('fluxMixin', () => {
     });
 
     it('accepts object of keys to state getters', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
@@ -306,11 +306,11 @@ describe('fluxMixin', () => {
     });
 
     it('calls default state getter once with array of stores', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
       flux.getStore('test2').setState({ otherThing: 'barbaz' });
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
@@ -325,19 +325,19 @@ describe('fluxMixin', () => {
     });
 
     it('calls custom state getter once with array of stores', () => {
-      let flux = new Flux();
-      let testStore = flux.getStore('test');
-      let test2Store = flux.getStore('test2');
+      const flux = new Flux();
+      const testStore = flux.getStore('test');
+      const test2Store = flux.getStore('test2');
 
       testStore._testId = 'test';
       test2Store._testId = 'test2';
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
-      let stateGetter = sinon.stub().returns({ foo: 'bar' });
-      let state = component.connectToStores(['test', 'test2'], stateGetter);
+      const stateGetter = sinon.stub().returns({ foo: 'bar' });
+      const state = component.connectToStores(['test', 'test2'], stateGetter);
 
       expect(stateGetter.calledOnce).to.be.true;
       // Use _testId as unique identifier on store.
@@ -350,9 +350,9 @@ describe('fluxMixin', () => {
     });
 
     it('uses default getter if null is passed as getter', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 
@@ -369,12 +369,12 @@ describe('fluxMixin', () => {
     });
 
     it('removes listener before unmounting', () => {
-      let flux = new Flux();
-      let div = document.createElement('div');
+      const flux = new Flux();
+      const div = document.createElement('div');
 
-      let component = React.render(<ComponentWithFluxMixin flux={flux} />, div);
+      const component = React.render(<ComponentWithFluxMixin flux={flux} />, div);
 
-      let store = flux.getStore('test');
+      const store = flux.getStore('test');
       component.connectToStores('test');
 
       expect(store.listeners('change').length).to.equal(1);
@@ -386,9 +386,9 @@ describe('fluxMixin', () => {
 
   describe('#getStoreState', () => {
     it('gets combined state of connected stores', () => {
-      let flux = new Flux();
+      const flux = new Flux();
 
-      let component = TestUtils.renderIntoDocument(
+      const component = TestUtils.renderIntoDocument(
         <ComponentWithFluxMixin key="test" flux={flux} />
       );
 

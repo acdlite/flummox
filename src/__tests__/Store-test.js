@@ -9,22 +9,22 @@ describe('Store', () => {
     }
   }
 
-  let actionId = 'actionId';
+  const actionId = 'actionId';
 
   describe('#register()', () => {
     it('adds handler to internal collection of handlers', () => {
-      let store = new ExampleStore();
-      let handler = sinon.spy();
+      const store = new ExampleStore();
+      const handler = sinon.spy();
       store.register(actionId, handler);
 
-      let mockArgs = ['foo', 'bar'];
+      const mockArgs = ['foo', 'bar'];
       store._handlers[actionId](...mockArgs);
 
       expect(handler.calledWith(...mockArgs)).to.be.true;
     });
 
     it('binds handler to store', () => {
-      let store = new ExampleStore();
+      const store = new ExampleStore();
       store.foo = 'bar';
 
       function handler() {
@@ -43,19 +43,19 @@ describe('Store', () => {
         }
       }
 
-      let actions = new ExampleActions();
-      let store = new ExampleStore();
-      let handler = sinon.spy();
+      const actions = new ExampleActions();
+      const store = new ExampleStore();
+      const handler = sinon.spy();
       store.register(actions.getFoo, handler);
 
-      let mockArgs = ['foo', 'bar'];
+      const mockArgs = ['foo', 'bar'];
       store._handlers[actions.getFoo._id](...mockArgs);
 
       expect(handler.calledWith(...mockArgs)).to.be.true;
     });
 
     it('ignores non-function handlers', () => {
-      let store = new ExampleStore();
+      const store = new ExampleStore();
       expect(store.register.bind(store, null)).not.to.throw();
     });
 
@@ -68,7 +68,7 @@ describe('Store', () => {
 
   describe('#registerAsync()', () => {
     it('registers handlers for begin, success, and failure of async action', async function() {
-      let error = new Error();
+      const error = new Error();
 
       class ExampleActions extends Actions {
         async getFoo(message, _success = true) {
@@ -90,20 +90,20 @@ describe('Store', () => {
         }
       }
 
-      let flux = new ExampleFlux();
-      let actions = flux.getActions('example');
-      let store = flux.getStore('example');
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
 
-      let handler = sinon.spy();
+      const handler = sinon.spy();
       store.register(actions.getBar, handler);
 
       await actions.getBar('bar');
       expect(handler.calledOnce).to.be.true;
       expect(handler.firstCall.args).to.deep.equal(['bar']);
 
-      let begin = sinon.spy();
-      let success = sinon.spy();
-      let failure = sinon.spy();
+      const begin = sinon.spy();
+      const success = sinon.spy();
+      const failure = sinon.spy();
       store.registerAsync(actions.getFoo, begin, success, failure);
 
       await actions.getFoo('foo', true);
@@ -122,19 +122,19 @@ describe('Store', () => {
     });
 
     it('ignores non-function handlers', () => {
-      let store = new ExampleStore();
+      const store = new ExampleStore();
       expect(store.registerAsync.bind(store, null)).not.to.throw();
     });
   });
 
   describe('#handler()', () => {
     it('delegates dispatches to registered handlers', () => {
-      let store = new ExampleStore();
-      let handler = sinon.spy();
+      const store = new ExampleStore();
+      const handler = sinon.spy();
       store.register(actionId, handler);
 
       // Simulate dispatch
-      let body = { foo: 'bar' };
+      const body = { foo: 'bar' };
       store.handler({ body, actionId });
 
       expect(handler.calledWith(body)).to.be.true;
@@ -143,8 +143,8 @@ describe('Store', () => {
 
   describe('#waitFor()', () => {
     it('waits for other stores', () => {
-      let flux = new Flux();
-      let result = [];
+      const flux = new Flux();
+      const result = [];
 
       let store2;
 
@@ -182,8 +182,8 @@ describe('Store', () => {
 
   describe('#forceUpdate()', () => {
     it('emits change event', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.forceUpdate();
@@ -192,8 +192,8 @@ describe('Store', () => {
     });
 
     it('doesn\'t modify existing state', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.register(actionId, function() {
@@ -218,7 +218,7 @@ describe('Store', () => {
 
   describe('#setState()', () => {
     it('shallow merges old state with new state', () => {
-      let store = new ExampleStore();
+      const store = new ExampleStore();
 
       store.setState({ bar: 'baz' });
 
@@ -240,8 +240,8 @@ describe('Store', () => {
     });
 
     it('emits change event', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.setState({ foo: 'bar' });
@@ -250,8 +250,8 @@ describe('Store', () => {
     });
 
     it('batches multiple state updates within action handler', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.register(actionId, function() {
@@ -271,8 +271,8 @@ describe('Store', () => {
     });
 
     it('warns if called from outside an action handler', () => {
-      let store = new ExampleStore();
-      let warn = sinon.spy(console, 'warn');
+      const store = new ExampleStore();
+      const warn = sinon.spy(console, 'warn');
 
       store.setState({ foo: 'bar' });
 
@@ -287,7 +287,7 @@ describe('Store', () => {
 
   describe('#replaceState()', () => {
     it('replaces old state with new state', () => {
-      let store = new ExampleStore();
+      const store = new ExampleStore();
 
       store.replaceState({ bar: 'baz' });
 
@@ -297,8 +297,8 @@ describe('Store', () => {
     });
 
     it('batches multiple state updates within action handler', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.register(actionId, function() {
@@ -319,8 +319,8 @@ describe('Store', () => {
     });
 
     it('emits change event', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.replaceState({ foo: 'bar' });
@@ -355,8 +355,8 @@ describe('Store', () => {
 
   describe('#forceUpdate()', () => {
     it('emits change event', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.forceUpdate();
@@ -365,8 +365,8 @@ describe('Store', () => {
     });
 
     it('doesn\'t modify existing state', () => {
-      let store = new ExampleStore();
-      let listener = sinon.spy();
+      const store = new ExampleStore();
+      const listener = sinon.spy();
       store.addListener('change', listener);
 
       store.register(actionId, function() {

@@ -21,7 +21,7 @@ export default class Flux extends EventEmitter {
   createStore(key, _Store, ...constructorArgs) {
 
     if (!(_Store.prototype instanceof Store)) {
-      let className = getClassName(_Store);
+      const className = getClassName(_Store);
 
       throw new Error(
         `You've attempted to create a store from the class ${className}, which `
@@ -38,8 +38,8 @@ export default class Flux extends EventEmitter {
       );
     }
 
-    let store = new _Store(...constructorArgs);
-    let token = this.dispatcher.register(store.handler.bind(store));
+    const store = new _Store(...constructorArgs);
+    const token = this.dispatcher.register(store.handler.bind(store));
 
     store._waitFor = this.waitFor.bind(this);
     store._token = token;
@@ -56,7 +56,7 @@ export default class Flux extends EventEmitter {
   createActions(key, _Actions, ...constructorArgs) {
 
     if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
-      let className = getClassName(_Actions);
+      const className = getClassName(_Actions);
 
       throw new Error(
         `You've attempted to create actions from the class ${className}, which `
@@ -73,7 +73,7 @@ export default class Flux extends EventEmitter {
       );
     }
 
-    let actions = new _Actions(...constructorArgs);
+    const actions = new _Actions(...constructorArgs);
     actions.dispatch = this.dispatch.bind(this);
     actions.dispatchAsync = this.dispatchAsync.bind(this);
 
@@ -87,7 +87,7 @@ export default class Flux extends EventEmitter {
   }
 
   getActionIds(key) {
-    let actions = this.getActions(key);
+    const actions = this.getActions(key);
 
     if (!actions) return;
 
@@ -99,7 +99,7 @@ export default class Flux extends EventEmitter {
   }
 
   dispatchAsync(actionId, promise, actionArgs) {
-    let payload = {
+    const payload = {
       actionId,
       async: 'begin',
     };
@@ -145,13 +145,13 @@ export default class Flux extends EventEmitter {
 
     if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
 
-    let ensureIsToken = tokenOrStore => {
+    const ensureIsToken = tokenOrStore => {
       return tokenOrStore instanceof Store
         ? tokenOrStore._token
         : tokenOrStore;
     };
 
-    let tokens = tokensOrStores.map(ensureIsToken);
+    const tokens = tokensOrStores.map(ensureIsToken);
 
     this.dispatcher.waitFor(tokens);
   }
@@ -160,28 +160,28 @@ export default class Flux extends EventEmitter {
     for (let key in this._stores) {
       if (!this._stores.hasOwnProperty(key)) continue;
 
-      let store = this._stores[key];
+      const store = this._stores[key];
 
       store.removeAllListeners(event);
     }
   }
 
   serialize() {
-    let stateTree = {};
+    const stateTree = {};
 
     for (let key in this._stores) {
       if (!this._stores.hasOwnProperty(key)) continue;
 
-      let store = this._stores[key];
+      const store = this._stores[key];
 
-      let serialize = store.constructor.serialize;
+      const serialize = store.constructor.serialize;
 
       if (typeof serialize !== 'function') continue;
 
-      let serializedStoreState = serialize(store.state);
+      const serializedStoreState = serialize(store.state);
 
       if (typeof serializedStoreState !== 'string') {
-        let className = store.constructor.name;
+        const className = store.constructor.name;
 
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
@@ -195,7 +195,7 @@ export default class Flux extends EventEmitter {
       stateTree[key] = serializedStoreState;
 
       if (typeof store.constructor.deserialize !== 'function') {
-        let className = store.constructor.name;
+        const className = store.constructor.name;
 
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
@@ -216,7 +216,7 @@ export default class Flux extends EventEmitter {
     try {
       stateMap = JSON.parse(serializedState);
     } catch (error) {
-      let className = this.constructor.name;
+      const className = this.constructor.name;
 
       if (process.env.NODE_ENV !== 'production') {
         throw new Error(
@@ -229,19 +229,19 @@ export default class Flux extends EventEmitter {
     for (let key in this._stores) {
       if (!this._stores.hasOwnProperty(key)) continue;
 
-      let store = this._stores[key];
+      const store = this._stores[key];
 
-      let deserialize = store.constructor.deserialize;
+      const deserialize = store.constructor.deserialize;
 
       if (typeof deserialize !== 'function') continue;
 
-      let storeStateString = stateMap[key];
-      let storeState = deserialize(storeStateString);
+      const storeStateString = stateMap[key];
+      const storeState = deserialize(storeStateString);
 
       store.replaceState(storeState);
 
       if (typeof store.constructor.serialize !== 'function') {
-        let className = store.constructor.name;
+        const className = store.constructor.name;
 
         if (process.env.NODE_ENV !== 'production') {
           console.warn(
@@ -264,7 +264,7 @@ function getClassName(Class) {
   return Class.prototype.constructor.name;
 }
 
-let Flummox = Flux;
+const Flummox = Flux;
 
 export {
   Flux,

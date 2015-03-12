@@ -5,8 +5,8 @@ import sinon from 'sinon';
 describe('TestUtils', () => {
   describe('#simulateAction', () => {
     it('calls the stores handler', () => {
-      let store = mockStore();
-      let actionFunc = function() {};
+      const store = mockStore();
+      const actionFunc = function() {};
       actionFunc._id = 'actionFunc';
 
       TestUtils.simulateAction(store, 'foo', 'foo body');
@@ -28,7 +28,7 @@ describe('TestUtils', () => {
 
   describe('#simulateActionAsync', () => {
     it('it handles async begin', () => {
-      let store = mockStore();
+      const store = mockStore();
 
       TestUtils.simulateActionAsync(store, 'foo', 'begin');
 
@@ -40,7 +40,7 @@ describe('TestUtils', () => {
     });
 
     it('it handles async begin w/ action args', () => {
-      let store = mockStore();
+      const store = mockStore();
 
       TestUtils.simulateActionAsync(store, 'foo', 'begin', 'arg1', 'arg2');
 
@@ -53,7 +53,7 @@ describe('TestUtils', () => {
     });
 
     it('it handles async success', () => {
-      let store = mockStore();
+      const store = mockStore();
 
       TestUtils.simulateActionAsync(store, 'foo', 'success', { foo: 'bar' });
 
@@ -68,7 +68,7 @@ describe('TestUtils', () => {
     });
 
     it('it handles async failure', () => {
-      let store = mockStore();
+      const store = mockStore();
 
       TestUtils.simulateActionAsync(store, 'foo', 'failure', 'error message');
 
@@ -81,8 +81,8 @@ describe('TestUtils', () => {
     });
 
     it('it throws error with invalid asyncAction', () => {
-      let store = mockStore();
-      let simulate = () => TestUtils.simulateActionAsync(store, 'foo', 'fizbin');
+      const store = mockStore();
+      const simulate = () => TestUtils.simulateActionAsync(store, 'foo', 'fizbin');
 
       expect(simulate).to.throw('asyncAction must be one of: begin, success or failure');
     });
