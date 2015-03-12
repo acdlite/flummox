@@ -70,9 +70,9 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(4).Dispatcher;
+	var Dispatcher = __webpack_require__(3).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
 	var Flux = (function (_EventEmitter) {
 	  function Flux() {
@@ -349,9 +349,9 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var assign = _interopRequire(__webpack_require__(7));
+	var assign = _interopRequire(__webpack_require__(6));
 
 	var Store = (function (_EventEmitter) {
 
@@ -382,14 +382,14 @@ var Flummox =
 	        }
 
 	        if (this._isHandlingDispatch) {
-	          this._pendingState = this.constructor.assignState(this._pendingState, newState);
+	          this._pendingState = this._assignState(this._pendingState, newState);
 	          this._emitChangeAfterHandlingDispatch = true;
 	        } else {
 
 	          if ((undefined) !== "production") {
 	            console.warn("Store#setState() called from outside an action handler. This is likely " + "a mistake. Flux stores should manage their own state.");
 	          }
-	          this.state = this.constructor.assignState(this.state, newState);
+	          this.state = this._assignState(this.state, newState);
 	          this.emit("change");
 	        }
 	      }
@@ -397,12 +397,21 @@ var Flummox =
 	    replaceState: {
 	      value: function replaceState(newState) {
 	        if (this._isHandlingDispatch) {
-	          this._pendingState = this.constructor.assignState(undefined, newState);
+	          this._pendingState = this._assignState(undefined, newState);
 	          this._emitChangeAfterHandlingDispatch = true;
 	        } else {
-	          this.state = this.constructor.assignState(undefined, newState);
+	          this.state = this._assignState(undefined, newState);
 	          this.emit("change");
 	        }
+	      }
+	    },
+	    _assignState: {
+	      value: function _assignState() {
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	          args[_key] = arguments[_key];
+	        }
+
+	        return (this.constructor.assignState || Store.assignState).apply(undefined, args);
 	      }
 	    },
 	    forceUpdate: {
@@ -497,7 +506,7 @@ var Flummox =
 	        }
 
 	        this._isHandlingDispatch = true;
-	        this._pendingState = this.constructor.assignState(undefined, this.state);
+	        this._pendingState = this._assignState(undefined, this.state);
 	        this._emitChangeAfterHandlingDispatch = false;
 
 	        try {
@@ -557,7 +566,7 @@ var Flummox =
 	 * of the payload sent to the dispatcher.
 	 */
 
-	var uniqueId = _interopRequire(__webpack_require__(5));
+	var uniqueId = _interopRequire(__webpack_require__(7));
 
 	var Actions = (function () {
 	  function Actions() {
@@ -676,6 +685,22 @@ var Flummox =
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(5)
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -910,82 +935,7 @@ var Flummox =
 
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(6)
-
-
-/***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-
-	var count = 0;
-
-	/**
-	 * Generate a unique ID.
-	 *
-	 * Optionally pass a prefix to prepend, a suffix to append, or a
-	 * multiplier to use on the ID.
-	 *
-	 * ```js
-	 * uniqueId(); //=> '25'
-	 *
-	 * uniqueId({prefix: 'apple_'});
-	 * //=> 'apple_10'
-	 *
-	 * uniqueId({suffix: '_orange'});
-	 * //=> '10_orange'
-	 *
-	 * uniqueId({multiplier: 5});
-	 * //=> 5, 10, 15, 20...
-	 * ```
-	 *
-	 * To reset the `id` to zero, do `id.reset()`.
-	 *
-	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
-	 * @return {String} The unique id.
-	 * @api public
-	 */
-
-	var id = module.exports = function (options) {
-	  options = options || {};
-
-	  var prefix = options.prefix;
-	  var suffix = options.suffix;
-
-	  var id = ++count * (options.multiplier || 1);
-
-	  if (prefix == null) {
-	    prefix = '';
-	  }
-
-	  if (suffix == null) {
-	    suffix = '';
-	  }
-
-	  return String(prefix) + id + String(suffix);
-	};
-
-
-	id.reset = function() {
-	  return count = 0;
-	};
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1241,7 +1191,7 @@ var Flummox =
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1271,6 +1221,65 @@ var Flummox =
 		return to;
 	};
 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+
+	var count = 0;
+
+	/**
+	 * Generate a unique ID.
+	 *
+	 * Optionally pass a prefix to prepend, a suffix to append, or a
+	 * multiplier to use on the ID.
+	 *
+	 * ```js
+	 * uniqueId(); //=> '25'
+	 *
+	 * uniqueId({prefix: 'apple_'});
+	 * //=> 'apple_10'
+	 *
+	 * uniqueId({suffix: '_orange'});
+	 * //=> '10_orange'
+	 *
+	 * uniqueId({multiplier: 5});
+	 * //=> 5, 10, 15, 20...
+	 * ```
+	 *
+	 * To reset the `id` to zero, do `id.reset()`.
+	 *
+	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
+	 * @return {String} The unique id.
+	 * @api public
+	 */
+
+	var id = module.exports = function (options) {
+	  options = options || {};
+
+	  var prefix = options.prefix;
+	  var suffix = options.suffix;
+
+	  var id = ++count * (options.multiplier || 1);
+
+	  if (prefix == null) {
+	    prefix = '';
+	  }
+
+	  if (suffix == null) {
+	    suffix = '';
+	  }
+
+	  return String(prefix) + id + String(suffix);
+	};
+
+
+	id.reset = function() {
+	  return count = 0;
+	};
 
 /***/ },
 /* 8 */

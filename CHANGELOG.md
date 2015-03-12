@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.0.1
+- **Bug Fix**
+  - Add `Store.assign()` workaround for TypeScript, since it doesn't support extending static methods.
+
 ## 3.0.0
 - **New Feature**
   - Transactional state updates: `this.setState(state => ({ foo: state.foo + 1 }))`.
