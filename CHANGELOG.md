@@ -13,12 +13,14 @@ Tags:
 - **New Feature**
   - Transactional state updates: `this.setState(state => ({ foo: state.foo + 1 }))`.
   - A new static method `Store.assignState()` can be overridden to customize the top-level state type.
+  - Custom rendering in `FluxComponent`. Pass a function as the `render` prop.
 - **Breaking Change**
   - Stores no longer use empty object as default state. Default state is null, like React.
   - The array form of `connectToStore()` accepts a single state getter as the second parameter, which is passed an array of stores corresponding to the passed keys.
   - State getters are no longer auto-bound to the component. Props are passed as the second parameter.
   - Directly-nested FluxComponents warn about mismatched parent and owner context. Not sure how to fix this yet, but it will work because of prop transfer, anyway.
   - `connectToStores()` no longer checks if component is mounted before updating, since `isMounted()` is deprecated in React 0.13. 99% of the time, this shouldn't be a problem, and it's easily worked around using the `render` prop. Let me know if this is a serious issue for you.
+  - `FluxComponent` updates in `componentWillReceiveProps()` instead of `componentDidUpdate()`, preventing extra render.
 - **Internal**
   - Remove undocumented method `Store#getState()`.
 
