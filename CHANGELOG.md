@@ -25,6 +25,8 @@ Tags:
   - Remove undocumented method `Store#getState()`.
   - Favor `const` over `let`.
 
+Big thanks to [@tappleby](https://github.com/tappleby), [@hugobessaa](https://github.com/hugobessaa), [@gaearon](https://github.com/gaearon), [@emmenko](https://github.com/emmenko), [@ariabuckles](https://github.com/ariabuckles), and everyone else who submitted a PR or an issue or contributed in any way.
+
 ## 2.13.1
 - **Bug Fix**
   - Small update to async actions so returned promise does not reject due to errors that occur in store handlers.
