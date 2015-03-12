@@ -75,5 +75,4 @@ Previously it was suggested that you could directly nest FluxComponents as a way
     </FluxComponent>
   }
 />
-</FluxComponent>
 ```
