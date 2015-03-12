@@ -22,9 +22,7 @@ const instanceMethods = {
 
     if (!flux) return {};
 
-    return {
-      flux: this.getFlux()
-    };
+    return { flux };
   },
 
   getFlux() {
