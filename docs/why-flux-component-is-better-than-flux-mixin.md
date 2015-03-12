@@ -129,8 +129,8 @@ let BlogPostPage = React.createClass({
       <SiteNavigation />
       <MainContentArea>
         <FluxComponent connectToStores={{
-          posts: (store, props) => ({
-            post: store.getPost(props.postId),
+          posts: store => ({
+            post: store.getPost(this.props.postId),
           })
         }}>
           <BlogPost />
@@ -153,8 +153,8 @@ let BlogPostPage = React.createClass({
       <MainContentArea>
         <FluxComponent
           connectToStores={{
-            posts: (store, props) => ({
-              post: store.getPost(props.postId),
+            posts: store => ({
+              post: store.getPost(this.props.postId),
             })
           }}
           render={storeState => {

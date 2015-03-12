@@ -15,7 +15,7 @@ Tags:
 
 ## 3.0.1
 - **Bug Fix**
-  - Add `Store.assign()` workaround for TypeScript, since it doesn't support extending static methods.
+  - Add `Store.assign()` workaround for TypeScript, since it doesn't support extending static methods.  ([@ivw](https://github.com/ivw))
 
 ## 3.0.0
 - **New Feature**
