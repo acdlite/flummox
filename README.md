@@ -28,20 +28,71 @@ Features
 - Tiny. **~3.8kb (compressed and gzipped)**.
 - The dispatcher and constants are implementation details — no need to interact with them unless you want to.
 - Async actions [made simple with promises](https://github.com/acdlite/flummox/blob/master/docs/api/Actions.md#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
-- Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via fluxMixin and FluxComponent
-- Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.*
+- Easy [integration with React](https://github.com/acdlite/flummox/blob/master/docs/react-integration.md) via fluxMixin and FluxComponent.
+- Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
 - Straightforward [optimistic UI updates](https://github.com/acdlite/flummox/blob/master/docs/api/Store.md#performing-optimistic-updates)
 - Serialization/deserialization of stores, for faster page loads.
 - Centralized [debugging](https://github.com/acdlite/flummox/blob/master/docs/api/Flux.md#debugging).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
-*~~Not officially supported until stable 0.13 release, but it should work~~
-
-**Version 3.0 with official support for React 0.13 is [imminent](https://github.com/acdlite/flummox/milestones/3.0).**
+**Version 3.0 with official support for React 0.13 has been released! See the [changelog](https://github.com/acdlite/flummox/blob/master/CHANGELOG.md) and [upgrade guide](https://github.com/acdlite/flummox/blob/master/UPGRADE_GUIDE.md) for more information.**
 
 Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
+
+Simple example
+--------------
+
+```js
+import { Actions, Store, Flummox } from 'flummox';
+import FluxComponent from 'flummox/component';
+import React from 'react';
+
+class MessageActions extends Actions {
+  newMessage(content) {
+    return content; // automatically dispatched
+  }
+}
+
+class MessageStore extends Store {
+  constructor(flux) {
+    super();
+
+    const messageActions = flux.getActions('messages');
+    this.register(messageActions.newMessage, this.handleNewMessage);
+    this.messageCounter = 0;
+
+    this.state = {};
+  }
+
+  handleNewMessage(content) {
+    const id = this.messageCounter++;
+
+    this.setState({
+      [id]: {
+        content,
+        id,
+      },
+    });
+  }
+}
+
+class Flux extends Flummox {
+  constructor() {
+    super();
+
+    this.createActions('messages', MessageActions);
+    this.createStore('messages', MessageStore, this);
+  }
+}
+
+const flux = new Flux();
+
+// perform action
+flux.getActions('messages').newMessage('Hello, world!');
+```
+
 
 The big idea
 ------------

@@ -6,9 +6,13 @@ Please refer to the [changelog](/CHANGELOG.md) for a full list of breaking chang
 2.x -> 3.x
 ----------
 
+### Upgrade to React 0.13
+
+FluxComponent and fluxMixin have seen some significant updates, and now require React 0.13. If you're still on React 0.12, keep using Flummox 2.13.1 until you're able to upgrade.
+
 ### Accessing props inside state getters
 
-The biggest breaking change is that state getters passed to `connectToStores()` are no longer auto-bound to the component. Instead, `props` are passed as the second parameter:
+State getters passed to `connectToStores()` are no longer auto-bound to the component. Instead, `props` are passed as the second parameter:
 
 ```js
 // Before: 2.x
