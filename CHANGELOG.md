@@ -9,9 +9,9 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 3.1.0 (pending release)
+## 3.1.0
 - **New Feature**
-  - Flux is passed as second parameter to custom render function of FluxComponent.
+  - Flux is passed as second parameter to custom render function of FluxComponent. ([@ivw](https://github.com/ivw))
 
 ## 3.0.1
 - **Bug Fix**
