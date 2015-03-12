@@ -32,7 +32,6 @@ const instanceMethods = {
   initialize() {
     this._fluxStateGetters = [];
     this._fluxListeners = {};
-    this._fluxDidSyncStoreState = false;
     this.flux = this.getFlux();
 
     if (!(this.flux instanceof Flux)) {
