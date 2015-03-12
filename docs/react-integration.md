@@ -91,7 +91,7 @@ So, in just a few short lines, we can specify the initialization logic, update l
 </FluxComponent>
 ```
 
-In this example, InnerComponent has props `post` and `comments`. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead. Refer to the FluxComponent docs for more information.
+In this example, InnerComponent has props `post` and `comments`. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead. Refer to the [FluxComponent](api/FluxComponent.md) docs for more information.
 
 ## Using fluxMixin
 
