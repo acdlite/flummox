@@ -41,8 +41,24 @@ Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://git
 
 https://github.com/acdlite/flummox-isomorphic-demo
 
-Simple example
---------------
+
+The big idea
+------------
+
+There are *sooo* many Flux libraries out there. What makes Flummox special?
+
+Flummox allows you to encapsulate your entire Flux set-up — stores, actions, constants, and the dispatcher — into a single class, with **zero singletons or global references**. It's as easy as
+
+```js
+let flux = new Flux();
+```
+
+There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on both the server and the client) incredibly straightforward.
+
+**Flummox is not a framework.** Rather than forcing a bunch of new concepts and complicated APIs upon you, Flummox embraces existing idioms from Flux, React, and ES6 — without being too prescriptive.
+
+#### Simple example
+
 
 ```js
 import { Actions, Store, Flummox } from 'flummox';
@@ -92,24 +108,6 @@ const flux = new Flux();
 // perform action
 flux.getActions('messages').newMessage('Hello, world!');
 ```
-
-
-The big idea
-------------
-
-There are *sooo* many Flux libraries out there. What makes Flummox special?
-
-Flummox allows you to encapsulate your entire Flux set-up — stores, actions, constants, and the dispatcher — into a single class, with **zero singletons or global references**. It's as easy as
-
-```js
-let flux = new Flux();
-```
-
-There are many benefits to this approach, but the biggest one is that it makes isomorphism (running the same code on both the server and the client) incredibly straightforward.
-
-**Flummox is not a framework.** Rather than forcing a bunch of new concepts and complicated APIs upon you, Flummox embraces existing idioms from Flux, React, and ES6 — without being too prescriptive.
-
-**tl;dr Show me the code!!!** No problem. Check out a full example from Flummox's [test suite](https://github.com/acdlite/flummox/blob/master/src/__tests__/exampleFlux-test.js).
 
 ### Idiomatic
 
