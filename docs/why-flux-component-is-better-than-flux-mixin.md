@@ -157,9 +157,9 @@ let BlogPostPage = React.createClass({
               post: store.getPost(props.postId),
             })
           }}
-          render={props => {
+          render={storeState => {
             // render whatever you want
-            return <BlogPost {...props} />;
+            return <BlogPost {...storeState} />;
           }}
         />
       </MainContentArea>

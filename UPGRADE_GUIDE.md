@@ -17,10 +17,8 @@ State getters passed to `connectToStores()` are no longer auto-bound to the comp
 ```js
 // Before: 2.x
 <FluxComponent connectToStores={{
-  posts: function(store) ({
-    return {
-      post: store.getPost(this.props.postId),
-    };
+  posts: store => ({
+    post: store.getPost(this.props.postId),
   })
 }}>
   <InnerComponent />
@@ -67,14 +65,15 @@ Previously it was suggested that you could directly nest FluxComponents as a way
       mostRecentPost: store.getMostRecentPost(),
     })
   }}
-  render={props =>
+  render={storeState =>
     <FluxComponent connectToStores={{
-      comments: (store, props) => ({
-        mostRecentComments: store.getMostRecentComments(props.mostRecentPost.id)
+      comments: store => ({
+        mostRecentComments: store.getMostRecentComments(storeState.mostRecentPost.id)
       })
     }}>
-      <ChildComponent {...props} /> // has props "mostRecentPosts" and "mostRecentComments"
+      <ChildComponent {...storeState} /> // has props "mostRecentPosts" and "mostRecentComments"
     </FluxComponent>
   }
 />
+</FluxComponent>
 ```
