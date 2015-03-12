@@ -28,13 +28,13 @@ import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
 export default function fluxMixin(...args) {
+  function getInitialState() {
+    this.initialize();
+    return this.connectToStores(...args);
+  }
+
   return assign(
-    {
-      getInitialState() {
-        this.initialize();
-        return this.connectToStores(...args);
-      }
-    },
+    { getInitialState },
     instanceMethods,
     staticProperties
   );

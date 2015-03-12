@@ -48,16 +48,19 @@
  */
 
 import React from 'react';
-import fluxMixin from './fluxMixin';
+import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
-let FluxComponent = React.createClass({
+class FluxComponent extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
-  mixins: [fluxMixin()],
+    this.initialize();
 
-  getInitialState() {
-    return this.connectToStores(this.props.connectToStores);
-  },
+    this.state = this.connectToStores(props.connectToStores);
+
+    this.wrapChild = this.wrapChild.bind(this);
+  }
 
   wrapChild(child) {
     let { children, connectToStores, ...props } = this.props;
@@ -70,7 +73,7 @@ let FluxComponent = React.createClass({
         props
       )
     );
-  },
+  }
 
   render() {
     let { children } = this.props;
@@ -84,7 +87,13 @@ let FluxComponent = React.createClass({
       return <span>{React.Children.map(children, this.wrapChild)}</span>;
     }
   }
+}
 
-});
+assign(
+  FluxComponent.prototype,
+  instanceMethods
+);
+
+assign(FluxComponent, staticProperties);
 
 export default FluxComponent;

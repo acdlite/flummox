@@ -64,7 +64,7 @@ describe('FluxComponent', () => {
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
   });
 
-  it('passes connectToStore prop to FluxMixin\'s connectToStores()', () => {
+  it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
     let flux = new Flux();
     let actions = flux.getActions('test');
 

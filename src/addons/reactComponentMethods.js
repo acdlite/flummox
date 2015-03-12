@@ -176,10 +176,8 @@
 
  function createStoreListener(component, store, storeStateGetter) {
    return function() {
-     if (this.isMounted()) {
-       let state = storeStateGetter(store, this.props);
-       this.setState(state);
-     }
+     let state = storeStateGetter(store, this.props);
+     this.setState(state);
    }.bind(component);
  }
 
