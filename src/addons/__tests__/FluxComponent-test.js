@@ -176,4 +176,26 @@ describe('FluxComponent', () => {
     expect(div.props.something).to.equal('something else');
   });
 
+  it('uses `render` prop for custom rendering, if it exists', () => {
+    let flux = new Flux();
+    let actions = flux.getActions('test');
+
+    let tree = TestUtils.renderIntoDocument(
+      <FluxComponent
+        flux={flux}
+        connectToStores="test"
+        render={props =>
+          <div something={props.something} />
+        }
+      />
+    );
+
+    let div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    actions.getSomething('something good');
+    expect(div.props.something).to.equal('something good');
+    actions.getSomething('something else');
+    expect(div.props.something).to.equal('something else');
+  });
+
 });
