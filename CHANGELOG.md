@@ -23,6 +23,7 @@ Tags:
   - `FluxComponent` updates in `componentWillReceiveProps()` instead of `componentDidUpdate()`, preventing extra render.
 - **Internal**
   - Remove undocumented method `Store#getState()`.
+  - Favor `const` over `let`.
 
 ## 2.13.1
 - **Bug Fix**
