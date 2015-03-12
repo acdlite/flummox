@@ -9,6 +9,8 @@ import fluxMixin from 'flummox/mixin';
 
 This guide discusses how to use FluxComponent to integrate Flummox with React.
 
+**In v3.0, FluxComponent requires React 0.13. If you're still on React 0.12, keep using Flummox 2.x until you're able to upgrade.**
+
 ## Accessing the Flux instance
 
 **tl;dr** FluxComponent gives you easy access to your Flux instance from anywhere in your component tree using only components and props.

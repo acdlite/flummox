@@ -17,8 +17,10 @@ State getters passed to `connectToStores()` are no longer auto-bound to the comp
 ```js
 // Before: 2.x
 <FluxComponent connectToStores={{
-  posts: store => ({
-    post: store.getPost(this.props.postId),
+  posts: function(store) ({
+    return {
+      post: store.getPost(this.props.postId),
+    };
   })
 }}>
   <InnerComponent />
