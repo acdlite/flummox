@@ -101,7 +101,7 @@ export default class Flux extends EventEmitter {
     for (let key in this._actions) {
       if (!this._actions.hasOwnProperty(key)) continue;
 
-      let actionConstants = this._actions[key].getConstants();
+      const actionConstants = this._actions[key].getConstants();
 
       actionIds = actionIds.concat(getValues(actionConstants));
     }
