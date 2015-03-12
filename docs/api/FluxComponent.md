@@ -52,8 +52,8 @@ With FluxComponent, state from your stores is automatically passed as props to i
 ```js
 // Using children
 <FluxComponent connectToStores={{
-  posts: (store, props) => ({
-    post: store.getPost(props.postId),
+  posts: store => ({
+    post: store.getPost(this.props.postId),
   })
 }}>
   <InnerComponent />
@@ -62,8 +62,8 @@ With FluxComponent, state from your stores is automatically passed as props to i
 // Using custom `render` function
 <FluxComponent
   connectToStores={{
-    posts: (store, props) => ({
-      post: store.getPost(props.postId),
+    posts: store => ({
+      post: store.getPost(this.props.postId),
     })
   }}
   render={storeState => {
