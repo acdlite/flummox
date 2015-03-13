@@ -187,12 +187,12 @@ function createStoreListener(component, store, storeStateGetter) {
 }
 
 function defaultStateGetter(store) {
-  return store.state;
+  return store.getStateAsObject();
 }
 
 function defaultReduceStateGetter(stores) {
   return stores.reduce(
-    (result, store) => assign(result, store.state),
+    (result, store) => assign(result, store.getStateAsObject()),
     {}
   );
 }

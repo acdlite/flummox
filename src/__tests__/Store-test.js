@@ -353,6 +353,14 @@ describe('Store', () => {
     });
   });
 
+  describe('#getStateAsObject()', () => {
+    it('returns the current state as an object', () => {
+      const store = new Store();
+      store.setState({ foo: 'bar', bar: 'baz' });
+      expect(store.getStateAsObject()).to.deep.equal({ foo: 'bar', bar: 'baz' });
+    });
+  });
+
   describe('#forceUpdate()', () => {
     it('emits change event', () => {
       const store = new ExampleStore();

@@ -59,6 +59,10 @@ export default class Store extends EventEmitter {
     }
   }
 
+  getStateAsObject() {
+    return this.state;
+  }
+
   static assignState(oldState, newState) {
     return assign({}, oldState, newState);
   }
