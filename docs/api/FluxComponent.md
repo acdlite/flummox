@@ -27,11 +27,6 @@ State getters
 Refer to [FluxMixin](FluxMixin.md)
 
 
-Use `key` to ensure stores stay in sync
----------------------------------------
-
-Refer to [FluxMixin](FluxMixin.md)
-
 Access flux with `this.props.flux`
 ----------------------------------
 
