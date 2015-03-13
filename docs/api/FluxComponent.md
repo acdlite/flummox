@@ -47,7 +47,7 @@ onClick(e) {
 Custom rendering
 ----------------
 
-With FluxComponent, state from your stores is automatically passed as props to its children. This is nice for simple cases, especially when there's only a single child. But for more complex cases, or if you want direct control over rendering, now you can pass a custom render function prop to FluxComponent:
+With FluxComponent, state from your stores is automatically passed as props to its children. This is nice for simple cases, especially when there's only a single child. But for more complex cases, or if you want direct control over rendering, you can pass a custom render function prop to FluxComponent:
 
 ```js
 // Using children
