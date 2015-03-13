@@ -72,7 +72,7 @@ class FluxComponent extends React.Component {
   }
 
   getChildProps() {
-    const { children, render, connectToStores, flux, ...extraProps } = this.props;
+    const { children, render, connectToStores, flux, html, ...extraProps } = this.props;
 
     return assign(
       { flux: this.getFlux() },
@@ -82,7 +82,7 @@ class FluxComponent extends React.Component {
   }
 
   render() {
-    const { children, render } = this.props;
+    const { children, render, html = {} } = this.props;
 
     if (typeof render === 'function') {
       return render(this.getChildProps(), this.getFlux());
@@ -94,7 +94,8 @@ class FluxComponent extends React.Component {
       const child = children;
       return this.wrapChild(child);
     } else {
-      return <span>{React.Children.map(children, this.wrapChild)}</span>;
+      const { tagName = 'span', ...htmlProps } = html;
+      return React.createElement(tagName, htmlProps, React.Children.map(children, this.wrapChild));
     }
   }
 }

@@ -272,4 +272,32 @@ describe('FluxComponent', () => {
     expect(div.props.yay).to.equal('baz');
   });
 
+  it('allows the component wrapper element to be customized', () => {
+    const flux = new Flux();
+
+    const tree = TestUtils.renderIntoDocument(
+      <FluxComponent
+        flux={flux}>
+        <FluxComponent
+          html={
+            {
+              tagName: 'div',
+              className: 'my-class-name',
+              id: 'some-div'
+            }
+          }>
+          <h1>Header 1</h1>
+          <h2>Header 2</h2>
+          <h3>Header 3</h3>
+        </FluxComponent>
+      </FluxComponent>
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    expect(div.props.className).to.equal('my-class-name');
+
+    const divDOM = React.findDOMNode(div);
+    expect(divDOM.className).to.equal('my-class-name');
+    expect(divDOM.id).to.equal('some-div');
+  });
 });
