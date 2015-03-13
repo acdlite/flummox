@@ -16,22 +16,25 @@ State getters passed to `connectToStores()` are no longer auto-bound to the comp
 
 ```js
 // Before: 2.x
-<FluxComponent connectToStores={{
-  posts: store => ({
-    post: store.getPost(this.props.postId),
-  })
-}}>
-  <InnerComponent />
-</FluxComponent>
+const MyComponent = React.createClass({
+  mixins: [fluxMixin({
+    posts: function(store) {
+      return {
+        post: store.getPost(this.props.postId),
+      };
+    }
+  })]
+});
 
 // After: 3.x
-<FluxComponent connectToStores={{
-  posts: store => ({
-    post: store.getPost(this.props.postId),
-  })
-}}>
-  <InnerComponent />
-</FluxComponent>
+// Or, you know, just use FluxComponent :)
+const MyComponent = React.createClass({
+  mixins: [fluxMixin({
+    posts: (store, props) => ({
+      post: store.getPost(props.postId),
+    })
+  })]
+})
 ```
 
 Aside from being more a functional interface, this allows us to do optimizations at the library level, and prevents anti-patterns such using state inside a state getter.
