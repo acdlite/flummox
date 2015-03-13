@@ -7,7 +7,7 @@ Access the Flux instance and subscribe to store updates. Uses [FluxMixin](FluxMi
 
 
 ```js
-<FluxComponent key={this.props.post.id} connectToStores={{
+<FluxComponent connectToStores={{
   posts: store => ({
     post: store.getPost(this.props.post.id),
   }),
