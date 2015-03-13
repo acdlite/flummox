@@ -28,7 +28,7 @@ Here's how we'll approach this walkthrough. I like to go in order of Flux data f
 
 ### 1. Create some actions
 
-Actions are groups of functions you call to send data through the dispatcher. (Sometimes these are actually referred to as *action creators*, while actions are the data structures that are sent through the dispatcher, but whatever. We're calling going to use *action* to mean the function that triggers the dispatch.)
+Actions are groups of functions you call to send data through the dispatcher. (Sometimes these are actually referred to as *action creators*, while actions are the data structures that are sent through the dispatcher, but whatever. We're going to use *action* to refer to the function that triggers the dispatch.)
 
 To create actions, just extend from the base Actions class and add some methods:
 
@@ -49,7 +49,7 @@ class MessageActions extends Actions {
 
 ```
 
-That's it! Seriously. We just created a single action, `createMessage`, that takes in message content and returns an object with a message field and a date. The return value is then sent through the dispatcher automatically. (If you return undefined, Flummox skips the dispatch step.)
+That's it! Seriously. We just created a single action, `createMessage`, that takes in message content and returns an object with a message field and a date. The return value is then sent through the dispatcher automatically. (If you return `undefined`, Flummox skips the dispatch step.)
 
 This is a pretty simple example, though. Often, your actions will need to perform some sort of async server operation before dispatching it to the stores. If you return a Promise, Flummox will wait for the Promise to resolve and then dispatch the unwrapped value. ES7's async-await pattern makes this easy. Let's update our example:
 
@@ -111,7 +111,7 @@ Stores are EventEmitters. This lets views listen for changes and stay in sync. A
 
 The one bit of API that's new is `this.register(actionId, handler)`. This registers a store method with the dispatcher. Actually, it will accept any function, not just methods... but you probably want to stick to methods (except for testing purposes).
 
-In this example, the store's constructor expects a single argument, flux. This is not a required argument (notice we're not passing it to `super()`); it's a pattern we're using so we have access to our message action ids. I'll explain this in the next section.
+In this example, the store's constructor expects a single argument, `flux`. This is not a required argument (notice we're not passing it to `super()`); it's a pattern we're using so we have access to our message action ids. I'll explain this in the next section.
 
 ### 3. Bring them together in a flux class
 
@@ -142,7 +142,7 @@ There's an additional method for accessing action ids: `getActionIds(key)`. This
 
 Each Flux instance comes with its own dispatcher. Like constants, the dispatcher is treated as an implementation detail. The closest you'll come to interacting with it in most cases is the `Store#register(actionId, handler)` method discussed above. However, if you want to access the dispatcher directly, you can reference the `dispatcher` property of the Flux instance.
 
-So, now we have a class Flux that encapsulates our entire Flux set-up! Now we just create an instance:
+So, now we have an AppFlux class that encapsulates our entire Flux set-up! Now we just create an instance:
 
 ```js
 let flux = new AppFlux();
