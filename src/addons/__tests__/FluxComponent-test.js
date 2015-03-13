@@ -198,4 +198,39 @@ describe('FluxComponent', () => {
     expect(div.props.something).to.equal('something else');
   });
 
+  it('updates with render-time computed values in state getters on componentWillReceiveProps()', () => {
+    const flux = new Flux();
+
+    class Owner extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          foo: 'bar'
+        };
+      }
+
+      render() {
+        return (
+          <FluxComponent
+            flux={flux}
+            connectToStores={{
+              test: store => ({
+                yay: this.state.foo
+              })
+            }}
+            render={storeState => <div {...storeState} />}
+          />
+        );
+      }
+    }
+
+    const owner = TestUtils.renderIntoDocument(<Owner />);
+    const div = TestUtils.findRenderedDOMComponentWithTag(owner, 'div');
+
+    expect(div.props.yay).to.equal('bar');
+    owner.setState({ foo: 'baz' });
+    expect(div.props.yay).to.equal('baz');
+  });
+
 });
