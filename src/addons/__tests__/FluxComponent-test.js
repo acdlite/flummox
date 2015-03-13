@@ -64,6 +64,45 @@ describe('FluxComponent', () => {
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
   });
 
+  it('allows for FluxComponents through the tree via context', () => {
+    const flux = new Flux();
+    const actions = flux.getActions('test');
+
+    class TopView extends React.Component {
+      render() {
+        return (
+          <FluxComponent
+            flux={flux}
+            render={() => <SubView />}
+          />
+        );
+      }
+    }
+
+    class SubView extends React.Component {
+      render() {
+        return <SubSubView />;
+      }
+    }
+
+    class SubSubView extends React.Component {
+      render() {
+        return <FluxComponent connectToStores="test">
+          <div />
+        </FluxComponent>;
+      }
+    }
+
+    const tree = TestUtils.renderIntoDocument(
+      <TopView />
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    actions.getSomething('something good');
+    expect(div.props.something).to.equal('something good');
+  });
+
   it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
