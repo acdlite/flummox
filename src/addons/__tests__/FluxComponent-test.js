@@ -165,11 +165,18 @@ describe('FluxComponent', () => {
 
   it('injects children with any extra props', () => {
     const flux = new Flux();
+    const stateGetter = () => {};
 
+    // Pass all possible PropTypes to ensure only extra props
+    // are injected.
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} extraProp="hello">
-        <div />
-      </FluxComponent>
+      <FluxComponent
+        flux={flux}
+        connectToStores="test"
+        stateGetter={stateGetter}
+        extraProp="hello"
+        render={(props) => <div {...props} />}
+      />
     );
 
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');

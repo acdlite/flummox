@@ -83,7 +83,7 @@ class FluxComponent extends React.Component {
   }
 
   getChildProps() {
-    const { children, render, connectToStores, flux, ...extraProps } = this.props;
+    const { children, render, connectToStores, stateGetter, flux, ...extraProps } = this.props;
 
     return assign(
       { flux: this.getFlux() },
