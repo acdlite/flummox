@@ -169,11 +169,12 @@ const staticProperties = {
   },
 
   propTypes: {
-    connectToStores: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string),
-      React.PropTypes.func,
-    ])
+    connectToStores: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.object
+    ]),
+    flux: PropTypes.instanceOf(Flux)
   },
 };
 

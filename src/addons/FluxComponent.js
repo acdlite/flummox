@@ -53,13 +53,7 @@ import assign from 'object-assign';
 
 const FluxComponentPropTypes = {
   render: React.PropTypes.func,
-  connectToStores: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.arrayOf(React.PropTypes.string),
-    React.PropTypes.object
-  ]),
   stateGetter: React.PropTypes.func,
-  flux: React.PropTypes.object
 };
 
 class FluxComponent extends React.Component {
@@ -116,7 +110,6 @@ assign(
 );
 
 assign(FluxComponent, staticProperties);
-
-FluxComponent.propTypes = FluxComponentPropTypes;
+assign(FluxComponent.propTypes, FluxComponentPropTypes);
 
 export default FluxComponent;
