@@ -51,13 +51,24 @@ import React from 'react';
 import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
+const FluxComponentPropTypes = {
+  render: React.PropTypes.func,
+  connectToStores: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.arrayOf(React.PropTypes.string),
+    React.PropTypes.object
+  ]),
+  stateGetter: React.PropTypes.func,
+  flux: React.PropTypes.object
+};
+
 class FluxComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.initialize();
 
-    this.state = this.connectToStores(props.connectToStores);
+    this.state = this.connectToStores(props.connectToStores, props.stateGetter);
 
     this.wrapChild = this.wrapChild.bind(this);
   }
@@ -105,5 +116,7 @@ assign(
 );
 
 assign(FluxComponent, staticProperties);
+
+FluxComponent.propTypes = FluxComponentPropTypes;
 
 export default FluxComponent;

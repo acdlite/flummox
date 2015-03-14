@@ -5,6 +5,7 @@ import React from 'react/addons';
 const { TestUtils } = React.addons;
 
 import FluxComponent from '../FluxComponent';
+import sinon from 'sinon';
 
 describe('FluxComponent', () => {
 
@@ -115,6 +116,18 @@ describe('FluxComponent', () => {
     expect(component.state.something).to.deep.equal('something good');
     actions.getSomething('something else');
     expect(component.state.something).to.deep.equal('something else');
+  });
+
+  it('passes stateGetter prop to reactComponentMethod connectToStores()', () => {
+    const flux = new Flux();
+    const actions = flux.getActions('test');
+    const stateGetter = sinon.stub().returns({ fiz: 'bin' });
+
+    const component = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux} connectToStores="test" stateGetter={stateGetter} />
+    );
+
+    expect(component.state.fiz).to.equal('bin');
   });
 
   it('injects children with flux prop', () => {
