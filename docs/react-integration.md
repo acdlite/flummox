@@ -1,6 +1,6 @@
 # React integration guide
 
-If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](api/FluxComponent.md) and [fluxMixin](api/fluxMixin.md). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).)
+If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](api/FluxComponent.md) and [fluxMixin](api/FluxMixin.md). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).)
 
 ```js
 import FluxComponent from 'flummox/component';
