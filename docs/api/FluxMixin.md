@@ -81,7 +81,9 @@ connectToStores(object stateGetterMap [, function stateGetter])
 
 Synchronize component state with state from Flux stores. Pass a single store key, an array of store keys, or a map of store keys to getter functions. You can also specify a custom state getter as the second argument, the default state getter will return the entire store state (a reduce is performed on the entire store state when using an array or store keys).
 
-When using an array of store keys, the custom state getter is called with an array of store instances (same order as keys) as the first argument. Otherwise only a single store instance is passed to the custom state getter.
+When using an array of store keys, the custom state getter is called with an array of store instances (same order as keys) as the first argument; An array is used instead of seperate arguments to allow for future versions of flummox to pass additional arguments to the stateGetter eg. `props`. 
+
+Otherwise only a single store instance is passed to the custom state getter.
 
 Returns the initial combined state of the specified stores.
 
