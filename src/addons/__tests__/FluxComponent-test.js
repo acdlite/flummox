@@ -5,6 +5,7 @@ import React from 'react/addons';
 const { TestUtils } = React.addons;
 
 import FluxComponent from '../FluxComponent';
+import sinon from 'sinon';
 
 describe('FluxComponent', () => {
 
@@ -117,6 +118,18 @@ describe('FluxComponent', () => {
     expect(component.state.something).to.deep.equal('something else');
   });
 
+  it('passes stateGetter prop to reactComponentMethod connectToStores()', () => {
+    const flux = new Flux();
+    const actions = flux.getActions('test');
+    const stateGetter = sinon.stub().returns({ fiz: 'bin' });
+
+    const component = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux} connectToStores="test" stateGetter={stateGetter} />
+    );
+
+    expect(component.state.fiz).to.equal('bin');
+  });
+
   it('injects children with flux prop', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
@@ -152,11 +165,18 @@ describe('FluxComponent', () => {
 
   it('injects children with any extra props', () => {
     const flux = new Flux();
+    const stateGetter = () => {};
 
+    // Pass all possible PropTypes to ensure only extra props
+    // are injected.
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} extraProp="hello">
-        <div />
-      </FluxComponent>
+      <FluxComponent
+        flux={flux}
+        connectToStores="test"
+        stateGetter={stateGetter}
+        extraProp="hello"
+        render={(props) => <div {...props} />}
+      />
     );
 
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
