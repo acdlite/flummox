@@ -37,7 +37,7 @@ Features
 
 **Version 3.0 with official support for React 0.13 has been released! See the [changelog](https://github.com/acdlite/flummox/blob/master/CHANGELOG.md) and [upgrade guide](https://github.com/acdlite/flummox/blob/master/UPGRADE_GUIDE.md) for more information.**
 
-Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
+Here's a WIP demo of an isomorphic app using Flummox, [React Router](https://github.com/rackt/react-router), and [Immutable.js](https://facebook.github.io/immutable-js) (still needs some work, but feel free to check it out):
 
 https://github.com/acdlite/flummox-isomorphic-demo
 
