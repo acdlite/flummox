@@ -130,7 +130,7 @@ export default class Store extends EventEmitter {
           return;
         case 'failure':
           if (typeof _asyncHandler === 'function') {
-            this._performHandler(_asyncHandler, error);
+            this._performHandler.apply(this, [_asyncHandler].concat(error).concat(actionArgs));
           }
           return;
         case 'success':

@@ -252,20 +252,23 @@ describe('Flux', () => {
       const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
       const actionId = 'actionId';
+      const actionArgs = {};
 
       const error = new Error('error');
 
-      await expect(flux.dispatchAsync(actionId, Promise.reject(error)))
+      await expect(flux.dispatchAsync(actionId, Promise.reject(error), actionArgs))
         .to.be.rejected;
 
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
+        actionArgs,
         async: 'begin',
       });
       expect(dispatch.secondCall.args[0]).to.deep.equal({
         actionId,
         error,
+        actionArgs,
         async: 'failure'
       });
     });
