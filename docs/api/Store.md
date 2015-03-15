@@ -64,7 +64,7 @@ Things to keep in mind when overriding `assignState()`:
 - Should be non-mutative.
 - `assignState(null, newState)` should not throw and should return a copy of `newState`.
 
-To support React integration with FluxComponent, you should also override `Store#getStateAsObject()`, which returns a plain object representation of `this.state`.
+To support React integration with FluxComponent, you should also override `Store#getStateAsObject()`, which returns a plain object representation of `this.state`. The default state getter uses the object returned by this function.
 
 Methods
 -------

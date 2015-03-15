@@ -11,9 +11,12 @@ Tags:
 
 ## 3.1.0 (pending release)
 - **New Feature**
-  - Flux is passed as second parameter to custom render function of FluxComponent.
+  - Flux is passed as second parameter to custom render function of FluxComponent. ([@tappleby](https://github.com/tappleby))
+  - New Store method `getStateAsObject()` is used inside default state getters for `connectToStores()`. This should be overridden alongside `Store.assignState()`.
+  - New prop `stateGetter` for FluxComponent. ([@tappleby](https://github.com/tappleby))
   - Store no longer warns if `setState()` called outside dispatch handler. There are some valid reasons you may want to do this, primarily tests.
-  - New prop `stateGetter` for FluxComponent.
+- **Internal**
+  - Updated dependencies.
 
 ## 3.0.1
 - **Bug Fix**
