@@ -24,7 +24,20 @@ In general, [it's recommended to use FluxComponent instead of FluxMixin](../why-
 State getters
 -------------
 
-Refer to [FluxMixin](FluxMixin.md)
+The `stateGetter` prop can be used to control how state from stores are transformed into props:
+
+```js
+<FluxComponent 
+  connectToStores={['posts', 'session']}
+  stateGetter={([postStore, sessionStore]) => ({
+    posts: store.getPostForUser(sessionStore.getCurrentUserId())
+  })}
+}}>
+  <InnerComponent />
+</FluxComponent>
+```
+
+The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [FluxMixin](FluxMixin.md) for more details.
 
 
 Access flux with `this.props.flux`
@@ -73,4 +86,8 @@ Props
 
 ### `connectToStores`
 
-This prop has the same effect as passing an argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
+This prop has the same effect as passing the first argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
+
+### `stateGetter`
+
+This prop has the same effect as passing the second argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.

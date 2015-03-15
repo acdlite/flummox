@@ -12,6 +12,7 @@ Tags:
 ## 3.1.0 (pending release)
 - **New Feature**
   - Flux is passed as second parameter to custom render function of FluxComponent.
+  - Added `stateGetter` prop to FluxComponent.
 
 ## 3.0.1
 - **Bug Fix**
