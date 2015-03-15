@@ -269,20 +269,6 @@ describe('Store', () => {
       expect(listener.calledOnce).to.be.true;
       expect(store.state).to.deep.equal({ foo: 'bar', bar: 'baz', baz: 'foo' });
     });
-
-    it('warns if called from outside an action handler', () => {
-      const store = new ExampleStore();
-      const warn = sinon.spy(console, 'warn');
-
-      store.setState({ foo: 'bar' });
-
-      expect(warn.firstCall.args[0]).to.equal(
-        'Store#setState() called from outside an action handler. This is '
-      + 'likely a mistake. Flux stores should manage their own state.'
-      );
-
-      console.warn.restore();
-    });
   });
 
   describe('#replaceState()', () => {
