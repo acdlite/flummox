@@ -62,8 +62,6 @@ There are many benefits to this approach, but the biggest one is that it makes i
 
 ```js
 import { Actions, Store, Flummox } from 'flummox';
-import FluxComponent from 'flummox/component';
-import React from 'react';
 
 class MessageActions extends Actions {
   newMessage(content) {
@@ -156,6 +154,7 @@ Integrating Flummox with React is really easy. You can do it the long way by man
 Here's a basic example:
 
 ```js
+import React from 'react';
 import FluxComponent from 'flummox/component';
 
 class OuterComponent extends React.Component {
