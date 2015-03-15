@@ -40,6 +40,17 @@ fluxMixin({
 });
 ```
 
+In some situations the data retrieved from one store depends on the state from another, you can use an array of store keys with a custom state getter to ensure the components state is updated when either store changes:
+
+```js
+fluxMixin(
+  ['posts', 'session'],
+  ([postStore, sessionStore]) => ({
+    posts: store.getPostForUser(sessionStore.getCurrentUserId())
+  })
+);
+```
+
 Access flux with `this.flux`
 ----------------------------
 
