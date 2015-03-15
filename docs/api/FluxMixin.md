@@ -45,6 +45,10 @@ In some situations the data retrieved from one store depends on the state from a
 ```js
 fluxMixin(
   ['posts', 'session'],
+  
+  // An array of store instances are passed to the state getter; Instead of indexing
+  // into the stores array, ES6 array destructuring is used to access each store
+  // as a variable.
   ([postStore, sessionStore]) => ({
     posts: store.getPostForUser(sessionStore.getCurrentUserId())
   })
