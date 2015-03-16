@@ -104,7 +104,7 @@ export default class Store extends EventEmitter {
   registerAll(handler) {
     if (typeof handler !== 'function') return;
 
-    this._catchAllHandlers.push(handler);
+    this._catchAllHandlers.push(handler.bind(this));
   }
 
   registerAllAsync(beginHandler, successHandler, failureHandler) {
