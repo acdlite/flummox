@@ -127,6 +127,71 @@ describe('Store', () => {
     });
   });
 
+  describe('#registerAll()', () => {
+    it('adds handler to internal collection of "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+
+      expect(handler.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('adds multiple handlers to internal collection of "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler1 = sinon.spy();
+      const handler2 = sinon.spy();
+      store.registerAll(handler1);
+      store.registerAll(handler2);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+      store._catchAllHandlers[1](...mockArgs);
+
+      expect(handler1.calledWith(...mockArgs)).to.be.true;
+      expect(handler2.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('binds handler to store', () => {
+      const store = new ExampleStore();
+      store.foo = 'bar';
+
+      function handler() {
+        return this.foo;
+      }
+
+      store.registerAll(handler);
+
+      expect(store._catchAllHandlers[0]()).to.equal('bar');
+    });
+
+    it('accepts actions instead of action ids', () => {
+      class ExampleActions extends Actions {
+        getFoo() {
+          return 'foo';
+        }
+      }
+
+      const actions = new ExampleActions();
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+
+      expect(handler.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('ignores non-function handlers', () => {
+      const store = new ExampleStore();
+      expect(store.registerAll.bind(store, null)).not.to.throw();
+    });
+
+  });
+
   describe('#handler()', () => {
     it('delegates dispatches to registered handlers', () => {
       const store = new ExampleStore();
