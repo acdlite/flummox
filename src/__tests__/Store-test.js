@@ -272,6 +272,21 @@ describe('Store', () => {
 
       expect(handler.calledWith(body)).to.be.true;
     });
+
+    it('delegates dispatches to registered "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      const actionIds = ['actionId1', 'actionId2'];
+      store.registerAll(handler);
+
+      // Simulate dispatch
+      const body = { foo: 'bar' };
+      store.handler({ body, actionId: actionIds[0] });
+      store.handler({ body, actionId: actionIds[1] });
+
+      expect(handler.calledWith(body)).to.be.true;
+      expect(handler.calledTwice).to.be.true;
+    });
   });
 
   describe('#waitFor()', () => {
