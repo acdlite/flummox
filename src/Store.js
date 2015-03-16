@@ -21,8 +21,12 @@ export default class Store extends EventEmitter {
 
     this._handlers = {};
     this._asyncHandlers = {};
-    this._catchAllHandler = null;
-    this._catchAllAsyncHandlers = {};
+    this._catchAllHandlers = [];
+    this._catchAllAsyncHandlers = {
+      begin: [],
+      success: [],
+      failure: [],
+    };
   }
 
   setState(newState) {
@@ -100,7 +104,7 @@ export default class Store extends EventEmitter {
   registerAll(handler) {
     if (typeof handler !== 'function') return;
 
-    this._catchAllHandler = handler;
+    this._catchAllHandlers.push(handler);
   }
 
   registerAllAsync(beginHandler, successHandler, failureHandler) {
@@ -110,7 +114,11 @@ export default class Store extends EventEmitter {
       failure: failureHandler,
     });
 
-    this._catchAllHandlers = asyncHandlers;
+    for (key of asyncHandlers) {
+      this._catchAllAsyncHandlers[key] = this._catchAllAsyncHandlers[key].push(
+        asyncHandlers[key]
+      );
+    }
   }
 
   _bindAsyncHandlers(asyncHandlers) {
@@ -142,34 +150,34 @@ export default class Store extends EventEmitter {
       error
     } = payload;
 
-    const _allHandler = this._catchAllHandler;
+    const _allHandlers = this._catchAllHandlers;
     const _handler = this._handlers[actionId];
 
-    const _allAsyncHandler = this._catchAllAsyncHandlers
-      && this._catchAllAsyncHandlers[_async];
+    const _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
     const _asyncHandler = this._asyncHandlers[actionId]
       && this._asyncHandlers[actionId][_async];
 
     if (_async) {
+      let beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+
       switch (_async) {
         case 'begin':
-          this._performHandlers([_allAsyncHandler, _asyncHandler], actionArgs);
+          this._performHandlers(beginOrFailureHandlers, actionArgs);
           return;
         case 'failure':
-          this._performHandlers([_allAsyncHandler, _asyncHandler], [error]);
+          this._performHandlers(beginOrFailureHandlers, [error]);
           return;
         case 'success':
-          this._performHandlers([
-            _allAsyncHandler,
+          this._performHandlers(_allAsyncHandlers.concat([
             (_asyncHandler || _handler)
-          ], [body]);
+          ]), [body]);
           return;
         default:
           return;
       }
     }
 
-    this._performHandlers([_allHandler, _handler], [body]);
+    this._performHandlers(_allHandlers.concat([_handler]), [body]);
   }
 
   _performHandlers(_handlers, args) {
