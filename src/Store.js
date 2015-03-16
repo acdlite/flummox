@@ -162,13 +162,13 @@ export default class Store extends EventEmitter {
 
       switch (_async) {
         case 'begin':
-          this._performHandlers(beginOrFailureHandlers, actionArgs);
+          this._performHandler(beginOrFailureHandlers, actionArgs);
           return;
         case 'failure':
-          this._performHandlers(beginOrFailureHandlers, [error]);
+          this._performHandler(beginOrFailureHandlers, [error]);
           return;
         case 'success':
-          this._performHandlers(_allAsyncHandlers.concat([
+          this._performHandler(_allAsyncHandlers.concat([
             (_asyncHandler || _handler)
           ]), [body]);
           return;
@@ -177,23 +177,23 @@ export default class Store extends EventEmitter {
       }
     }
 
-    this._performHandlers(_allHandlers.concat([_handler]), [body]);
+    this._performHandler(_allHandlers.concat([_handler]), [body]);
   }
 
   _performHandlers(_handlers, args) {
     _handlers.forEach(function(_handler) {
       if (typeof _handler !== 'function') return;
-      this._performHandler.apply(this, [_handler].concat(args));
+      _handler.apply(this, args);
     }.bind(this));
   }
 
-  _performHandler(_handler, ...args) {
+  _performHandler(_handlers, args) {
     this._isHandlingDispatch = true;
     this._pendingState = this._assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
-      _handler.apply(this, args);
+      this._performHandlers(_handlers, args);
     } finally {
       if (this._emitChangeAfterHandlingDispatch) {
         this.state = this._pendingState;
