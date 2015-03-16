@@ -7,14 +7,14 @@ Access the Flux instance and subscribe to store updates. Uses [FluxMixin](FluxMi
 
 
 ```js
-<FluxComponent connectToStores={{
+<FluxComponent flux={flux} connectToStores={{
   posts: store => ({
     post: store.getPost(this.props.post.id),
   }),
   comments: store => ({
     comments: store.getCommentsForPost(this.props.post.id),
   })
-}}>
+>
   <InnerComponent />
 </FluxComponent>
 ```
