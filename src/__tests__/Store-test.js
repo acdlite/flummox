@@ -192,6 +192,74 @@ describe('Store', () => {
 
   });
 
+  describe('#registerAllAsync()', () => {
+    it('registers "catch all" handlers for begin, success, and failure of async action', async function() {
+      const error = new Error();
+
+      class ExampleActions extends Actions {
+        async getFoo(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+
+        async getBar(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+      }
+
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', ExampleActions);
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const begin = sinon.spy();
+      const success = sinon.spy();
+      const failure = sinon.spy();
+      store.registerAllAsync(begin, success, failure);
+
+      await actions.getFoo('foo', true);
+      expect(begin.calledOnce).to.be.true;
+      expect(begin.firstCall.args).to.deep.equal(['foo', true]);
+      expect(success.calledOnce).to.be.true;
+      expect(success.firstCall.args[0]).to.equal('foo success');
+      expect(failure.called).to.be.false;
+
+      await expect(actions.getFoo('bar', false)).to.be.rejected;
+      expect(begin.calledTwice).to.be.true;
+      expect(success.calledOnce).to.be.true;
+      expect(failure.calledOnce).to.be.true;
+      expect(failure.firstCall.args[0]).to.equal(error);
+
+      await actions.getBar('foo', true);
+      expect(begin.calledThrice).to.be.true;
+      expect(begin.thirdCall.args).to.deep.equal(['foo', true]);
+      expect(success.calledTwice).to.be.true;
+      expect(success.secondCall.args[0]).to.equal('foo success');
+      expect(failure.calledTwice).to.be.false;
+
+      await expect(actions.getBar('bar', false)).to.be.rejected;
+      expect(begin.callCount).to.equal(4);
+      expect(success.calledTwice).to.be.true;
+      expect(failure.calledTwice).to.be.true;
+      expect(failure.secondCall.args[0]).to.equal(error);
+    });
+
+    it('ignores non-function handlers', () => {
+      const store = new ExampleStore();
+      expect(store.registerAsync.bind(store, null)).not.to.throw();
+    });
+  });
+
   describe('#handler()', () => {
     it('delegates dispatches to registered handlers', () => {
       const store = new ExampleStore();
