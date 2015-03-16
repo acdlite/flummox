@@ -180,13 +180,6 @@ export default class Store extends EventEmitter {
     this._performHandler(_allHandlers.concat([_handler]), [body]);
   }
 
-  _performHandlers(_handlers, args) {
-    _handlers.forEach(function(_handler) {
-      if (typeof _handler !== 'function') return;
-      _handler.apply(this, args);
-    }.bind(this));
-  }
-
   _performHandler(_handlers, args) {
     this._isHandlingDispatch = true;
     this._pendingState = this._assignState(undefined, this.state);
@@ -204,6 +197,13 @@ export default class Store extends EventEmitter {
       this._pendingState = undefined;
       this._emitChangeAfterHandlingDispatch = false;
     }
+  }
+
+  _performHandlers(_handlers, args) {
+    _handlers.forEach(function(_handler) {
+      if (typeof _handler !== 'function') return;
+      _handler.apply(this, args);
+    }.bind(this));
   }
 }
 
