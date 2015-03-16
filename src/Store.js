@@ -114,11 +114,11 @@ export default class Store extends EventEmitter {
       failure: failureHandler,
     });
 
-    for (key of asyncHandlers) {
-      this._catchAllAsyncHandlers[key] = this._catchAllAsyncHandlers[key].push(
+    Object.keys(asyncHandlers).forEach((key) => {
+      this._catchAllAsyncHandlers[key].push(
         asyncHandlers[key]
       );
-    }
+    });
   }
 
   _bindAsyncHandlers(asyncHandlers) {
