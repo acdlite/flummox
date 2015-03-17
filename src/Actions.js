@@ -53,7 +53,10 @@ export default class Actions {
 
       if (isPromise(body)) {
         const promise = body;
-        this._dispatchAsync(actionId, promise, args, methodName);
+        this._dispatchAsync(actionId, promise, args, methodName)
+          // Catch errors and do nothing
+          // They can be handled by store or caller
+          .catch(error => {});
       } else {
         this._dispatch(actionId, body, args, methodName);
       }
