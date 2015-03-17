@@ -38,7 +38,7 @@ Like Stores, Flux instances are EventEmitters. A `dispatch` event is emitted on 
 
 ```js
 flux.addListener('dispatch', payload => {
-  console.log('Dispatch: ' + payload);
+  console.log('Dispatch: ', payload);
 });
 ```
 
