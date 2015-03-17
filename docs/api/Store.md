@@ -104,12 +104,18 @@ If any of the passed handlers are not functions, they are ignored.
 ### setState
 
 ```js
-setState(object nextState)
+setState(function|object nextState[, function callback])
 ```
 
 Shallow merges `nextState` with the current state, then emits a change event so views know to update themselves.
 
 Similar to React, multiple calls to `setState()` within the same handler are batched and applied at the end. Accessing `this.state` after calling `setState()` will return the existing value, not the updated value.
+
+You can also do transactional state updates by passing a function:
+
+```js
+this.setState(state => ({ counter: state.counter + 1 }));
+```
 
 ### replaceState
 
