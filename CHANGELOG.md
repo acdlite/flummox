@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 2.13.2
+- **Bug Fix**
+  - Add dummy handler to internal promise to prevent false warnings.
+
 ## 2.13.1
 - **Bug Fix**
   - Small update to async actions so returned promise does not gobble errors that occur in store handlers.

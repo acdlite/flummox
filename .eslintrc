@@ -12,7 +12,11 @@
     "no-underscore-dangle": 0,
     "no-comma-dangle": 0,
     "consistent-return": 0,
-    
+
+    // Doesn't work with classes
+    // https://github.com/babel/babel-eslint/issues/8
+    "no-undef": 0,
+
     // Doesn't work inside ES6 template strings
     "comma-spacing": 0,
 

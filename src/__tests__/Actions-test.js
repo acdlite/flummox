@@ -114,7 +114,7 @@ describe('Actions', () => {
 
     it('does not skip async dispatch, even if resolved value is undefined', () => {
       let actions = new TestActions();
-      let dispatch = sinon.spy();
+      let dispatch = sinon.stub().returns(Promise.resolve(undefined));
       actions.dispatchAsync = dispatch;
 
       actions.asyncAction(undefined);

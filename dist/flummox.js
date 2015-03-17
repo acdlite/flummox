@@ -51,12 +51,15 @@ var Flummox =
 
 	var _applyConstructor = function (Constructor, args) { var instance = Object.create(Constructor.prototype); var result = Constructor.apply(instance, args); return result != null && (typeof result == "object" || typeof result == "function") ? result : instance; };
 
-	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	/**
 	 * Flux
 	 *
@@ -67,11 +70,11 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(4).Dispatcher;
+	var Dispatcher = __webpack_require__(3).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var Flux = (function (EventEmitter) {
+	var Flux = (function (_EventEmitter) {
 	  function Flux() {
 	    _classCallCheck(this, Flux);
 
@@ -81,9 +84,9 @@ var Flummox =
 	    this._actions = {};
 	  }
 
-	  _inherits(Flux, EventEmitter);
+	  _inherits(Flux, _EventEmitter);
 
-	  _prototypeProperties(Flux, null, {
+	  _createClass(Flux, {
 	    createStore: {
 	      value: function createStore(key, _Store) {
 	        for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -109,16 +112,12 @@ var Flummox =
 	        this._stores[key] = store;
 
 	        return store;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    getStore: {
 	      value: function getStore(key) {
 	        return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    createActions: {
 	      value: function createActions(key, _Actions) {
@@ -143,16 +142,12 @@ var Flummox =
 	        this._actions[key] = actions;
 
 	        return actions;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    getActions: {
 	      value: function getActions(key) {
 	        return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    getActionIds: {
 	      value: function getActionIds(key) {
@@ -161,16 +156,12 @@ var Flummox =
 	        if (!actions) {
 	          return;
 	        }return actions.getConstants();
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    dispatch: {
 	      value: function dispatch(actionId, body) {
 	        this._dispatch({ actionId: actionId, body: body });
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    dispatchAsync: {
 	      value: function dispatchAsync(actionId, promise, actionArgs) {
@@ -204,17 +195,13 @@ var Flummox =
 
 	          return Promise.reject(error);
 	        });
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _dispatch: {
 	      value: function _dispatch(payload) {
 	        this.dispatcher.dispatch(payload);
 	        this.emit("dispatch", payload);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    waitFor: {
 	      value: function waitFor(tokensOrStores) {
@@ -228,9 +215,7 @@ var Flummox =
 	        var tokens = tokensOrStores.map(ensureIsToken);
 
 	        this.dispatcher.waitFor(tokens);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    removeAllStoreListeners: {
 	      value: function removeAllStoreListeners(event) {
@@ -241,9 +226,7 @@ var Flummox =
 
 	          store.removeAllListeners(event);
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    serialize: {
 	      value: function serialize() {
@@ -280,9 +263,7 @@ var Flummox =
 	        }
 
 	        return JSON.stringify(stateTree);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    deserialize: {
 	      value: function deserialize(serializedState) {
@@ -320,9 +301,7 @@ var Flummox =
 	            }
 	          }
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    }
 	  });
 
@@ -346,9 +325,6 @@ var Flummox =
 	exports.Flummox = Flummox;
 	exports.Store = Store;
 	exports.Actions = Actions;
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 
 /***/ },
 /* 1 */
@@ -358,7 +334,7 @@ var Flummox =
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -373,11 +349,11 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
 	var assign = _interopRequire(__webpack_require__(6));
 
-	var Store = (function (EventEmitter) {
+	var Store = (function (_EventEmitter) {
 
 	  /**
 	   * Stores are initialized with a reference
@@ -393,9 +369,9 @@ var Flummox =
 	    this._asyncHandlers = {};
 	  }
 
-	  _inherits(Store, EventEmitter);
+	  _inherits(Store, _EventEmitter);
 
-	  _prototypeProperties(Store, null, {
+	  _createClass(Store, {
 	    getState: {
 
 	      /**
@@ -406,9 +382,7 @@ var Flummox =
 
 	      value: function getState() {
 	        return assign({}, this.state);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    setState: {
 	      value: function setState(newState) {
@@ -426,9 +400,7 @@ var Flummox =
 	          this.state = assign({}, this.state, newState);
 	          this.emit("change");
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    replaceState: {
 	      value: function replaceState(newState) {
@@ -441,9 +413,7 @@ var Flummox =
 	          this.state = assign({}, newState);
 	          this.emit("change");
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    forceUpdate: {
 	      value: function forceUpdate() {
@@ -452,9 +422,7 @@ var Flummox =
 	        } else {
 	          this.emit("change");
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    register: {
 	      value: function register(actionId, handler) {
@@ -463,9 +431,7 @@ var Flummox =
 	        if (typeof handler !== "function") {
 	          return;
 	        }this._handlers[actionId] = handler.bind(this);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    registerAsync: {
 	      value: function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
@@ -489,16 +455,12 @@ var Flummox =
 	        }
 
 	        this._asyncHandlers[actionId] = asyncHandlers;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    waitFor: {
 	      value: function waitFor(tokensOrStores) {
 	        this._waitFor(tokensOrStores);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    handler: {
 	      value: function handler(payload) {
@@ -536,9 +498,7 @@ var Flummox =
 	        if (typeof _handler !== "function") {
 	          return;
 	        }this._performHandler(_handler, body);
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _performHandler: {
 	      value: function _performHandler(_handler) {
@@ -562,9 +522,7 @@ var Flummox =
 	          this._pendingState = {};
 	          this._emitChangeAfterHandlingDispatch = false;
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    }
 	  });
 
@@ -585,7 +543,7 @@ var Flummox =
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
@@ -620,7 +578,7 @@ var Flummox =
 	    this.getConstants = this.getActionIds;
 	  }
 
-	  _prototypeProperties(Actions, null, {
+	  _createClass(Actions, {
 	    getActionIds: {
 	      value: function getActionIds() {
 	        var _this = this;
@@ -629,9 +587,7 @@ var Flummox =
 	          result[actionName] = _this[actionName]._id;
 	          return result;
 	        }, {});
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _getActionMethodNames: {
 	      value: function _getActionMethodNames(instance) {
@@ -640,9 +596,7 @@ var Flummox =
 	        return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
 	          return name !== "constructor" && typeof _this[name] === "function";
 	        });
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _wrapAction: {
 	      value: function _wrapAction(methodName) {
@@ -660,7 +614,11 @@ var Flummox =
 
 	          if (isPromise(body)) {
 	            var promise = body;
-	            _this._dispatchAsync(actionId, promise, args, methodName);
+	            _this._dispatchAsync(actionId, promise, args, methodName)
+	            // Catch errors and do nothing
+	            // They can be handled by store or caller
+	            ["catch"](function (error) {});
+
 	            return promise;
 	          } else {
 	            return _this._dispatch(actionId, body, args, methodName);
@@ -670,9 +628,7 @@ var Flummox =
 	        action._id = actionId;
 
 	        this[methodName] = action;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _createActionId: {
 
@@ -683,9 +639,7 @@ var Flummox =
 
 	      value: function _createActionId(methodName) {
 	        return "" + this._baseId + "-" + methodName;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _dispatch: {
 	      value: function _dispatch(actionId, body, args, methodName) {
@@ -700,9 +654,7 @@ var Flummox =
 	        }
 
 	        return body;
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    },
 	    _dispatchAsync: {
 	      value: function _dispatchAsync(actionId, promise, args, methodName) {
@@ -715,9 +667,7 @@ var Flummox =
 
 	          return promise;
 	        }
-	      },
-	      writable: true,
-	      configurable: true
+	      }
 	    }
 	  });
 
@@ -732,6 +682,22 @@ var Flummox =
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(5)
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -963,22 +929,6 @@ var Flummox =
 	// Expose the module.
 	//
 	module.exports = EventEmitter;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(5)
 
 
 /***/ },
