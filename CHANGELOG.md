@@ -9,7 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 3.1.0 (pending release)
+## 3.1.1
+- **Bugfix**
+  - Add dummy handler to internal promise to prevent false warnings.
+
+## 3.1.0
 - **New Feature**
   - Flux is passed as second parameter to custom render function of FluxComponent.
   - New Store method `getStateAsObject()` is used inside default state getters for `connectToStores()`. This should be overridden alongside `Store.assignState()`.
