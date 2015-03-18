@@ -84,6 +84,10 @@ With FluxComponent, state from your stores is automatically passed as props to i
 Props
 -----
 
+### `flux`
+
+Indicates the [Flux instance](./Flux.md) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
+
 ### `connectToStores`
 
 This prop has the same effect as passing the first argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
@@ -91,3 +95,7 @@ This prop has the same effect as passing the first argument to [FluxMixin](FluxM
 ### `stateGetter`
 
 This prop has the same effect as passing the second argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
+
+### `render`
+
+Optionally overrides the rendering function, useful to control what state is passed down as props to components.
