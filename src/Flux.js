@@ -137,8 +137,16 @@ export default class Flux extends EventEmitter {
   }
 
   _dispatch(payload) {
-    this.dispatcher.dispatch(payload);
-    this.emit('dispatch', payload);
+    if (!this.dispatcher.isDispatching()) {
+      this.dispatcher.dispatch(payload);
+      this.emit('dispatch', payload);
+    }
+    else {
+      setTimeout(() => {
+        this.dispatcher.dispatch(payload);
+        this.emit('dispatch', payload);
+      }, 0);
+    }
   }
 
   waitFor(tokensOrStores) {
