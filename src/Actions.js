@@ -40,6 +40,7 @@ export default class Actions {
     return Object.getOwnPropertyNames(this.constructor.prototype)
       .filter(name =>
         name !== 'constructor' &&
+        name[0] !== '_' &&
         typeof this[name] === 'function'
       );
   }
