@@ -145,7 +145,7 @@ export default class Flux extends EventEmitter {
       setTimeout(() => {
         this.dispatcher.dispatch(payload);
         this.emit('dispatch', payload);
-      }, 0);
+        }, 1);
     }
   }
 
