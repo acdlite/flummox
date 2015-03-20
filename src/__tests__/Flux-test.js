@@ -152,7 +152,7 @@ describe('Flux', () => {
     it('delegates to dispatcher', () => {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
+      flux.dispatcher = { dispatch, isDispatching: function() {return false;} };
       let actionId = 'actionId';
 
       flux.dispatch(actionId, 'foobar');
@@ -186,7 +186,7 @@ describe('Flux', () => {
     it('delegates to dispatcher', async function() {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
+      flux.dispatcher = { dispatch, isDispatching: function() {return false;} };
       let actionId = 'actionId';
 
       await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
@@ -228,7 +228,7 @@ describe('Flux', () => {
     it('resolves to value of given promise', done => {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
+      flux.dispatcher = { dispatch, isDispatching: function() {return false;} };
       let actionId = 'actionId';
 
       expect(flux.dispatchAsync(actionId, Promise.resolve('foobar')))
@@ -239,7 +239,7 @@ describe('Flux', () => {
     it('rejects with error if promise rejects', done => {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
+      flux.dispatcher = { dispatch, isDispatching: function() {return false;} };
       let actionId = 'actionId';
 
       expect(flux.dispatchAsync(actionId, Promise.reject(new Error('error'))))
@@ -250,7 +250,7 @@ describe('Flux', () => {
     it('dispatches with error if promise rejects', async function() {
       let flux = new Flux();
       let dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
+      flux.dispatcher = { dispatch, isDispatching: function() {return false;} };
       let actionId = 'actionId';
 
       let error = new Error('error');
