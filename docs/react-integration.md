@@ -126,3 +126,46 @@ let MyComponent = React.createClass({
 ```
 
 If `storeA` has state `{foo: 'bar'}` and `storeB` has state `{bar: 'baz'}`, then MyComponent has state `{foo: 'bar', bar: 'baz'}`. Whenever the stores change, so does MyComponent.
+
+
+## Using a Custom Dispatcher
+
+**tl;dr** Flummox uses the flux dispatcher from Facebook, but you can switch out whatever api compatible dispatcher you want.
+
+***
+
+Usually the dispatcher provided by Facebook is sufficient, but you aren't limited to using it if you find you need more than it provides.  If you want to have custom behavior when dispatching actions, you can provide a wrapper for the Facebook dispatcher that does what you want.  Or use something else entirely.  It's up to you.
+
+To substitute a different dispatcher object just change the `constructor()` function of your flux object like this:
+
+```js
+
+class Flux extends Flummox {
+  constructor() {
+    super();
+
+    this.dispatcher = new MyCustomDispatcher();
+  }
+}
+
+```
+
+Just remember, whatever object you provide has to follow the same api as the dispatcher from Facebook.  The easiest way to do that is to extend the Facebook dispatcher in a new class, and then provide whatever alternate or extended functionality you desire.
+
+For instance, say you want to allow the dispatcher to receive actions for dispatching while it is in the middle of another action dispatch.  The standard dispatcher will complain that you cannot dispatch an action during another action.  There are good reasons for this, but perhaps you just want to queue up that action and have it execute when the current action is completed.  One easy way to do this would be to use `setTimeout()`.  To do this you would provide a dispatcher with slightly different dispatch functionality, like this:
+
+```js
+
+class MyCustomDispatcher extends Dispatcher {
+  dispatch(...args) {
+    if (!this.isDispatching()) {
+      super(...args); // This will execute the Facebook dispatcher's dispatch function.
+    } else {
+      setTimeout(() => { // We are currently dispatching, so delay this action using setTimeout
+        super(...args); 
+      }, 0);
+    }
+  }
+}
+
+```
