@@ -104,7 +104,7 @@ If any of the passed handlers are not functions, they are ignored.
 ### setState
 
 ```js
-setState(function|object nextState[, function callback])
+setState(function|object nextState)
 ```
 
 Shallow merges `nextState` with the current state, then emits a change event so views know to update themselves.
