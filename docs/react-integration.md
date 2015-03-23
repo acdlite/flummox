@@ -159,10 +159,10 @@ For instance, say you want to allow the dispatcher to receive actions for dispat
 class MyCustomDispatcher extends Dispatcher {
   dispatch(...args) {
     if (!this.isDispatching()) {
-      super(...args); // This will execute the Facebook dispatcher's dispatch function.
+      super.dispatch(...args); // This will execute the Facebook dispatcher's dispatch function.
     } else {
       setTimeout(() => { // We are currently dispatching, so delay this action using setTimeout
-        super(...args); 
+        super.dispatch(...args); 
       }, 0);
     }
   }
