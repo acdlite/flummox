@@ -47,7 +47,7 @@
  * and props that sync with each of the state keys of fooStore.
  */
 
-import React from 'react';
+import React from 'react/addons';
 import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
@@ -68,7 +68,7 @@ class FluxComponent extends React.Component {
   }
 
   wrapChild(child) {
-    return React.cloneElement(
+    return React.addons.cloneWithProps(
       child,
       this.getChildProps()
     );

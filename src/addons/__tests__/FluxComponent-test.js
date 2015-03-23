@@ -72,10 +72,9 @@ describe('FluxComponent', () => {
     class TopView extends React.Component {
       render() {
         return (
-          <FluxComponent
-            flux={flux}
-            render={() => <SubView />}
-          />
+          <FluxComponent flux={flux}>
+            <SubView />
+          </FluxComponent>
         );
       }
     }
@@ -88,9 +87,11 @@ describe('FluxComponent', () => {
 
     class SubSubView extends React.Component {
       render() {
-        return <FluxComponent connectToStores="test">
-          <div />
-        </FluxComponent>;
+        return (
+          <FluxComponent connectToStores="test">
+            <div />
+          </FluxComponent>
+        );
       }
     }
 
