@@ -39,23 +39,6 @@ const MyComponent = React.createClass({
 
 Aside from being more a functional interface, this allows us to do optimizations at the library level, and prevents anti-patterns such using state inside a state getter.
 
-### Adding Flux instance to context
-
-There's currently an issue with using a top-level FluxComponent to add the Flux instance to context so that descendent FluxComponents can access it. See [#85](https://github.com/acdlite/flummox/issues/85) for more information. The solution for now is to use new `render` prop of FluxComponent:
-
-```js
-// Before: 2.x
-<FluxComponent flux={flux}>
-  <InnerComponent />
-</FluxComponent>
-
-// After: 3.x
-<FluxComponent
-  flux={flux}
-  render={() => <InnerComponent />}
-/>
-```
-
 ### Directly-nested FluxComponents
 
 Previously it was suggested that you could directly nest FluxComponents as a way to get store state based on other store state. This is now considered an anti-pattern. Use the `render` prop for custom rendering instead.
