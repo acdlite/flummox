@@ -1,7 +1,7 @@
 Flummox
 =======
 
-[![build status](https://img.shields.io/travis/parisleaf/parisleaf.com.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
+[![build status](https://img.shields.io/travis/acdlite/flummox.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![npm downloads](https://img.shields.io/npm/dm/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
 [![npm version](https://img.shields.io/npm/v/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
