@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.2.0
+- **New Feature**
+  - New higher-order component connectToStores, because why not. It works just like FluxComponent.
+
 ## 3.1.2
 - **Bugfix**
   - Switch back to using `cloneWithProps()` instead of `cloneElement()` to fix context passing with FluxComponent. See [this issue](https://github.com/acdlite/flummox/issues/111#issuecomment-85172486) for an explanation.

@@ -174,7 +174,9 @@ const staticProperties = {
       PropTypes.arrayOf(PropTypes.string),
       PropTypes.object
     ]),
-    flux: PropTypes.instanceOf(Flux)
+    flux: PropTypes.instanceOf(Flux),
+    render: React.PropTypes.func,
+    stateGetter: React.PropTypes.func,
   },
 };
 

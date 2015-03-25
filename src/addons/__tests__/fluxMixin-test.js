@@ -61,7 +61,7 @@ describe('fluxMixin', () => {
     );
 
     const tree = TestUtils.renderIntoDocument(
-      <ContextComponent keys="test" />
+      <ContextComponent />
     );
 
     contextComponent = TestUtils.findRenderedComponentWithType(
@@ -69,7 +69,7 @@ describe('fluxMixin', () => {
     );
 
     propsComponent = TestUtils.renderIntoDocument(
-      <ComponentWithFluxMixin key="test" flux={flux} />
+      <ComponentWithFluxMixin flux={flux} />
     );
 
     expect(contextComponent.flux).to.be.an.instanceof(Flummox);

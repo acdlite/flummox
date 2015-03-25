@@ -51,11 +51,6 @@ import React from 'react/addons';
 import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
-const FluxComponentPropTypes = {
-  render: React.PropTypes.func,
-  stateGetter: React.PropTypes.func,
-};
-
 class FluxComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -114,6 +109,5 @@ assign(
 );
 
 assign(FluxComponent, staticProperties);
-assign(FluxComponent.propTypes, FluxComponentPropTypes);
 
 export default FluxComponent;
