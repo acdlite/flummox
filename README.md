@@ -86,8 +86,8 @@ class MessageStore extends Store {
     this.setState({
       [id]: {
         content,
-        id,
-      },
+        id
+      }
     });
   }
 }
