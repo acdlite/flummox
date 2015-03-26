@@ -83,26 +83,24 @@ describe('connectToStores (HoC)', () => {
 
     const ConnectedComponent = connectToStores(BaseComponent, 'test');
 
-    const component = TestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ConnectedComponent flux={flux} />
+    );
+
+    const component = TestUtils.findRenderedComponentWithType(
+      tree, BaseComponent
     );
 
     const getSomething = flux.getActions('test').getSomething;
 
-    expect(component.state).to.deep.equal({
-      something: null,
-    });
+    expect(component.props.something).to.be.null;
 
     getSomething('do');
 
-    expect(component.state).to.deep.equal({
-      something: 'do',
-    });
+    expect(component.props.something).to.equal('do');
 
     getSomething('re');
 
-    expect(component.state).to.deep.equal({
-      something: 're',
-    });
+    expect(component.props.something).to.equal('re');
   });
 });
