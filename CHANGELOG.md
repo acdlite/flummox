@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.2.1
+- **Bugfix**
+  - Fix connectToStores HoC to pass state instead of props.
+
 ## 3.2.0
 - **New Feature**
   - New higher-order component connectToStores, because why not. It works just like FluxComponent.
