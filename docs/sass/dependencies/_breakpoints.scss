@@ -1,0 +1,18 @@
+$breakpoints: map-get($theme, 'breakpoints');
+$mediaQueries: map-get($theme, 'sassMediaQueries');
+
+@function media-query($name) {
+  @return unquote(map-get($mediaQueries, $name));
+}
+
+@function bp($name) {
+  @return map-get($breakpoints, $name) + px;
+}
+
+@mixin bp($name) {
+  @media #{media-query($name)} {
+    @content;
+  }
+}
+
+$breakpoints: map-get($theme, 'breakpoints');

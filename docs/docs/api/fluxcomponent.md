@@ -1,9 +1,9 @@
-API: `FluxComponent`
+`FluxComponent`
 ===============
 
 **In v3.0, FluxComponent requires React 0.13. If you're still on React 0.12, keep using Flummox 2.x until you're able to upgrade.**
 
-Access the Flux instance and subscribe to store updates. Uses [FluxMixin](FluxMixin.md) under the hood. Refer to the [React integration guide](../react-integration.md) for more information.
+Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](/flummox/guides/react-integration) for more information.
 
 
 ```js
@@ -19,7 +19,7 @@ Access the Flux instance and subscribe to store updates. Uses [FluxMixin](FluxMi
 </FluxComponent>
 ```
 
-In general, [it's recommended to use FluxComponent instead of FluxMixin](../why-flux-component-is-better-than-flux-mixin.md).
+In general, [it's recommended to use FluxComponent instead of fluxMixin](/flummox/guides/why-flux-component-is-better-than-flux-mixin).
 
 State getters
 -------------
@@ -27,7 +27,7 @@ State getters
 The `stateGetter` prop can be used to control how state from stores are transformed into props:
 
 ```js
-<FluxComponent 
+<FluxComponent
   connectToStores={['posts', 'session']}
   stateGetter={([postStore, sessionStore]) => ({
     posts: store.getPostForUser(sessionStore.getCurrentUserId())
@@ -37,7 +37,7 @@ The `stateGetter` prop can be used to control how state from stores are transfor
 </FluxComponent>
 ```
 
-The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [FluxMixin](FluxMixin.md) for more details.
+The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [fluxMixin](/flummox/api/fluxmixin) for more details.
 
 
 Access flux with `this.props.flux`
@@ -86,15 +86,15 @@ Props
 
 ### `flux`
 
-Indicates the [Flux instance](./Flux.md) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
+Indicates the [Flux instance](/flummox/api/flux) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
 
 ### `connectToStores`
 
-This prop has the same effect as passing the first argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
+This prop has the same effect as passing the first argument to [fluxMixin](/flummox/api/fluxmixin)'s `connectToStores()`.
 
 ### `stateGetter`
 
-This prop has the same effect as passing the second argument to [FluxMixin](FluxMixin.md)'s `connectToStores()`.
+This prop has the same effect as passing the second argument to [fluxMixin](/flummox/api/fluxmixin)'s `connectToStores()`.
 
 ### `render`
 

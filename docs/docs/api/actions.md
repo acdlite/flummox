@@ -1,5 +1,5 @@
-API: `Actions`
-==============
+`Actions`
+=========
 
 Create actions by extending from the base `Actions` class.
 
@@ -17,8 +17,8 @@ class MessageActions extends Actions {
   // Asynchronous functions are also supported: just return a promise
   // This is easy using async-await
   async createMessage(messageContent) {
-    let response = await serverCreateMessage(messageContent);
-    return response.body;
+    const response = await serverCreateMessage(messageContent);
+    return await response.json();
   }
 
 }
@@ -31,7 +31,7 @@ The return value of an action is dispatched automatically. It's also returned to
 
 ```js
 // Using mocha and chai-as-promised
-let actions = new MessageActions();
+const actions = new MessageActions();
 
 expect(actions.newMessage('Hello world!')).to.equal('Hello world');
 
@@ -46,7 +46,7 @@ expect(actions.createMessage('Hello world!')).to.eventually.deep.equal({
 Asynchronous actions
 --------------------
 
-Asynchronous actions are actions that return promises. Unlike synchronous actions, async actions fire the dispatcher twice: at the beginning and at the end of the action. Refer to the [Store API](Store.md) for information on how to register handlers for asynchronous actions.
+Asynchronous actions are actions that return promises. Unlike synchronous actions, async actions fire the dispatcher twice: at the beginning and at the end of the action. Refer to the [Store API](store) for information on how to register handlers for asynchronous actions.
 
 Methods
 -------
@@ -54,7 +54,7 @@ Methods
 ### getActionIds
 
 ```js
-getActionIds()
+object getActionIds()
 ```
 
 Returns an object of action ids, keyed by action name. (In most cases, it's probably more convenient to use `Flux#getActionIds()` instead.)

@@ -1,0 +1,14 @@
+$font-families: map-get($theme, sassFontFamilies);
+$font-sizes: map-get($theme, fontSizes);
+
+@function font-family($name) {
+  @return map-get($font-families, $name);
+}
+
+@mixin font-family($name) {
+  font-family: font-family($name);
+}
+
+@function font-size($name) {
+  @return map-get($font-sizes, $name);
+}

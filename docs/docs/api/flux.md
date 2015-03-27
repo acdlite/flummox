@@ -1,5 +1,5 @@
-API: `Flux`
-==============
+`Flux`
+======
 
 Create Flux containers by extending from the base `Flux` (or `Flummox`) class.
 
@@ -25,7 +25,7 @@ Encapsulate your stores and actions
 Flummox is designed to be used without singletons. Instead, create a Flux class that encapsulates the creation of all your application's stores and actions, so that you can create new instances on the fly.
 
 ```js
-let flux = new Flux();
+const flux = new Flux();
 ```
 
 (Note that there's nothing technically stopping you from using singletons if you wish, but why would you want to?)
@@ -50,7 +50,7 @@ Methods
 ### createActions
 
 ```js
-createActions(string key, function ActionsClass [, ...constructorArgs])
+Actions createActions(string key, function ActionsClass [, ...constructorArgs])
 ```
 
 Creates an instance of `ActionsClass` and saves a reference to it. `constructorArgs` are passed to the constructor of `ActionsClass` on creation.
@@ -58,7 +58,7 @@ Creates an instance of `ActionsClass` and saves a reference to it. `constructorA
 ### createStore
 
 ```js
-createStore(string key, function StoreClass [, ...constructorArgs])
+Store createStore(string key, function StoreClass [, ...constructorArgs])
 ```
 
 Creates an instance of `StoreClass`, registers the store's handlers with the dispatcher, and saves a reference to it. `constructorArgs` are passed to the constructor of `ActionsClass` on creation.
@@ -66,7 +66,7 @@ Creates an instance of `StoreClass`, registers the store's handlers with the dis
 ### getStore
 
 ```js
-getStore(string key)
+Store getStore(string key)
 ```
 
 Gets an store instance by key.
@@ -74,7 +74,7 @@ Gets an store instance by key.
 ### getActions
 
 ```js
-getActions(string key)
+Actions getActions(string key)
 ```
 
 Gets an actions instance by key.
@@ -82,7 +82,7 @@ Gets an actions instance by key.
 ### getActionIds
 
 ```js
-getActionIds(string key)
+Actions getActionIds(string key)
 ```
 
 Gets action ids for the given actions key. Internally calls `Actions#getActionIds`.
@@ -173,7 +173,7 @@ This feature is opt-in on a store-by-store basis, and requires some additional s
 ### serialize
 
 ```
-serialize()
+string serialize()
 ```
 
 Returns a serialized string describing the entire state of your Flux application.

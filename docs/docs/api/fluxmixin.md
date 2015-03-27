@@ -1,7 +1,7 @@
-API: `fluxMixin`
-===============
+`fluxMixin`
+===========
 
-Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](../react-integration.md) for more information.
+Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](/flummox/guides/react-integration) for more information.
 
 Note that fluxMixin is actually a function that returns a mixin, as the example below shows. The parameters are the same as those for `connectToStores()`, described below. On component initialization, `connectToStores()` is called and used to set the initial state of the component.
 
@@ -16,7 +16,7 @@ let MyComponent = React.createClass({
 });
 ```
 
-In general, [it's recommended to use FluxComponent instead of fluxMixin](../why-flux-component-is-better-than-flux-mixin.md).
+In general, [it's recommended to use FluxComponent instead of fluxMixin](/flummox/guides/why-flux-component-is-better-than-flux-mixin).
 
 State getters
 -------------
@@ -45,7 +45,7 @@ In some situations the data retrieved from one store depends on the state from a
 ```js
 fluxMixin(
   ['posts', 'session'],
-  
+
   // An array of store instances are passed to the state getter; Instead of indexing
   // into the stores array, ES6 array destructuring is used to access each store
   // as a variable.
@@ -81,7 +81,7 @@ connectToStores(object stateGetterMap [, function stateGetter])
 
 Synchronize component state with state from Flux stores. Pass a single store key, an array of store keys, or a map of store keys to getter functions. You can also specify a custom state getter as the second argument, the default state getter will return the entire store state (a reduce is performed on the entire store state when using an array or store keys).
 
-When using an array of store keys, the custom state getter is called with an array of store instances (same order as keys) as the first argument; An array is used instead of separate arguments to allow for future versions of flummox to pass additional arguments to the stateGetter eg. `props`. 
+When using an array of store keys, the custom state getter is called with an array of store instances (same order as keys) as the first argument; An array is used instead of separate arguments to allow for future versions of flummox to pass additional arguments to the stateGetter eg. `props`.
 
 Otherwise only a single store instance is passed to the custom state getter.
 

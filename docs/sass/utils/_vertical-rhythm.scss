@@ -1,0 +1,30 @@
+$base-font-size: 1rem !global;
+$base-line-height: $base-font-size * 1.5 !global;
+$round-to-nearest-half-line: true !global;
+
+/**
+ * Convert a unitless value to vertical rhythm units.
+ * Non-unitless numbers are ignored.
+ * @param  {number | list} $values - Number of lines
+ * @return {number | list} Output
+ */
+@function rhythm($value) {
+  @if type-of($value) == list {
+    $list: $value;
+    $separator: list-separator($list);
+    $rhythm: ();
+
+    @each $item in $list {
+      $rhythm: append($rhythm, rhythm($item), $separator);
+    }
+
+    @return $rhythm;
+  }
+
+  @else if type-of($value) == number and unit($value) == "" and $value != 0 {
+    $lines: $value;
+    $value: $lines * $base-line-height;
+  }
+
+  @return $value;
+}

@@ -84,7 +84,7 @@ class MessageStore extends Store {
   constructor(flux) {
     super(); // Don't forget this step
 
-    let messageActionIds = flux.getActionIds('messages');
+    const messageActionIds = flux.getActionIds('messages');
     this.register(messageActionIds.createMessage, this.handleNewMessage);
 
     this.state = {
@@ -145,7 +145,7 @@ Each Flux instance comes with its own dispatcher. Like constants, the dispatcher
 So, now we have an AppFlux class that encapsulates our entire Flux set-up! Now we just create an instance:
 
 ```js
-let flux = new AppFlux();
+const flux = new AppFlux();
 ```
 
 Because everything is self-contained, you can create as many independent instances as you want. The reason this is so cool is that you get isomorphism for free: just create a new instance for each request.
@@ -179,6 +179,6 @@ class MessagesView extends React.Component {
 
 ```
 
-Read more in the [React integration guide](react-integration.md).
+Read more in the [React integration guide](react-integration).
 
 And there you go! I hope this guide was helpful.

@@ -1,0 +1,149 @@
+@import "vendor";
+@import "utils";
+@import "dependencies";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  @include font-family(text);
+  font-size: 18px;
+  line-height: 1.5;
+  background: theme-color(background);
+  color: theme-color(text);
+
+  // TODO: make site mobile-friendly
+  min-width: bp(s);
+}
+
+a {
+  color: theme-color(pink);
+}
+
+::selection {
+  background: transparentize(theme-color(pink), 0.7);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @include font-family(display);
+}
+
+pre, code {
+  @include font-family(code);
+}
+
+// Muahahahahaha
+.View {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+
+  &--flexDirectionColumn {
+    flex-direction: column;
+  }
+
+  &--alignItemsFlexEnd {
+    align-items: flex-end;
+  }
+
+  &--justifyContentFlexEnd {
+    justify-content: flex-end;
+  }
+
+  &--flexGrow {
+    flex-grow: 1;
+  }
+}
+
+.Container {
+  max-width: bp(l);
+  margin: 0 auto;
+  padding: 0 rhythm(1);
+}
+
+.HTMLContent {
+  a {
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover {
+      border-bottom: 2px solid;
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: rhythm(3);
+    margin-bottom: rhythm(1);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  h3, h4, h5, h6 {
+    margin-top: rhythm(2);
+  }
+
+  p, pre {
+    margin: rhythm(1) 0;
+  }
+
+  pre {
+    padding: rhythm(1/2 1);
+    background: white;
+    font-size: 90%;
+    border-left: solid rhythm(1/4) theme-color(pink);
+    transition: border-color 250ms;
+    color: black;
+
+    @include bp(l) {
+      padding-left: rhythm(3/4);
+      margin-left: rhythm(-1);
+      margin-right: rhythm(-1);
+    }
+
+    ::selection {
+      @extend ::selection;
+    }
+  }
+
+  hr {
+    border: 2px solid transparentize(white, 0.9);
+    margin: rhythm(2);
+  }
+}
+
+.Doc {
+  &-content {
+    @extend .HTMLContent;
+  }
+}
+
+.RouteTransition {
+  $transition-duration: 150ms;
+
+  &-enter, &-leave {
+    @include z-index(RouteTransition);
+    position: absolute;
+    width: 100%;
+    backface-visibility: hidden;
+    transition: opacity $transition-duration ease-in;
+  }
+
+  &-enter {
+    opacity: 0.01;
+  }
+
+  &-enter.RouteTransition-enter-active {
+    opacity: 1;
+  }
+
+  &-leave {
+    opacity: 1;
+  }
+
+  &-leave.RouteTransition-leave-active {
+    opacity: 0.01;
+  }
+}

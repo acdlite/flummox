@@ -1,0 +1,23 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Flummox | Minimal, isomorphic Flux</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% if env.NODE_ENV != 'development' %}
+      <link rel="stylesheet" href="/flummox/css/app.min.css">
+    {% endif %}
+  </head>
+  <body>
+    <div id="app">{{ appString | safe }}</div>
+
+    {% if env.NODE_ENV == 'development' %}
+      <script src="http://0.0.0.0:8081/flummox/js/app.js" defer></script>
+    {% else %}
+      <script src="/flummox/js/app.min.js" defer></script>
+    {% endif %}
+  </body>
+</html>

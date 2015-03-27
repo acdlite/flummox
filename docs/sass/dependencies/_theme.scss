@@ -1,0 +1,50 @@
+$theme: (
+  colors: (
+    purple: #724685,
+    darkPurple: #413247,
+    pink: #ED4F81,
+    blue: #2083E0,
+    darkBlue: #1C4467,
+    text: #fff,
+    background: #1C4467
+  ),
+  zIndices: (
+    AppNav: 9999,
+    RouteTransition: 999
+  ),
+  fontFamilies: (
+    sourceSans: Source Sans Pro,
+    sourceCode: Source Code Pro,
+    text: Source Sans Pro,
+    display: Source Sans Pro,
+    code: Source Code Pro
+  ),
+  sassFontFamilies: (
+    sourceSans: (Source Sans Pro),
+    sourceCode: (Source Code Pro),
+    text: (Source Sans Pro),
+    display: (Source Sans Pro),
+    code: (Source Code Pro)
+  ),
+  breakpoints: (
+    s: 500,
+    m: 768,
+    l: 950,
+    xl: 1100,
+    xxl: 1300
+  ),
+  mediaQueries: (
+    s: screen and (min-width:500px),
+    m: screen and (min-width:768px),
+    l: screen and (min-width:950px),
+    xl: screen and (min-width:1100px),
+    xxl: screen and (min-width:1300px)
+  ),
+  sassMediaQueries: (
+    s: 'screen and (min-width:500px)',
+    m: 'screen and (min-width:768px)',
+    l: 'screen and (min-width:950px)',
+    xl: 'screen and (min-width:1100px)',
+    xxl: 'screen and (min-width:1300px)'
+  )
+);

@@ -1,5 +1,5 @@
-API: `Store`
-==============
+`Store`
+=======
 
 Create stores by extending from the base `Store` class.
 
@@ -15,7 +15,7 @@ class MessageStore extends Store {
 
     // Register handlers with the dispatcher using action ids, or the
     // actions themselves
-    let messageActions = flux.getActions('messages');
+    const messageActions = flux.getActions('messages');
     this.register(messageActions.newMessage, this.handleNewMessage);
 
     // Set initial state using assignment

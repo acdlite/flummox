@@ -1,7 +1,7 @@
 Why FluxComponent > fluxMixin
 =============================
 
-In the [React integration guide](react-integration.md), I suggest that using [FluxComponent](api/FluxComponent.md) is better than using [fluxMixin](api/fluxMixin.md), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
+In the [React integration guide](/flummox/guides/react-integration), I suggest that using [FluxComponent](/flummox/api/fluxcomponent) is better than using [fluxMixin](/flummox/api/fluxmixin), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
 
 My argument can be broken down into three basic points. Note that these aren't my original ideas, nor are they unique to Flummox — they are the "React Way":
 
@@ -29,7 +29,7 @@ However, when you use fluxMixin, you're introducing data into your component tha
 For instance, here's a component that renders a single blog post, based on the id of the post.
 
 ```js
-let BlogPost = React.createClass({
+const BlogPost = React.createClass({
   mixins: [fluxMixin({
     posts: (store, props) => ({
       post: store.getPost(props.id),
@@ -54,7 +54,7 @@ A better approach is to separate the data fetching logic from the logic of rende
 After we rewrite BlogPost, it looks something like this:
 
 ```js
-let BlogPost = React.createClass({
+const BlogPost = React.createClass({
   render() {
     <article>
       <h1>{this.props.post.title}</h1>
@@ -67,7 +67,7 @@ let BlogPost = React.createClass({
 And its owner looks something like this:
 
 ```js
-let BlogPostPage = React.createClass({
+const BlogPostPage = React.createClass({
   mixins: [fluxMixin({
     posts: (store, props) => ({
       post: store.getPost(props.id),
@@ -103,7 +103,7 @@ On an even more practical level, every time the state of a component changes, th
 Alright, so we need to refactor once again so that fluxMixin is only updating what needs to be updated. We already learned that we shouldn't put the mixin inside BlogPost itself, because that makes the component less reusable. Our remaining option is to create a new component that wraps around BlogPost:
 
 ```js
-let BlogPostWrapper = React.createClass({
+const BlogPostWrapper = React.createClass({
   mixins: [fluxMixin({
     posts: (store, props) => ({
       post: store.getPost(props.id),
@@ -123,7 +123,7 @@ Wouldn't it be great if there were a shortcut for this pattern — a convenient 
 Yep! It's called FluxComponent.
 
 ```js
-let BlogPostPage = React.createClass({
+class BlogPostPage extends React.Component {
   render() {
     <div>
       <SiteNavigation />
@@ -140,13 +140,13 @@ let BlogPostPage = React.createClass({
       <SiteFooter />
     </div>
   }
-});
+}
 ```
 
 The state fetched by `connectToStores()` is transferred to the children of FluxComponent. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead:
 
 ```js
-let BlogPostPage = React.createClass({
+class BlogPostPage React.Component {
   render() {
     <div>
       <SiteNavigation />
@@ -167,7 +167,7 @@ let BlogPostPage = React.createClass({
       <SiteFooter />
     </div>
   }
-});
+}
 ```
 
 Do what's right

@@ -1,0 +1,9 @@
+$z-indices: map-get($theme, zIndices);
+
+@function z-index($name, $offset: 0) {
+  @return map-get($z-indices, $name) + $offset;
+}
+
+@mixin z-index($args...) {
+  z-index: z-index($args...);
+}
