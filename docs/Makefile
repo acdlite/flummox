@@ -47,7 +47,7 @@ watch-js:
 build-docs: $(DOCS_MD) js
 	node lib/scripts/build-docs.js
 
-build-static-site: build
+build-static-site: clean fast-build
 	rm -rf dist/
 	node lib/scripts/build-static-site.js
 

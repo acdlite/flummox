@@ -34,6 +34,10 @@ lint:
 # Faster on first build, but not after that
 fast-build: fast-js build
 
+# Publish docs to GitHub Pages
+publish-docs:
+	git subtree push --prefix docs/dist/flummox origin gh-pages
+
 # Transpile JavaScript using Babel
 js: $(LIB_JS)
 
