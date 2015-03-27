@@ -22,8 +22,8 @@ Tools and libraries used
 
 - [React](http://facebook.github.io/react/)
 - [Flummox](http://acdlite.github.io/flummox)
-- [iojs](iojs.org)
-- [koa](koajs.com)
+- [iojs](http://iojs.org)
+- [koa](http://koajs.com/)
 - [Sass/libsass](sass-lang.com)
 - [React Router](https://github.com/rackt/react-router)
 - [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
