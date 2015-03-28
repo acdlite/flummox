@@ -5,7 +5,7 @@
   "main": "lib/app.js",
   "scripts": {
     "prestart": "make fast-build",
-    "start": "node lib/server"
+    "start": "node --harmony lib/server"
   },
   "repository": {
     "type": "git",
