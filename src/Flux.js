@@ -123,6 +123,7 @@ export default class Flux extends EventEmitter {
           this._dispatch({
             actionId,
             error,
+            actionArgs: actionArgs,
             async: 'failure',
           });
 
