@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.3.0
+  - **New Feature**
+    - `registerAll()` and `registerAllAsync()` [@hugobessaa](https://github.com/hugobessaa)
+
 ## 3.2.1
 - **Bugfix**
   - Fix connectToStores HoC to pass state instead of props.
