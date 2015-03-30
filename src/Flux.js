@@ -57,6 +57,7 @@ export default class Flux extends EventEmitter {
   removeStore(key) {
     if (this._stores.hasOwnProperty(key)) {
       this._stores[key].removeAllListeners();
+      this.dispatcher.unregister(this._stores[key]._token);
       delete this._stores[key];
     } else {
       throw new Error(

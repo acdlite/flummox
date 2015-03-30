@@ -100,6 +100,7 @@ describe('Flux', () => {
       flux.createStore('ExampleStore', TestStore);
       flux.removeStore('ExampleStore');
       expect(flux._stores.ExampleStore).to.be.undefined;
+      expect(flux.dispatcher.$Dispatcher_callbacks.ExampleStore).to.be.undefined;
     });
   });
 
