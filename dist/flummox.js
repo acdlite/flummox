@@ -70,9 +70,9 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(3).Dispatcher;
+	var Dispatcher = __webpack_require__(4).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
 	var Flux = (function (_EventEmitter) {
 	  function Flux() {
@@ -108,6 +108,7 @@ var Flummox =
 
 	        store._waitFor = this.waitFor.bind(this);
 	        store._token = token;
+	        store._getAllActionIds = this.getAllActionIds.bind(this);
 
 	        this._stores[key] = store;
 
@@ -156,6 +157,21 @@ var Flummox =
 	        if (!actions) {
 	          return;
 	        }return actions.getConstants();
+	      }
+	    },
+	    getAllActionIds: {
+	      value: function getAllActionIds() {
+	        var actionIds = [];
+
+	        for (var key in this._actions) {
+	          if (!this._actions.hasOwnProperty(key)) continue;
+
+	          var actionConstants = this._actions[key].getConstants();
+
+	          actionIds = actionIds.concat(getValues(actionConstants));
+	        }
+
+	        return actionIds;
 	      }
 	    },
 	    dispatch: {
@@ -312,11 +328,24 @@ var Flummox =
 
 	// Aliases
 	Flux.prototype.getConstants = Flux.prototype.getActionIds;
+	Flux.prototype.getAllConstants = Flux.prototype.getAllActionIds;
 	Flux.prototype.dehydrate = Flux.prototype.serialize;
 	Flux.prototype.hydrate = Flux.prototype.deserialize;
 
 	function getClassName(Class) {
 	  return Class.prototype.constructor.name;
+	}
+
+	function getValues(object) {
+	  var values = [];
+
+	  for (var key in object) {
+	    if (!object.hasOwnProperty(key)) continue;
+
+	    values.push(object[key]);
+	  }
+
+	  return values;
 	}
 
 	var Flummox = Flux;
@@ -349,9 +378,9 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var EventEmitter = _interopRequire(__webpack_require__(3));
 
-	var assign = _interopRequire(__webpack_require__(6));
+	var assign = _interopRequire(__webpack_require__(5));
 
 	var Store = (function (_EventEmitter) {
 
@@ -367,6 +396,11 @@ var Flummox =
 
 	    this._handlers = {};
 	    this._asyncHandlers = {};
+	    this._catchAllHandlers = [];
+	    this._catchAllAsyncHandlers = {
+	      begin: [],
+	      success: [],
+	      failure: [] };
 	  }
 
 	  _inherits(Store, _EventEmitter);
@@ -437,11 +471,37 @@ var Flummox =
 	      value: function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
 	        actionId = ensureActionId(actionId);
 
-	        var asyncHandlers = {
+	        var asyncHandlers = this._bindAsyncHandlers({
 	          begin: beginHandler,
 	          success: successHandler,
-	          failure: failureHandler };
+	          failure: failureHandler });
 
+	        this._asyncHandlers[actionId] = asyncHandlers;
+	      }
+	    },
+	    registerAll: {
+	      value: function registerAll(handler) {
+	        if (typeof handler !== "function") {
+	          return;
+	        }this._catchAllHandlers.push(handler.bind(this));
+	      }
+	    },
+	    registerAllAsync: {
+	      value: function registerAllAsync(beginHandler, successHandler, failureHandler) {
+	        var _this = this;
+
+	        var asyncHandlers = this._bindAsyncHandlers({
+	          begin: beginHandler,
+	          success: successHandler,
+	          failure: failureHandler });
+
+	        Object.keys(asyncHandlers).forEach(function (key) {
+	          _this._catchAllAsyncHandlers[key].push(asyncHandlers[key]);
+	        });
+	      }
+	    },
+	    _bindAsyncHandlers: {
+	      value: function _bindAsyncHandlers(asyncHandlers) {
 	        for (var key in asyncHandlers) {
 	          if (!asyncHandlers.hasOwnProperty(key)) continue;
 
@@ -454,7 +514,7 @@ var Flummox =
 	          }
 	        }
 
-	        this._asyncHandlers[actionId] = asyncHandlers;
+	        return asyncHandlers;
 	      }
 	    },
 	    waitFor: {
@@ -470,48 +530,41 @@ var Flummox =
 	        var actionArgs = payload.actionArgs;
 	        var error = payload.error;
 
+	        var _allHandlers = this._catchAllHandlers;
 	        var _handler = this._handlers[actionId];
+
+	        var _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
 	        var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
 
 	        if (_async) {
+	          var beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+
 	          switch (_async) {
 	            case "begin":
-	              if (typeof _asyncHandler === "function") {
-	                this._performHandler.apply(this, [_asyncHandler].concat(actionArgs));
-	              }
+	              this._performHandler(beginOrFailureHandlers, actionArgs);
 	              return;
 	            case "failure":
-	              if (typeof _asyncHandler === "function") {
-	                this._performHandler(_asyncHandler, error);
-	              }
+	              this._performHandler(beginOrFailureHandlers, [error]);
 	              return;
 	            case "success":
-	              if (typeof _asyncHandler === "function") {
-	                _handler = _asyncHandler;
-	              }
-	              break;
+	              this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler]), [body]);
+	              return;
 	            default:
 	              return;
 	          }
 	        }
 
-	        if (typeof _handler !== "function") {
-	          return;
-	        }this._performHandler(_handler, body);
+	        this._performHandler(_allHandlers.concat([_handler]), [body]);
 	      }
 	    },
 	    _performHandler: {
-	      value: function _performHandler(_handler) {
-	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	          args[_key - 1] = arguments[_key];
-	        }
-
+	      value: function _performHandler(_handlers, args) {
 	        this._isHandlingDispatch = true;
 	        this._pendingState = this._assignState(undefined, this.state);
 	        this._emitChangeAfterHandlingDispatch = false;
 
 	        try {
-	          _handler.apply(this, args);
+	          this._performHandlers(_handlers, args);
 	        } finally {
 	          if (this._emitChangeAfterHandlingDispatch) {
 	            this.state = this._pendingState;
@@ -522,6 +575,14 @@ var Flummox =
 	          this._pendingState = undefined;
 	          this._emitChangeAfterHandlingDispatch = false;
 	        }
+	      }
+	    },
+	    _performHandlers: {
+	      value: function _performHandlers(_handlers, args) {
+	        _handlers.forEach((function (_handler) {
+	          if (typeof _handler !== "function") return;
+	          _handler.apply(this, args);
+	        }).bind(this));
 	      }
 	    }
 	  }, {
@@ -689,22 +750,6 @@ var Flummox =
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(5)
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -939,7 +984,55 @@ var Flummox =
 
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(6)
+
+
+/***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1192,38 +1285,6 @@ var Flummox =
 
 
 	module.exports = Dispatcher;
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
 
 
 /***/ },

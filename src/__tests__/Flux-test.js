@@ -9,7 +9,7 @@ function createSerializableStore(serializedState) {
     static deserialize(stateString) {
       return {
         stateString,
-        deserialized: true,
+        deserialized: true
       };
     }
   };
@@ -171,7 +171,8 @@ describe('Flux', () => {
   describe('#removeActions()', () => {
     it('throws if key does not exist', () => {
       const flux = new Flux();
-      class TestActions extends Actions {}
+      class TestActions extends Actions {
+      }
 
       flux.createActions('TestActions', TestActions);
       expect(flux.removeActions.bind(flux, 'NonexistentActions')).to.throw(
@@ -181,11 +182,38 @@ describe('Flux', () => {
 
     it('deletes actions instance', () => {
       const flux = new Flux();
-      class TestActions extends Store {}
+      class TestActions extends Store {
+      }
 
       flux.createStore('TestActions', TestActions);
       flux.removeStore('TestActions');
       expect(flux._actions.TestActions).to.be.undefined;
+    });
+  });
+
+  describe('#getAllActionIds() / #getAllConstants()', () => {
+    class TestFooActions extends Actions {
+      getFoo() {}
+      getBar() {}
+    }
+
+    class TestBarActions extends Actions {
+      getFoo() {}
+      getBar() {}
+    }
+
+    it('retrives ids of all actions', () => {
+      let flux = new Flux();
+      flux.createActions('TestFooActions', TestFooActions);
+      flux.createActions('TestBarActions', TestBarActions);
+
+      expect(flux.getAllActionIds()).to.be.an('array');
+      expect(flux.getAllActionIds()[0]).to.be.a('string');
+      expect(flux.getAllActionIds()).to.have.length(4);
+
+      expect(flux.getAllConstants()).to.be.an('array');
+      expect(flux.getAllConstants()[0]).to.be.a('string');
+      expect(flux.getAllConstants()).to.have.length(4);
     });
   });
 
@@ -201,7 +229,7 @@ describe('Flux', () => {
 
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        body: 'foobar',
+        body: 'foobar'
       });
     });
 
@@ -236,7 +264,7 @@ describe('Flux', () => {
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(dispatch.secondCall.args[0]).to.deep.equal({
         actionId,
@@ -258,12 +286,12 @@ describe('Flux', () => {
       expect(listener.calledTwice).to.be.true;
       expect(listener.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(listener.secondCall.args[0]).to.deep.equal({
         actionId,
         async: 'success',
-        body: 'foobar',
+        body: 'foobar'
       });
     });
 
@@ -303,7 +331,7 @@ describe('Flux', () => {
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(dispatch.secondCall.args[0]).to.deep.equal({
         actionId,
@@ -399,7 +427,7 @@ describe('Flux', () => {
       expect(JSON.parse(flux.serialize())).to.deep.equal({
         foo: 'foo state',
         bar: 'bar state',
-        baz: 'baz state',
+        baz: 'baz state'
       });
     });
 
@@ -413,7 +441,7 @@ describe('Flux', () => {
 
       expect(JSON.parse(flux.serialize())).to.deep.equal({
         foo: 'foo state',
-        bar: 'bar state',
+        bar: 'bar state'
       });
     });
 
