@@ -127,6 +127,139 @@ describe('Store', () => {
     });
   });
 
+  describe('#registerAll()', () => {
+    it('adds handler to internal collection of "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+
+      expect(handler.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('adds multiple handlers to internal collection of "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler1 = sinon.spy();
+      const handler2 = sinon.spy();
+      store.registerAll(handler1);
+      store.registerAll(handler2);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+      store._catchAllHandlers[1](...mockArgs);
+
+      expect(handler1.calledWith(...mockArgs)).to.be.true;
+      expect(handler2.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('binds handler to store', () => {
+      const store = new ExampleStore();
+      store.foo = 'bar';
+
+      function handler() {
+        return this.foo;
+      }
+
+      store.registerAll(handler);
+
+      expect(store._catchAllHandlers[0]()).to.equal('bar');
+    });
+
+    it('accepts actions instead of action ids', () => {
+      class ExampleActions extends Actions {
+        getFoo() {
+          return 'foo';
+        }
+      }
+
+      const actions = new ExampleActions();
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      const mockArgs = ['foo', 'bar'];
+      store._catchAllHandlers[0](...mockArgs);
+
+      expect(handler.calledWith(...mockArgs)).to.be.true;
+    });
+
+    it('ignores non-function handlers', () => {
+      const store = new ExampleStore();
+      expect(store.registerAll.bind(store, null)).not.to.throw();
+    });
+
+  });
+
+  describe('#registerAllAsync()', () => {
+    it('registers "catch all" handlers for begin, success, and failure of async action', async function() {
+      const error = new Error();
+
+      class ExampleActions extends Actions {
+        async getFoo(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+
+        async getBar(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+      }
+
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', ExampleActions);
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const begin = sinon.spy();
+      const success = sinon.spy();
+      const failure = sinon.spy();
+      store.registerAllAsync(begin, success, failure);
+
+      await actions.getFoo('foo', true);
+      expect(begin.calledOnce).to.be.true;
+      expect(begin.firstCall.args).to.deep.equal(['foo', true]);
+      expect(success.calledOnce).to.be.true;
+      expect(success.firstCall.args[0]).to.equal('foo success');
+      expect(failure.called).to.be.false;
+
+      await expect(actions.getFoo('bar', false)).to.be.rejected;
+      expect(begin.calledTwice).to.be.true;
+      expect(success.calledOnce).to.be.true;
+      expect(failure.calledOnce).to.be.true;
+      expect(failure.firstCall.args[0]).to.equal(error);
+
+      await actions.getBar('foo', true);
+      expect(begin.calledThrice).to.be.true;
+      expect(begin.thirdCall.args).to.deep.equal(['foo', true]);
+      expect(success.calledTwice).to.be.true;
+      expect(success.secondCall.args[0]).to.equal('foo success');
+      expect(failure.calledTwice).to.be.false;
+
+      await expect(actions.getBar('bar', false)).to.be.rejected;
+      expect(begin.callCount).to.equal(4);
+      expect(success.calledTwice).to.be.true;
+      expect(failure.calledTwice).to.be.true;
+      expect(failure.secondCall.args[0]).to.equal(error);
+    });
+
+    it('ignores non-function handlers', () => {
+      const store = new ExampleStore();
+      expect(store.registerAsync.bind(store, null)).not.to.throw();
+    });
+  });
+
   describe('#handler()', () => {
     it('delegates dispatches to registered handlers', () => {
       const store = new ExampleStore();
@@ -138,6 +271,21 @@ describe('Store', () => {
       store.handler({ body, actionId });
 
       expect(handler.calledWith(body)).to.be.true;
+    });
+
+    it('delegates dispatches to registered "catch all" handlers', () => {
+      const store = new ExampleStore();
+      const handler = sinon.spy();
+      const actionIds = ['actionId1', 'actionId2'];
+      store.registerAll(handler);
+
+      // Simulate dispatch
+      const body = { foo: 'bar' };
+      store.handler({ body, actionId: actionIds[0] });
+      store.handler({ body, actionId: actionIds[1] });
+
+      expect(handler.calledWith(body)).to.be.true;
+      expect(handler.calledTwice).to.be.true;
     });
   });
 
