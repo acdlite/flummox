@@ -36,7 +36,7 @@
  * class ParentComponent extends React.Component {
  *
  *   render() {
- *     <FluxComponent connectToStore="fooStore">
+ *     <FluxComponent connectToStores="fooStore">
  *       <ChildComponent />
  *     </FluxComponent>
  *   }
