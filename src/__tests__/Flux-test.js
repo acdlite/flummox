@@ -82,6 +82,27 @@ describe('Flux', () => {
     });
   });
 
+  describe('#removeStore()', () => {
+    it('throws if key does not exist', () => {
+      const flux = new Flux();
+      class TestStore extends Store {}
+
+      flux.createStore('ExampleStore', TestStore);
+      expect(flux.removeStore.bind(flux, 'NonexistentStore')).to.throw(
+        'You\'ve attempted to remove store with key NonexistentStore which does not exist.'
+      );
+    });
+
+    it('deletes store instance', () => {
+      const flux = new Flux();
+      class TestStore extends Store {}
+
+      flux.createStore('ExampleStore', TestStore);
+      flux.removeStore('ExampleStore');
+      expect(flux._stores.ExampleStore).to.be.undefined;
+    });
+  });
+
   describe('#createActions()', () => {
     it('throws if key already exists', () => {
       class TestActions extends Actions {}
@@ -144,6 +165,27 @@ describe('Flux', () => {
 
       expect(flux.getConstants('TestActions').getFoo).to.be.a('string');
       expect(flux.getConstants('NonexistentActions')).to.be.undefined;
+    });
+  });
+
+  describe('#removeActions()', () => {
+    it('throws if key does not exist', () => {
+      const flux = new Flux();
+      class TestActions extends Actions {}
+
+      flux.createActions('TestActions', TestActions);
+      expect(flux.removeActions.bind(flux, 'NonexistentActions')).to.throw(
+        'You\'ve attempted to remove actions with key NonexistentActions which does not exist.'
+      );
+    });
+
+    it('deletes actions instance', () => {
+      const flux = new Flux();
+      class TestActions extends Store {}
+
+      flux.createStore('TestActions', TestActions);
+      flux.removeStore('TestActions');
+      expect(flux._actions.TestActions).to.be.undefined;
     });
   });
 

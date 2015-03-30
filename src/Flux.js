@@ -53,6 +53,17 @@ export default class Flux extends EventEmitter {
     return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
   }
 
+  removeStore(key) {
+    if (this._stores.hasOwnProperty(key)) {
+      this._stores[key].removeAllListeners();
+      delete this._stores[key];
+    } else {
+      throw new Error(
+        `You've attempted to remove store with key ${key} which does not exist.`
+      );
+    }
+  }
+
   createActions(key, _Actions, ...constructorArgs) {
 
     if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
@@ -92,6 +103,16 @@ export default class Flux extends EventEmitter {
     if (!actions) return;
 
     return actions.getConstants();
+  }
+
+  removeActions(key) {
+    if (this._actions.hasOwnProperty(key)) {
+      delete this._actions[key];
+    } else {
+      throw new Error(
+        `You've attempted to remove actions with key ${key} which does not exist.`
+      );
+    }
   }
 
   dispatch(actionId, body) {
