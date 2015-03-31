@@ -20,7 +20,6 @@ clean:
 
 # Test
 test: lint js
-	echo $(TEST_JS)
 	@NODE_ENV=test $(MOCHA_CMD) $(MOCHA_ARGS)
 
 test-cov: js
