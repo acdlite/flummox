@@ -97,10 +97,11 @@ describe('Flux', () => {
       const flux = new Flux();
       class TestStore extends Store {}
 
-      flux.createStore('ExampleStore', TestStore);
+      let store = flux.createStore('ExampleStore', TestStore);
+      expect(flux.dispatcher.$Dispatcher_callbacks[store._token]).to.be.function;
       flux.removeStore('ExampleStore');
       expect(flux._stores.ExampleStore).to.be.undefined;
-      expect(flux.dispatcher.$Dispatcher_callbacks.ExampleStore).to.be.undefined;
+      expect(flux.dispatcher.$Dispatcher_callbacks[store._token]).to.be.undefined;
     });
   });
 
