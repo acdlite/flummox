@@ -9,12 +9,16 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.3.1
+  - **Bug Fix**
+    - Yet another attempt to deal with asynchronous error handling in a sane way. Previously, errors in store handlers were being swallowed. This should fix that problem.
+
 ## 3.3.0
   - **New Feature**
     - `registerAll()` and `registerAllAsync()` [@hugobessaa](https://github.com/hugobessaa)
 
 ## 3.2.1
-- **Bugfix**
+- **Bug Fix**
   - Fix connectToStores HoC to pass state instead of props.
 
 ## 3.2.0
