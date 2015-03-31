@@ -8,6 +8,7 @@ import Store from './Store';
 import Actions from './Actions';
 import { Dispatcher } from 'flux';
 import EventEmitter from 'eventemitter3';
+import assign from 'object-assign';
 
 export default class Flux extends EventEmitter {
 
@@ -57,15 +58,32 @@ export default class Flux extends EventEmitter {
   createActions(key, _Actions, ...constructorArgs) {
 
     if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
-      const className = getClassName(_Actions);
+      if (typeof _Actions === 'function') {
+        console.log(_Actions.prototype);
+        const properties = assign({}, _Actions.prototype);
 
-      throw new Error(
-        `You've attempted to create actions from the class ${className}, which `
-      + `does not have the base Actions class in its prototype chain. Make `
-      + `sure you're using the \`extends\` keyword: \`class ${className} `
-      + `extends Actions { ... }\``
-      );
+        _Actions.prototype = Object.create(Actions.prototype);
+        _Actions.prototype.constructor = _Actions;
+
+
+        assign(_Actions.prototype, properties);
+      } else {
+        const properties = _Actions;
+        _Actions = class extends Actions {};
+        assign(_Actions.prototype, properties);
+      }
     }
+
+    // if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
+    //   const className = getClassName(_Actions);
+    //
+    //   throw new Error(
+    //     `You've attempted to create actions from the class ${className}, which `
+    //   + `does not have the base Actions class in its prototype chain. Make `
+    //   + `sure you're using the \`extends\` keyword: \`class ${className} `
+    //   + `extends Actions { ... }\``
+    //   );
+    // }
 
     if (this._actions.hasOwnProperty(key) && this._actions[key]) {
       throw new Error(
