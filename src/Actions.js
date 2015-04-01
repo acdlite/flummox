@@ -14,6 +14,8 @@
 
 import uniqueId from 'uniqueid';
 
+const noop = () => {};
+
 export default class Actions {
 
   constructor() {
@@ -95,7 +97,10 @@ export default class Actions {
 
   _dispatchAsync(actionId, promise, args, methodName) {
     if (typeof this.dispatchAsync === 'function') {
-      setTimeout(this.dispatchAsync(actionId, promise, args), 0);
+      setTimeout(() => {
+        this.dispatchAsync(actionId, promise, args)
+        .catch(noop);
+      }, 0);
     } else {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
