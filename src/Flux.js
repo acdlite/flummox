@@ -145,7 +145,7 @@ export default class Flux extends EventEmitter {
       .catch(error => {
         this.emit('error', error);
 
-        return Promise.reject(error);
+        throw error;
       });
   }
 
