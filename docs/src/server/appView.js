@@ -45,7 +45,9 @@ export default function(app) {
 
       const routeHandlerInfo = { state, flux };
 
-      yield performRouteHandlerStaticMethod(state.routes, 'routerWillRun', routeHandlerInfo);
+      try {
+        yield performRouteHandlerStaticMethod(state.routes, 'routerWillRun', routeHandlerInfo);
+      } catch (error) {}
 
 
       appString = React.renderToString(

@@ -6,7 +6,7 @@ class HomeHandler extends React.Component {
   render() {
     const { doc } = this.props;
 
-    if (!doc) return null;
+    if (!doc) return <span />;
 
     return <Doc doc={doc} />;
   }
@@ -14,8 +14,8 @@ class HomeHandler extends React.Component {
 
 HomeHandler = connectToStores(HomeHandler, {
   docs: store => ({
-    doc: store.getDoc('index'),
-  }),
+    doc: store.getDoc('index')
+  })
 });
 
 export default HomeHandler;

@@ -43,17 +43,17 @@ class AppNav extends React.Component {
             <AppNavLink title="Flummox" href="/" />
           </View>
           <View justifyContent="flex-end" flexGrow>
-            <AppNavLink title="Guides" href="/flummox/guides">
-              <AppNavLink title="Quick Start" href="/flummox/guides/quick-start" />
-              <AppNavLink title="React Integration" href="/flummox/guides/react-integration" />
-              <AppNavLink title="Why FluxComponent > FluxMixin" href="/flummox/guides/why-flux-component-is-better-than-flux-mixin" />
+            <AppNavLink title="Guides" href="/flummox/docs/guides">
+              <AppNavLink title="Quick Start" href="/flummox/docs/guides/quick-start" />
+              <AppNavLink title="React Integration" href="/flummox/docs/guides/react-integration" />
+              <AppNavLink title="Why FluxComponent > FluxMixin" href="/flummox/docs/guides/why-flux-component-is-better-than-flux-mixin" />
             </AppNavLink>
-            <AppNavLink title="API" href="/flummox/api">
-              <AppNavLink title="Store" href="/flummox/api/store" />
-              <AppNavLink title="Flux" href="/flummox/api/flux" />
-              <AppNavLink title="Actions" href="/flummox/api/actions" />
-              <AppNavLink title="FluxComponent" href="/flummox/api/fluxcomponent" />
-              <AppNavLink title="fluxMixin" href="/flummox/api/fluxmixin" />
+            <AppNavLink title="API" href="/flummox/docs/api">
+              <AppNavLink title="Store" href="/flummox/docs/api/store" />
+              <AppNavLink title="Flux" href="/flummox/docs/api/flux" />
+              <AppNavLink title="Actions" href="/flummox/docs/api/actions" />
+              <AppNavLink title="FluxComponent" href="/flummox/docs/api/fluxcomponent" />
+              <AppNavLink title="fluxMixin" href="/flummox/docs/api/fluxmixin" />
             </AppNavLink>
             <AppNavLink title="GitHub" href="https://github.com/acdlite/flummox" />
           </View>

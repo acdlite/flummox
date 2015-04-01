@@ -7,12 +7,22 @@ class DocHandler extends React.Component {
   static willTransitionTo(transition, params) {
     const { splat: docPath } = params;
 
-    const canonicalPath = DocHandler.normalizeDocPath(docPath);
+    const canonicalPath = DocHandler.canonicalDocPath(docPath);
 
     if (docPath !== canonicalPath) transition.redirect(`/flummox/${canonicalPath}`);
   }
 
-  static normalizeDocPath(docPath) {
+  // Redundant since docs have already been fetched, but included for illustration
+  static async routerWillRun({ flux, state }) {
+    const docActions = flux.getActions('docs');
+    const { params: { splat: path } } = state;
+
+    const canonicalPath = DocHandler.canonicalDocPath(path);
+
+    return await docActions.getDoc(canonicalPath);
+  }
+
+  static canonicalDocPath(docPath) {
     const canonicalPath = docPath.replace(/\/index\/?$/, '');
 
     return canonicalPath;
@@ -21,7 +31,7 @@ class DocHandler extends React.Component {
   getDocPath() {
     const { params: { splat: docPath } } = this.props;
 
-    return DocHandler.normalizeDocPath(docPath);
+    return DocHandler.canonicalDocPath(docPath);
   }
 
   render() {
