@@ -204,8 +204,6 @@ var Flummox =
 	            actionId: actionId,
 	            error: error,
 	            async: "failure" });
-
-	          return Promise.reject(error);
 	        })["catch"](function (error) {
 	          _this.emit("error", error);
 
