@@ -9,7 +9,7 @@ function createSerializableStore(serializedState) {
     static deserialize(stateString) {
       return {
         stateString,
-        deserialized: true,
+        deserialized: true
       };
     }
   };
@@ -82,6 +82,29 @@ describe('Flux', () => {
     });
   });
 
+  describe('#removeStore()', () => {
+    it('throws if key does not exist', () => {
+      const flux = new Flux();
+      class TestStore extends Store {}
+
+      flux.createStore('ExampleStore', TestStore);
+      expect(flux.removeStore.bind(flux, 'NonexistentStore')).to.throw(
+        'You\'ve attempted to remove store with key NonexistentStore which does not exist.'
+      );
+    });
+
+    it('deletes store instance', () => {
+      const flux = new Flux();
+      class TestStore extends Store {}
+
+      let store = flux.createStore('ExampleStore', TestStore);
+      expect(flux.dispatcher.$Dispatcher_callbacks[store._token]).to.be.function;
+      flux.removeStore('ExampleStore');
+      expect(flux._stores.ExampleStore).to.be.undefined;
+      expect(flux.dispatcher.$Dispatcher_callbacks[store._token]).to.be.undefined;
+    });
+  });
+
   describe('#createActions()', () => {
     it('throws if key already exists', () => {
       class TestActions extends Actions {}
@@ -147,6 +170,29 @@ describe('Flux', () => {
     });
   });
 
+  describe('#removeActions()', () => {
+    it('throws if key does not exist', () => {
+      const flux = new Flux();
+      class TestActions extends Actions {
+      }
+
+      flux.createActions('TestActions', TestActions);
+      expect(flux.removeActions.bind(flux, 'NonexistentActions')).to.throw(
+        'You\'ve attempted to remove actions with key NonexistentActions which does not exist.'
+      );
+    });
+
+    it('deletes actions instance', () => {
+      const flux = new Flux();
+      class TestActions extends Store {
+      }
+
+      flux.createStore('TestActions', TestActions);
+      flux.removeStore('TestActions');
+      expect(flux._actions.TestActions).to.be.undefined;
+    });
+  });
+
   describe('#getAllActionIds() / #getAllConstants()', () => {
     class TestFooActions extends Actions {
       getFoo() {}
@@ -185,7 +231,7 @@ describe('Flux', () => {
 
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        body: 'foobar',
+        body: 'foobar'
       });
     });
 
@@ -220,7 +266,7 @@ describe('Flux', () => {
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(dispatch.secondCall.args[0]).to.deep.equal({
         actionId,
@@ -242,12 +288,12 @@ describe('Flux', () => {
       expect(listener.calledTwice).to.be.true;
       expect(listener.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(listener.secondCall.args[0]).to.deep.equal({
         actionId,
         async: 'success',
-        body: 'foobar',
+        body: 'foobar'
       });
     });
 
@@ -275,7 +321,7 @@ describe('Flux', () => {
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
         actionId,
-        async: 'begin',
+        async: 'begin'
       });
       expect(dispatch.secondCall.args[0]).to.deep.equal({
         actionId,
@@ -355,7 +401,7 @@ describe('Flux', () => {
       expect(JSON.parse(flux.serialize())).to.deep.equal({
         foo: 'foo state',
         bar: 'bar state',
-        baz: 'baz state',
+        baz: 'baz state'
       });
     });
 
@@ -369,7 +415,7 @@ describe('Flux', () => {
 
       expect(JSON.parse(flux.serialize())).to.deep.equal({
         foo: 'foo state',
-        bar: 'bar state',
+        bar: 'bar state'
       });
     });
 
