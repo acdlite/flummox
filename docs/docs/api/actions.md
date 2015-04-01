@@ -24,6 +24,22 @@ class MessageActions extends Actions {
 }
 ```
 
+You can also use a plain JavaScript object. When passed to `flux.createActions`, it will be converted into an Actions class.
+
+```js
+// Same as previous example
+const MessageActions = {
+  newMessage(content) {
+    return content;
+  },
+
+  async createMessage(messageContent) {
+    const response = await serverCreateMessage(messageContent);
+    return await response.json();
+  }
+}
+```
+
 Testing
 -------
 

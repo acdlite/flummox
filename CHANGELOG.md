@@ -9,7 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 3.4
+## 3.5.0
+- **New Feature**
+  - `Flux#createActions()` will now also accept a plain JavaScript object instead of an Actions class.
+
+## 3.4.0
 - **New Feature**
   - `removeActions()` and `removeStore()` [@chicoxyzzy](https://github.com/chicoxyzzy)
 

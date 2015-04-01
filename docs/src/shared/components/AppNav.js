@@ -46,13 +46,14 @@ class AppNav extends React.Component {
             <AppNavLink title="Guides" href="/flummox/docs/guides">
               <AppNavLink title="Quick Start" href="/flummox/docs/guides/quick-start" />
               <AppNavLink title="React Integration" href="/flummox/docs/guides/react-integration" />
-              <AppNavLink title="Why FluxComponent > FluxMixin" href="/flummox/docs/guides/why-flux-component-is-better-than-flux-mixin" />
+              <AppNavLink title="Why FluxComponent > fluxMixin" href="/flummox/docs/guides/why-flux-component-is-better-than-flux-mixin" />
             </AppNavLink>
             <AppNavLink title="API" href="/flummox/docs/api">
               <AppNavLink title="Store" href="/flummox/docs/api/store" />
               <AppNavLink title="Flux" href="/flummox/docs/api/flux" />
               <AppNavLink title="Actions" href="/flummox/docs/api/actions" />
               <AppNavLink title="FluxComponent" href="/flummox/docs/api/fluxcomponent" />
+              <AppNavLink title="Higher-order component" href="/flummox/docs/api/higher-order-component" />
               <AppNavLink title="fluxMixin" href="/flummox/docs/api/fluxmixin" />
             </AppNavLink>
             <AppNavLink title="GitHub" href="https://github.com/acdlite/flummox" />
