@@ -120,6 +120,17 @@ var Flummox =
 	        return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
 	      }
 	    },
+	    removeStore: {
+	      value: function removeStore(key) {
+	        if (this._stores.hasOwnProperty(key)) {
+	          this._stores[key].removeAllListeners();
+	          this.dispatcher.unregister(this._stores[key]._token);
+	          delete this._stores[key];
+	        } else {
+	          throw new Error("You've attempted to remove store with key " + key + " which does not exist.");
+	        }
+	      }
+	    },
 	    createActions: {
 	      value: function createActions(key, _Actions) {
 	        for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -159,6 +170,15 @@ var Flummox =
 	        }return actions.getConstants();
 	      }
 	    },
+	    removeActions: {
+	      value: function removeActions(key) {
+	        if (this._actions.hasOwnProperty(key)) {
+	          delete this._actions[key];
+	        } else {
+	          throw new Error("You've attempted to remove actions with key " + key + " which does not exist.");
+	        }
+	      }
+	    },
 	    getAllActionIds: {
 	      value: function getAllActionIds() {
 	        var actionIds = [];
@@ -185,7 +205,8 @@ var Flummox =
 
 	        var payload = {
 	          actionId: actionId,
-	          async: "begin" };
+	          async: "begin"
+	        };
 
 	        if (actionArgs) payload.actionArgs = actionArgs;
 
@@ -203,11 +224,12 @@ var Flummox =
 	          _this._dispatch({
 	            actionId: actionId,
 	            error: error,
-	            async: "failure" });
+	            async: "failure"
+	          });
 	        })["catch"](function (error) {
 	          _this.emit("error", error);
 
-	          return Promise.reject(error);
+	          throw error;
 	        });
 	      }
 	    },
@@ -378,7 +400,7 @@ var Flummox =
 
 	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var assign = _interopRequire(__webpack_require__(7));
+	var assign = _interopRequire(__webpack_require__(6));
 
 	var Store = (function (_EventEmitter) {
 
@@ -626,7 +648,7 @@ var Flummox =
 	 * of the payload sent to the dispatcher.
 	 */
 
-	var uniqueId = _interopRequire(__webpack_require__(6));
+	var uniqueId = _interopRequire(__webpack_require__(7));
 
 	var Actions = (function () {
 	  function Actions() {
@@ -1254,6 +1276,38 @@ var Flummox =
 
 	'use strict';
 
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 
 	var count = 0;
 
@@ -1306,38 +1360,6 @@ var Flummox =
 	id.reset = function() {
 	  return count = 0;
 	};
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
 
 /***/ },
 /* 8 */
