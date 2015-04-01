@@ -95,7 +95,7 @@ export default class Actions {
 
   _dispatchAsync(actionId, promise, args, methodName) {
     if (typeof this.dispatchAsync === 'function') {
-      setTimeout(this.dispatchAsync(actionId, promise, args), 0);
+      this.dispatchAsync(actionId, promise, args);
     } else {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(

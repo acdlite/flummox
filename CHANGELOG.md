@@ -9,7 +9,7 @@ Tags:
 - [Internal]
 - [Polish]
 
-## 3.3.1
+## 3.3.2
   - **Bug Fix**
     - Yet another attempt to deal with asynchronous error handling in a sane way. Previously, errors in store handlers were being swallowed. This should fix that problem.
 
