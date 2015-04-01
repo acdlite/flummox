@@ -118,7 +118,7 @@ describe('Flux', () => {
       );
     });
 
-    it.skip('throws if Actions is not a prototype of class', () => {
+    it('throws if Actions is a class without base Actions class in its prototype chain', () => {
       const flux = new Flux();
       class ForgotToExtendActions {}
 
@@ -129,29 +129,6 @@ describe('Flux', () => {
         + 'in its prototype chain. Make sure you\'re using the `extends` '
         + 'keyword: `class ForgotToExtendActions extends Actions { ... }`'
       );
-    });
-
-    it.only('accepts plain class, no extends', () => {
-      const flux = new Flux();
-
-      class FoobarActionsssss {
-        foo() {
-          return 'bar';
-        }
-
-        bar() {
-          return 'baz';
-        }
-      }
-
-      console.log(FoobarActionsssss.prototype);
-
-      flux.createActions('foobar', FoobarActionsssss);
-
-      expect(flux.getActions('foobar')).to.be.an.instanceof(Actions);
-
-      // expect(flux.getActions('foobar').foo()).to.equal('bar');
-      // expect(flux.getActions('foobar').bar()).to.equal('baz');
     });
 
     it('accepts plain old JavaScript object', () => {
