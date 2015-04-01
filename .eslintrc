@@ -10,7 +10,7 @@
     "quotes": [2, "single"],
     "curly": [2, "multi-line"],
     "no-underscore-dangle": 0,
-    "no-comma-dangle": 0,
+    "comma-dangle": 0,
     "consistent-return": 0,
 
     // Doesn't work with classes
