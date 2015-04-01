@@ -1,5 +1,7 @@
 # Contributing
 
+**Please make sure your PR includes both tests and documentation.**
+
 ## File organization
 
 All code is written in next-generation JavaScript and transpiled using Babel, including tests. Source files are located in `src` and transpiled to `lib`, which is gitignored. `dist` is for browser builds, and is not ignored. Add-ons (modules that are not part of core) are located in `src/addons`.
@@ -52,6 +54,10 @@ make test
 Tests are run on the transpiled code, not the source files. If you rename or delete a source file, make sure the transpiled file is also deleted. You can always run `make clean` to clear out all generated files.
 
 Tests are written using mocha and chai. chai-as-promised and async/await should be used for testing asynchronous operations. A browser environment is provided for React tests via jsdom. Continuous integration tests are run on Travis CI.
+
+## Documentation
+
+New features or API changes should be documented. Docs are located in the `docs` folder. Refer to the docs [README](docs/README.md) for information on how to build the docs. Please do not commit changes `dist/docs` — I will add those before deploying to GitHub pages.
 
 ## Code style
 

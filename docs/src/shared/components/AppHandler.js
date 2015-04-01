@@ -13,6 +13,7 @@ class AppHandler extends React.Component {
     }
   }
 
+  // Fetch all docs on start up, since there aren't that many
   static async routerWillRun({ flux }) {
     const docActions = flux.getActions('docs');
     return await docActions.getAllDocs();

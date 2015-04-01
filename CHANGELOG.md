@@ -9,12 +9,24 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.4
+- **New Feature**
+  - `removeActions()` and `removeStore()` [@chicoxyzzy](https://github.com/chicoxyzzy)
+
+## 3.3.3
+- **Bug Fix**
+  - Squash Chrome `Uncaught (in promise) errors` once and for all (hopefully). Big thanks to [@johanneslumpe](https://github.com/johanneslumpe).
+
+## 3.3.2
+- **Bug Fix**
+  - Yet another attempt to deal with asynchronous error handling in a sane way. Previously, errors in store handlers were being swallowed. This should fix that problem.
+
 ## 3.3.0
-  - **New Feature**
-    - `registerAll()` and `registerAllAsync()` [@hugobessaa](https://github.com/hugobessaa)
+- **New Feature**
+  - `registerAll()` and `registerAllAsync()` [@hugobessaa](https://github.com/hugobessaa)
 
 ## 3.2.1
-- **Bugfix**
+- **Bug Fix**
   - Fix connectToStores HoC to pass state instead of props.
 
 ## 3.2.0

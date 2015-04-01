@@ -70,9 +70,9 @@ var Flummox =
 
 	var Actions = _interopRequire(__webpack_require__(2));
 
-	var Dispatcher = __webpack_require__(4).Dispatcher;
+	var Dispatcher = __webpack_require__(3).Dispatcher;
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
 	var Flux = (function (_EventEmitter) {
 	  function Flux() {
@@ -120,6 +120,17 @@ var Flummox =
 	        return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
 	      }
 	    },
+	    removeStore: {
+	      value: function removeStore(key) {
+	        if (this._stores.hasOwnProperty(key)) {
+	          this._stores[key].removeAllListeners();
+	          this.dispatcher.unregister(this._stores[key]._token);
+	          delete this._stores[key];
+	        } else {
+	          throw new Error("You've attempted to remove store with key " + key + " which does not exist.");
+	        }
+	      }
+	    },
 	    createActions: {
 	      value: function createActions(key, _Actions) {
 	        for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -159,6 +170,15 @@ var Flummox =
 	        }return actions.getConstants();
 	      }
 	    },
+	    removeActions: {
+	      value: function removeActions(key) {
+	        if (this._actions.hasOwnProperty(key)) {
+	          delete this._actions[key];
+	        } else {
+	          throw new Error("You've attempted to remove actions with key " + key + " which does not exist.");
+	        }
+	      }
+	    },
 	    getAllActionIds: {
 	      value: function getAllActionIds() {
 	        var actionIds = [];
@@ -185,7 +205,8 @@ var Flummox =
 
 	        var payload = {
 	          actionId: actionId,
-	          async: "begin" };
+	          async: "begin"
+	        };
 
 	        if (actionArgs) payload.actionArgs = actionArgs;
 
@@ -203,13 +224,12 @@ var Flummox =
 	          _this._dispatch({
 	            actionId: actionId,
 	            error: error,
-	            async: "failure" });
-
-	          return Promise.reject(error);
+	            async: "failure"
+	          });
 	        })["catch"](function (error) {
 	          _this.emit("error", error);
 
-	          return Promise.reject(error);
+	          throw error;
 	        });
 	      }
 	    },
@@ -378,9 +398,9 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(3));
+	var EventEmitter = _interopRequire(__webpack_require__(4));
 
-	var assign = _interopRequire(__webpack_require__(5));
+	var assign = _interopRequire(__webpack_require__(6));
 
 	var Store = (function (_EventEmitter) {
 
@@ -681,10 +701,7 @@ var Flummox =
 
 	          if (isPromise(body)) {
 	            var promise = body;
-	            _this._dispatchAsync(actionId, promise, args, methodName)
-	            // Catch errors and do nothing
-	            // They can be handled by store or caller
-	            ["catch"](function (error) {});
+	            _this._dispatchAsync(actionId, promise, args, methodName);
 	          } else {
 	            _this._dispatch(actionId, body, args, methodName);
 	          }
@@ -727,13 +744,11 @@ var Flummox =
 	    _dispatchAsync: {
 	      value: function _dispatchAsync(actionId, promise, args, methodName) {
 	        if (typeof this.dispatchAsync === "function") {
-	          return this.dispatchAsync(actionId, promise, args);
+	          this.dispatchAsync(actionId, promise, args);
 	        } else {
 	          if ((undefined) !== "production") {
 	            console.warn("You've attempted to perform the asynchronous action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
 	          }
-
-	          return promise;
 	        }
 	      }
 	    }
@@ -750,6 +765,22 @@ var Flummox =
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(5)
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -984,55 +1015,7 @@ var Flummox =
 
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(6)
-
-
-/***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1285,6 +1268,38 @@ var Flummox =
 
 
 	module.exports = Dispatcher;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
 
 
 /***/ },

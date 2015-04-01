@@ -16,9 +16,9 @@ Join the **#flummox** channel of the [Reactiflux](http://reactiflux.com/) Slack 
 
 [![Join the chat at https://gitter.im/acdlite/flummox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/acdlite/flummox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-* [API documentation](/flummox/api)
-* [Quick start guide](/flummox/guides/quick-start)
-* [React integration guide](/flummox/guides/react-integration)
+* [API documentation](/flummox/docs/api)
+* [Quick start guide](/flummox/docs/guides/quick-start)
+* [React integration guide](/flummox/docs/guides/react-integration)
 
 Features
 --------
@@ -27,11 +27,11 @@ Features
 - Robust yet minimal API inspired by React and ES6
 - Tiny. **~3.8kb (compressed and gzipped)**.
 - The dispatcher and constants are implementation details — no need to interact with them unless you want to.
-- Async actions [made simple with promises](/flummox/api/actions#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
-- Easy [integration with React](/flummox/guides/react-integration) via fluxMixin and FluxComponent.
+- Async actions [made simple with promises](/flummox/docs/api/actions#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
+- Easy [integration with React](/flummox/docs/guides/react-integration) via fluxMixin and FluxComponent.
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
 - Serialization/deserialization of stores, for faster page loads.
-- Centralized [debugging](/flummox/api/flux).
+- Centralized [debugging](/flummox/docs/api/flux).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
 **Version 3.0 with official support for React 0.13 has been released! See the [changelog](https://github.com/acdlite/flummox/blob/master/CHANGELOG.md) and [upgrade guide](https://github.com/acdlite/flummox/blob/master/UPGRADE_GUIDE.md) for more information.**
@@ -165,7 +165,7 @@ class OuterComponent extends React.Component {
 }
 ```
 
-You can subscribe to subsets of store state using custom state getters. Read all about it in the [React integration guide](/flummox/guides/react-integration).
+You can subscribe to subsets of store state using custom state getters. Read all about it in the [React integration guide](/flummox/docs/guides/react-integration).
 
 
 Roadmap

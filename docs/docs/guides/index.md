@@ -1,6 +1,6 @@
 Guides
 ======
 
-- [Quick start](/flummox/guides/quick-start)
-- [React integration](/flummox/guides/react-integration)
-- [Why FluxComponent > fluxMixin](/flummox/guides/why-flux-component-is-better-than-flux-mixin)
+- [Quick start](guides/quick-start)
+- [React integration](guides/react-integration)
+- [Why FluxComponent > fluxMixin](guides/why-flux-component-is-better-than-flux-mixin)

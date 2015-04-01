@@ -71,6 +71,14 @@ Store getStore(string key)
 
 Gets an store instance by key.
 
+### removeStore
+
+```js
+Store removeStore(string key)
+```
+
+Deletes an instance of `StoreClass`, unregisters the store's handlers from dispatcher, and removes all store listeners.
+
 ### getActions
 
 ```js
@@ -88,6 +96,14 @@ Actions getActionIds(string key)
 Gets action ids for the given actions key. Internally calls `Actions#getActionIds`.
 
 Also available as `getConstants()`.
+
+### removeActions
+
+```js
+Actions removeActions(string key)
+```
+
+Deletes an actions instance by key.
 
 Dispatcher methods
 ------------------

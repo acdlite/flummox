@@ -5,11 +5,22 @@ export default class DocStore extends Store {
   constructor({ docActions }) {
     super();
 
+    this.register(docActions.getDoc, this.handleNewDoc);
     this.register(docActions.getAllDocs, this.handleNewDocs);
 
     this.state = {
-      docs: new Map(),
+      docs: new Map()
     };
+  }
+
+  handleNewDoc(newDoc) {
+    const docs = {
+      [newDoc.path]: newDoc
+    };
+
+    this.setState({
+      docs: this.state.docs.merge(docs)
+    });
   }
 
   handleNewDocs(newDocs) {
@@ -19,7 +30,7 @@ export default class DocStore extends Store {
     }, {});
 
     this.setState({
-      docs: this.state.docs.merge(docs),
+      docs: this.state.docs.merge(docs)
     });
   }
 

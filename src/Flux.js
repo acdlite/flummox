@@ -55,6 +55,18 @@ export default class Flux extends EventEmitter {
     return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
   }
 
+  removeStore(key) {
+    if (this._stores.hasOwnProperty(key)) {
+      this._stores[key].removeAllListeners();
+      this.dispatcher.unregister(this._stores[key]._token);
+      delete this._stores[key];
+    } else {
+      throw new Error(
+        `You've attempted to remove store with key ${key} which does not exist.`
+      );
+    }
+  }
+
   createActions(key, _Actions, ...constructorArgs) {
 
     if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
@@ -113,6 +125,16 @@ export default class Flux extends EventEmitter {
     return actions.getConstants();
   }
 
+  removeActions(key) {
+    if (this._actions.hasOwnProperty(key)) {
+      delete this._actions[key];
+    } else {
+      throw new Error(
+        `You've attempted to remove actions with key ${key} which does not exist.`
+      );
+    }
+  }
+
   getAllActionIds() {
     let actionIds = [];
 
@@ -134,7 +156,7 @@ export default class Flux extends EventEmitter {
   dispatchAsync(actionId, promise, actionArgs) {
     const payload = {
       actionId,
-      async: 'begin',
+      async: 'begin'
     };
 
     if (actionArgs) payload.actionArgs = actionArgs;
@@ -156,16 +178,14 @@ export default class Flux extends EventEmitter {
           this._dispatch({
             actionId,
             error,
-            async: 'failure',
+            async: 'failure'
           });
-
-          return Promise.reject(error);
         }
       )
       .catch(error => {
         this.emit('error', error);
 
-        return Promise.reject(error);
+        throw error;
       });
   }
 

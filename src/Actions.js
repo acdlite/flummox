@@ -53,10 +53,7 @@ export default class Actions {
 
       if (isPromise(body)) {
         const promise = body;
-        this._dispatchAsync(actionId, promise, args, methodName)
-          // Catch errors and do nothing
-          // They can be handled by store or caller
-          .catch(error => {});
+        this._dispatchAsync(actionId, promise, args, methodName);
       } else {
         this._dispatch(actionId, body, args, methodName);
       }
@@ -98,7 +95,7 @@ export default class Actions {
 
   _dispatchAsync(actionId, promise, args, methodName) {
     if (typeof this.dispatchAsync === 'function') {
-      return this.dispatchAsync(actionId, promise, args);
+      this.dispatchAsync(actionId, promise, args);
     } else {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
@@ -107,10 +104,7 @@ export default class Actions {
         + `to a Flux instance.`
         );
       }
-
-      return promise;
     }
-
   }
 
 }
