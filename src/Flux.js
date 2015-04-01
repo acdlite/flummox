@@ -140,8 +140,6 @@ export default class Flux extends EventEmitter {
             error,
             async: 'failure',
           });
-
-          return Promise.reject(error);
         }
       )
       .catch(error => {
