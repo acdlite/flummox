@@ -1,10 +1,9 @@
 /**
  * Flux Component
  *
- * Component form of fluxMixin. Uses fluxMixin as part of its implementation,
- * so requires a flux instance to be provided as either context or a prop.
+ * Component interface to reactComponentMethods module.
  *
- * Like fluxMixin, children are given access to the flux instance via
+ * Children of FluxComponent are given access to the flux instance via
  * `context.flux`. Use this near the top of your app hierarchy and all children
  * will have easy access to the flux instance (including, of course, other
  * Flux components!):
@@ -24,10 +23,9 @@
  *
  * Additionally, immediate children are given a `flux` prop.
  *
- * The component has an optional prop `connectToStores`, which is -- you guessed
- * it -- passed directly to fluxMixin's `connectToStores()` function and
- * set as the initial state. The component's state is injected as props to
- * child components.
+ * The component has an optional prop `connectToStores`, which is passed to
+ * `this.connectToStores` and used to set the initial state. The component's
+ * state is injected as props to the child components.
  *
  * The practical upshot of all this is that fluxMixin, state changes, and
  * context are now simply implementation details. Among other things, this means
@@ -79,7 +77,7 @@ class FluxComponent extends React.Component {
       ...extraProps } = this.props;
 
     return assign(
-      { flux: this.getFlux() },
+      { flux: this.getFlux() }, // TODO: remove in next major version
       this.state,
       extraProps
     );
