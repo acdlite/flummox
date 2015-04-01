@@ -262,17 +262,6 @@ describe('Flux', () => {
         .notify(done);
     });
 
-    it('rejects with error if promise rejects', done => {
-      const flux = new Flux();
-      const dispatch = sinon.spy();
-      flux.dispatcher = { dispatch };
-      const actionId = 'actionId';
-
-      expect(flux.dispatchAsync(actionId, Promise.reject(new Error('error'))))
-        .to.be.rejectedWith('error')
-        .notify(done);
-    });
-
     it('dispatches with error if promise rejects', async function() {
       const flux = new Flux();
       const dispatch = sinon.spy();
@@ -281,8 +270,7 @@ describe('Flux', () => {
 
       const error = new Error('error');
 
-      await expect(flux.dispatchAsync(actionId, Promise.reject(error)))
-        .to.be.rejected;
+      await flux.dispatchAsync(actionId, Promise.reject(error));
 
       expect(dispatch.callCount).to.equal(2);
       expect(dispatch.firstCall.args[0]).to.deep.equal({
@@ -294,22 +282,6 @@ describe('Flux', () => {
         error,
         async: 'failure'
       });
-    });
-
-    it('emits error if promise rejects', async function() {
-      class ExampleStore extends Store {}
-
-      const flux = new Flux();
-      const listener = sinon.spy();
-      flux.addListener('error', listener);
-
-      const actionId = 'actionId';
-
-      await expect(flux.dispatchAsync(actionId, Promise.reject(new Error('foobar'))))
-        .to.be.rejectedWith('foobar');
-
-      expect(listener.calledOnce).to.be.true;
-      expect(listener.firstCall.args[0].message).to.equal('foobar');
     });
 
     it('emit errors that occur as result of dispatch', async function() {
