@@ -1,7 +1,7 @@
 `fluxMixin`
 ===========
 
-Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](/flummox/docs/guides/react-integration) for more information.
+Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](../guides/react-integration.md) for more information.
 
 Note that fluxMixin is actually a function that returns a mixin, as the example below shows. The parameters are the same as those for `connectToStores()`, described below. On component initialization, `connectToStores()` is called and used to set the initial state of the component.
 
@@ -16,7 +16,7 @@ let MyComponent = React.createClass({
 });
 ```
 
-In general, [it's recommended to use FluxComponent instead of fluxMixin](/flummox/docs/guides/why-flux-component-is-better-than-flux-mixin).
+In general, [it's recommended to use FluxComponent instead of fluxMixin](../guides/why-flux-component-is-better-than-flux-mixin.md).
 
 State getters
 -------------

@@ -9,7 +9,7 @@ class DocHandler extends React.Component {
 
     const canonicalPath = DocHandler.canonicalDocPath(docPath);
 
-    if (docPath !== canonicalPath) transition.redirect(`/flummox/${canonicalPath}`);
+    if (docPath !== canonicalPath) transition.redirect(`/flummox/docs/${canonicalPath}`);
   }
 
   // Redundant since docs have already been fetched, but included for illustration
@@ -23,9 +23,10 @@ class DocHandler extends React.Component {
   }
 
   static canonicalDocPath(docPath) {
-    const canonicalPath = docPath.replace(/\/index\/?$/, '');
+    docPath = docPath.replace(/\.md$/, '');
+    docPath = docPath.replace(/\/index\/?$/, '');
 
-    return canonicalPath;
+    return docPath;
   }
 
   getDocPath() {

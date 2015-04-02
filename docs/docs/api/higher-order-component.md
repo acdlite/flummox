@@ -3,7 +3,7 @@ Higher-order Flux Component
 
 **Requires React 0.13. If you're still on React 0.12, use FluxComponent instead.**
 
-A higher-order component form of [FluxComponent](fluxcomponent). Here's an example from the [Flummox documentation app](https://github.com/acdlite/flummox/blob/master/docs/src/shared/components/HomeHandler.js#L15-L19):
+A higher-order component form of [FluxComponent](fluxcomponent.md). Here's an example from the [Flummox documentation app](https://github.com/acdlite/flummox/blob/master/docs/src/shared/components/HomeHandler.js#L15-L19):
 
 ```js
 class HomeHandler extends React.Component {

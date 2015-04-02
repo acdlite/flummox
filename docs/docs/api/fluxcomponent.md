@@ -3,7 +3,7 @@
 
 **In v3.0, FluxComponent requires React 0.13. If you're still on React 0.12, keep using Flummox 2.x until you're able to upgrade.**
 
-Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](/flummox/docs/guides/react-integration) for more information.
+Access the Flux instance and subscribe to store updates. Refer to the [React integration guide](../guides/react-integration.md) for more information.
 
 
 ```js
@@ -19,7 +19,7 @@ Access the Flux instance and subscribe to store updates. Refer to the [React int
 </FluxComponent>
 ```
 
-In general, [it's recommended to use FluxComponent instead of fluxMixin](/flummox/docs/guides/why-flux-component-is-better-than-flux-mixin).
+In general, [it's recommended to use FluxComponent instead of fluxMixin](../guides/why-flux-component-is-better-than-flux-mixin.md).
 
 State getters
 -------------
@@ -37,7 +37,7 @@ The `stateGetter` prop can be used to control how state from stores are transfor
 </FluxComponent>
 ```
 
-The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [fluxMixin](fluxmixin) for more details.
+The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [fluxMixin](fluxmixin.md) for more details.
 
 
 Access flux with `this.props.flux`
@@ -86,15 +86,15 @@ Props
 
 ### `flux`
 
-Indicates the [Flux instance](flux) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
+Indicates the [Flux instance](flux.md) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
 
 ### `connectToStores`
 
-This prop has the same effect as passing the first argument to [fluxMixin](fluxmixin)'s `connectToStores()`.
+This prop has the same effect as passing the first argument to [fluxMixin](fluxmixin.md)'s `connectToStores()`.
 
 ### `stateGetter`
 
-This prop has the same effect as passing the second argument to [fluxMixin](fluxmixin)'s `connectToStores()`.
+This prop has the same effect as passing the second argument to [fluxMixin](fluxmixin.md)'s `connectToStores()`.
 
 ### `render`
 

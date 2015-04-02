@@ -3,9 +3,9 @@ API
 
 Flummox has three exports:
 
-* [Actions](api/actions)
-* [Store](api/store)
-* [Flux](api/flux) (also available as `Flummox`) This is the default export.
+* [Actions](api/actions.md)
+* [Store](api/store.md)
+* [Flux](api/flux.md) (also available as `Flummox`) This is the default export.
 
 If you're using ES6 module syntax:
 
@@ -24,11 +24,11 @@ Addons
 
 Flummox also comes with some addons. These are not part of the main export. That way, if you don't use them, they won't increase the size of your bundle.
 
-* [FluxComponent](api/fluxcomponent)
-* [fluxMixin](api/fluxmixin)
-* [Higher-order component](api/higher-order-component)
+* [FluxComponent](api/fluxcomponent.md)
+* [fluxMixin](api/fluxmixin.md)
+* [Higher-order component](api/higher-order-component.md)
 
-Refer to the [React integration guide](/flummox/docs/guides/react-integration) for details.
+Refer to the [React integration guide](../guides/react-integration.md) for details.
 
 ```js
 import fluxMixin from 'flummox/mixin';
