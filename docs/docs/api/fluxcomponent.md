@@ -37,7 +37,7 @@ The `stateGetter` prop can be used to control how state from stores are transfor
 </FluxComponent>
 ```
 
-The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [fluxMixin](fluxmixin) for more details.
+The `stateGetter` prop behaves differently depending on the value passed to the `connectToStores` prop, refer to [fluxMixin](/flummox/docs/api/fluxmixin) for more details.
 
 
 Access flux with `this.props.flux`
@@ -86,15 +86,15 @@ Props
 
 ### `flux`
 
-Indicates the [Flux instance](flux) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
+Indicates the [Flux instance](/flummox/docs/api/flux) to be used. It will be added to the context of all its nested components. If unset, it'll try to infer it from the context.
 
 ### `connectToStores`
 
-This prop has the same effect as passing the first argument to [fluxMixin](fluxmixin)'s `connectToStores()`.
+This prop has the same effect as passing the first argument to [fluxMixin](/flummox/docs/api/fluxmixin)'s `connectToStores()`.
 
 ### `stateGetter`
 
-This prop has the same effect as passing the second argument to [fluxMixin](fluxmixin)'s `connectToStores()`.
+This prop has the same effect as passing the second argument to [fluxMixin](/flummox/docs/api/fluxmixin)'s `connectToStores()`.
 
 ### `render`
 
