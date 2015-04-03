@@ -45,42 +45,48 @@ var Flummox =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
 
-	var _applyConstructor = function (Constructor, args) { var instance = Object.create(Constructor.prototype); var result = Constructor.apply(instance, args); return result != null && (typeof result == "object" || typeof result == "function") ? result : instance; };
+	var _bind = Function.prototype.bind;
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+	var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 	/**
 	 * Flux
 	 *
 	 * The main Flux class.
 	 */
 
-	var Store = _interopRequire(__webpack_require__(1));
+	var _Store = __webpack_require__(1);
 
-	var Actions = _interopRequire(__webpack_require__(2));
+	var Store = _interopRequire(_Store);
 
-	var Dispatcher = __webpack_require__(3).Dispatcher;
+	var _Actions = __webpack_require__(2);
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var Actions = _interopRequire(_Actions);
 
-	var assign = _interopRequire(__webpack_require__(5));
+	var _Dispatcher = __webpack_require__(3);
+
+	var _EventEmitter2 = __webpack_require__(4);
+
+	var EventEmitter = _interopRequire(_EventEmitter2);
+
+	var _assign = __webpack_require__(5);
+
+	var assign = _interopRequire(_assign);
 
 	var Flux = (function (_EventEmitter) {
 	  function Flux() {
 	    _classCallCheck(this, Flux);
 
-	    this.dispatcher = new Dispatcher();
+	    _EventEmitter.call(this);
+
+	    this.dispatcher = new _Dispatcher.Dispatcher();
 
 	    this._stores = {};
 	    this._actions = {};
@@ -88,283 +94,265 @@ var Flummox =
 
 	  _inherits(Flux, _EventEmitter);
 
-	  _createClass(Flux, {
-	    createStore: {
-	      value: function createStore(key, _Store) {
-	        for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-	          constructorArgs[_key - 2] = arguments[_key];
-	        }
+	  Flux.prototype.createStore = function createStore(key, _Store) {
+	    for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	      constructorArgs[_key - 2] = arguments[_key];
+	    }
 
-	        if (!(_Store.prototype instanceof Store)) {
-	          var className = getClassName(_Store);
+	    if (!(_Store.prototype instanceof Store)) {
+	      var className = getClassName(_Store);
 
-	          throw new Error("You've attempted to create a store from the class " + className + ", which " + "does not have the base Store class in its prototype chain. Make sure " + ("you're using the `extends` keyword: `class " + className + " extends ") + "Store { ... }`");
-	        }
+	      throw new Error('You\'ve attempted to create a store from the class ' + className + ', which ' + 'does not have the base Store class in its prototype chain. Make sure ' + ('you\'re using the `extends` keyword: `class ' + className + ' extends ') + 'Store { ... }`');
+	    }
 
-	        if (this._stores.hasOwnProperty(key) && this._stores[key]) {
-	          throw new Error("You've attempted to create multiple stores with key " + key + ". Keys must " + "be unique.");
-	        }
+	    if (this._stores.hasOwnProperty(key) && this._stores[key]) {
+	      throw new Error('You\'ve attempted to create multiple stores with key ' + key + '. Keys must ' + 'be unique.');
+	    }
 
-	        var store = _applyConstructor(_Store, constructorArgs);
-	        var token = this.dispatcher.register(store.handler.bind(store));
+	    var store = new (_bind.apply(_Store, [null].concat(constructorArgs)))();
+	    var token = this.dispatcher.register(store.handler.bind(store));
 
-	        store._waitFor = this.waitFor.bind(this);
-	        store._token = token;
-	        store._getAllActionIds = this.getAllActionIds.bind(this);
+	    store._waitFor = this.waitFor.bind(this);
+	    store._token = token;
+	    store._getAllActionIds = this.getAllActionIds.bind(this);
 
-	        this._stores[key] = store;
+	    this._stores[key] = store;
 
-	        return store;
-	      }
-	    },
-	    getStore: {
-	      value: function getStore(key) {
-	        return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
-	      }
-	    },
-	    removeStore: {
-	      value: function removeStore(key) {
-	        if (this._stores.hasOwnProperty(key)) {
-	          this._stores[key].removeAllListeners();
-	          this.dispatcher.unregister(this._stores[key]._token);
-	          delete this._stores[key];
-	        } else {
-	          throw new Error("You've attempted to remove store with key " + key + " which does not exist.");
-	        }
-	      }
-	    },
-	    createActions: {
-	      value: function createActions(key, _Actions) {
-	        for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-	          constructorArgs[_key - 2] = arguments[_key];
-	        }
+	    return store;
+	  };
 
-	        if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
-	          if (typeof _Actions === "function") {
-	            var className = getClassName(_Actions);
+	  Flux.prototype.getStore = function getStore(key) {
+	    return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
+	  };
 
-	            throw new Error("You've attempted to create actions from the class " + className + ", which " + "does not have the base Actions class in its prototype chain. Make " + ("sure you're using the `extends` keyword: `class " + className + " ") + "extends Actions { ... }`");
-	          } else {
-	            var properties = _Actions;
-	            _Actions = (function (_Actions2) {
-	              var _class = function () {
-	                _classCallCheck(this, _class);
+	  Flux.prototype.removeStore = function removeStore(key) {
+	    if (this._stores.hasOwnProperty(key)) {
+	      this._stores[key].removeAllListeners();
+	      this.dispatcher.unregister(this._stores[key]._token);
+	      delete this._stores[key];
+	    } else {
+	      throw new Error('You\'ve attempted to remove store with key ' + key + ' which does not exist.');
+	    }
+	  };
 
-	                if (_Actions2 != null) {
-	                  _Actions2.apply(this, arguments);
-	                }
-	              };
+	  Flux.prototype.createActions = function createActions(key, _Actions) {
+	    for (var _len2 = arguments.length, constructorArgs = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+	      constructorArgs[_key2 - 2] = arguments[_key2];
+	    }
 
-	              _inherits(_class, _Actions2);
+	    if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
+	      if (typeof _Actions === 'function') {
+	        var className = getClassName(_Actions);
 
-	              return _class;
-	            })(Actions);
-	            assign(_Actions.prototype, properties);
-	          }
-	        }
+	        throw new Error('You\'ve attempted to create actions from the class ' + className + ', which ' + 'does not have the base Actions class in its prototype chain. Make ' + ('sure you\'re using the `extends` keyword: `class ' + className + ' ') + 'extends Actions { ... }`');
+	      } else {
+	        var properties = _Actions;
+	        _Actions = (function (_Actions2) {
+	          var _class = function () {
+	            _classCallCheck(this, _class);
 
-	        if (this._actions.hasOwnProperty(key) && this._actions[key]) {
-	          throw new Error("You've attempted to create multiple actions with key " + key + ". Keys " + "must be unique.");
-	        }
-
-	        var actions = _applyConstructor(_Actions, constructorArgs);
-	        actions.dispatch = this.dispatch.bind(this);
-	        actions.dispatchAsync = this.dispatchAsync.bind(this);
-
-	        this._actions[key] = actions;
-
-	        return actions;
-	      }
-	    },
-	    getActions: {
-	      value: function getActions(key) {
-	        return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
-	      }
-	    },
-	    getActionIds: {
-	      value: function getActionIds(key) {
-	        var actions = this.getActions(key);
-
-	        if (!actions) {
-	          return;
-	        }return actions.getConstants();
-	      }
-	    },
-	    removeActions: {
-	      value: function removeActions(key) {
-	        if (this._actions.hasOwnProperty(key)) {
-	          delete this._actions[key];
-	        } else {
-	          throw new Error("You've attempted to remove actions with key " + key + " which does not exist.");
-	        }
-	      }
-	    },
-	    getAllActionIds: {
-	      value: function getAllActionIds() {
-	        var actionIds = [];
-
-	        for (var key in this._actions) {
-	          if (!this._actions.hasOwnProperty(key)) continue;
-
-	          var actionConstants = this._actions[key].getConstants();
-
-	          actionIds = actionIds.concat(getValues(actionConstants));
-	        }
-
-	        return actionIds;
-	      }
-	    },
-	    dispatch: {
-	      value: function dispatch(actionId, body) {
-	        this._dispatch({ actionId: actionId, body: body });
-	      }
-	    },
-	    dispatchAsync: {
-	      value: function dispatchAsync(actionId, promise, actionArgs) {
-	        var _this = this;
-
-	        var payload = {
-	          actionId: actionId,
-	          async: "begin"
-	        };
-
-	        if (actionArgs) payload.actionArgs = actionArgs;
-
-	        this._dispatch(payload);
-
-	        return promise.then(function (body) {
-	          _this._dispatch({
-	            actionId: actionId,
-	            body: body,
-	            async: "success"
-	          });
-
-	          return body;
-	        }, function (error) {
-	          _this._dispatch({
-	            actionId: actionId,
-	            error: error,
-	            async: "failure"
-	          });
-	        })["catch"](function (error) {
-	          _this.emit("error", error);
-
-	          throw error;
-	        });
-	      }
-	    },
-	    _dispatch: {
-	      value: function _dispatch(payload) {
-	        this.dispatcher.dispatch(payload);
-	        this.emit("dispatch", payload);
-	      }
-	    },
-	    waitFor: {
-	      value: function waitFor(tokensOrStores) {
-
-	        if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
-
-	        var ensureIsToken = function (tokenOrStore) {
-	          return tokenOrStore instanceof Store ? tokenOrStore._token : tokenOrStore;
-	        };
-
-	        var tokens = tokensOrStores.map(ensureIsToken);
-
-	        this.dispatcher.waitFor(tokens);
-	      }
-	    },
-	    removeAllStoreListeners: {
-	      value: function removeAllStoreListeners(event) {
-	        for (var key in this._stores) {
-	          if (!this._stores.hasOwnProperty(key)) continue;
-
-	          var store = this._stores[key];
-
-	          store.removeAllListeners(event);
-	        }
-	      }
-	    },
-	    serialize: {
-	      value: function serialize() {
-	        var stateTree = {};
-
-	        for (var key in this._stores) {
-	          if (!this._stores.hasOwnProperty(key)) continue;
-
-	          var store = this._stores[key];
-
-	          var serialize = store.constructor.serialize;
-
-	          if (typeof serialize !== "function") continue;
-
-	          var serializedStoreState = serialize(store.state);
-
-	          if (typeof serializedStoreState !== "string") {
-	            var className = store.constructor.name;
-
-	            if ((undefined) !== "production") {
-	              console.warn("The store with key '" + key + "' was not serialized because the static " + ("method `" + className + ".serialize()` returned a non-string with type ") + ("'" + typeof serializedStoreState + "'."));
+	            if (_Actions2 != null) {
+	              _Actions2.apply(this, arguments);
 	            }
-	          }
+	          };
 
-	          stateTree[key] = serializedStoreState;
+	          _inherits(_class, _Actions2);
 
-	          if (typeof store.constructor.deserialize !== "function") {
-	            var className = store.constructor.name;
-
-	            if ((undefined) !== "production") {
-	              console.warn("The class `" + className + "` has a `serialize()` method, but no " + "corresponding `deserialize()` method.");
-	            }
-	          }
-	        }
-
-	        return JSON.stringify(stateTree);
+	          return _class;
+	        })(Actions);
+	        assign(_Actions.prototype, properties);
 	      }
-	    },
-	    deserialize: {
-	      value: function deserialize(serializedState) {
-	        var stateMap = undefined;
+	    }
 
-	        try {
-	          stateMap = JSON.parse(serializedState);
-	        } catch (error) {
-	          var className = this.constructor.name;
+	    if (this._actions.hasOwnProperty(key) && this._actions[key]) {
+	      throw new Error('You\'ve attempted to create multiple actions with key ' + key + '. Keys ' + 'must be unique.');
+	    }
 
-	          if ((undefined) !== "production") {
-	            throw new Error("Invalid value passed to `" + className + "#deserialize()`: " + ("" + serializedState));
-	          }
+	    var actions = new (_bind.apply(_Actions, [null].concat(constructorArgs)))();
+	    actions.dispatch = this.dispatch.bind(this);
+	    actions.dispatchAsync = this.dispatchAsync.bind(this);
+
+	    this._actions[key] = actions;
+
+	    return actions;
+	  };
+
+	  Flux.prototype.getActions = function getActions(key) {
+	    return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
+	  };
+
+	  Flux.prototype.getActionIds = function getActionIds(key) {
+	    var actions = this.getActions(key);
+
+	    if (!actions) {
+	      return;
+	    }return actions.getConstants();
+	  };
+
+	  Flux.prototype.removeActions = function removeActions(key) {
+	    if (this._actions.hasOwnProperty(key)) {
+	      delete this._actions[key];
+	    } else {
+	      throw new Error('You\'ve attempted to remove actions with key ' + key + ' which does not exist.');
+	    }
+	  };
+
+	  Flux.prototype.getAllActionIds = function getAllActionIds() {
+	    var actionIds = [];
+
+	    for (var key in this._actions) {
+	      if (!this._actions.hasOwnProperty(key)) continue;
+
+	      var actionConstants = this._actions[key].getConstants();
+
+	      actionIds = actionIds.concat(getValues(actionConstants));
+	    }
+
+	    return actionIds;
+	  };
+
+	  Flux.prototype.dispatch = function dispatch(actionId, body) {
+	    this._dispatch({ actionId: actionId, body: body });
+	  };
+
+	  Flux.prototype.dispatchAsync = function dispatchAsync(actionId, promise, actionArgs) {
+	    var _this = this;
+
+	    var payload = {
+	      actionId: actionId,
+	      async: 'begin'
+	    };
+
+	    if (actionArgs) payload.actionArgs = actionArgs;
+
+	    this._dispatch(payload);
+
+	    return promise.then(function (body) {
+	      _this._dispatch({
+	        actionId: actionId,
+	        body: body,
+	        async: 'success'
+	      });
+
+	      return body;
+	    }, function (error) {
+	      _this._dispatch({
+	        actionId: actionId,
+	        error: error,
+	        async: 'failure'
+	      });
+	    })['catch'](function (error) {
+	      _this.emit('error', error);
+
+	      throw error;
+	    });
+	  };
+
+	  Flux.prototype._dispatch = function _dispatch(payload) {
+	    this.dispatcher.dispatch(payload);
+	    this.emit('dispatch', payload);
+	  };
+
+	  Flux.prototype.waitFor = function waitFor(tokensOrStores) {
+
+	    if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
+
+	    var ensureIsToken = function ensureIsToken(tokenOrStore) {
+	      return tokenOrStore instanceof Store ? tokenOrStore._token : tokenOrStore;
+	    };
+
+	    var tokens = tokensOrStores.map(ensureIsToken);
+
+	    this.dispatcher.waitFor(tokens);
+	  };
+
+	  Flux.prototype.removeAllStoreListeners = function removeAllStoreListeners(event) {
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
+
+	      var store = this._stores[key];
+
+	      store.removeAllListeners(event);
+	    }
+	  };
+
+	  Flux.prototype.serialize = function serialize() {
+	    var stateTree = {};
+
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
+
+	      var store = this._stores[key];
+
+	      var serialize = store.constructor.serialize;
+
+	      if (typeof serialize !== 'function') continue;
+
+	      var serializedStoreState = serialize(store.state);
+
+	      if (typeof serializedStoreState !== 'string') {
+	        var className = store.constructor.name;
+
+	        if ((undefined) !== 'production') {
+	          console.warn('The store with key \'' + key + '\' was not serialized because the static ' + ('method `' + className + '.serialize()` returned a non-string with type ') + ('\'' + typeof serializedStoreState + '\'.'));
 	        }
+	      }
 
-	        for (var key in this._stores) {
-	          if (!this._stores.hasOwnProperty(key)) continue;
+	      stateTree[key] = serializedStoreState;
 
-	          var store = this._stores[key];
+	      if (typeof store.constructor.deserialize !== 'function') {
+	        var className = store.constructor.name;
 
-	          var deserialize = store.constructor.deserialize;
-
-	          if (typeof deserialize !== "function") continue;
-
-	          var storeStateString = stateMap[key];
-	          var storeState = deserialize(storeStateString);
-
-	          store.replaceState(storeState);
-
-	          if (typeof store.constructor.serialize !== "function") {
-	            var className = store.constructor.name;
-
-	            if ((undefined) !== "production") {
-	              console.warn("The class `" + className + "` has a `deserialize()` method, but no " + "corresponding `serialize()` method.");
-	            }
-	          }
+	        if ((undefined) !== 'production') {
+	          console.warn('The class `' + className + '` has a `serialize()` method, but no ' + 'corresponding `deserialize()` method.');
 	        }
 	      }
 	    }
-	  });
+
+	    return JSON.stringify(stateTree);
+	  };
+
+	  Flux.prototype.deserialize = function deserialize(serializedState) {
+	    var stateMap = undefined;
+
+	    try {
+	      stateMap = JSON.parse(serializedState);
+	    } catch (error) {
+	      var className = this.constructor.name;
+
+	      if ((undefined) !== 'production') {
+	        throw new Error('Invalid value passed to `' + className + '#deserialize()`: ' + ('' + serializedState));
+	      }
+	    }
+
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
+
+	      var store = this._stores[key];
+
+	      var deserialize = store.constructor.deserialize;
+
+	      if (typeof deserialize !== 'function') continue;
+
+	      var storeStateString = stateMap[key];
+	      var storeState = deserialize(storeStateString);
+
+	      store.replaceState(storeState);
+
+	      if (typeof store.constructor.serialize !== 'function') {
+	        var className = store.constructor.name;
+
+	        if ((undefined) !== 'production') {
+	          console.warn('The class `' + className + '` has a `deserialize()` method, but no ' + 'corresponding `serialize()` method.');
+	        }
+	      }
+	    }
+	  };
 
 	  return Flux;
 	})(EventEmitter);
 
-	exports["default"] = Flux;
+	exports['default'] = Flux;
 
 	// Aliases
 	Flux.prototype.getConstants = Flux.prototype.getActionIds;
@@ -399,15 +387,13 @@ var Flummox =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+	var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 	/**
 	 * Store
@@ -418,9 +404,13 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var EventEmitter = _interopRequire(__webpack_require__(4));
+	var _EventEmitter2 = __webpack_require__(4);
 
-	var assign = _interopRequire(__webpack_require__(5));
+	var EventEmitter = _interopRequire(_EventEmitter2);
+
+	var _assign = __webpack_require__(5);
+
+	var assign = _interopRequire(_assign);
 
 	var Store = (function (_EventEmitter) {
 
@@ -431,6 +421,8 @@ var Flummox =
 
 	  function Store() {
 	    _classCallCheck(this, Store);
+
+	    _EventEmitter.call(this);
 
 	    this.state = null;
 
@@ -445,193 +437,174 @@ var Flummox =
 
 	  _inherits(Store, _EventEmitter);
 
-	  _createClass(Store, {
-	    setState: {
-	      value: function setState(newState) {
-	        // Do a transactional state update if a function is passed
-	        if (typeof newState === "function") {
-	          var prevState = this._isHandlingDispatch ? this._pendingState : this.state;
+	  Store.prototype.setState = function setState(newState) {
+	    // Do a transactional state update if a function is passed
+	    if (typeof newState === 'function') {
+	      var prevState = this._isHandlingDispatch ? this._pendingState : this.state;
 
-	          newState = newState(prevState);
-	        }
+	      newState = newState(prevState);
+	    }
 
-	        if (this._isHandlingDispatch) {
-	          this._pendingState = this._assignState(this._pendingState, newState);
-	          this._emitChangeAfterHandlingDispatch = true;
-	        } else {
-	          this.state = this._assignState(this.state, newState);
-	          this.emit("change");
-	        }
-	      }
-	    },
-	    replaceState: {
-	      value: function replaceState(newState) {
-	        if (this._isHandlingDispatch) {
-	          this._pendingState = this._assignState(undefined, newState);
-	          this._emitChangeAfterHandlingDispatch = true;
-	        } else {
-	          this.state = this._assignState(undefined, newState);
-	          this.emit("change");
-	        }
-	      }
-	    },
-	    getStateAsObject: {
-	      value: function getStateAsObject() {
-	        return this.state;
-	      }
-	    },
-	    _assignState: {
-	      value: function _assignState() {
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
+	    if (this._isHandlingDispatch) {
+	      this._pendingState = this._assignState(this._pendingState, newState);
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.state = this._assignState(this.state, newState);
+	      this.emit('change');
+	    }
+	  };
 
-	        return (this.constructor.assignState || Store.assignState).apply(undefined, args);
-	      }
-	    },
-	    forceUpdate: {
-	      value: function forceUpdate() {
-	        if (this._isHandlingDispatch) {
-	          this._emitChangeAfterHandlingDispatch = true;
-	        } else {
-	          this.emit("change");
-	        }
-	      }
-	    },
-	    register: {
-	      value: function register(actionId, handler) {
-	        actionId = ensureActionId(actionId);
+	  Store.prototype.replaceState = function replaceState(newState) {
+	    if (this._isHandlingDispatch) {
+	      this._pendingState = this._assignState(undefined, newState);
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.state = this._assignState(undefined, newState);
+	      this.emit('change');
+	    }
+	  };
 
-	        if (typeof handler !== "function") {
-	          return;
-	        }this._handlers[actionId] = handler.bind(this);
-	      }
-	    },
-	    registerAsync: {
-	      value: function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
-	        actionId = ensureActionId(actionId);
+	  Store.prototype.getStateAsObject = function getStateAsObject() {
+	    return this.state;
+	  };
 
-	        var asyncHandlers = this._bindAsyncHandlers({
-	          begin: beginHandler,
-	          success: successHandler,
-	          failure: failureHandler });
+	  Store.assignState = function assignState(oldState, newState) {
+	    return assign({}, oldState, newState);
+	  };
 
-	        this._asyncHandlers[actionId] = asyncHandlers;
-	      }
-	    },
-	    registerAll: {
-	      value: function registerAll(handler) {
-	        if (typeof handler !== "function") {
-	          return;
-	        }this._catchAllHandlers.push(handler.bind(this));
-	      }
-	    },
-	    registerAllAsync: {
-	      value: function registerAllAsync(beginHandler, successHandler, failureHandler) {
-	        var _this = this;
+	  Store.prototype._assignState = function _assignState() {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
 
-	        var asyncHandlers = this._bindAsyncHandlers({
-	          begin: beginHandler,
-	          success: successHandler,
-	          failure: failureHandler });
+	    return (this.constructor.assignState || Store.assignState).apply(undefined, args);
+	  };
 
-	        Object.keys(asyncHandlers).forEach(function (key) {
-	          _this._catchAllAsyncHandlers[key].push(asyncHandlers[key]);
-	        });
-	      }
-	    },
-	    _bindAsyncHandlers: {
-	      value: function _bindAsyncHandlers(asyncHandlers) {
-	        for (var key in asyncHandlers) {
-	          if (!asyncHandlers.hasOwnProperty(key)) continue;
+	  Store.prototype.forceUpdate = function forceUpdate() {
+	    if (this._isHandlingDispatch) {
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.emit('change');
+	    }
+	  };
 
-	          var handler = asyncHandlers[key];
+	  Store.prototype.register = function register(actionId, handler) {
+	    actionId = ensureActionId(actionId);
 
-	          if (typeof handler === "function") {
-	            asyncHandlers[key] = handler.bind(this);
-	          } else {
-	            delete asyncHandlers[key];
-	          }
-	        }
+	    if (typeof handler !== 'function') {
+	      return;
+	    }this._handlers[actionId] = handler.bind(this);
+	  };
 
-	        return asyncHandlers;
-	      }
-	    },
-	    waitFor: {
-	      value: function waitFor(tokensOrStores) {
-	        this._waitFor(tokensOrStores);
-	      }
-	    },
-	    handler: {
-	      value: function handler(payload) {
-	        var body = payload.body;
-	        var actionId = payload.actionId;
-	        var _async = payload.async;
-	        var actionArgs = payload.actionArgs;
-	        var error = payload.error;
+	  Store.prototype.registerAsync = function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
+	    actionId = ensureActionId(actionId);
 
-	        var _allHandlers = this._catchAllHandlers;
-	        var _handler = this._handlers[actionId];
+	    var asyncHandlers = this._bindAsyncHandlers({
+	      begin: beginHandler,
+	      success: successHandler,
+	      failure: failureHandler });
 
-	        var _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
-	        var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
+	    this._asyncHandlers[actionId] = asyncHandlers;
+	  };
 
-	        if (_async) {
-	          var beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+	  Store.prototype.registerAll = function registerAll(handler) {
+	    if (typeof handler !== 'function') {
+	      return;
+	    }this._catchAllHandlers.push(handler.bind(this));
+	  };
 
-	          switch (_async) {
-	            case "begin":
-	              this._performHandler(beginOrFailureHandlers, actionArgs);
-	              return;
-	            case "failure":
-	              this._performHandler(beginOrFailureHandlers, [error]);
-	              return;
-	            case "success":
-	              this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler]), [body]);
-	              return;
-	            default:
-	              return;
-	          }
-	        }
+	  Store.prototype.registerAllAsync = function registerAllAsync(beginHandler, successHandler, failureHandler) {
+	    var _this = this;
 
-	        this._performHandler(_allHandlers.concat([_handler]), [body]);
-	      }
-	    },
-	    _performHandler: {
-	      value: function _performHandler(_handlers, args) {
-	        this._isHandlingDispatch = true;
-	        this._pendingState = this._assignState(undefined, this.state);
-	        this._emitChangeAfterHandlingDispatch = false;
+	    var asyncHandlers = this._bindAsyncHandlers({
+	      begin: beginHandler,
+	      success: successHandler,
+	      failure: failureHandler });
 
-	        try {
-	          this._performHandlers(_handlers, args);
-	        } finally {
-	          if (this._emitChangeAfterHandlingDispatch) {
-	            this.state = this._pendingState;
-	            this.emit("change");
-	          }
+	    Object.keys(asyncHandlers).forEach(function (key) {
+	      _this._catchAllAsyncHandlers[key].push(asyncHandlers[key]);
+	    });
+	  };
 
-	          this._isHandlingDispatch = false;
-	          this._pendingState = undefined;
-	          this._emitChangeAfterHandlingDispatch = false;
-	        }
-	      }
-	    },
-	    _performHandlers: {
-	      value: function _performHandlers(_handlers, args) {
-	        _handlers.forEach((function (_handler) {
-	          if (typeof _handler !== "function") return;
-	          _handler.apply(this, args);
-	        }).bind(this));
+	  Store.prototype._bindAsyncHandlers = function _bindAsyncHandlers(asyncHandlers) {
+	    for (var key in asyncHandlers) {
+	      if (!asyncHandlers.hasOwnProperty(key)) continue;
+
+	      var handler = asyncHandlers[key];
+
+	      if (typeof handler === 'function') {
+	        asyncHandlers[key] = handler.bind(this);
+	      } else {
+	        delete asyncHandlers[key];
 	      }
 	    }
-	  }, {
-	    assignState: {
-	      value: function assignState(oldState, newState) {
-	        return assign({}, oldState, newState);
+
+	    return asyncHandlers;
+	  };
+
+	  Store.prototype.waitFor = function waitFor(tokensOrStores) {
+	    this._waitFor(tokensOrStores);
+	  };
+
+	  Store.prototype.handler = function handler(payload) {
+	    var body = payload.body;
+	    var actionId = payload.actionId;
+	    var _async = payload.async;
+	    var actionArgs = payload.actionArgs;
+	    var error = payload.error;
+
+	    var _allHandlers = this._catchAllHandlers;
+	    var _handler = this._handlers[actionId];
+
+	    var _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
+	    var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
+
+	    if (_async) {
+	      var beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+
+	      switch (_async) {
+	        case 'begin':
+	          this._performHandler(beginOrFailureHandlers, actionArgs);
+	          return;
+	        case 'failure':
+	          this._performHandler(beginOrFailureHandlers, [error]);
+	          return;
+	        case 'success':
+	          this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler]), [body]);
+	          return;
+	        default:
+	          return;
 	      }
 	    }
-	  });
+
+	    this._performHandler(_allHandlers.concat([_handler]), [body]);
+	  };
+
+	  Store.prototype._performHandler = function _performHandler(_handlers, args) {
+	    this._isHandlingDispatch = true;
+	    this._pendingState = this._assignState(undefined, this.state);
+	    this._emitChangeAfterHandlingDispatch = false;
+
+	    try {
+	      this._performHandlers(_handlers, args);
+	    } finally {
+	      if (this._emitChangeAfterHandlingDispatch) {
+	        this.state = this._pendingState;
+	        this.emit('change');
+	      }
+
+	      this._isHandlingDispatch = false;
+	      this._pendingState = undefined;
+	      this._emitChangeAfterHandlingDispatch = false;
+	    }
+	  };
+
+	  Store.prototype._performHandlers = function _performHandlers(_handlers, args) {
+	    _handlers.forEach((function (_handler) {
+	      if (typeof _handler !== 'function') return;
+	      _handler.apply(this, args);
+	    }).bind(this));
+	  };
 
 	  return Store;
 	})(EventEmitter);
@@ -639,20 +612,18 @@ var Flummox =
 	module.exports = Store;
 
 	function ensureActionId(actionOrActionId) {
-	  return typeof actionOrActionId === "function" ? actionOrActionId._id : actionOrActionId;
+	  return typeof actionOrActionId === 'function' ? actionOrActionId._id : actionOrActionId;
 	}
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
 
 	/**
 	 * Actions
@@ -668,7 +639,9 @@ var Flummox =
 	 * of the payload sent to the dispatcher.
 	 */
 
-	var uniqueId = _interopRequire(__webpack_require__(6));
+	var _uniqueId = __webpack_require__(7);
+
+	var uniqueId = _interopRequire(_uniqueId);
 
 	var Actions = (function () {
 	  function Actions() {
@@ -685,94 +658,84 @@ var Flummox =
 	    this.getConstants = this.getActionIds;
 	  }
 
-	  _createClass(Actions, {
-	    getActionIds: {
-	      value: function getActionIds() {
-	        var _this = this;
+	  Actions.prototype.getActionIds = function getActionIds() {
+	    var _this = this;
 
-	        return this._getActionMethodNames().reduce(function (result, actionName) {
-	          result[actionName] = _this[actionName]._id;
-	          return result;
-	        }, {});
+	    return this._getActionMethodNames().reduce(function (result, actionName) {
+	      result[actionName] = _this[actionName]._id;
+	      return result;
+	    }, {});
+	  };
+
+	  Actions.prototype._getActionMethodNames = function _getActionMethodNames(instance) {
+	    var _this2 = this;
+
+	    return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
+	      return name !== 'constructor' && typeof _this2[name] === 'function';
+	    });
+	  };
+
+	  Actions.prototype._wrapAction = function _wrapAction(methodName) {
+	    var _this3 = this;
+
+	    var originalMethod = this[methodName];
+	    var actionId = this._createActionId(methodName);
+
+	    var action = function action() {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
 	      }
-	    },
-	    _getActionMethodNames: {
-	      value: function _getActionMethodNames(instance) {
-	        var _this = this;
 
-	        return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
-	          return name !== "constructor" && typeof _this[name] === "function";
-	        });
+	      var body = originalMethod.apply(_this3, args);
+
+	      if (isPromise(body)) {
+	        var promise = body;
+	        _this3._dispatchAsync(actionId, promise, args, methodName);
+	      } else {
+	        _this3._dispatch(actionId, body, args, methodName);
 	      }
-	    },
-	    _wrapAction: {
-	      value: function _wrapAction(methodName) {
-	        var _this = this;
 
-	        var originalMethod = this[methodName];
-	        var actionId = this._createActionId(methodName);
+	      // Return original method's return value to caller
+	      return body;
+	    };
 
-	        var action = function () {
-	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	          }
+	    action._id = actionId;
 
-	          var body = originalMethod.apply(_this, args);
+	    this[methodName] = action;
+	  };
 
-	          if (isPromise(body)) {
-	            var promise = body;
-	            _this._dispatchAsync(actionId, promise, args, methodName);
-	          } else {
-	            _this._dispatch(actionId, body, args, methodName);
-	          }
+	  /**
+	   * Create unique string constant for an action method, using
+	   * @param {string} methodName - Name of the action method
+	   */
 
-	          // Return original method's return value to caller
-	          return body;
-	        };
+	  Actions.prototype._createActionId = function _createActionId(methodName) {
+	    return '' + this._baseId + '-' + methodName;
+	  };
 
-	        action._id = actionId;
-
-	        this[methodName] = action;
+	  Actions.prototype._dispatch = function _dispatch(actionId, body, args, methodName) {
+	    if (typeof this.dispatch === 'function') {
+	      if (typeof body !== 'undefined') {
+	        this.dispatch(actionId, body, args);
 	      }
-	    },
-	    _createActionId: {
-
-	      /**
-	       * Create unique string constant for an action method, using
-	       * @param {string} methodName - Name of the action method
-	       */
-
-	      value: function _createActionId(methodName) {
-	        return "" + this._baseId + "-" + methodName;
-	      }
-	    },
-	    _dispatch: {
-	      value: function _dispatch(actionId, body, args, methodName) {
-	        if (typeof this.dispatch === "function") {
-	          if (typeof body !== "undefined") {
-	            this.dispatch(actionId, body, args);
-	          }
-	        } else {
-	          if ((undefined) !== "production") {
-	            console.warn("You've attempted to perform the action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
-	          }
-	        }
-
-	        return body;
-	      }
-	    },
-	    _dispatchAsync: {
-	      value: function _dispatchAsync(actionId, promise, args, methodName) {
-	        if (typeof this.dispatchAsync === "function") {
-	          this.dispatchAsync(actionId, promise, args);
-	        } else {
-	          if ((undefined) !== "production") {
-	            console.warn("You've attempted to perform the asynchronous action " + ("" + this.constructor.name + "#" + methodName + ", but it hasn't been added ") + "to a Flux instance.");
-	          }
-	        }
+	    } else {
+	      if ((undefined) !== 'production') {
+	        console.warn('You\'ve attempted to perform the action ' + ('' + this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
 	      }
 	    }
-	  });
+
+	    return body;
+	  };
+
+	  Actions.prototype._dispatchAsync = function _dispatchAsync(actionId, promise, args, methodName) {
+	    if (typeof this.dispatchAsync === 'function') {
+	      this.dispatchAsync(actionId, promise, args);
+	    } else {
+	      if ((undefined) !== 'production') {
+	        console.warn('You\'ve attempted to perform the asynchronous action ' + ('' + this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
+	      }
+	    }
+	  };
 
 	  return Actions;
 	})();
@@ -780,7 +743,7 @@ var Flummox =
 	module.exports = Actions;
 
 	function isPromise(value) {
-	  return value && typeof value.then === "function";
+	  return value && typeof value.then === 'function';
 	}
 
 /***/ },
@@ -796,7 +759,7 @@ var Flummox =
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(7)
+	module.exports.Dispatcher = __webpack_require__(6)
 
 
 /***/ },
@@ -1070,65 +1033,6 @@ var Flummox =
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-
-	var count = 0;
-
-	/**
-	 * Generate a unique ID.
-	 *
-	 * Optionally pass a prefix to prepend, a suffix to append, or a
-	 * multiplier to use on the ID.
-	 *
-	 * ```js
-	 * uniqueId(); //=> '25'
-	 *
-	 * uniqueId({prefix: 'apple_'});
-	 * //=> 'apple_10'
-	 *
-	 * uniqueId({suffix: '_orange'});
-	 * //=> '10_orange'
-	 *
-	 * uniqueId({multiplier: 5});
-	 * //=> 5, 10, 15, 20...
-	 * ```
-	 *
-	 * To reset the `id` to zero, do `id.reset()`.
-	 *
-	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
-	 * @return {String} The unique id.
-	 * @api public
-	 */
-
-	var id = module.exports = function (options) {
-	  options = options || {};
-
-	  var prefix = options.prefix;
-	  var suffix = options.suffix;
-
-	  var id = ++count * (options.multiplier || 1);
-
-	  if (prefix == null) {
-	    prefix = '';
-	  }
-
-	  if (suffix == null) {
-	    suffix = '';
-	  }
-
-	  return String(prefix) + id + String(suffix);
-	};
-
-
-	id.reset = function() {
-	  return count = 0;
-	};
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/*
 	 * Copyright (c) 2014, Facebook, Inc.
 	 * All rights reserved.
@@ -1380,6 +1284,65 @@ var Flummox =
 
 	module.exports = Dispatcher;
 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+
+	var count = 0;
+
+	/**
+	 * Generate a unique ID.
+	 *
+	 * Optionally pass a prefix to prepend, a suffix to append, or a
+	 * multiplier to use on the ID.
+	 *
+	 * ```js
+	 * uniqueId(); //=> '25'
+	 *
+	 * uniqueId({prefix: 'apple_'});
+	 * //=> 'apple_10'
+	 *
+	 * uniqueId({suffix: '_orange'});
+	 * //=> '10_orange'
+	 *
+	 * uniqueId({multiplier: 5});
+	 * //=> 5, 10, 15, 20...
+	 * ```
+	 *
+	 * To reset the `id` to zero, do `id.reset()`.
+	 *
+	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
+	 * @return {String} The unique id.
+	 * @api public
+	 */
+
+	var id = module.exports = function (options) {
+	  options = options || {};
+
+	  var prefix = options.prefix;
+	  var suffix = options.suffix;
+
+	  var id = ++count * (options.multiplier || 1);
+
+	  if (prefix == null) {
+	    prefix = '';
+	  }
+
+	  if (suffix == null) {
+	    suffix = '';
+	  }
+
+	  return String(prefix) + id + String(suffix);
+	};
+
+
+	id.reset = function() {
+	  return count = 0;
+	};
 
 /***/ },
 /* 8 */

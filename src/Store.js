@@ -17,6 +17,8 @@ export default class Store extends EventEmitter {
    * @type {Object}
    */
   constructor() {
+    super();
+
     this.state = null;
 
     this._handlers = {};
@@ -142,7 +144,7 @@ export default class Store extends EventEmitter {
     const {
       body,
       actionId,
-      async: _async,
+      'async': _async,
       actionArgs,
       error
     } = payload;

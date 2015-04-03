@@ -13,6 +13,8 @@ import assign from 'object-assign';
 export default class Flux extends EventEmitter {
 
   constructor() {
+    super();
+
     this.dispatcher = new Dispatcher();
 
     this._stores = {};

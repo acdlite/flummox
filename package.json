@@ -24,10 +24,10 @@
   "author": "Andrew Clark <acdlite@me.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "4.7.12",
+    "babel": "5.0.6",
     "babel-eslint": "2.0.2",
-    "babel-loader": "4.1.0",
-    "babel-runtime": "4.7.12",
+    "babel-loader": "5.0.0",
+    "babel-runtime": "5.0.6",
     "chai": "~1.10.0",
     "chai-as-promised": "4.3.0",
     "es6-promise": "~2.0.1",
