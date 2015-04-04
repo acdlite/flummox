@@ -199,10 +199,8 @@ export default class Store extends EventEmitter {
   }
 
   _performHandlers(_handlers, args) {
-    _handlers.forEach(function(_handler) {
-      if (typeof _handler !== 'function') return;
-      _handler.apply(this, args);
-    }.bind(this));
+    _handlers.forEach(_handler => 
+      (typeof _handler === 'function') && _handler.apply(this, args));
   }
 }
 
