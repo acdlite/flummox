@@ -17,7 +17,7 @@ export default (BaseComponent, stores, stateGetter) => {
     }
 
     render() {
-      return <BaseComponent {...this.props} {...this.state} />;
+      return <BaseComponent {...this.state} {...this.props} />;
     }
   };
 

@@ -72,6 +72,29 @@ describe('connectToStores (HoC)', () => {
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
   });
 
+  it('transfers props', () => {
+    const flux = new Flux();
+
+    class BaseComponent extends React.Component {
+      render() {
+        return <div/>;
+      }
+    }
+
+    const ConnectedComponent = connectToStores(BaseComponent, 'test');
+
+    const tree = TestUtils.renderIntoDocument(
+      <ConnectedComponent flux={flux} foo="bar" bar="baz" />
+    );
+
+    const component = TestUtils.findRenderedComponentWithType(
+      tree, BaseComponent
+    );
+
+    expect(component.props.foo).to.equal('bar');
+    expect(component.props.bar).to.equal('baz');
+  });
+
   it('syncs with store after state change', () => {
     const flux = new Flux();
 
