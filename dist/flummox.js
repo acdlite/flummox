@@ -600,10 +600,11 @@ var Flummox =
 	  };
 
 	  Store.prototype._performHandlers = function _performHandlers(_handlers, args) {
-	    _handlers.forEach((function (_handler) {
-	      if (typeof _handler !== 'function') return;
-	      _handler.apply(this, args);
-	    }).bind(this));
+	    var _this2 = this;
+
+	    _handlers.forEach(function (_handler) {
+	      return typeof _handler === 'function' && _handler.apply(_this2, args);
+	    });
 	  };
 
 	  return Store;
