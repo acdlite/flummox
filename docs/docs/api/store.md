@@ -113,6 +113,24 @@ If any of the passed handlers are not functions, they are ignored.
 
 ### registerAllAsync
 
+```js
+registerAllAsync([function begin, function success, function failure])
+```
+
+A register handler specifically for all asynchronous actions.
+
+- `beginHandler` is called at the beginning of an asynchronous action. It receives same arguments that were passed to the action.
+
+- `successHandler` works the same as if you registered an async action with `register()`: it is called if and when an asynchronous action resolves. It receives the resolved value of the promise returned by the action.
+
+- `failureHandler` is called if and when an asynchronous action is rejected. It receives the rejected value of the promise returned by the action (by convention, an error object).
+
+This makes it easy perform to perform optimistic UI updates.
+
+If any of the passed handlers are not functions, they are ignored.
+
+**Usage note**: `registerAllAsync(null, handler, null)` is functionally equivalent to `registerAll(handler)`. If you don't need to respond to the beginning of async actions or respond to errors, then just use `registerAll()`.
+
 ### setState
 
 ```js
