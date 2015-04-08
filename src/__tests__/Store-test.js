@@ -190,6 +190,43 @@ describe('Store', () => {
       expect(store.registerAll.bind(store, null)).not.to.throw();
     });
 
+	it('registers for all async actions success', async function() {
+      const error = new Error();
+
+      class ExampleActions extends Actions {
+        async getFoo(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+
+        async getBar(message, _success = true) {
+          if (!_success) throw error;
+
+          return message + ' success';
+        }
+      }
+
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', ExampleActions);
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      await actions.getBar('bar');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args).to.deep.equal(['bar success']);
+    });
+
   });
 
   describe('#registerAllAsync()', () => {
