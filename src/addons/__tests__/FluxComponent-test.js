@@ -131,6 +131,65 @@ describe('FluxComponent', () => {
     expect(component.state.fiz).to.equal('bin');
   });
 
+  it('passes injectActions prop to reactComponentMethod collectActions()', () => {
+    class Flux extends Flummox {
+      constructor() {
+        super();
+
+        this.createActions('A', {
+          do() {
+            return 're';
+          },
+
+          re() {
+            return 'mi';
+          }
+        });
+
+        this.createActions('B', {
+          mi() {
+            return 'fa';
+          },
+
+          fa() {
+            return 'so';
+          }
+        });
+      }
+    }
+
+    const flux = new Flux();
+
+    const component = TestUtils.renderIntoDocument(
+      <FluxComponent
+        flux={flux}
+        injectActions={{
+          A: actions => ({
+            do: actions.do
+          }),
+
+          B: actions => ({
+            fa: actions.fa
+          }),
+        }}
+        render={(storeState, actions, flux) =>
+          <div {...actions} />
+        }
+      />
+    );
+
+    const tree = TestUtils.renderIntoDocument(
+      <FluxComponent flux={flux}>
+        <div />
+      </FluxComponent>
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    expect(div.props.do()).to.equal('do');
+    expect(div.props.fa()).to.equal('fa');
+  });
+
   it('injects children with flux prop', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
