@@ -169,7 +169,7 @@ export default class Store extends EventEmitter {
         case 'success':
           this._performHandler(_allAsyncHandlers.concat([
             (_asyncHandler || _handler)
-          ]), [body]);
+          ].concat(_asyncHandler && [] || _allHandlers)), [body]);
           return;
         default:
           return;
