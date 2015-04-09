@@ -28,7 +28,7 @@ Flummox also comes with some addons. These are not part of the main export. That
 * [fluxMixin](api/fluxmixin.md)
 * [Higher-order component](api/higher-order-component.md)
 
-Refer to the [React integration guide](../guides/react-integration.md) for details.
+Refer to the [React integration guide](guides/react-integration.md) for details.
 
 ```js
 import fluxMixin from 'flummox/mixin';
