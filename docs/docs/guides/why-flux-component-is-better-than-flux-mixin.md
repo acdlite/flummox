@@ -146,7 +146,7 @@ class BlogPostPage extends React.Component {
 The state fetched by `connectToStores()` is transferred to the children of FluxComponent. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead:
 
 ```js
-class BlogPostPage React.Component {
+class BlogPostPage extends React.Component {
   render() {
     <div>
       <SiteNavigation />
