@@ -570,7 +570,7 @@ var Flummox =
 	          this._performHandler(beginOrFailureHandlers, [error]);
 	          return;
 	        case 'success':
-	          this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler]), [body]);
+	          this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler].concat(_asyncHandler && [] || _allHandlers)), [body]);
 	          return;
 	        default:
 	          return;
