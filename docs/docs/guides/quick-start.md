@@ -160,7 +160,7 @@ However, manually passing your Flux instance as props down the component tree is
 
 ```js
 
-/* App's Root Component/React */
+/* App's Root Component */
 
 import { AppFlux } from 'AppFlux'; // import your AppFlux class
 
