@@ -156,26 +156,54 @@ Because everything is self-contained, you can create as many independent instanc
 
 So how do you use Flux in your view components? With a traditional Flux library, we'd use a singleton. And if you want to do that, that's perfectly fine. Just create a module that exports a Flux instance and you're good to go. But again, this won't do on the server, because you need a way to 1) deal with multiple requests, and 2) isolate user-specific data. Instead, with Flummox, we create a new Flux instance for every request.
 
-However, manually passing your Flux instance as props down the component tree isn't the best solution. Instead, use fluxMixin and/or FluxComponent. Under the hood, they use React context to expose your Flux instance to arbitrarily nested views. They also make it stupidly easy to subscribe to store updates:
+However, manually passing your Flux instance as props down the component tree isn't the best solution. Instead, use **connectToStores** high order component and **FluxComponent**. Under the hood, they use React context to expose your Flux instance to arbitrarily nested views. They also make it stupidly easy to subscribe to store updates:
 
 ```js
+
+/* App's Root Component/React */
+
+import { AppFlux } from 'AppFlux'; // import your AppFlux class
+
+const flux = new AppFlux(); // create a flux instance for your app
+
+React.render(
+  <FluxComponent flux={flux}> // inject flux instance into all children components context
+    <MessagesView />
+  </FluxComponent>,
+  document.getElementById('app')
+);
+
+
+
+/* MessagesView Component */
 
 class MessagesView extends React.Component {
 
   render() {
+    let messageList = this.props.messages.map( message => {(
+                        <li>
+                          <Message author={message.author} body={message.body} key={message.id} />
+                        </li>
+                      )});
     return (
-      <FluxComponent connectToStores={{
-        messages: store => ({
-          messages: store.messages
-        })
-      }}>
-        // MessageList is injected with a `messages` prop by FluxContainer
-        <MessageList />
-      </FluxComponent>
+      <ul className="message-list">
+        {messageList}
+      </ul>
     );
   }
-
 }
+
+// Wrap your Component with 'connectToStores' HoC
+// connectToStores connects to 'messages' store
+// connectToStores injects 'messages' store state into wrapped component(s) props
+// MessagesView is injected with a `messages` prop
+MessagesView = connectToStores(MessagesView, {
+  messages: store => ({
+    messages: store.messages
+  })
+});
+
+export default MessagesView;
 
 ```
 
