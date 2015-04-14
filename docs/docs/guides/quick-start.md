@@ -193,10 +193,11 @@ class MessagesView extends React.Component {
   }
 }
 
-// Wrap your Component with 'connectToStores' HoC
-// connectToStores connects to 'messages' store
-// connectToStores injects 'messages' store state into wrapped component(s) props
-// MessagesView is injected with a `messages` prop
+/* Wrap your Component with 'connectToStores' HoC
+ * connectToStores connects to 'messages' store
+ * connectToStores injects 'messages' store state into wrapped component(s) props
+ * MessagesView is injected with a `messages` prop
+ */
 MessagesView = connectToStores(MessagesView, {
   messages: store => ({
     messages: store.messages
