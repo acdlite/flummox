@@ -204,7 +204,7 @@ MessagesView = connectToStores(MessagesView, {
   })
 });
 
-export default MessagesView;
+export default MessagesView; // export the Wrapped Component
 
 ```
 
