@@ -23,4 +23,4 @@ HomeHandler = connectToStores(HomeHandler, {
 });
 ```
 
-**Note**: FluxComponent, fluxMixin, and the higher-order component implement the same [interface](https://github.com/acdlite/flummox/blob/master/src/addons/reactComponentMethods.js). Eventually the docs will updated to make this clearer.
+**Note**: FluxComponent, fluxMixin, and the higher-order component implement the same [interface](https://github.com/acdlite/flummox/blob/master/src/addons/reactComponentMethods.js). Eventually the docs will be updated to make this clearer.
