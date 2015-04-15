@@ -21,13 +21,16 @@ export default class Store extends EventEmitter {
 
     this.state = null;
 
+    // Map of action ids to collection of action handlers
+    // Async handlers are categorized as 'begin', 'success', or 'error'
+    // Non-async handlers are categorized as 'success'
     this._handlers = {};
-    this._asyncHandlers = {};
-    this._catchAllHandlers = [];
-    this._catchAllAsyncHandlers = {
+
+    // Like above, except generic handlers are called for every action
+    this._genericHandlers = {
       begin: [],
       success: [],
-      failure: [],
+      failure: []
     };
   }
 
@@ -85,55 +88,61 @@ export default class Store extends EventEmitter {
 
     if (typeof handler !== 'function') return;
 
-    this._handlers[actionId] = handler.bind(this);
+    const actionHandlers = this._handlers[actionId] || {};
+    const actionSuccessHandlers = actionHandlers.success || [];
+
+    actionSuccessHandlers.push(handler.bind(this));
+
+    actionHandlers.success = actionSuccessHandlers;
+    this._handlers[actionId] = actionHandlers;
   }
 
   registerAsync(actionId, beginHandler, successHandler, failureHandler) {
     actionId = ensureActionId(actionId);
 
-    const asyncHandlers = this._bindAsyncHandlers({
+    const actionHandlers = this._handlers[actionId] || {};
+
+    const newActionHandlers = {
       begin: beginHandler,
       success: successHandler,
-      failure: failureHandler,
-    });
+      failure: failureHandler
+    };
 
-    this._asyncHandlers[actionId] = asyncHandlers;
+    for (let handlerType in newActionHandlers) {
+      const handler = newActionHandlers[handlerType];
+
+      if (typeof handler !== 'function') continue;
+
+      const actionTypeHandlers = actionHandlers[handlerType] || [];
+
+      actionTypeHandlers.push(handler.bind(this));
+
+      actionHandlers[handlerType] = actionTypeHandlers;
+    }
+
+    this._handlers[actionId] = actionHandlers;
   }
 
   registerAll(handler) {
     if (typeof handler !== 'function') return;
 
-    this._catchAllHandlers.push(handler.bind(this));
+    this._genericHandlers.success.push(handler);
   }
 
   registerAllAsync(beginHandler, successHandler, failureHandler) {
-    const asyncHandlers = this._bindAsyncHandlers({
+    const newActionHandlers = {
       begin: beginHandler,
       success: successHandler,
-      failure: failureHandler,
-    });
+      failure: failureHandler
+    };
 
-    Object.keys(asyncHandlers).forEach((key) => {
-      this._catchAllAsyncHandlers[key].push(
-        asyncHandlers[key]
-      );
-    });
-  }
+    for (let handlerType in newActionHandlers) {
+      const handler = newActionHandlers[handlerType];
 
-  _bindAsyncHandlers(asyncHandlers) {
-    for (let key in asyncHandlers) {
-      if (!asyncHandlers.hasOwnProperty(key)) continue;
+      if (typeof handler !== 'function') continue;
 
-      const handler = asyncHandlers[key];
-
-      if (typeof handler === 'function') {
-        asyncHandlers[key] = handler.bind(this);
-      } else {
-        delete asyncHandlers[key];
-      }
+      this._genericHandlers[handlerType].push(handler.bind(this));
     }
-
-    return asyncHandlers;
   }
 
   waitFor(tokensOrStores) {
@@ -144,48 +153,63 @@ export default class Store extends EventEmitter {
     const {
       body,
       actionId,
-      'async': _async,
+      'async': asyncType,
       actionArgs,
       error
     } = payload;
 
-    const _allHandlers = this._catchAllHandlers;
-    const _handler = this._handlers[actionId];
+    // Collect array of all matching action handlers
+    const actionHandlers = this._handlers[actionId] || {};
+    const genericHandlers = this._genericHandlers;
 
-    const _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
-    const _asyncHandler = this._asyncHandlers[actionId]
-      && this._asyncHandlers[actionId][_async];
+    let matchedActionHandlers = [];
 
-    if (_async) {
-      let beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+    if (asyncType === 'begin' || asyncType === 'failure') {
+      const matchedAsyncActionHandlers = actionHandlers[asyncType];
+      const matchedAsyncGenericHandlers = genericHandlers[asyncType];
 
-      switch (_async) {
-        case 'begin':
-          this._performHandler(beginOrFailureHandlers, actionArgs);
-          return;
-        case 'failure':
-          this._performHandler(beginOrFailureHandlers, [error]);
-          return;
-        case 'success':
-          this._performHandler(_allAsyncHandlers.concat([
-            (_asyncHandler || _handler)
-          ].concat(_asyncHandler && [] || _allHandlers)), [body]);
-          return;
-        default:
-          return;
+      if (matchedAsyncActionHandlers) {
+        matchedActionHandlers = matchedActionHandlers.concat(matchedAsyncActionHandlers);
+      }
+
+      if (matchedAsyncGenericHandlers) {
+        matchedActionHandlers = matchedActionHandlers.concat(matchedAsyncGenericHandlers);
+      }
+    } else {
+      const matchedSuccessActionHandlers = actionHandlers.success;
+      const matchedSuccessGenericHandlers = genericHandlers.success;
+
+      if (matchedSuccessActionHandlers) {
+        matchedActionHandlers = matchedActionHandlers.concat(matchedSuccessActionHandlers);
+      }
+
+      if (matchedSuccessGenericHandlers) {
+        matchedActionHandlers = matchedActionHandlers.concat(matchedSuccessGenericHandlers);
       }
     }
 
-    this._performHandler(_allHandlers.concat([_handler]), [body]);
-  }
+    // Determine args to pass to handlers based on action type
+    let args;
 
-  _performHandler(_handlers, args) {
+    switch (asyncType) {
+      case 'begin':
+        args = [payload];
+        break;
+      case 'failure':
+        args = [error, payload];
+        break;
+      default:
+        args = [body, payload];
+    }
+
     this._isHandlingDispatch = true;
     this._pendingState = this._assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
-      this._performHandlers(_handlers, args);
+      for (let actionHandler of matchedActionHandlers) {
+        actionHandler(...args);
+      }
     } finally {
       if (this._emitChangeAfterHandlingDispatch) {
         this.state = this._pendingState;
@@ -196,11 +220,6 @@ export default class Store extends EventEmitter {
       this._pendingState = undefined;
       this._emitChangeAfterHandlingDispatch = false;
     }
-  }
-
-  _performHandlers(_handlers, args) {
-    _handlers.forEach(_handler =>
-      (typeof _handler === 'function') && _handler.apply(this, args));
   }
 }
 
