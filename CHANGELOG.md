@@ -12,6 +12,7 @@ Tags:
 ## Pending release
 - **New Feature**
   - Multiple handlers can be registered for the same action.
+  - Async action handlers are sent a `dispatchId` as part of the payload. The dispatch id for a `begin` dispatch is equal to the id of the corresponding `success` or `error` dispatch. This enables fine-grained optimistic updates.
 - **Breaking Change**
   - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
 - **Internal**
