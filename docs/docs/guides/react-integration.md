@@ -49,7 +49,7 @@ Pretty simple, right?
 
 ## Accesing the Flux instance in context
 
-Like we just leaned, FluxComponent injects a the flux instance as a prop to its **immediate** children; but what if we need to access our flux instance in an arbitrary component down the tree?
+Like we just learned, FluxComponent injects the flux instance as a prop to its **immediate** children; but what if we need to access our flux instance in an arbitrary component down the tree?.
 
 Since our Flux instance is passed down from the top component through context, we can always access it like this:
 
@@ -71,7 +71,7 @@ MyComponent.contextTypes = {
 export default MyComponent;
 ```
 
-When we declare a Component's 'contextTypes' we make those contexts accesible to the Component itself via 'this.context'. If you want to learn more about how context works, [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html) is a good article by Dave King.
+When we declare a Component's 'contextTypes' we make those contexts accesible to the Component itself via 'this.context'. If you want to learn more about how context works [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html) is a good article by Dave King.
 
 ## Subscribing to store updates
 
