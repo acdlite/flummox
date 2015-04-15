@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.5.2
+- **Bug Fix**
+  - `registerAll(action, handler)` is effectively the same as `registerAllAsync(action, null, handler, null)` [@hugobessaa](https://github.com/hugobessaa)
+
 ## 3.5.1
 - **Bug Fix**
   - Higher-order component wasn't passing through props [@Blitz2145](https://github.com/Blitz2145)
