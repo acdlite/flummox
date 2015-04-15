@@ -9,6 +9,14 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
+- **New Feature**
+  - Multiple handlers can be registered for the same action.
+- **Breaking Change**
+  - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
+- **Internal**
+  - Cleaned up Store's `register` methods. Much simpler code paths now.
+
 ## 3.5.2
 - **Bug Fix**
   - `registerAll(action, handler)` is effectively the same as `registerAllAsync(action, null, handler, null)` [@hugobessaa](https://github.com/hugobessaa)
