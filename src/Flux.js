@@ -10,6 +10,8 @@ import { Dispatcher } from 'flux';
 import EventEmitter from 'eventemitter3';
 import assign from 'object-assign';
 
+import uniqueId from 'uniqueid';
+
 export default class Flux extends EventEmitter {
 
   constructor() {
@@ -144,8 +146,11 @@ export default class Flux extends EventEmitter {
   }
 
   dispatchAsync(actionId, promise, actionArgs) {
+    const dispatchId = uniqueId();
+
     const payload = {
       actionId,
+      dispatchId,
       async: 'begin'
     };
 
@@ -158,6 +163,7 @@ export default class Flux extends EventEmitter {
         body => {
           this._dispatch({
             actionId,
+            dispatchId,
             body,
             async: 'success'
           });
@@ -167,6 +173,7 @@ export default class Flux extends EventEmitter {
         error => {
           this._dispatch({
             actionId,
+            dispatchId,
             error,
             async: 'failure'
           });
