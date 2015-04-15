@@ -318,38 +318,6 @@ describe('Store', () => {
     });
   });
 
-  // describe('#handler()', () => {
-  //   it('delegates dispatches to registered handlers', () => {
-  //     const store = new ExampleStore();
-  //     const handler = sinon.spy();
-  //     store.register(actionId, handler);
-  //
-  //     // Simulate dispatch
-  //     const body = { foo: 'bar' };
-  //     store.handler({ body, actionId });
-  //
-  //     expect(handler.firstCall.args[0]).to.equal(body);
-  //   });
-  //
-  //   it.skip('delegates dispatches to registered generic handlers', () => {
-  //     const store = new ExampleStore();
-  //     const handler = sinon.spy();
-  //     store.registerAll(handler);
-  //
-  //     // Simulate dispatch
-  //     const body1 = { foo: 'bar' };
-  //     const body2 = { bar: 'baz' };
-  //     store.handler({ body: body1, actionId: 'actionId1' });
-  //     store.handler({ body: body2, actionId: 'actionId2' });
-  //
-  //     console.log(handler);
-  //
-  //     expect(handler.calledTwice).to.be.true;
-  //     // expect(handler.firstCall.args[0]).to.equal(body1);
-  //     // expect(handler.secondCall.args[0]).to.equal(body2);
-  //   });
-  // });
-
   describe('#waitFor()', () => {
     it('waits for other stores', () => {
       const flux = new Flux();
