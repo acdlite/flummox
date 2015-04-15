@@ -200,7 +200,7 @@ class MessagesView extends React.Component {
  */
 MessagesView = connectToStores(MessagesView, {
   messages: store => ({
-    messages: store.messages
+    messages: store.getMessages()
   })
 });
 

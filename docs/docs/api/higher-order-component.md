@@ -23,4 +23,6 @@ HomeHandler = connectToStores(HomeHandler, {
 });
 ```
 
+**TODO** MUST TALK ABOUT passing a custom render function
+
 **Note**: FluxComponent, fluxMixin, and the higher-order component implement the same [interface](https://github.com/acdlite/flummox/blob/master/src/addons/reactComponentMethods.js). Eventually the docs will updated to make this clearer.
