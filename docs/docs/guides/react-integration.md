@@ -9,7 +9,7 @@ import FluxComponent from 'flummox/component';
 
 This guide discusses how to use **connectToStores HoC** to integrate Flummox with React.
 
-**connectToStores HoC requires React 0.13. If you're still on React 0.12, use FluxComponent exclusively until you're able to upgrade.**
+**connectToStores HoC requires React 0.13. If you're still on React 0.12, use FluxComponent and Flummox 2.x exclusively until you're able to upgrade.**
 
 ## Accessing the Flux instance
 
