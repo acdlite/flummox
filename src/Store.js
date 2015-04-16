@@ -241,14 +241,18 @@ export default class Store extends EventEmitter {
         actionHandler(payload);
       }
     } finally {
+      let emit = false;
+
       if (this._emitChangeAfterHandlingDispatch) {
+        emit = true;
         this.state = this._pendingState;
-        this.emit('change');
       }
 
       this._isHandlingDispatch = false;
       this._pendingState = undefined;
       this._emitChangeAfterHandlingDispatch = false;
+
+      if (emit) this.emit('change');
     }
   }
 }
