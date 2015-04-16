@@ -32,6 +32,11 @@ export default class Store extends EventEmitter {
       success: [],
       failure: []
     };
+
+    // Array of { matcher, handler }
+    // matcher is called with each payload
+    // handler is called if matcher returns true
+    this._matchHandlers = [];
   }
 
   setState(newState) {
@@ -126,7 +131,7 @@ export default class Store extends EventEmitter {
   registerAll(handler) {
     if (typeof handler !== 'function') return;
 
-    this._genericHandlers.success.push(handler);
+    this._genericHandlers.success.push(handler.bind(this));
   }
 
   registerAllAsync(beginHandler, successHandler, failureHandler) {
@@ -145,6 +150,13 @@ export default class Store extends EventEmitter {
     }
   }
 
+  registerMatch(matcher, handler) {
+    this._matchHandlers.push({
+      matcher,
+      handler: handler.bind(this)
+    });
+  }
+
   waitFor(tokensOrStores) {
     this._waitFor(tokensOrStores);
   }
@@ -161,6 +173,7 @@ export default class Store extends EventEmitter {
     // Collect array of all matching action handlers
     const actionHandlers = this._handlers[actionId] || {};
     const genericHandlers = this._genericHandlers;
+    const matchHandlers = this._matchHandlers;
 
     let matchedActionHandlers = [];
 
@@ -188,6 +201,17 @@ export default class Store extends EventEmitter {
       }
     }
 
+    // Collect handlers that match custom matcher functions
+    // These are collected separately because they always receive the payload
+    // as the sole argument.
+    let customMatchedActionHandlers = [];
+
+    for (let { matcher, handler } of matchHandlers) {
+      if (matcher(payload) === true) {
+        customMatchedActionHandlers.push(handler);
+      }
+    }
+
     // Determine args to pass to handlers based on action type
     let args;
 
@@ -207,8 +231,14 @@ export default class Store extends EventEmitter {
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
+      // Dispatch matched handlers
       for (let actionHandler of matchedActionHandlers) {
         actionHandler(...args);
+      }
+
+      // Dispatch custom matched handers
+      for (let actionHandler of customMatchedActionHandlers) {
+        actionHandler(payload);
       }
     } finally {
       if (this._emitChangeAfterHandlingDispatch) {

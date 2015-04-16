@@ -211,7 +211,7 @@ describe('Store', () => {
       expect(store.registerAll.bind(store, null)).not.to.throw();
     });
 
-	it('registers for all successful async actions', async function() {
+    it('registers for all successful async actions', async function() {
       const error = new Error();
 
       class ExampleActions extends Actions {
@@ -315,6 +315,40 @@ describe('Store', () => {
     it('ignores non-function handlers', () => {
       const store = new ExampleStore();
       expect(store.registerAsync.bind(store, null)).not.to.throw();
+    });
+  });
+
+  describe('#registerMatch', () => {
+    it('registers handler that is called when matching function returns true for dispatcher payload', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const handler = sinon.spy();
+      store.registerMatch(
+        payload => payload.body === 'match!',
+        handler
+      );
+
+      actions.foo('match!');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0].body).to.equal('match!');
+
+      actions.foo('not a match!');
+      expect(handler.calledOnce).to.be.true;
     });
   });
 
