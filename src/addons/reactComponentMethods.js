@@ -106,7 +106,7 @@ const instanceMethods = {
   connectToStores(stateGetterMap = {}, stateGetter = null) {
     const flux = this.getFlux();
 
-    const getStore = (key) => {
+    function getStore(key) {
       const store = flux.getStore(key);
 
       if (typeof store === 'undefined') {
@@ -116,12 +116,12 @@ const instanceMethods = {
       }
 
       return store;
-    };
+    }
 
     if (typeof stateGetterMap === 'string') {
       const key = stateGetterMap;
       const store = getStore(key);
-      const getter = stateGetter || defaultStateGetter;
+      const getter = createGetter(stateGetter, defaultStateGetter);
 
       this._fluxStateGetters.push({ stores: store, getter });
       const listener = createStoreListener(this, store, getter);
@@ -130,7 +130,7 @@ const instanceMethods = {
       this._fluxListeners[key] = listener;
     } else if (Array.isArray(stateGetterMap)) {
       const stores = stateGetterMap.map(getStore);
-      const getter = stateGetter || defaultReduceStateGetter;
+      const getter = createGetter(stateGetter, defaultReduceStateGetter);
 
       this._fluxStateGetters.push({ stores, getter });
       const listener = createStoreListener(this, stores, getter);
@@ -144,7 +144,7 @@ const instanceMethods = {
     } else {
        for (let key in stateGetterMap) {
         const store = getStore(key);
-        const getter = stateGetterMap[key] || defaultStateGetter;
+        const getter = createGetter(stateGetterMap[key], defaultStateGetter);
 
         this._fluxStateGetters.push({ stores: store, getter });
         const listener = createStoreListener(this, store, getter);
@@ -156,6 +156,10 @@ const instanceMethods = {
 
     return this.getStoreState();
   }
+
+  // collectActions(actionMap = {}, actionGetter = null) {
+  //
+  // }
 
 };
 
@@ -187,6 +191,14 @@ function createStoreListener(component, store, storeStateGetter) {
     const state = storeStateGetter(store, this.props);
     this.setState(state);
   }.bind(component);
+}
+
+function createGetter(value, defaultGetter) {
+  if (typeof value !== 'function') {
+    return defaultGetter;
+  } else {
+    return value;
+  }
 }
 
 function defaultStateGetter(store) {

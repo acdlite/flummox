@@ -131,7 +131,7 @@ describe('FluxComponent', () => {
     expect(component.state.fiz).to.equal('bin');
   });
 
-  it('passes injectActions prop to reactComponentMethod collectActions()', () => {
+  it.skip('passes injectActions prop to reactComponentMethod collectActions()', () => {
     class Flux extends Flummox {
       constructor() {
         super();
