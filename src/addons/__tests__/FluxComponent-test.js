@@ -131,7 +131,7 @@ describe('FluxComponent', () => {
     expect(component.state.fiz).to.equal('bin');
   });
 
-  it.skip('passes injectActions prop to reactComponentMethod collectActions()', () => {
+  it('passes injectActions prop to reactComponentMethod collectActions()', () => {
     class Flux extends Flummox {
       constructor() {
         super();
@@ -178,16 +178,10 @@ describe('FluxComponent', () => {
       />
     );
 
-    const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux}>
-        <div />
-      </FluxComponent>
-    );
+    const div = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
 
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
-    expect(div.props.do()).to.equal('do');
-    expect(div.props.fa()).to.equal('fa');
+    expect(div.props.do()).to.equal('re');
+    expect(div.props.fa()).to.equal('so');
   });
 
   it('injects children with flux prop', () => {
@@ -235,8 +229,9 @@ describe('FluxComponent', () => {
         connectToStores="test"
         stateGetter={stateGetter}
         extraProp="hello"
-        render={(props) => <div {...props} />}
-      />
+      >
+        <div />
+      </FluxComponent>
     );
 
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');

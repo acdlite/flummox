@@ -40,6 +40,20 @@ describe('Actions', () => {
 
   });
 
+  describe('#getActionsAsObject', () => {
+    it('returns actions as plain object', () => {
+      const actions = new TestActions();
+
+      expect(actions.getActionsAsObject()).to.deep.equal({
+        getFoo: actions.getFoo,
+        getBar: actions.getBar,
+        getBaz: actions.getBaz,
+        asyncAction: actions.asyncAction,
+        badAsyncAction: actions.badAsyncAction
+      });
+    });
+  });
+
   describe('#[methodName]', () => {
     it('calls Flux dispatcher', () => {
       const actions = new TestActions();

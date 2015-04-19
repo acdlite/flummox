@@ -155,12 +155,51 @@ const instanceMethods = {
     }
 
     return this.getStoreState();
+  },
+
+  collectActions(actionMap = {}, actionGetter = null) {
+    if (typeof actionMap === 'undefined') {
+      return {};
+    }
+
+    const flux = this.getFlux();
+
+    function getActions(key) {
+      const actions = flux.getActions(key);
+
+      if (typeof actions === 'undefined') {
+        throw new Error(
+          `connectToStores(): Actions with key '${key}' does not exist.`
+        );
+      }
+
+      return actions;
+    }
+
+    const collectedActions = {};
+
+    if (typeof actionMap === 'string') {
+      const key = actionMap;
+      const actions = getActions(key);
+      const getter = createGetter(actionGetter, defaultActionGetter);
+
+      assign(collectedActions, getter(actions));
+    } else if (Array.isArray(actionMap)) {
+      const actions = actionMap.map(getActions);
+      const getter = createGetter(actionGetter, defaultReduceActionGetter);
+
+      assign(collectedActions, getter(actions));
+    } else {
+      for (let key in actionMap) {
+        const actions = getActions(key);
+        const getter = createGetter(actionMap[key], defaultActionGetter);
+
+        assign(collectedActions, getter(actions));
+      }
+    }
+
+    return collectedActions;
   }
-
-  // collectActions(actionMap = {}, actionGetter = null) {
-  //
-  // }
-
 };
 
 const staticProperties = {
@@ -208,6 +247,17 @@ function defaultStateGetter(store) {
 function defaultReduceStateGetter(stores) {
   return stores.reduce(
     (result, store) => assign(result, store.getStateAsObject()),
+    {}
+  );
+}
+
+function defaultActionGetter(actions) {
+  return actions.getActionsAsObject();
+}
+
+function defaultReduceActionGetter(actions) {
+  return actions.reduce(
+    (result, _actions) => assign(result, _actions.getStateAsObject()),
     {}
   );
 }

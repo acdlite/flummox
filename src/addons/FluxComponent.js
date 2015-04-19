@@ -79,16 +79,21 @@ class FluxComponent extends React.Component {
 
     return assign(
       { flux: this.getFlux() }, // TODO: remove in next major version
+      this.collectActions(injectActions),
       this.state,
       extraProps
     );
   }
 
   render() {
-    const { children, render } = this.props;
+    const { children, render, injectActions } = this.props;
 
     if (typeof render === 'function') {
-      return render(this.getChildProps(), this.getFlux());
+      return render(
+        this.state,
+        this.collectActions(injectActions),
+        this.getFlux()
+      );
     }
 
     if (!children) return null;

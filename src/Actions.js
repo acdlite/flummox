@@ -36,6 +36,13 @@ export default class Actions {
     }, {});
   }
 
+  getActionsAsObject() {
+    return this._getActionMethodNames().reduce((result, actionName) => {
+      result[actionName] = this[actionName];
+      return result;
+    }, {});
+  }
+
   _getActionMethodNames(instance) {
     return Object.getOwnPropertyNames(this.constructor.prototype)
       .filter(name =>
