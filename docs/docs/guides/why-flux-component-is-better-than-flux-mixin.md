@@ -1,3 +1,10 @@
+
+
+This is an Archived Doc. The current best way to connect to store data is via the *connectToStores HoC*
+
+Please read the current version of this Doc here: [why connectToStores HoC is preferred](why-hoc-better-than-fluxcomponent).
+
+
 Why FluxComponent > fluxMixin
 =============================
 

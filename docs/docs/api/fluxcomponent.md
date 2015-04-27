@@ -19,7 +19,7 @@ Access the Flux instance and subscribe to store updates. Refer to the [React int
 </FluxComponent>
 ```
 
-In general, [it's recommended to use FluxComponent instead of fluxMixin](../guides/why-flux-component-is-better-than-flux-mixin.md).
+In general, [it's recommended to use *connectToStores HoC* + FluxComponent instead of fluxMixin or just FluxComponent bi it self](../guides/why-hoc-better-than-fluxcomponent.md).
 
 State getters
 -------------
