@@ -61,7 +61,7 @@ class FluxComponent extends React.Component {
   }
 
   wrapChild(child) {
-    return React.addons.cloneWithProps(
+    return React.addons.cloneElement(
       child,
       this.getChildProps()
     );
