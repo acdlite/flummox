@@ -127,11 +127,11 @@ class MyComponent extends React.Component {
 
 // Pass an object of store keys mapped to getter functions
 MyComponent = connectToStores(MyComponent, {  
-  posts: store => ({
-    postBody: store.getPostBody(this.props.post.id),
+  posts: (store, props) => ({
+    postBody: store.getPostBody(props.post.id),
   }),
-  comments: store => ({
-    comments: store.getCommentsForPost(this.props.post.id),
+  comments: (store, props) => ({
+    comments: store.getCommentsForPost(props.post.id),
   })
 });
 

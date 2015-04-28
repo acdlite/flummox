@@ -135,8 +135,8 @@ class BlogPostPage extends React.Component {
       <SiteNavigation />
       <MainContentArea>
         <FluxComponent connectToStores={{
-          posts: store => ({
-            post: store.getPost(this.props.postId),
+          posts: (store, props) => ({
+            post: store.getPost(props.postId),
           })
         }}>
           <BlogPost />
@@ -182,8 +182,8 @@ class BlogPost extends React.Component {
  * while mantaining composability
  */
 BlogPost = connectToStores(BlogPost, {
-  posts: store => ({
-    post: store.getPost(this.props.postId),
+  posts: (store, props) => ({
+    post: store.getPost(props.postId),
   })
 });
 

@@ -18,8 +18,9 @@ Subscribes to store updates. A higher-order component form of [FluxComponent](fl
  *   an object of store keys mapped to state getters.
  *
  * stateGetter: a function that takes the store as a parameter and
- *   returns the state that should be passed to the component's
- *   `setState()`. If no state getter is specified, the default getter is
+ *   returns the state that should be passed to the component's `setState()`. 
+ *   Since 3.0 you can access the component props via the second stateGetter parameter.
+ *   If no state getter is specified, the default getter is
  *   used, which simply returns the entire store state.
  */
 connectToStores(BaseComponent, stores, stateGetter);
@@ -52,7 +53,7 @@ class MessagesView extends React.Component {
  * MessagesView is injected with a `messages` prop
  */
 MessagesView = connectToStores(MessagesView, {
-  messages: store => ({
+  messages: (store, props) => ({
     messages: store.getMessages()
   })
 });
@@ -62,21 +63,22 @@ export default MessagesView; // export the Wrapped Component
 
 State getters
 -------------
-The `stateGetter` prop can be used to control how state from stores are transformed into props. For example in some situations the data retrieved from one store depends on the state from another, you can use an array of store keys with a custom state getter to ensure the components state is updated when either store changes:
+The `stateGetter` param can be used to control how state from stores are transformed into props. For example in some situations the data retrieved from one store depends on the state from another, you can use an array of store keys with a custom state getter to ensure the components state is updated when either store changes:
 
 ```js
 connectToStores(SomeComponent,
-  ['posts', 'session'],
+  ['posts', 'user'],
 
-  // An array of store instances are passed to the state getter; Instead of indexing
-  // into the stores array, ES6 array destructuring is used to access each store
-  // as a variable.
-  ([postStore, sessionStore]) => ({
-    posts: store.getPostForUser(sessionStore.getCurrentUserId())
+ /* An array of store instances are passed to the state getter; Instead of indexing
+  * into the stores array, ES6 array destructuring is used to access each store
+  * as a variable.
+  *
+  * the second param (props) contains the props passed to the wrapped component
+  */
+  ([postStore, userStore], props) => ({
+    posts: store.getPostForUser(userStore.getUserIdFromName(props.user.name))
   })
 );
 ```
-
-The `stateGetter` param behaves differently depending on the value passed to the `stores` param, you can refer to [fluxMixin](fluxmixin.md) for more details.
 
 **Note**: FluxComponent, fluxMixin, and the higher-order component implement the same [interface](https://github.com/acdlite/flummox/blob/master/src/addons/reactComponentMethods.js). Eventually the docs will updated to make this clearer.

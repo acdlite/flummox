@@ -49,7 +49,8 @@ fluxMixin(
   // An array of store instances are passed to the state getter; Instead of indexing
   // into the stores array, ES6 array destructuring is used to access each store
   // as a variable.
-  ([postStore, sessionStore]) => ({
+  // the second param (props) contains the props passed to the wrapped component.
+  ([postStore, sessionStore], props) => ({
     posts: store.getPostForUser(sessionStore.getCurrentUserId())
   })
 );
