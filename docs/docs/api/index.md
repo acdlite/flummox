@@ -24,14 +24,15 @@ Addons
 
 Flummox also comes with some addons. These are not part of the main export. That way, if you don't use them, they won't increase the size of your bundle.
 
+* [Higher-order component](api/higher-order-component.md)
 * [FluxComponent](api/fluxcomponent.md)
 * [fluxMixin](api/fluxmixin.md)
-* [Higher-order component](api/higher-order-component.md)
+
 
 Refer to the [React integration guide](guides/react-integration.md) for details.
 
 ```js
-import fluxMixin from 'flummox/mixin';
-import FluxComponent from 'flummox/component';
 import connectToStores from 'flummox/connect';
+import FluxComponent from 'flummox/component';
+import fluxMixin from 'flummox/mixin';
 ```

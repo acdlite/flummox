@@ -7,6 +7,8 @@ Access the Flux instance and subscribe to store updates. Refer to the [React int
 
 
 ```js
+import FluxComponent from 'flummox/component';
+
 <FluxComponent connectToStores={{
   posts: (store, props) => ({
     post: store.getPost(props.post.id),

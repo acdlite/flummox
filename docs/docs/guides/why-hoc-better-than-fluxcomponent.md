@@ -129,6 +129,8 @@ Wouldn't it be great if there were a shortcut for this pattern — a convenient 
 Yep! It's called FluxComponent.
 
 ```js
+import FluxComponent from 'flummox/component';
+
 class BlogPostPage extends React.Component {
   render() {
     <div>
@@ -154,6 +156,8 @@ The state fetched by `connectToStores()` is transferred to **the children of Flu
 Flummox provides a higher order component that does just that, it's called connectToStores.
 
 ```js
+import connectToStores from 'flummox/connect';
+
 class BlogPostPage extends React.Component {
   render() {
     <div>

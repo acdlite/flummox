@@ -163,6 +163,8 @@ However, manually passing your Flux instance as props down the component tree is
 /* App's Root Component */
 
 import { AppFlux } from 'AppFlux'; // import your AppFlux class
+import connectToStores from 'flummox/connect';
+import FluxComponent from 'flummox/component';
 
 const flux = new AppFlux(); // create a flux instance for your app
 

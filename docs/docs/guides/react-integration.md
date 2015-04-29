@@ -37,6 +37,8 @@ Additionally, the immediate children of FluxComponent will be injected with a `f
 So if you pass a flux instance as a prop to a FluxComponent wrapping your app's top component, all components further down the tree will automatically have access to it:
 
 ```js
+import FluxComponent from 'flummox/component';
+
 React.render(
   <FluxComponent flux={flux}>
     <App />
@@ -85,6 +87,8 @@ This sucks. And it's easy to mess up.
 **connectToStores HoC** hides all of these concerns behind a simple component interface. connectToStores specifies which stores you want to stay in sync with. connectToStores immediate children will be injected with props corresponding to the state of those stores.
 
 ```js
+import connectToStores from 'flummox/connect';
+
 class MyComponent extends React.Component {
   render() {
     return (
@@ -109,6 +113,8 @@ If `storeA` has state `{foo: 'bar'}` and `storeB` has state `{bar: 'baz'}`, then
 So, in just a few short lines, we can specify the initialization logic, update logic, and listening/unlistening logic for our component.
 
 ```js
+import connectToStores from 'flummox/connect';
+
 class MyComponent extends React.Component {
   render() {
     let commentList = this.props.comments.map( comment => {(

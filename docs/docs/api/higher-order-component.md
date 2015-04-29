@@ -18,7 +18,7 @@ Subscribes to store updates. A higher-order component form of [FluxComponent](fl
  *   an object of store keys mapped to state getters.
  *
  * stateGetter: a function that takes the store as a parameter and
- *   returns the state that should be passed to the component's `setState()`. 
+ *   returns the state that should be passed to the component's `setState()`.
  *   Since 3.0 you can access the component props via the second stateGetter parameter.
  *   If no state getter is specified, the default getter is
  *   used, which simply returns the entire store state.
@@ -31,6 +31,8 @@ It's main advantage is that it makes it possible for components to co-locate it'
 Here's an example from the quickstart:
 
 ```js
+import connectToStores from 'flummox/connect';
+
 class MessagesView extends React.Component {
 
   render() {
