@@ -49,7 +49,7 @@ React.render(
 
 Pretty simple, right?
 
-## Accesing the Flux instance in context
+## Accessing the Flux instance in context
 
 Like we just learned, FluxComponent injects the flux instance as a prop to its **immediate** children; but what if we need to access our flux instance in an arbitrary component down the tree?.
 
@@ -73,7 +73,7 @@ MyComponent.contextTypes = {
 export default MyComponent;
 ```
 
-When we declare a Component's 'contextTypes' we make those contexts accesible to the Component itself via 'this.context'. If you want to learn more about how context works [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html) is a good article by Dave King.
+When we declare a Component's 'contextTypes' we make those contexts accessible to the Component itself via 'this.context'. If you want to learn more about how context works [here](https://www.tildedave.com/2014/11/15/introduction-to-contexts-in-react-js.html) is a good article by Dave King.
 
 ## Subscribing to store updates
 
@@ -110,7 +110,7 @@ If `storeA` has state `{foo: 'bar'}` and `storeB` has state `{bar: 'baz'}`, then
 
 **connectToStores** will accept a single store key, an array of store keys, or a map of store keys to getter functions. A getter function is a function which takes a single parameter, the store, and returns an object of props to be injected into the children of FluxComponent. If a null is specified as a getter, the default getter is used instead, which simply returns the entire store state (like in the example above).
 
-So, in just a few short lines, we can specify the initialization logic, update logic, and listening/unlistening logic for our component.
+So, in just a few short lines, we can specify the initialization logic, update logic, and listening/un-listening logic for our component.
 
 ```js
 import connectToStores from 'flummox/connect';

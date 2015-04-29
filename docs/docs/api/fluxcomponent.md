@@ -21,7 +21,7 @@ import FluxComponent from 'flummox/component';
 </FluxComponent>
 ```
 
-In general, [it's recommended to use *connectToStores HoC* + FluxComponent instead of fluxMixin or just FluxComponent bi it self](../guides/why-hoc-better-than-fluxcomponent.md).
+In general, [it's recommended to use *connectToStores HoC* + FluxComponent instead of fluxMixin or just FluxComponent by itself](../guides/why-hoc-better-than-fluxcomponent.md).
 
 State getters
 -------------

@@ -1,7 +1,7 @@
 Why connectToStores HoC > FluxComponent > fluxMixin
 =============================
 
-**TLDR;** Mixins are an escape hatch to work around reusability limitations in the system. It’s not idiomatic React. Making composition easier is a higher priority than making arbitrary mixins work.[(source)](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)
+**TLDR;** Mixins are an escape hatch to work around re-usability limitations in the system. It’s not idiomatic React. Making composition easier is a higher priority than making arbitrary mixins work.[(source)](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)
 
 In the [React integration guide](react-integration), I suggest that using [connectToStores HoC](/flummox/docs/api/higher-order-component) is better than using [fluxMixin](/flummox/docs/api/fluxmixin) or [FluxComponent](/flummox/docs/api/fluxcomponent) alone, even though they do essentially the same thing. A few people have told me they like the mixin/FluxCompoent form more, so allow me to explain.
 

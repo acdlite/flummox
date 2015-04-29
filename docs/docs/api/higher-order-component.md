@@ -26,7 +26,7 @@ Subscribes to store updates. A higher-order component form of [FluxComponent](fl
 connectToStores(BaseComponent, stores, stateGetter);
 ```
 
-It's main advantage is that it makes it possible for components to co-locate it's data requirements declaratively while mantaining composability; so that you keep a component's behaivior/render logic and data needs encapsulated on itself. Refer to the [React integration guide](../guides/react-integration.md) for more information.
+It's main advantage is that it makes it possible for components to co-locate it's data requirements declarative while maintaining composability; so that you keep a component's behavior/render logic and data needs encapsulated on itself. Refer to the [React integration guide](../guides/react-integration.md) for more information.
 
 Here's an example from the quickstart:
 

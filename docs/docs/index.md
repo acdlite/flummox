@@ -30,7 +30,7 @@ Features
 - Async actions [made simple with promises](flummox/docs/api/actions#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
 - Easy [integration with React](flummox/docs/guides/react-integration) via connectToStores HoC and FluxComponent.
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
-- Serialization/deserialization of stores, for faster page loads.
+- Serialization/de-serialization of stores, for faster page loads.
 - Centralized [debugging](flummox/docs/api/flux).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
@@ -140,7 +140,7 @@ app.get("/", function(req, res) {
 });
 ```
 
-Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and deserialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
+Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and de-serialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
 
 React integration
 -----------------
