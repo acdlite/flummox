@@ -1,6 +1,6 @@
 # React integration guide
 
-If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](/flummox/docs/api/fluxcomponent) and [fluxMixin](/flummox/docs/api/fluxmixin). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin).)
+If you're using Flummox, you're probably also using React. To make React integration incredibly simple, Flummox comes with some optional goodies: [FluxComponent](../api/fluxcomponent.md) and [fluxMixin](../api/fluxmixin.md). Both have essentially the same functionality — in fact, the component is mostly just a wrapper around the mixin. However, in the spirit of React, the component form is preferred. (Read more about [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).)
 
 ```js
 import FluxComponent from 'flummox/component';
@@ -100,11 +100,11 @@ So, in just a few short lines, we can specify the initialization logic, update l
 </FluxComponent>
 ```
 
-In this example, InnerComponent has props `post` and `comments`. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead. Refer to the [FluxComponent](/flummox/docs/api/fluxcomponent) docs for more information.
+In this example, InnerComponent has props `post` and `comments`. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead. Refer to the [FluxComponent](../api/fluxcomponent.md) docs for more information.
 
 ## Using fluxMixin
 
-**tl;dr** Just use FluxComponent. (Unless you don't want to. Up to you.) Read a longer explanation for [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin).
+**tl;dr** Just use FluxComponent. (Unless you don't want to. Up to you.) Read a longer explanation for [why FluxComponent is preferred](why-flux-component-is-better-than-flux-mixin.md).
 
 ***
 
