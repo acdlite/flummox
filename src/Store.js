@@ -207,7 +207,7 @@ export default class Store extends EventEmitter {
     let customMatchedActionHandlers = [];
 
     for (let { matcher, handler } of matchHandlers) {
-      if (matcher(payload) === true) {
+      if (matcher(payload)) {
         customMatchedActionHandlers.push(handler);
       }
     }
