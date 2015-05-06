@@ -14,6 +14,22 @@
 
 import uniqueId from 'uniqueid';
 
+/**
+ * Obtain all inherited props until motherProto (excluded)
+ * @param {function} obj - the proto to inspect
+ * @param {function} motherProto - the roo prototype to exclude
+ */
+const getAllPropertyNames = (obj, motherProto) => {
+  // credits: http://stackoverflow.com/a/8024294
+  let props = [];
+
+  do {
+    props = props.concat(Object.getOwnPropertyNames(obj));
+  } while((obj = Object.getPrototypeOf(obj)) && obj !== motherProto);
+
+  return props;
+};
+
 export default class Actions {
 
   constructor() {
@@ -37,7 +53,7 @@ export default class Actions {
   }
 
   _getActionMethodNames(instance) {
-    return Object.getOwnPropertyNames(this.constructor.prototype)
+    return getAllPropertyNames(this.constructor.prototype, Actions.prototype)
       .filter(name =>
         name !== 'constructor' &&
         typeof this[name] === 'function'
