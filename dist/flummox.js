@@ -47,15 +47,15 @@ var Flummox =
 
 	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
-
+	exports.__esModule = true;
 	var _bind = Function.prototype.bind;
 
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	exports.__esModule = true;
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
 	/**
 	 * Flux
 	 *
@@ -64,21 +64,21 @@ var Flummox =
 
 	var _Store = __webpack_require__(1);
 
-	var Store = _interopRequire(_Store);
+	var _Store2 = _interopRequireDefault(_Store);
 
 	var _Actions = __webpack_require__(2);
 
-	var Actions = _interopRequire(_Actions);
+	var _Actions3 = _interopRequireDefault(_Actions);
 
-	var _Dispatcher = __webpack_require__(3);
+	var _flux = __webpack_require__(5);
 
-	var _EventEmitter2 = __webpack_require__(4);
+	var _eventemitter3 = __webpack_require__(4);
 
-	var EventEmitter = _interopRequire(_EventEmitter2);
+	var _eventemitter32 = _interopRequireDefault(_eventemitter3);
 
-	var _assign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(3);
 
-	var assign = _interopRequire(_assign);
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 	var Flux = (function (_EventEmitter) {
 	  function Flux() {
@@ -86,7 +86,7 @@ var Flummox =
 
 	    _EventEmitter.call(this);
 
-	    this.dispatcher = new _Dispatcher.Dispatcher();
+	    this.dispatcher = new _flux.Dispatcher();
 
 	    this._stores = {};
 	    this._actions = {};
@@ -99,7 +99,7 @@ var Flummox =
 	      constructorArgs[_key - 2] = arguments[_key];
 	    }
 
-	    if (!(_Store.prototype instanceof Store)) {
+	    if (!(_Store.prototype instanceof _Store2['default'])) {
 	      var className = getClassName(_Store);
 
 	      throw new Error('You\'ve attempted to create a store from the class ' + className + ', which ' + 'does not have the base Store class in its prototype chain. Make sure ' + ('you\'re using the `extends` keyword: `class ' + className + ' extends ') + 'Store { ... }`');
@@ -140,7 +140,7 @@ var Flummox =
 	      constructorArgs[_key2 - 2] = arguments[_key2];
 	    }
 
-	    if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
+	    if (!(_Actions.prototype instanceof _Actions3['default']) && _Actions !== _Actions3['default']) {
 	      if (typeof _Actions === 'function') {
 	        var className = getClassName(_Actions);
 
@@ -159,8 +159,8 @@ var Flummox =
 	          _inherits(_class, _Actions2);
 
 	          return _class;
-	        })(Actions);
-	        assign(_Actions.prototype, properties);
+	        })(_Actions3['default']);
+	        _objectAssign2['default'](_Actions.prototype, properties);
 	      }
 	    }
 
@@ -184,9 +184,9 @@ var Flummox =
 	  Flux.prototype.getActionIds = function getActionIds(key) {
 	    var actions = this.getActions(key);
 
-	    if (!actions) {
-	      return;
-	    }return actions.getConstants();
+	    if (!actions) return;
+
+	    return actions.getConstants();
 	  };
 
 	  Flux.prototype.removeActions = function removeActions(key) {
@@ -258,7 +258,7 @@ var Flummox =
 	    if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
 
 	    var ensureIsToken = function ensureIsToken(tokenOrStore) {
-	      return tokenOrStore instanceof Store ? tokenOrStore._token : tokenOrStore;
+	      return tokenOrStore instanceof _Store2['default'] ? tokenOrStore._token : tokenOrStore;
 	    };
 
 	    var tokens = tokensOrStores.map(ensureIsToken);
@@ -350,7 +350,7 @@ var Flummox =
 	  };
 
 	  return Flux;
-	})(EventEmitter);
+	})(_eventemitter32['default']);
 
 	exports['default'] = Flux;
 
@@ -380,8 +380,8 @@ var Flummox =
 
 	exports.Flux = Flux;
 	exports.Flummox = Flummox;
-	exports.Store = Store;
-	exports.Actions = Actions;
+	exports.Store = _Store2['default'];
+	exports.Actions = _Actions3['default'];
 
 /***/ },
 /* 1 */
@@ -389,11 +389,13 @@ var Flummox =
 
 	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
+	exports.__esModule = true;
 
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	/**
 	 * Store
@@ -404,13 +406,13 @@ var Flummox =
 	 * from the outside world is via the dispatcher.
 	 */
 
-	var _EventEmitter2 = __webpack_require__(4);
+	var _eventemitter3 = __webpack_require__(4);
 
-	var EventEmitter = _interopRequire(_EventEmitter2);
+	var _eventemitter32 = _interopRequireDefault(_eventemitter3);
 
-	var _assign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(3);
 
-	var assign = _interopRequire(_assign);
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 	var Store = (function (_EventEmitter) {
 
@@ -469,7 +471,7 @@ var Flummox =
 	  };
 
 	  Store.assignState = function assignState(oldState, newState) {
-	    return assign({}, oldState, newState);
+	    return _objectAssign2['default']({}, oldState, newState);
 	  };
 
 	  Store.prototype._assignState = function _assignState() {
@@ -491,9 +493,9 @@ var Flummox =
 	  Store.prototype.register = function register(actionId, handler) {
 	    actionId = ensureActionId(actionId);
 
-	    if (typeof handler !== 'function') {
-	      return;
-	    }this._handlers[actionId] = handler.bind(this);
+	    if (typeof handler !== 'function') return;
+
+	    this._handlers[actionId] = handler.bind(this);
 	  };
 
 	  Store.prototype.registerAsync = function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
@@ -508,9 +510,9 @@ var Flummox =
 	  };
 
 	  Store.prototype.registerAll = function registerAll(handler) {
-	    if (typeof handler !== 'function') {
-	      return;
-	    }this._catchAllHandlers.push(handler.bind(this));
+	    if (typeof handler !== 'function') return;
+
+	    this._catchAllHandlers.push(handler.bind(this));
 	  };
 
 	  Store.prototype.registerAllAsync = function registerAllAsync(beginHandler, successHandler, failureHandler) {
@@ -549,7 +551,7 @@ var Flummox =
 	  Store.prototype.handler = function handler(payload) {
 	    var body = payload.body;
 	    var actionId = payload.actionId;
-	    var _async = payload.async;
+	    var _async = payload['async'];
 	    var actionArgs = payload.actionArgs;
 	    var error = payload.error;
 
@@ -608,13 +610,14 @@ var Flummox =
 	  };
 
 	  return Store;
-	})(EventEmitter);
+	})(_eventemitter32['default']);
 
-	module.exports = Store;
+	exports['default'] = Store;
 
 	function ensureActionId(actionOrActionId) {
 	  return typeof actionOrActionId === 'function' ? actionOrActionId._id : actionOrActionId;
 	}
+	module.exports = exports['default'];
 
 /***/ },
 /* 2 */
@@ -622,9 +625,11 @@ var Flummox =
 
 	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj['default'] : obj; };
+	exports.__esModule = true;
 
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	/**
 	 * Actions
@@ -640,15 +645,31 @@ var Flummox =
 	 * of the payload sent to the dispatcher.
 	 */
 
-	var _uniqueId = __webpack_require__(7);
+	var _uniqueid = __webpack_require__(6);
 
-	var uniqueId = _interopRequire(_uniqueId);
+	var _uniqueid2 = _interopRequireDefault(_uniqueid);
+
+	/**
+	 * Obtain all inherited props until motherProto (excluded)
+	 * @param {function} obj - the proto to inspect
+	 * @param {function} motherProto - the roo prototype to exclude
+	 */
+	var getAllPropertyNames = function getAllPropertyNames(obj, motherProto) {
+	  // credits: http://stackoverflow.com/a/8024294
+	  var props = [];
+
+	  do {
+	    props = props.concat(Object.getOwnPropertyNames(obj));
+	  } while ((obj = Object.getPrototypeOf(obj)) && obj !== motherProto);
+
+	  return props;
+	};
 
 	var Actions = (function () {
 	  function Actions() {
 	    _classCallCheck(this, Actions);
 
-	    this._baseId = uniqueId();
+	    this._baseId = _uniqueid2['default']();
 
 	    var methodNames = this._getActionMethodNames();
 	    for (var i = 0; i < methodNames.length; i++) {
@@ -671,7 +692,7 @@ var Flummox =
 	  Actions.prototype._getActionMethodNames = function _getActionMethodNames(instance) {
 	    var _this2 = this;
 
-	    return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
+	    return getAllPropertyNames(this.constructor.prototype, Actions.prototype).filter(function (name) {
 	      return name !== 'constructor' && typeof _this2[name] === 'function';
 	    });
 	  };
@@ -741,26 +762,43 @@ var Flummox =
 	  return Actions;
 	})();
 
-	module.exports = Actions;
+	exports['default'] = Actions;
 
 	function isPromise(value) {
 	  return value && typeof value.then === 'function';
 	}
+	module.exports = exports['default'];
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Copyright (c) 2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
+	'use strict';
 
-	module.exports.Dispatcher = __webpack_require__(6)
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = Object.keys(Object(from));
+
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+
+		return to;
+	};
 
 
 /***/ },
@@ -1002,36 +1040,79 @@ var Flummox =
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
 
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
+	module.exports.Dispatcher = __webpack_require__(7)
 
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+
+	var count = 0;
+
+	/**
+	 * Generate a unique ID.
+	 *
+	 * Optionally pass a prefix to prepend, a suffix to append, or a
+	 * multiplier to use on the ID.
+	 *
+	 * ```js
+	 * uniqueId(); //=> '25'
+	 *
+	 * uniqueId({prefix: 'apple_'});
+	 * //=> 'apple_10'
+	 *
+	 * uniqueId({suffix: '_orange'});
+	 * //=> '10_orange'
+	 *
+	 * uniqueId({multiplier: 5});
+	 * //=> 5, 10, 15, 20...
+	 * ```
+	 *
+	 * To reset the `id` to zero, do `id.reset()`.
+	 *
+	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
+	 * @return {String} The unique id.
+	 * @api public
+	 */
+
+	var id = module.exports = function (options) {
+	  options = options || {};
+
+	  var prefix = options.prefix;
+	  var suffix = options.suffix;
+
+	  var id = ++count * (options.multiplier || 1);
+
+	  if (prefix == null) {
+	    prefix = '';
+	  }
+
+	  if (suffix == null) {
+	    suffix = '';
+	  }
+
+	  return String(prefix) + id + String(suffix);
+	};
+
+
+	id.reset = function() {
+	  return count = 0;
+	};
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1285,65 +1366,6 @@ var Flummox =
 
 	module.exports = Dispatcher;
 
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-
-	var count = 0;
-
-	/**
-	 * Generate a unique ID.
-	 *
-	 * Optionally pass a prefix to prepend, a suffix to append, or a
-	 * multiplier to use on the ID.
-	 *
-	 * ```js
-	 * uniqueId(); //=> '25'
-	 *
-	 * uniqueId({prefix: 'apple_'});
-	 * //=> 'apple_10'
-	 *
-	 * uniqueId({suffix: '_orange'});
-	 * //=> '10_orange'
-	 *
-	 * uniqueId({multiplier: 5});
-	 * //=> 5, 10, 15, 20...
-	 * ```
-	 *
-	 * To reset the `id` to zero, do `id.reset()`.
-	 *
-	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
-	 * @return {String} The unique id.
-	 * @api public
-	 */
-
-	var id = module.exports = function (options) {
-	  options = options || {};
-
-	  var prefix = options.prefix;
-	  var suffix = options.suffix;
-
-	  var id = ++count * (options.multiplier || 1);
-
-	  if (prefix == null) {
-	    prefix = '';
-	  }
-
-	  if (suffix == null) {
-	    suffix = '';
-	  }
-
-	  return String(prefix) + id + String(suffix);
-	};
-
-
-	id.reset = function() {
-	  return count = 0;
-	};
 
 /***/ },
 /* 8 */
