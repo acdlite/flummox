@@ -141,39 +141,38 @@ export default class Flux extends EventEmitter {
     return actionIds;
   }
 
-  dispatch(actionId, body) {
+  dispatch(actionId, body, payloadFields) {
     this._dispatch({ actionId, body });
   }
 
-  dispatchAsync(actionId, promise, actionArgs) {
+  dispatchAsync(actionId, promise, payloadFields) {
     const dispatchId = uniqueId();
 
     const payload = {
       actionId,
       dispatchId,
-      async: 'begin'
+      ...payloadFields
     };
 
-    if (actionArgs) payload.actionArgs = actionArgs;
-
-    this._dispatch(payload);
+    this._dispatch({
+      ...payload,
+      async: 'begin'
+    });
 
     return promise
       .then(
         body => {
           this._dispatch({
-            actionId,
-            dispatchId,
+            ...payload,
+            async: 'success',
             body,
-            async: 'success'
           });
 
           return body;
         },
         error => {
           this._dispatch({
-            actionId,
-            dispatchId,
+            ...payload,
             error,
             async: 'failure'
           });
