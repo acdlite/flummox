@@ -4,7 +4,7 @@ import addContext from './addContext';
 import React from 'react/addons';
 const { TestUtils } = React.addons;
 
-import FluxComponent from '../FluxComponent';
+import { FluxComponent } from '../react';
 import sinon from 'sinon';
 
 describe('FluxComponent', () => {

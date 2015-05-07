@@ -1,4 +1,4 @@
-import connectToStores from '../connectToStores';
+import { connectToStores } from '../react';
 import addContext from './addContext';
 import { Actions, Store, Flummox } from '../../Flux';
 import React from 'react/addons';
