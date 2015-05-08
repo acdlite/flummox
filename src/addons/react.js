@@ -1,7 +1,7 @@
 import React from 'react';
 
 import createFluxComponent from './FluxComponent';
-import createFluxMixin from './FluxMixin';
+import createFluxMixin from './fluxMixin';
 import createConnectToStores from './connectToStores';
 
 export const FluxComponent = createFluxComponent(React);
