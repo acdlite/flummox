@@ -11,7 +11,6 @@
  * of `connectToStores` for details.
  */
 
-import { default as React, PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
 
@@ -202,26 +201,28 @@ const instanceMethods = {
   }
 };
 
-const staticProperties = {
-  contextTypes: {
-    flux: PropTypes.instanceOf(Flux),
-  },
+function staticProperties(PropTypes) {
+  return {
+    contextTypes: {
+      flux: PropTypes.instanceOf(Flux),
+    },
 
-  childContextTypes: {
-    flux: PropTypes.instanceOf(Flux),
-  },
+    childContextTypes: {
+      flux: PropTypes.instanceOf(Flux),
+    },
 
-  propTypes: {
-    connectToStores: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.object
-    ]),
-    flux: PropTypes.instanceOf(Flux),
-    render: React.PropTypes.func,
-    stateGetter: React.PropTypes.func,
-  },
-};
+    propTypes: {
+      connectToStores: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.object
+      ]),
+      flux: PropTypes.instanceOf(Flux),
+      render: PropTypes.func,
+      stateGetter: PropTypes.func,
+    }
+  };
+}
 
 export { instanceMethods, staticProperties };
 

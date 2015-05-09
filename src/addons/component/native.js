@@ -1,5 +1,5 @@
 /**
- * Flux Component
+ * Flux Native Component
  *
  * Component interface to reactComponentMethods module.
  *
@@ -45,9 +45,11 @@
  * and props that sync with each of the state keys of fooStore.
  */
 
-import React from 'react/addons';
-import { instanceMethods, staticProperties } from './reactComponentMethods';
+import React from 'react-native';
+import { instanceMethods, staticProperties } from '../reactComponentMethods';
 import assign from 'object-assign';
+
+let { PropTypes, View } = React;
 
 class FluxComponent extends React.Component {
   constructor(props, context) {
@@ -72,28 +74,22 @@ class FluxComponent extends React.Component {
       children,
       render,
       connectToStores,
-      injectActions,
       stateGetter,
       flux,
       ...extraProps } = this.props;
 
     return assign(
       { flux: this.getFlux() }, // TODO: remove in next major version
-      this.collectActions(injectActions),
       this.state,
       extraProps
     );
   }
 
   render() {
-    const { children, render, injectActions } = this.props;
+    const { children, render } = this.props;
 
     if (typeof render === 'function') {
-      return render(
-        this.state,
-        this.collectActions(injectActions),
-        this.getFlux()
-      );
+      return render(this.getChildProps(), this.getFlux());
     }
 
     if (!children) return null;
@@ -102,7 +98,7 @@ class FluxComponent extends React.Component {
       const child = children;
       return this.wrapChild(child);
     } else {
-      return <span>{React.Children.map(children, this.wrapChild)}</span>;
+      return <View>{React.Children.map(children, this.wrapChild)}</View>;
     }
   }
 }
@@ -112,6 +108,6 @@ assign(
   instanceMethods
 );
 
-assign(FluxComponent, staticProperties);
+assign(FluxComponent, staticProperties(PropTypes));
 
 export default FluxComponent;
