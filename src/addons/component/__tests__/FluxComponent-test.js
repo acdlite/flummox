@@ -1,10 +1,10 @@
-import { Flummox, Store, Actions } from '../../Flux';
-import addContext from './addContext';
+import { Flummox, Store, Actions } from '../../../Flux';
+import addContext from '../../__tests__/addContext';
 
 import React from 'react/addons';
 const { TestUtils } = React.addons;
 
-import FluxComponent from '../FluxComponent';
+import FluxComponent from '../web';
 import sinon from 'sinon';
 
 describe('FluxComponent', () => {

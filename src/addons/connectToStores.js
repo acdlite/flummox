@@ -2,7 +2,7 @@
  * Higher-order component form of connectToStores
  */
 
-import React from 'react';
+import { default as React, PropTypes } from 'react';
 import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';
 
@@ -26,7 +26,7 @@ export default (BaseComponent, stores, stateGetter) => {
     instanceMethods
   );
 
-  assign(ConnectedComponent, staticProperties);
+  assign(ConnectedComponent, staticProperties(PropTypes));
 
   return ConnectedComponent;
 };

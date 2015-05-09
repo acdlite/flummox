@@ -36,6 +36,6 @@ export default function fluxMixin(...args) {
   return assign(
     { getInitialState },
     instanceMethods,
-    staticProperties
+    staticProperties(PropTypes)
   );
 };
