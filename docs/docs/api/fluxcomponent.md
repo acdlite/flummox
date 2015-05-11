@@ -30,7 +30,7 @@ The `stateGetter` prop can be used to control how state from stores are transfor
 <FluxComponent
   connectToStores={['posts', 'session']}
   stateGetter={([postStore, sessionStore]) => ({
-    posts: store.getPostForUser(sessionStore.getCurrentUserId())
+    posts: postStore.getPostForUser(sessionStore.getCurrentUserId())
   })}
 }}>
   <InnerComponent />
