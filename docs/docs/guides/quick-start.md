@@ -140,7 +140,7 @@ You can access a Flux instance's actions and stores using `getActions(key)` and 
 
 There's an additional method for accessing action ids: `getActionIds(key)`. This is the method we used in the MessageStore class we created above, in order to register the store's action handler. That's why we're passing our Flux instance to the constructor of MessageStore. To reiterate, this isn't a requirement; just a recommended pattern.
 
-Each Flux instance comes with its own dispatcher. Like constants, the dispatcher is treated as an implementation detail. The closest you'll come to interacting with it in most cases is the `Store#register(actionId, handler)` method discussed above. However, if you want to access the dispatcher directly, you can reference the `dispatcher` property of the Flux instance.
+Each Flux instance comes with its own dispatcher. Like constants, the dispatcher is treated as an implementation detail. The closest you'll come to interacting with it in most cases is the `Store.register(actionId, handler)` method discussed above. However, if you want to access the dispatcher directly, you can reference the `dispatcher` property of the Flux instance.
 
 So, now we have an AppFlux class that encapsulates our entire Flux set-up! Now we just create an instance:
 
