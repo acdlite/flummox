@@ -43,6 +43,9 @@ document.onclick = event => {
 
   if (!href) return;
 
+  // if middle click then don't override default click behaviour
+  if (event.which === 2) return;
+
   const resolvedHref = url.resolve(window.location.href, href);
   const { host, path } = url.parse(resolvedHref);
 
