@@ -48,7 +48,7 @@
 import createReactComponentMethods from './reactComponentMethods';
 import assign from 'object-assign';
 
-export default React => {
+export default (React, PlainWrapperComponent) => {
   const { instanceMethods, staticProperties } = createReactComponentMethods(React);
 
   class FluxComponent extends React.Component {
@@ -104,7 +104,11 @@ export default React => {
         const child = children;
         return this.wrapChild(child);
       } else {
-        return <span>{React.Children.map(children, this.wrapChild)}</span>;
+        return (
+          <PlainWrapperComponent>
+            {React.Children.map(children, this.wrapChild)}
+          </PlainWrapperComponent>
+        );
       }
     }
   }
