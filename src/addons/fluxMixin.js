@@ -23,18 +23,22 @@
  */
 
 import { Flux } from '../Flux';
-import { instanceMethods, staticProperties } from './reactComponentMethods';
+import createReactComponentMethods from './reactComponentMethods';
 import assign from 'object-assign';
 
-export default function fluxMixin(...args) {
-  function getInitialState() {
-    this.initialize();
-    return this.connectToStores(...args);
-  }
+export default React => {
+  const { instanceMethods, staticProperties } = createReactComponentMethods(React);
 
-  return assign(
-    { getInitialState },
-    instanceMethods,
-    staticProperties
-  );
-};
+  return (...args) => {
+    function getInitialState() {
+      this.initialize();
+      return this.connectToStores(...args);
+    }
+
+    return assign(
+      { getInitialState },
+      instanceMethods,
+      staticProperties
+    );
+  };
+}

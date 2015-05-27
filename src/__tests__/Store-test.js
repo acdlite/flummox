@@ -12,46 +12,64 @@ describe('Store', () => {
   const actionId = 'actionId';
 
   describe('#register()', () => {
-    it('adds handler to internal collection of handlers', () => {
-      const store = new ExampleStore();
-      const handler = sinon.spy();
-      store.register(actionId, handler);
+    it('registers handler to respond to sync action', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
 
-      const mockArgs = ['foo', 'bar'];
-      store._handlers[actionId](...mockArgs);
-
-      expect(handler.calledWith(...mockArgs)).to.be.true;
-    });
-
-    it('binds handler to store', () => {
-      const store = new ExampleStore();
-      store.foo = 'bar';
-
-      function handler() {
-        return this.foo;
-      }
-
-      store.register(actionId, handler);
-
-      expect(store._handlers[actionId]()).to.equal('bar');
-    });
-
-    it('accepts actions instead of action ids', () => {
-      class ExampleActions extends Actions {
-        getFoo() {
-          return 'foo';
+          this.createStore('example', ExampleStore);
         }
       }
 
-      const actions = new ExampleActions();
-      const store = new ExampleStore();
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
       const handler = sinon.spy();
-      store.register(actions.getFoo, handler);
+      store.register(actions.foo, handler);
 
-      const mockArgs = ['foo', 'bar'];
-      store._handlers[actions.getFoo._id](...mockArgs);
+      actions.foo('do');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0]).to.equal('do');
 
-      expect(handler.calledWith(...mockArgs)).to.be.true;
+      actions.foo('re');
+      expect(handler.calledTwice).to.be.true;
+      expect(handler.secondCall.args[0]).to.equal('re');
+    });
+
+    it('registers handler to respond to async action success', async () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            async foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const handler = sinon.spy();
+      store.register(actions.foo, handler);
+
+      await actions.foo('do');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0]).to.equal('do');
+
+      await actions.foo('re');
+      expect(handler.calledTwice).to.be.true;
+      expect(handler.secondCall.args[0]).to.equal('re');
     });
 
     it('ignores non-function handlers', () => {
@@ -99,7 +117,7 @@ describe('Store', () => {
 
       await actions.getBar('bar');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args).to.deep.equal(['bar']);
+      expect(handler.firstCall.args[0]).to.equal('bar');
 
       const begin = sinon.spy();
       const success = sinon.spy();
@@ -108,7 +126,7 @@ describe('Store', () => {
 
       await actions.getFoo('foo', true);
       expect(begin.calledOnce).to.be.true;
-      expect(begin.firstCall.args).to.deep.equal(['foo', true]);
+      expect(begin.firstCall.args[0].async).to.equal('begin');
       expect(success.calledOnce).to.be.true;
       expect(success.firstCall.args[0]).to.equal('foo success');
       expect(failure.called).to.be.false;
@@ -128,61 +146,64 @@ describe('Store', () => {
   });
 
   describe('#registerAll()', () => {
-    it('adds handler to internal collection of "catch all" handlers', () => {
-      const store = new ExampleStore();
-      const handler = sinon.spy();
-      store.registerAll(handler);
+    it('registers handler to respond to all sync actions', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
 
-      const mockArgs = ['foo', 'bar'];
-      store._catchAllHandlers[0](...mockArgs);
-
-      expect(handler.calledWith(...mockArgs)).to.be.true;
-    });
-
-    it('adds multiple handlers to internal collection of "catch all" handlers', () => {
-      const store = new ExampleStore();
-      const handler1 = sinon.spy();
-      const handler2 = sinon.spy();
-      store.registerAll(handler1);
-      store.registerAll(handler2);
-
-      const mockArgs = ['foo', 'bar'];
-      store._catchAllHandlers[0](...mockArgs);
-      store._catchAllHandlers[1](...mockArgs);
-
-      expect(handler1.calledWith(...mockArgs)).to.be.true;
-      expect(handler2.calledWith(...mockArgs)).to.be.true;
-    });
-
-    it('binds handler to store', () => {
-      const store = new ExampleStore();
-      store.foo = 'bar';
-
-      function handler() {
-        return this.foo;
-      }
-
-      store.registerAll(handler);
-
-      expect(store._catchAllHandlers[0]()).to.equal('bar');
-    });
-
-    it('accepts actions instead of action ids', () => {
-      class ExampleActions extends Actions {
-        getFoo() {
-          return 'foo';
+          this.createStore('example', ExampleStore);
         }
       }
 
-      const actions = new ExampleActions();
-      const store = new ExampleStore();
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
       const handler = sinon.spy();
       store.registerAll(handler);
 
-      const mockArgs = ['foo', 'bar'];
-      store._catchAllHandlers[0](...mockArgs);
+      actions.foo('do');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0]).to.equal('do');
 
-      expect(handler.calledWith(...mockArgs)).to.be.true;
+      actions.foo('re');
+      expect(handler.calledTwice).to.be.true;
+      expect(handler.secondCall.args[0]).to.equal('re');
+    });
+
+    it('registers handler to respond to all async action successes', async () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            async foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const handler = sinon.spy();
+      store.registerAll(handler);
+
+      await actions.foo('do');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0]).to.equal('do');
+
+      await actions.foo('re');
+      expect(handler.calledTwice).to.be.true;
+      expect(handler.secondCall.args[0]).to.equal('re');
     });
 
     it('ignores non-function handlers', () => {
@@ -190,7 +211,7 @@ describe('Store', () => {
       expect(store.registerAll.bind(store, null)).not.to.throw();
     });
 
-	it('registers for all async actions success', async function() {
+    it('registers for all successful async actions', async function() {
       const error = new Error();
 
       class ExampleActions extends Actions {
@@ -224,13 +245,13 @@ describe('Store', () => {
 
       await actions.getBar('bar');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args).to.deep.equal(['bar success']);
+      expect(handler.firstCall.args[0]).to.equal('bar success');
     });
 
   });
 
   describe('#registerAllAsync()', () => {
-    it('registers "catch all" handlers for begin, success, and failure of async action', async function() {
+    it('registers generic handlers for begin, success, and failure of async action', async function() {
       const error = new Error();
 
       class ExampleActions extends Actions {
@@ -266,7 +287,7 @@ describe('Store', () => {
 
       await actions.getFoo('foo', true);
       expect(begin.calledOnce).to.be.true;
-      expect(begin.firstCall.args).to.deep.equal(['foo', true]);
+      expect(begin.firstCall.args[0].async).to.equal('begin');
       expect(success.calledOnce).to.be.true;
       expect(success.firstCall.args[0]).to.equal('foo success');
       expect(failure.called).to.be.false;
@@ -279,7 +300,7 @@ describe('Store', () => {
 
       await actions.getBar('foo', true);
       expect(begin.calledThrice).to.be.true;
-      expect(begin.thirdCall.args).to.deep.equal(['foo', true]);
+      expect(begin.thirdCall.args[0].async).to.equal('begin');
       expect(success.calledTwice).to.be.true;
       expect(success.secondCall.args[0]).to.equal('foo success');
       expect(failure.calledTwice).to.be.false;
@@ -297,32 +318,37 @@ describe('Store', () => {
     });
   });
 
-  describe('#handler()', () => {
-    it('delegates dispatches to registered handlers', () => {
-      const store = new ExampleStore();
+  describe('#registerMatch', () => {
+    it('registers handler that is called when matching function returns true for dispatcher payload', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
       const handler = sinon.spy();
-      store.register(actionId, handler);
+      store.registerMatch(
+        payload => payload.body === 'match!',
+        handler
+      );
 
-      // Simulate dispatch
-      const body = { foo: 'bar' };
-      store.handler({ body, actionId });
+      actions.foo('match!');
+      expect(handler.calledOnce).to.be.true;
+      expect(handler.firstCall.args[0].body).to.equal('match!');
 
-      expect(handler.calledWith(body)).to.be.true;
-    });
-
-    it('delegates dispatches to registered "catch all" handlers', () => {
-      const store = new ExampleStore();
-      const handler = sinon.spy();
-      const actionIds = ['actionId1', 'actionId2'];
-      store.registerAll(handler);
-
-      // Simulate dispatch
-      const body = { foo: 'bar' };
-      store.handler({ body, actionId: actionIds[0] });
-      store.handler({ body, actionId: actionIds[1] });
-
-      expect(handler.calledWith(body)).to.be.true;
-      expect(handler.calledTwice).to.be.true;
+      actions.foo('not a match!');
+      expect(handler.calledOnce).to.be.true;
     });
   });
 

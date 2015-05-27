@@ -11,182 +11,234 @@
  * of `connectToStores` for details.
  */
 
-import { default as React, PropTypes } from 'react';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
 
-const instanceMethods = {
+export default React => {
+  const instanceMethods = {
 
-  getChildContext() {
-    const flux = this.getFlux();
+    getChildContext() {
+      const flux = this.getFlux();
 
-    if (!flux) return {};
+      if (!flux) return {};
 
-    return { flux };
-  },
+      return { flux };
+    },
 
-  getFlux() {
-    return this.props.flux || this.context.flux;
-  },
+    getFlux() {
+      return this.props.flux || this.context.flux;
+    },
 
-  initialize() {
-    this._fluxStateGetters = [];
-    this._fluxListeners = {};
-    this.flux = this.getFlux();
+    initialize() {
+      this._fluxStateGetters = [];
+      this._fluxListeners = {};
+      this.flux = this.getFlux();
 
-    if (!(this.flux instanceof Flux)) {
-      // TODO: print the actual class name here
-      throw new Error(
-        `fluxMixin: Could not find Flux instance. Ensure that your component `
-      + `has either \`this.context.flux\` or \`this.props.flux\`.`
-      );
-    }
-  },
-
-  componentWillUnmount() {
-    const flux = this.getFlux();
-
-    for (let key in this._fluxListeners) {
-      if (!this._fluxListeners.hasOwnProperty(key)) continue;
-
-      const store = flux.getStore(key);
-      if (typeof store === 'undefined') continue;
-
-      const listener = this._fluxListeners[key];
-
-      store.removeListener('change', listener);
-    }
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.updateStores(nextProps);
-  },
-
-  updateStores(props = this.props) {
-    const state = this.getStoreState(props);
-    this.setState(state);
-  },
-
-  getStoreState(props = this.props) {
-    return this._fluxStateGetters.reduce(
-      (result, stateGetter) => {
-        const { getter, stores } = stateGetter;
-        const stateFromStores = getter(stores, props);
-        return assign(result, stateFromStores);
-      }, {}
-    );
-  },
-
-   /**
-    * Connect component to stores, get the combined initial state, and
-    * subscribe to future changes. There are three ways to call it. The
-    * simplest is to pass a single store key and, optionally, a state getter.
-    * The state getter is a function that takes the store as a parameter and
-    * returns the state that should be passed to the component's `setState()`.
-    * If no state getter is specified, the default getter is used, which simply
-    * returns the entire store state.
-    *
-    * The second form accepts an array of store keys. With this form, the state
-    * getter is called once with an array of store instances (in the same order
-    * as the store keys). the default getter performance a reduce on the entire
-    * state for each store.
-    *
-    * The last form accepts an object of store keys mapped to state getters. As
-    * a shortcut, you can pass `null` as a state getter to use the default
-    * state getter.
-    *
-    * Returns the combined initial state of all specified stores.
-    *
-    * This way you can write all the initialization and update logic in a single
-    * location, without having to mess with adding/removing listeners.
-    *
-    * @type {string|array|object} stateGetterMap - map of keys to getters
-    * @returns {object} Combined initial state of stores
-    */
-  connectToStores(stateGetterMap = {}, stateGetter = null) {
-    const flux = this.getFlux();
-
-    const getStore = (key) => {
-      const store = flux.getStore(key);
-
-      if (typeof store === 'undefined') {
+      if (!(this.flux instanceof Flux)) {
+        // TODO: print the actual class name here
         throw new Error(
-          `connectToStores(): Store with key '${key}' does not exist.`
+          `fluxMixin: Could not find Flux instance. Ensure that your component `
+        + `has either \`this.context.flux\` or \`this.props.flux\`.`
         );
       }
+    },
 
-      return store;
-    };
+    componentWillUnmount() {
+      const flux = this.getFlux();
 
-    if (typeof stateGetterMap === 'string') {
-      const key = stateGetterMap;
-      const store = getStore(key);
-      const getter = stateGetter || defaultStateGetter;
+      for (let key in this._fluxListeners) {
+        if (!this._fluxListeners.hasOwnProperty(key)) continue;
 
-      this._fluxStateGetters.push({ stores: store, getter });
-      const listener = createStoreListener(this, store, getter);
+        const store = flux.getStore(key);
+        if (typeof store === 'undefined') continue;
 
-      store.addListener('change', listener);
-      this._fluxListeners[key] = listener;
-    } else if (Array.isArray(stateGetterMap)) {
-      const stores = stateGetterMap.map(getStore);
-      const getter = stateGetter || defaultReduceStateGetter;
+        const listener = this._fluxListeners[key];
 
-      this._fluxStateGetters.push({ stores, getter });
-      const listener = createStoreListener(this, stores, getter);
+        store.removeListener('change', listener);
+      }
+    },
 
-      stateGetterMap.forEach((key, index) => {
-        const store = stores[index];
-        store.addListener('change', listener);
-        this._fluxListeners[key] = listener;
-      });
+    componentWillReceiveProps(nextProps) {
+      this.updateStores(nextProps);
+    },
 
-    } else {
-       for (let key in stateGetterMap) {
+    updateStores(props = this.props) {
+      const state = this.getStoreState(props);
+      this.setState(state);
+    },
+
+    getStoreState(props = this.props) {
+      return this._fluxStateGetters.reduce(
+        (result, stateGetter) => {
+          const { getter, stores } = stateGetter;
+          const stateFromStores = getter(stores, props);
+          return assign(result, stateFromStores);
+        }, {}
+      );
+    },
+
+     /**
+      * Connect component to stores, get the combined initial state, and
+      * subscribe to future changes. There are three ways to call it. The
+      * simplest is to pass a single store key and, optionally, a state getter.
+      * The state getter is a function that takes the store as a parameter and
+      * returns the state that should be passed to the component's `setState()`.
+      * If no state getter is specified, the default getter is used, which simply
+      * returns the entire store state.
+      *
+      * The second form accepts an array of store keys. With this form, the state
+      * getter is called once with an array of store instances (in the same order
+      * as the store keys). the default getter performance a reduce on the entire
+      * state for each store.
+      *
+      * The last form accepts an object of store keys mapped to state getters. As
+      * a shortcut, you can pass `null` as a state getter to use the default
+      * state getter.
+      *
+      * Returns the combined initial state of all specified stores.
+      *
+      * This way you can write all the initialization and update logic in a single
+      * location, without having to mess with adding/removing listeners.
+      *
+      * @type {string|array|object} stateGetterMap - map of keys to getters
+      * @returns {object} Combined initial state of stores
+      */
+    connectToStores(stateGetterMap = {}, stateGetter = null) {
+      const flux = this.getFlux();
+
+      function getStore(key) {
+        const store = flux.getStore(key);
+
+        if (typeof store === 'undefined') {
+          throw new Error(
+            `connectToStores(): Store with key '${key}' does not exist.`
+          );
+        }
+
+        return store;
+      }
+
+      if (typeof stateGetterMap === 'string') {
+        const key = stateGetterMap;
         const store = getStore(key);
-        const getter = stateGetterMap[key] || defaultStateGetter;
+        const getter = createGetter(stateGetter, defaultStateGetter);
 
         this._fluxStateGetters.push({ stores: store, getter });
         const listener = createStoreListener(this, store, getter);
 
         store.addListener('change', listener);
         this._fluxListeners[key] = listener;
+      } else if (Array.isArray(stateGetterMap)) {
+        const stores = stateGetterMap.map(getStore);
+        const getter = createGetter(stateGetter, defaultReduceStateGetter);
+
+        this._fluxStateGetters.push({ stores, getter });
+        const listener = createStoreListener(this, stores, getter);
+
+        stateGetterMap.forEach((key, index) => {
+          const store = stores[index];
+          store.addListener('change', listener);
+          this._fluxListeners[key] = listener;
+        });
+
+      } else {
+         for (let key in stateGetterMap) {
+          const store = getStore(key);
+          const getter = createGetter(stateGetterMap[key], defaultStateGetter);
+
+          this._fluxStateGetters.push({ stores: store, getter });
+          const listener = createStoreListener(this, store, getter);
+
+          store.addListener('change', listener);
+          this._fluxListeners[key] = listener;
+        }
       }
+
+      return this.getStoreState();
+    },
+
+    collectActions(actionMap = {}, actionGetter = null) {
+      if (typeof actionMap === 'undefined') {
+        return {};
+      }
+
+      const flux = this.getFlux();
+
+      function getActions(key) {
+        const actions = flux.getActions(key);
+
+        if (typeof actions === 'undefined') {
+          throw new Error(
+            `connectToStores(): Actions with key '${key}' does not exist.`
+          );
+        }
+
+        return actions;
+      }
+
+      const collectedActions = {};
+
+      if (typeof actionMap === 'string') {
+        const key = actionMap;
+        const actions = getActions(key);
+        const getter = createGetter(actionGetter, defaultActionGetter);
+
+        assign(collectedActions, getter(actions));
+      } else if (Array.isArray(actionMap)) {
+        const actions = actionMap.map(getActions);
+        const getter = createGetter(actionGetter, defaultReduceActionGetter);
+
+        assign(collectedActions, getter(actions));
+      } else {
+        for (let key in actionMap) {
+          const actions = getActions(key);
+          const getter = createGetter(actionMap[key], defaultActionGetter);
+
+          assign(collectedActions, getter(actions));
+        }
+      }
+
+      return collectedActions;
     }
+  };
 
-    return this.getStoreState();
-  }
+  const staticProperties = {
+    contextTypes: {
+      flux: React.PropTypes.instanceOf(Flux),
+    },
 
-};
+    childContextTypes: {
+      flux: React.PropTypes.instanceOf(Flux),
+    },
 
-const staticProperties = {
-  contextTypes: {
-    flux: PropTypes.instanceOf(Flux),
-  },
+    propTypes: {
+      connectToStores: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.arrayOf(React.PropTypes.string),
+        React.PropTypes.object
+      ]),
+      flux: React.PropTypes.instanceOf(Flux),
+      render: React.PropTypes.func,
+      stateGetter: React.PropTypes.func,
+    },
+  };
 
-  childContextTypes: {
-    flux: PropTypes.instanceOf(Flux),
-  },
-
-  propTypes: {
-    connectToStores: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-      PropTypes.object
-    ]),
-    flux: PropTypes.instanceOf(Flux),
-    render: React.PropTypes.func,
-    stateGetter: React.PropTypes.func,
-  },
-};
-
-export { instanceMethods, staticProperties };
+  return { instanceMethods, staticProperties };
+}
 
 function createStoreListener(component, store, storeStateGetter) {
   return function() {
     const state = storeStateGetter(store, this.props);
     this.setState(state);
   }.bind(component);
+}
+
+function createGetter(value, defaultGetter) {
+  if (typeof value !== 'function') {
+    return defaultGetter;
+  } else {
+    return value;
+  }
 }
 
 function defaultStateGetter(store) {
@@ -196,6 +248,17 @@ function defaultStateGetter(store) {
 function defaultReduceStateGetter(stores) {
   return stores.reduce(
     (result, store) => assign(result, store.getStateAsObject()),
+    {}
+  );
+}
+
+function defaultActionGetter(actions) {
+  return actions.getActionsAsObject();
+}
+
+function defaultReduceActionGetter(actions) {
+  return actions.reduce(
+    (result, _actions) => assign(result, _actions.getStateAsObject()),
     {}
   );
 }

@@ -36,6 +36,13 @@ export default class Actions {
     }, {});
   }
 
+  getActionsAsObject() {
+    return this._getActionMethodNames().reduce((result, actionName) => {
+      result[actionName] = this[actionName];
+      return result;
+    }, {});
+  }
+
   _getActionMethodNames(instance) {
     return Object.getOwnPropertyNames(this.constructor.prototype)
       .filter(name =>
@@ -51,11 +58,17 @@ export default class Actions {
     const action = (...args) => {
       const body = originalMethod.apply(this, args);
 
+      const payload = {
+        actionArgs: args
+      };
+
       if (isPromise(body)) {
         const promise = body;
-        this._dispatchAsync(actionId, promise, args, methodName);
+        this.dispatchAsync(actionId, promise, payload);
       } else {
-        this._dispatch(actionId, body, args, methodName);
+        if (typeof body !== 'undefined') {
+          this.dispatch(actionId, body, payload);
+        }
       }
 
       // Return original method's return value to caller
@@ -73,38 +86,6 @@ export default class Actions {
    */
   _createActionId(methodName) {
     return `${this._baseId}-${methodName}`;
-  }
-
-  _dispatch(actionId, body, args, methodName) {
-    if (typeof this.dispatch === 'function') {
-      if (typeof body !== 'undefined') {
-        this.dispatch(actionId, body, args);
-      }
-    } else {
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn(
-          `You've attempted to perform the action `
-        + `${this.constructor.name}#${methodName}, but it hasn't been added `
-        + `to a Flux instance.`
-        );
-      }
-    }
-
-    return body;
-  }
-
-  _dispatchAsync(actionId, promise, args, methodName) {
-    if (typeof this.dispatchAsync === 'function') {
-      this.dispatchAsync(actionId, promise, args);
-    } else {
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn(
-          `You've attempted to perform the asynchronous action `
-        + `${this.constructor.name}#${methodName}, but it hasn't been added `
-        + `to a Flux instance.`
-        );
-      }
-    }
   }
 
 }

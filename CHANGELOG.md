@@ -9,6 +9,20 @@ Tags:
 - [Internal]
 - [Polish]
 
+## Pending release
+- **New Feature**
+  - Multiple handlers can be registered for the same action.
+  - Async action handlers are sent a `dispatchId` as part of the payload. The dispatch id for a `begin` dispatch is equal to the id of the corresponding `success` or `error` dispatch. This enables fine-grained optimistic updates.
+  - `Store#registerMatch(matcher, handler)` calls a handler when the matcher function returns true for a dispatched payload. The handler is passed the payload.
+  - Use `injectActions` prop of FluxComponent to pass actions to children as props.
+  - Actions no longer warn if they aren't added to a Flux instance.
+  - Use `stores` and `actions` props interchangeably with `connectToStores` and `injectActions`.
+- **Breaking Change**
+  - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
+  - Arguments sent to the `render` prop function of FluxComponent have been changed: `render(storeState, actions, flux)`. Notably, extra props added to FluxComponent are no longer combined with storeState, and `flux` is a separate parameter as well.
+- **Internal**
+  - Cleaned up Store's `register` methods. Much simpler code paths now.
+
 ## 3.5.2
 - **Bug Fix**
   - `registerAll(action, handler)` is effectively the same as `registerAllAsync(action, null, handler, null)` [@hugobessaa](https://github.com/hugobessaa)

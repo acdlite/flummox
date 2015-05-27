@@ -273,7 +273,7 @@ describe('Flux', () => {
 
   describe('#dispatchAsync()', () => {
 
-    it('delegates to dispatcher', async function() {
+    it('delegates to dispatcher', async () => {
       const flux = new Flux();
       const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
@@ -282,18 +282,39 @@ describe('Flux', () => {
       await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
 
       expect(dispatch.callCount).to.equal(2);
-      expect(dispatch.firstCall.args[0]).to.deep.equal({
-        actionId,
-        async: 'begin'
-      });
-      expect(dispatch.secondCall.args[0]).to.deep.equal({
-        actionId,
-        body: 'foobar',
-        async: 'success'
-      });
+
+      expect(dispatch.firstCall.args[0].actionId).to.equal(actionId);
+      expect(dispatch.firstCall.args[0].async).to.equal('begin');
+
+      expect(dispatch.secondCall.args[0].actionId).to.equal(actionId);
+      expect(dispatch.secondCall.args[0].body).to.equal('foobar');
+      expect(dispatch.secondCall.args[0].async).to.equal('success');
     });
 
-    it('emits dispatch event', async function() {
+    it('adds unique dispatch id to keep track of async actions', async () => {
+      const flux = new Flux();
+      const dispatch = sinon.spy();
+      flux.dispatcher = { dispatch };
+      const actionId = 'actionId';
+
+      await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
+
+      expect(dispatch.firstCall.args[0].async).to.equal('begin');
+      expect(dispatch.secondCall.args[0].async).to.equal('success');
+
+      expect(dispatch.firstCall.args[0].dispatchId)
+        .to.equal(dispatch.secondCall.args[0].dispatchId);
+
+      await flux.dispatchAsync(actionId, Promise.reject(new Error()));
+
+      expect(dispatch.thirdCall.args[0].async).to.equal('begin');
+      expect(dispatch.getCall(3).args[0].async).to.equal('failure');
+
+      expect(dispatch.thirdCall.args[0].dispatchId)
+        .to.equal(dispatch.getCall(3).args[0].dispatchId);
+    });
+
+    it('emits dispatch event', async () => {
       const flux = new Flux();
       const listener = sinon.spy();
 
@@ -304,15 +325,10 @@ describe('Flux', () => {
       await flux.dispatchAsync(actionId, Promise.resolve('foobar'));
 
       expect(listener.calledTwice).to.be.true;
-      expect(listener.firstCall.args[0]).to.deep.equal({
-        actionId,
-        async: 'begin'
-      });
-      expect(listener.secondCall.args[0]).to.deep.equal({
-        actionId,
-        async: 'success',
-        body: 'foobar'
-      });
+      expect(listener.firstCall.args[0].actionId).to.equal(actionId);
+      expect(listener.firstCall.args[0].async).to.equal('begin');
+      expect(listener.secondCall.args[0].actionId).to.equal(actionId);
+      expect(listener.secondCall.args[0].async).to.equal('success');
     });
 
     it('resolves to value of given promise', done => {
@@ -326,7 +342,7 @@ describe('Flux', () => {
         .notify(done);
     });
 
-    it('dispatches with error if promise rejects', async function() {
+    it('dispatches with error if promise rejects', async () => {
       const flux = new Flux();
       const dispatch = sinon.spy();
       flux.dispatcher = { dispatch };
@@ -337,18 +353,14 @@ describe('Flux', () => {
       await flux.dispatchAsync(actionId, Promise.reject(error));
 
       expect(dispatch.callCount).to.equal(2);
-      expect(dispatch.firstCall.args[0]).to.deep.equal({
-        actionId,
-        async: 'begin'
-      });
-      expect(dispatch.secondCall.args[0]).to.deep.equal({
-        actionId,
-        error,
-        async: 'failure'
-      });
+      expect(dispatch.firstCall.args[0].actionId).to.equal(actionId);
+      expect(dispatch.firstCall.args[0].async).to.equal('begin');
+      expect(dispatch.secondCall.args[0].actionId).to.equal(actionId);
+      expect(dispatch.secondCall.args[0].async).to.equal('failure');
+      expect(dispatch.secondCall.args[0].error).to.be.an.instanceof(Error);
     });
 
-    it('emit errors that occur as result of dispatch', async function() {
+    it('emit errors that occur as result of dispatch', async () => {
       class ExampleStore extends Store {}
 
       const flux = new Flux();

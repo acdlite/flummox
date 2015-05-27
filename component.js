@@ -1,1 +1,1 @@
-module.exports = require('./lib/addons/FluxComponent');
+module.exports = require('./lib/addons/FluxComponent').FluxComponent;

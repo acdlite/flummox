@@ -4,7 +4,7 @@ import addContext from './addContext';
 import React from 'react/addons';
 const { TestUtils } = React.addons;
 
-import FluxComponent from '../FluxComponent';
+import { FluxComponent } from '../react';
 import sinon from 'sinon';
 
 describe('FluxComponent', () => {
@@ -88,7 +88,7 @@ describe('FluxComponent', () => {
     class SubSubView extends React.Component {
       render() {
         return (
-          <FluxComponent connectToStores="test">
+          <FluxComponent stores="test">
             <div />
           </FluxComponent>
         );
@@ -105,12 +105,12 @@ describe('FluxComponent', () => {
     expect(div.props.something).to.equal('something good');
   });
 
-  it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
+  it('passes `stores` prop to reactComponentMethod connectToStores()', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
 
     const component = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test" />
+      <FluxComponent flux={flux} stores="test" />
     );
 
     actions.getSomething('something good');
@@ -125,10 +125,63 @@ describe('FluxComponent', () => {
     const stateGetter = sinon.stub().returns({ fiz: 'bin' });
 
     const component = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test" stateGetter={stateGetter} />
+      <FluxComponent flux={flux} stores="test" stateGetter={stateGetter} />
     );
 
     expect(component.state.fiz).to.equal('bin');
+  });
+
+  it('passes injectActions prop to reactComponentMethod collectActions()', () => {
+    class Flux extends Flummox {
+      constructor() {
+        super();
+
+        this.createActions('A', {
+          do() {
+            return 're';
+          },
+
+          re() {
+            return 'mi';
+          }
+        });
+
+        this.createActions('B', {
+          mi() {
+            return 'fa';
+          },
+
+          fa() {
+            return 'so';
+          }
+        });
+      }
+    }
+
+    const flux = new Flux();
+
+    const component = TestUtils.renderIntoDocument(
+      <FluxComponent
+        flux={flux}
+        actions={{
+          A: actions => ({
+            do: actions.do
+          }),
+
+          B: actions => ({
+            fa: actions.fa
+          }),
+        }}
+        render={(storeState, actions, flux) =>
+          <div {...actions} />
+        }
+      />
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+
+    expect(div.props.do()).to.equal('re');
+    expect(div.props.fa()).to.equal('so');
   });
 
   it('injects children with flux prop', () => {
@@ -151,7 +204,7 @@ describe('FluxComponent', () => {
     const actions = flux.getActions('test');
 
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test">
+      <FluxComponent flux={flux} stores="test">
         <div />
       </FluxComponent>
     );
@@ -173,11 +226,12 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
-        connectToStores="test"
+        stores="test"
         stateGetter={stateGetter}
         extraProp="hello"
-        render={(props) => <div {...props} />}
-      />
+      >
+        <div />
+      </FluxComponent>
     );
 
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
@@ -221,7 +275,7 @@ describe('FluxComponent', () => {
     const actions = flux.getActions('test');
 
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test">
+      <FluxComponent flux={flux} stores="test">
         <FluxComponent>
           <div />
         </FluxComponent>
@@ -243,7 +297,7 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
-        connectToStores="test"
+        stores="test"
         render={props =>
           <div something={props.something} />
         }
@@ -274,7 +328,7 @@ describe('FluxComponent', () => {
         return (
           <FluxComponent
             flux={flux}
-            connectToStores={{
+            stores={{
               test: store => ({
                 yay: this.state.foo
               })

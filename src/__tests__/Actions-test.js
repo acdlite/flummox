@@ -40,6 +40,20 @@ describe('Actions', () => {
 
   });
 
+  describe('#getActionsAsObject', () => {
+    it('returns actions as plain object', () => {
+      const actions = new TestActions();
+
+      expect(actions.getActionsAsObject()).to.deep.equal({
+        getFoo: actions.getFoo,
+        getBar: actions.getBar,
+        getBaz: actions.getBaz,
+        asyncAction: actions.asyncAction,
+        badAsyncAction: actions.badAsyncAction
+      });
+    });
+  });
+
   describe('#[methodName]', () => {
     it('calls Flux dispatcher', () => {
       const actions = new TestActions();
@@ -50,28 +64,6 @@ describe('Actions', () => {
 
       actions.getFoo();
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
-    });
-
-    it('warns if actions have not been added to a Flux instance', () => {
-      const actions = new TestActions();
-      const warn = sinon.spy(console, 'warn');
-
-      actions.getFoo();
-
-      expect(warn.firstCall.args[0]).to.equal(
-        'You\'ve attempted to perform the action TestActions#getFoo, but it '
-      + 'hasn\'t been added to a Flux instance.'
-      );
-
-      actions.asyncAction();
-
-      expect(warn.secondCall.args[0]).to.equal(
-        `You've attempted to perform the asynchronous action `
-      + `TestActions#asyncAction, but it hasn't been added `
-      + `to a Flux instance.`
-      );
-
-      console.warn.restore();
     });
 
     it('sends return value to Flux dispatch', () => {
