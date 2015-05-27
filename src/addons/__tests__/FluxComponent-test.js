@@ -88,7 +88,7 @@ describe('FluxComponent', () => {
     class SubSubView extends React.Component {
       render() {
         return (
-          <FluxComponent connectToStores="test">
+          <FluxComponent stores="test">
             <div />
           </FluxComponent>
         );
@@ -105,12 +105,12 @@ describe('FluxComponent', () => {
     expect(div.props.something).to.equal('something good');
   });
 
-  it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
+  it('passes `stores` prop to reactComponentMethod connectToStores()', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
 
     const component = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test" />
+      <FluxComponent flux={flux} stores="test" />
     );
 
     actions.getSomething('something good');
@@ -125,7 +125,7 @@ describe('FluxComponent', () => {
     const stateGetter = sinon.stub().returns({ fiz: 'bin' });
 
     const component = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test" stateGetter={stateGetter} />
+      <FluxComponent flux={flux} stores="test" stateGetter={stateGetter} />
     );
 
     expect(component.state.fiz).to.equal('bin');
@@ -163,7 +163,7 @@ describe('FluxComponent', () => {
     const component = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
-        injectActions={{
+        actions={{
           A: actions => ({
             do: actions.do
           }),
@@ -204,7 +204,7 @@ describe('FluxComponent', () => {
     const actions = flux.getActions('test');
 
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test">
+      <FluxComponent flux={flux} stores="test">
         <div />
       </FluxComponent>
     );
@@ -226,7 +226,7 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
-        connectToStores="test"
+        stores="test"
         stateGetter={stateGetter}
         extraProp="hello"
       >
@@ -275,7 +275,7 @@ describe('FluxComponent', () => {
     const actions = flux.getActions('test');
 
     const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux} connectToStores="test">
+      <FluxComponent flux={flux} stores="test">
         <FluxComponent>
           <div />
         </FluxComponent>
@@ -297,7 +297,7 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent
         flux={flux}
-        connectToStores="test"
+        stores="test"
         render={props =>
           <div something={props.something} />
         }
@@ -328,7 +328,7 @@ describe('FluxComponent', () => {
         return (
           <FluxComponent
             flux={flux}
-            connectToStores={{
+            stores={{
               test: store => ({
                 yay: this.state.foo
               })

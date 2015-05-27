@@ -55,9 +55,18 @@ class FluxComponent extends React.Component {
 
     this.initialize();
 
-    this.state = this.connectToStores(props.connectToStores, props.stateGetter);
+    const stores = this._getStoresProp(props);
+    this.state = this.connectToStores(stores, props.stateGetter);
 
     this.wrapChild = this.wrapChild.bind(this);
+  }
+
+  _getActionsProp(props) {
+    return props.actions || props.injectActions;
+  }
+
+  _getStoresProp(props) {
+    return props.stores || props.connectToStores;
   }
 
   wrapChild(child) {
@@ -72,26 +81,32 @@ class FluxComponent extends React.Component {
       children,
       render,
       connectToStores,
+      stores,
       injectActions,
+      actions: _actions,
       stateGetter,
       flux,
       ...extraProps } = this.props;
 
+    const actions = this._getActionsProp(this.props);
+
     return assign(
       { flux: this.getFlux() }, // TODO: remove in next major version
-      this.collectActions(injectActions),
+      this.collectActions(actions),
       this.state,
       extraProps
     );
   }
 
   render() {
-    const { children, render, injectActions } = this.props;
+    const { children, render } = this.props;
 
     if (typeof render === 'function') {
+      const actions = this._getActionsProp(this.props);
+
       return render(
         this.state,
-        this.collectActions(injectActions),
+        this.collectActions(actions),
         this.getFlux()
       );
     }
