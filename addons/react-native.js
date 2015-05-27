@@ -1,1 +1,1 @@
-module.exports = require('./lib/addons/react-native');
+module.exports = require('../lib/addons/react-native');
