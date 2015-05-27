@@ -1,4 +1,4 @@
-import fluxMixin from '../fluxMixin';
+import { fluxMixin } from '../react';
 import { Flummox, Store, Actions } from '../../Flux';
 import addContext from './addContext';
 import sinon from 'sinon';

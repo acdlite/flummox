@@ -45,88 +45,93 @@
  * and props that sync with each of the state keys of fooStore.
  */
 
-import React from 'react/addons';
-import { instanceMethods, staticProperties } from './reactComponentMethods';
+import createReactComponentMethods from './reactComponentMethods';
 import assign from 'object-assign';
 
-class FluxComponent extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+export default (React, PlainWrapperComponent) => {
+  const { instanceMethods, staticProperties } = createReactComponentMethods(React);
 
-    this.initialize();
+  class FluxComponent extends React.Component {
+    constructor(props, context) {
+      super(props, context);
 
-    const stores = this._getStoresProp(props);
-    this.state = this.connectToStores(stores, props.stateGetter);
+      this.initialize();
 
-    this.wrapChild = this.wrapChild.bind(this);
-  }
+      const stores = this._getStoresProp(props);
+      this.state = this.connectToStores(stores, props.stateGetter);
+    }
 
-  _getActionsProp(props) {
-    return props.actions || props.injectActions;
-  }
+    _getActionsProp(props) {
+      return props.actions || props.injectActions;
+    }
 
-  _getStoresProp(props) {
-    return props.stores || props.connectToStores;
-  }
+    _getStoresProp(props) {
+      return props.stores || props.connectToStores;
+    }
 
-  wrapChild(child) {
-    return React.addons.cloneWithProps(
-      child,
-      this.getChildProps()
-    );
-  }
-
-  getChildProps() {
-    const {
-      children,
-      render,
-      connectToStores,
-      stores,
-      injectActions,
-      actions: _actions,
-      stateGetter,
-      flux,
-      ...extraProps } = this.props;
-
-    const actions = this._getActionsProp(this.props);
-
-    return assign(
-      { flux: this.getFlux() }, // TODO: remove in next major version
-      this.collectActions(actions),
-      this.state,
-      extraProps
-    );
-  }
-
-  render() {
-    const { children, render } = this.props;
-
-    if (typeof render === 'function') {
-      const actions = this._getActionsProp(this.props);
-
-      return render(
-        this.state,
-        this.collectActions(actions),
-        this.getFlux()
+    wrapChild = (child) => {
+      return React.addons.cloneWithProps(
+        child,
+        this.getChildProps()
       );
     }
 
-    if (!children) return null;
+    getChildProps() {
+      const {
+        children,
+        render,
+        connectToStores,
+        stores,
+        injectActions,
+        actions: _actions,
+        stateGetter,
+        flux,
+        ...extraProps } = this.props;
 
-    if (!Array.isArray(children)) {
-      const child = children;
-      return this.wrapChild(child);
-    } else {
-      return <span>{React.Children.map(children, this.wrapChild)}</span>;
+      const actions = this._getActionsProp(this.props);
+
+      return assign(
+        { flux: this.getFlux() }, // TODO: remove in next major version
+        this.collectActions(actions),
+        this.state,
+        extraProps
+      );
+    }
+
+    render() {
+      const { children, render } = this.props;
+
+      if (typeof render === 'function') {
+        const actions = this._getActionsProp(this.props);
+
+        return render(
+          this.state,
+          this.collectActions(actions),
+          this.getFlux()
+        );
+      }
+
+      if (!children) return null;
+
+      if (!Array.isArray(children)) {
+        const child = children;
+        return this.wrapChild(child);
+      } else {
+        return (
+          <PlainWrapperComponent>
+            {React.Children.map(children, this.wrapChild)}
+          </PlainWrapperComponent>
+        );
+      }
     }
   }
+
+  assign(
+    FluxComponent.prototype,
+    instanceMethods
+  );
+
+  assign(FluxComponent, staticProperties);
+
+  return FluxComponent;
 }
-
-assign(
-  FluxComponent.prototype,
-  instanceMethods
-);
-
-assign(FluxComponent, staticProperties);
-
-export default FluxComponent;

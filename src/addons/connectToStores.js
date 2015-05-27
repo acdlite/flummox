@@ -2,31 +2,34 @@
  * Higher-order component form of connectToStores
  */
 
-import React from 'react';
-import { instanceMethods, staticProperties } from './reactComponentMethods';
+import createReactComponentMethods from './reactComponentMethods';
 import assign from 'object-assign';
 
-export default (BaseComponent, stores, stateGetter) => {
-  const ConnectedComponent = class extends React.Component {
-    constructor(props, context) {
-      super(props, context);
+export default React => {
+  const { instanceMethods, staticProperties } = createReactComponentMethods(React);
 
-      this.initialize();
+  return (BaseComponent, stores, stateGetter) => {
+    const ConnectedComponent = class extends React.Component {
+      constructor(props, context) {
+        super(props, context);
 
-      this.state = this.connectToStores(stores, stateGetter);
-    }
+        this.initialize();
 
-    render() {
-      return <BaseComponent {...this.state} {...this.props} />;
-    }
+        this.state = this.connectToStores(stores, stateGetter);
+      }
+
+      render() {
+        return <BaseComponent {...this.state} {...this.props} />;
+      }
+    };
+
+    assign(
+      ConnectedComponent.prototype,
+      instanceMethods
+    );
+
+    assign(ConnectedComponent, staticProperties);
+
+    return ConnectedComponent;
   };
-
-  assign(
-    ConnectedComponent.prototype,
-    instanceMethods
-  );
-
-  assign(ConnectedComponent, staticProperties);
-
-  return ConnectedComponent;
-};
+}
