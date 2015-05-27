@@ -1,1 +1,1 @@
-module.exports = require('./lib/addons/react');
+module.exports = require('../lib/addons/react');
