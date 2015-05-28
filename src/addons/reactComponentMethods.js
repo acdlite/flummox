@@ -159,7 +159,7 @@ export default React => {
       return this.getStoreState();
     },
 
-    collectActions(actionMap = {}, actionGetter = null) {
+    collectActions(actionMap = {}, actionGetter = null, props = this.props) {
       if (typeof actionMap === 'undefined') {
         return {};
       }
@@ -185,18 +185,18 @@ export default React => {
         const actions = getActions(key);
         const getter = createGetter(actionGetter, defaultActionGetter);
 
-        assign(collectedActions, getter(actions));
+        assign(collectedActions, getter(actions, props));
       } else if (Array.isArray(actionMap)) {
         const actions = actionMap.map(getActions);
         const getter = createGetter(actionGetter, defaultReduceActionGetter);
 
-        assign(collectedActions, getter(actions));
+        assign(collectedActions, getter(actions, props));
       } else {
         for (let key in actionMap) {
           const actions = getActions(key);
           const getter = createGetter(actionMap[key], defaultActionGetter);
 
-          assign(collectedActions, getter(actions));
+          assign(collectedActions, getter(actions, props));
         }
       }
 
