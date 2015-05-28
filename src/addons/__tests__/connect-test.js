@@ -1,4 +1,4 @@
-import { connectToStores } from '../react';
+import { connect } from '../react';
 import addContext from './addContext';
 import { Actions, Store, Flummox } from '../../Flux';
 import React from 'react/addons';
@@ -37,7 +37,7 @@ class Flux extends Flummox {
   }
 }
 
-describe('connectToStores (HoC)', () => {
+describe('connect (HoC)', () => {
   it('gets Flux from either props or context', () => {
     const flux = new Flux();
     let contextComponent, propsComponent;
@@ -48,7 +48,9 @@ describe('connectToStores (HoC)', () => {
       }
     }
 
-    const ConnectedComponent = connectToStores(BaseComponent, 'test');
+    const ConnectedComponent = connect(BaseComponent, {
+      stores: 'test'
+    });
 
     const ContextComponent = addContext(
       ConnectedComponent,
@@ -81,7 +83,9 @@ describe('connectToStores (HoC)', () => {
       }
     }
 
-    const ConnectedComponent = connectToStores(BaseComponent, 'test');
+    const ConnectedComponent = connect(BaseComponent, {
+      stores: 'test'
+    });
 
     const tree = TestUtils.renderIntoDocument(
       <ConnectedComponent flux={flux} foo="bar" bar="baz" />
@@ -104,7 +108,9 @@ describe('connectToStores (HoC)', () => {
       }
     }
 
-    const ConnectedComponent = connectToStores(BaseComponent, 'test');
+    const ConnectedComponent = connect(BaseComponent, {
+      stores: 'test'
+    });
 
     const tree = TestUtils.renderIntoDocument(
       <ConnectedComponent flux={flux} />

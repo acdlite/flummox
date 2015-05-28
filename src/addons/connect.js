@@ -8,7 +8,7 @@ import assign from 'object-assign';
 export default React => {
   const { instanceMethods, staticProperties } = createReactComponentMethods(React);
 
-  return (BaseComponent, stores, stateGetter) => {
+  return (BaseComponent, { stores, stateGetter }) => {
     const ConnectedComponent = class extends React.Component {
       constructor(props, context) {
         super(props, context);
