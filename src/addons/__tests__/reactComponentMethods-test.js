@@ -1,4 +1,3 @@
-import { fluxMixin } from '../react';
 import { Flummox, Store, Actions } from '../../Flux';
 import addContext from './addContext';
 import sinon from 'sinon';
@@ -6,6 +5,23 @@ import sinon from 'sinon';
 import React from 'react/addons';
 const { PropTypes } = React;
 const { TestUtils } = React.addons;
+
+// fluxMixin is no more, but we still need these tests
+// Need to migrate/refactor these tests so that they're more general
+// For now, we're just inlining an implementation of fluxMixin here
+import createReactComponentMethods from '../reactComponentMethods';
+import assign from 'object-assign';
+
+const { instanceMethods, staticProperties } = createReactComponentMethods(React);
+
+const fluxMixin = (...args) => ({
+  getInitialState() {
+    this.initialize();
+    return this.connectToStores(...args);
+  },
+  ...instanceMethods,
+  ...staticProperties
+});
 
 describe('fluxMixin', () => {
 
