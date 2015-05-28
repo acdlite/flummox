@@ -29,6 +29,14 @@ export default React => {
       return this.props.flux || this.context.flux;
     },
 
+    _getActionsProp(props) {
+      return props.actions || props.injectActions;
+    },
+
+    _getStoresProp(props) {
+      return props.stores || props.connectToStores;
+    },
+
     initialize() {
       this._fluxStateGetters = [];
       this._fluxListeners = {};
@@ -60,6 +68,7 @@ export default React => {
 
     componentWillReceiveProps(nextProps) {
       this.updateStores(nextProps);
+      this.updateActions(nextProps);
     },
 
     updateStores(props = this.props) {
@@ -77,6 +86,14 @@ export default React => {
           return assign(result, stateFromStores);
         }, {}
       );
+    },
+
+    updateActions(props = this.props) {
+      const actions = this._getActionsProp(props);
+
+      this.setState({
+        actions: this.collectActions(actions, props.actionGetter, props)
+      });
     },
 
      /**

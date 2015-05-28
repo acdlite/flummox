@@ -58,17 +58,12 @@ export default (React, PlainWrapperComponent) => {
       this.initialize();
 
       const stores = this._getStoresProp(props);
+      const actions = this._getActionsProp(props);
+
       this.state = {
-        storeState: this.connectToStores(stores, props.stateGetter)
+        storeState: this.connectToStores(stores, props.stateGetter),
+        actions: this.collectActions(actions, props.actionGetter, props)
       };
-    }
-
-    _getActionsProp(props) {
-      return props.actions || props.injectActions;
-    }
-
-    _getStoresProp(props) {
-      return props.stores || props.connectToStores;
     }
 
     wrapChild = (child) => {
@@ -85,16 +80,14 @@ export default (React, PlainWrapperComponent) => {
         connectToStores,
         stores,
         injectActions,
-        actions: _actions,
+        actions,
         stateGetter,
         flux,
         ...extraProps } = this.props;
 
-      const actions = this._getActionsProp(this.props);
-
       return assign(
         { flux: this.getFlux() }, // TODO: remove in next major version
-        this.collectActions(actions),
+        this.state.actions,
         this.state.storeState,
         extraProps
       );
@@ -108,7 +101,7 @@ export default (React, PlainWrapperComponent) => {
 
         return render(
           this.state.storeState,
-          this.collectActions(actions),
+          this.state.actions,
           this.getFlux()
         );
       }

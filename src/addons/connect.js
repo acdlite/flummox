@@ -16,7 +16,7 @@ export default React => {
         this.initialize();
 
         this.state = {
-          storeState: this.connectToStores(stores, stateGetter)
+          storeState: this.connectToStores(stores, props.stateGetter)
         };
       }
 
