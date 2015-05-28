@@ -58,7 +58,9 @@ export default (React, PlainWrapperComponent) => {
       this.initialize();
 
       const stores = this._getStoresProp(props);
-      this.state = this.connectToStores(stores, props.stateGetter);
+      this.state = {
+        storeState: this.connectToStores(stores, props.stateGetter)
+      };
     }
 
     _getActionsProp(props) {
@@ -93,7 +95,7 @@ export default (React, PlainWrapperComponent) => {
       return assign(
         { flux: this.getFlux() }, // TODO: remove in next major version
         this.collectActions(actions),
-        this.state,
+        this.state.storeState,
         extraProps
       );
     }
@@ -105,7 +107,7 @@ export default (React, PlainWrapperComponent) => {
         const actions = this._getActionsProp(this.props);
 
         return render(
-          this.state,
+          this.state.storeState,
           this.collectActions(actions),
           this.getFlux()
         );

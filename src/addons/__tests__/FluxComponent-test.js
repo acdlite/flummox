@@ -114,9 +114,9 @@ describe('FluxComponent', () => {
     );
 
     actions.getSomething('something good');
-    expect(component.state.something).to.deep.equal('something good');
+    expect(component.state.storeState.something).to.deep.equal('something good');
     actions.getSomething('something else');
-    expect(component.state.something).to.deep.equal('something else');
+    expect(component.state.storeState.something).to.deep.equal('something else');
   });
 
   it('passes stateGetter prop to reactComponentMethod connectToStores()', () => {
@@ -128,7 +128,7 @@ describe('FluxComponent', () => {
       <FluxComponent flux={flux} stores="test" stateGetter={stateGetter} />
     );
 
-    expect(component.state.fiz).to.equal('bin');
+    expect(component.state.storeState.fiz).to.equal('bin');
   });
 
   it('passes injectActions prop to reactComponentMethod collectActions()', () => {

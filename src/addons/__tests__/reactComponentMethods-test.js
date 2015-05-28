@@ -17,7 +17,9 @@ const { instanceMethods, staticProperties } = createReactComponentMethods(React)
 const fluxMixin = (...args) => ({
   getInitialState() {
     this.initialize();
-    return this.connectToStores(...args);
+    return {
+      storeState: this.connectToStores(...args)
+    };
   },
   ...instanceMethods,
   ...staticProperties
@@ -161,7 +163,7 @@ describe('fluxMixin', () => {
     flux.getActions('test').getSomething('bar');
     listener();
 
-    expect(component.state.something).to.equal('foo');
+    expect(component.state.storeState.something).to.equal('foo');
   });
 
   it('uses #connectToStores() to get initial state', () => {
@@ -204,9 +206,11 @@ describe('fluxMixin', () => {
     expect(flux.getStore('test').listeners('change')).to.have.length(1);
 
     expect(component.state).to.deep.equal({
-      something: 'foobar',
-      custom: true,
       foobar: 'baz',
+      storeState: {
+        something: 'foobar',
+        custom: true
+      }
     });
 
   });
@@ -240,7 +244,9 @@ describe('fluxMixin', () => {
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
-        something: 'foobar',
+        storeState: {
+          something: 'foobar'
+        },
         otherThing: 'barbaz',
       });
     });
@@ -262,9 +268,11 @@ describe('fluxMixin', () => {
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
-        something: 'foobar',
         otherThing: 'barbaz',
-        barbaz: 'barbaz',
+        storeState: {
+          something: 'foobar',
+          barbaz: 'barbaz'
+        }
       });
     });
 
@@ -289,11 +297,11 @@ describe('fluxMixin', () => {
         <Component key="test" flux={flux} foo="bar" />
       );
 
-      expect(component.state.foo).to.equal('foo is bar');
+      expect(component.state.storeState.foo).to.equal('foo is bar');
 
       component.setProps({ foo: 'baz' });
 
-      expect(component.state.foo).to.equal('foo is baz');
+      expect(component.state.storeState.foo).to.equal('foo is baz');
     });
 
     it('accepts object of keys to state getters', () => {
@@ -315,9 +323,11 @@ describe('fluxMixin', () => {
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
-        something: 'foobar',
         otherThing: 'barbaz',
-        custom: true,
+        storeState: {
+          something: 'foobar',
+          custom: true,
+        }
       });
     });
 
@@ -335,8 +345,10 @@ describe('fluxMixin', () => {
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
-        something: 'foobar',
-        otherThing: 'barbaz'
+        storeState: {
+          something: 'foobar',
+          otherThing: 'barbaz'
+        }
       });
     });
 
@@ -379,8 +391,10 @@ describe('fluxMixin', () => {
       flux.getActions('test').getSomething('foobar');
 
       expect(component.state).to.deep.equal({
-        something: 'foobar',
-        otherThing: 'barbaz',
+        storeState: {
+          something: 'foobar'
+        },
+        otherThing: 'barbaz'
       });
     });
 

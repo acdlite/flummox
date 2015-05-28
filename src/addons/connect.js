@@ -15,11 +15,13 @@ export default React => {
 
         this.initialize();
 
-        this.state = this.connectToStores(stores, stateGetter);
+        this.state = {
+          storeState: this.connectToStores(stores, stateGetter)
+        };
       }
 
       render() {
-        return <BaseComponent {...this.state} {...this.props} />;
+        return <BaseComponent {...this.state.storeState} {...this.props} />;
       }
     };
 

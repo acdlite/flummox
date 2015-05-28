@@ -64,7 +64,9 @@ export default React => {
 
     updateStores(props = this.props) {
       const state = this.getStoreState(props);
-      this.setState(state);
+      this.setState({
+        storeState: state
+      });
     },
 
     getStoreState(props = this.props) {
@@ -229,7 +231,9 @@ export default React => {
 function createStoreListener(component, store, storeStateGetter) {
   return function() {
     const state = storeStateGetter(store, this.props);
-    this.setState(state);
+    this.setState({
+      storeState: state
+    });
   }.bind(component);
 }
 
