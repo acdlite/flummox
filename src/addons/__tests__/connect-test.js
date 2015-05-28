@@ -74,7 +74,7 @@ describe('connect (HoC)', () => {
     expect(propsComponent.flux).to.be.an.instanceof(Flummox);
   });
 
-  it('transfers props', () => {
+  it('passes store state as props', () => {
     const flux = new Flux();
 
     class BaseComponent extends React.Component {
@@ -97,6 +97,65 @@ describe('connect (HoC)', () => {
 
     expect(component.props.foo).to.equal('bar');
     expect(component.props.bar).to.equal('baz');
+  });
+
+  it('passes actions as props', () => {
+    class Flux extends Flummox {
+      constructor() {
+        super();
+
+        this.createActions('A', {
+          do() {
+            return 're';
+          },
+
+          re() {
+            return 'mi';
+          }
+        });
+
+        this.createActions('B', {
+          mi() {
+            return 'fa';
+          },
+
+          fa() {
+            return 'so';
+          }
+        });
+      }
+    }
+
+    const flux = new Flux();
+
+    class BaseComponent extends React.Component {
+      render() {
+        return <div/>;
+      }
+    }
+
+    const ConnectedComponent = connect(BaseComponent, {
+      actions: {
+        A: actions => ({
+          do: actions.do
+        }),
+
+        B: actions => ({
+          fa: actions.fa
+        })
+      }
+    });
+
+    const tree = TestUtils.renderIntoDocument(
+      <ConnectedComponent flux={flux} />
+    );
+
+    const component = TestUtils.findRenderedComponentWithType(
+      tree, BaseComponent
+    );
+
+    expect(component.props.do()).to.equal('re');
+    expect(component.props.fa()).to.equal('so');
   });
 
   it('syncs with store after state change', () => {

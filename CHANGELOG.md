@@ -16,10 +16,15 @@ Tags:
   - `Store#registerMatch(matcher, handler)` calls a handler when the matcher function returns true for a dispatched payload. The handler is passed the payload.
   - Use `injectActions` prop of FluxComponent to pass actions to children as props.
   - Actions no longer warn if they aren't added to a Flux instance.
+  - FluxComponent supports injecting actions as props, in the same vein as `connectToStores`.
   - Use `stores` and `actions` props interchangeably with `connectToStores` and `injectActions`.
+  - connectToStores HoC now supports actions as well and is just called connect.
 - **Breaking Change**
   - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
   - Arguments sent to the `render` prop function of FluxComponent have been changed: `render(storeState, actions, flux)`. Notably, extra props added to FluxComponent are no longer combined with storeState, and `flux` is a separate parameter as well.
+  - Changed interface to HoC to support actions.
+  - fluxMixin has been removed.
+  - Flux instance prop is no longer automatically passed as prop to children of FluxComponent
 - **Internal**
   - Cleaned up Store's `register` methods. Much simpler code paths now.
 
