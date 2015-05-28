@@ -48,9 +48,9 @@ describe('connect (HoC)', () => {
       }
     }
 
-    const ConnectedComponent = connect(BaseComponent, {
+    const ConnectedComponent = connect({
       stores: 'test'
-    });
+    })(BaseComponent);
 
     const ContextComponent = addContext(
       ConnectedComponent,
@@ -77,26 +77,23 @@ describe('connect (HoC)', () => {
   it('passes store state as props', () => {
     const flux = new Flux();
 
+    @connect({
+      stores: 'test'
+    })
     class BaseComponent extends React.Component {
       render() {
-        return <div/>;
+        return <div {...this.props} />;
       }
     }
 
-    const ConnectedComponent = connect(BaseComponent, {
-      stores: 'test'
-    });
-
     const tree = TestUtils.renderIntoDocument(
-      <ConnectedComponent flux={flux} foo="bar" bar="baz" />
+      <BaseComponent flux={flux} foo="bar" bar="baz" />
     );
 
-    const component = TestUtils.findRenderedComponentWithType(
-      tree, BaseComponent
-    );
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
-    expect(component.props.foo).to.equal('bar');
-    expect(component.props.bar).to.equal('baz');
+    expect(div.props.foo).to.equal('bar');
+    expect(div.props.bar).to.equal('baz');
   });
 
   it('passes actions as props', () => {
@@ -128,13 +125,7 @@ describe('connect (HoC)', () => {
 
     const flux = new Flux();
 
-    class BaseComponent extends React.Component {
-      render() {
-        return <div/>;
-      }
-    }
-
-    const ConnectedComponent = connect(BaseComponent, {
+    @connect({
       actions: {
         A: actions => ({
           do: actions.do
@@ -144,18 +135,21 @@ describe('connect (HoC)', () => {
           fa: actions.fa
         })
       }
-    });
+    })
+    class BaseComponent extends React.Component {
+      render() {
+        return <div {...this.props} />;
+      }
+    }
 
     const tree = TestUtils.renderIntoDocument(
-      <ConnectedComponent flux={flux} />
+      <BaseComponent flux={flux} />
     );
 
-    const component = TestUtils.findRenderedComponentWithType(
-      tree, BaseComponent
-    );
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
-    expect(component.props.do()).to.equal('re');
-    expect(component.props.fa()).to.equal('so');
+    expect(div.props.do()).to.equal('re');
+    expect(div.props.fa()).to.equal('so');
   });
 
   it('syncs with store after state change', () => {
@@ -167,9 +161,9 @@ describe('connect (HoC)', () => {
       }
     }
 
-    const ConnectedComponent = connect(BaseComponent, {
+    const ConnectedComponent = connect({
       stores: 'test'
-    });
+    })(BaseComponent);
 
     const tree = TestUtils.renderIntoDocument(
       <ConnectedComponent flux={flux} />

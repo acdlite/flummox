@@ -172,7 +172,7 @@ describe('FluxComponent', () => {
             fa: actions.fa
           }),
         }}
-        render={(storeState, actions, flux) =>
+        render={(storeState, actions) =>
           <div {...actions} />
         }
       />

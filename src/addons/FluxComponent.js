@@ -128,4 +128,4 @@ export default (React, PlainWrapperComponent) => {
   assign(FluxComponent, staticProperties);
 
   return FluxComponent;
-}
+};

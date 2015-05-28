@@ -243,7 +243,7 @@ export default React => {
   };
 
   return { instanceMethods, staticProperties };
-}
+};
 
 function createStoreListener(component, store, storeStateGetter) {
   return function() {
