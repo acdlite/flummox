@@ -96,8 +96,6 @@ export default (React, PlainWrapperComponent) => {
       const { children, render } = this.props;
 
       if (typeof render === 'function') {
-        const actions = this._getActionsProp(this.props);
-
         return render(
           this.state.storeState,
           this.state.actions,
