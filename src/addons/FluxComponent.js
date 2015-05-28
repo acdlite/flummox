@@ -86,10 +86,9 @@ export default (React, PlainWrapperComponent) => {
         ...extraProps } = this.props;
 
       return assign(
-        { flux: this.getFlux() }, // TODO: remove in next major version
-        extraProps
+        extraProps,
         this.state.storeState,
-        this.state.actions,
+        this.state.actions
       );
     }
 

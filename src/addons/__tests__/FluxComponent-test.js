@@ -184,21 +184,6 @@ describe('FluxComponent', () => {
     expect(div.props.fa()).to.equal('so');
   });
 
-  it('injects children with flux prop', () => {
-    const flux = new Flux();
-    const actions = flux.getActions('test');
-
-    const tree = TestUtils.renderIntoDocument(
-      <FluxComponent flux={flux}>
-        <div />
-      </FluxComponent>
-    );
-
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
-    expect(div.props.flux).to.equal(flux);
-  });
-
   it('injects children with props corresponding to component state', () => {
     const flux = new Flux();
     const actions = flux.getActions('test');
@@ -237,7 +222,7 @@ describe('FluxComponent', () => {
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     expect(div.props.extraProp).to.equal('hello');
-    expect(Object.keys(div.props)).to.deep.equal(['flux', 'extraProp']);
+    expect(Object.keys(div.props)).to.deep.equal(['extraProp']);
   });
 
   it('wraps multiple children in span tag', () => {
