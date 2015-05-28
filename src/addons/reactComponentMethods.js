@@ -45,7 +45,7 @@ export default React => {
       if (!(this.flux instanceof Flux)) {
         // TODO: print the actual class name here
         throw new Error(
-          `fluxMixin: Could not find Flux instance. Ensure that your component `
+          `Could not find Flux instance. Ensure that your component `
         + `has either \`this.context.flux\` or \`this.props.flux\`.`
         );
       }
@@ -130,7 +130,7 @@ export default React => {
 
         if (typeof store === 'undefined') {
           throw new Error(
-            `connectToStores(): Store with key '${key}' does not exist.`
+            `Store with key '${key}' does not exist.`
           );
         }
 
@@ -188,7 +188,7 @@ export default React => {
 
         if (typeof actions === 'undefined') {
           throw new Error(
-            `connectToStores(): Actions with key '${key}' does not exist.`
+            `Actions with key '${key}' does not exist.`
           );
         }
 

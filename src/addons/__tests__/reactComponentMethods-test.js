@@ -134,7 +134,7 @@ describe('fluxMixin', () => {
 
     expect(TestUtils.renderIntoDocument.bind(null, <ComponentWithFluxMixin />))
       .to.throw(
-        'fluxMixin: Could not find Flux instance. Ensure that your component '
+        'Could not find Flux instance. Ensure that your component '
       + 'has either `this.context.flux` or `this.props.flux`.'
       );
   });
