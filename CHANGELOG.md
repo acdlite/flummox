@@ -25,6 +25,7 @@ Tags:
   - Changed interface to HoC to support actions.
   - fluxMixin has been removed.
   - Flux instance prop is no longer automatically passed as prop to children of FluxComponent
+  - Full support for React Native, including addons (FluxComponent, connect, etc.)
 - **Internal**
   - Cleaned up Store's `register` methods. Much simpler code paths now.
 
