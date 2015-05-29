@@ -221,6 +221,12 @@ export default React => {
     }
   };
 
+  const getterMapType = React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.arrayOf(React.PropTypes.string),
+    React.PropTypes.object
+  ]);
+
   const staticProperties = {
     contextTypes: {
       flux: React.PropTypes.instanceOf(Flux),
@@ -231,14 +237,14 @@ export default React => {
     },
 
     propTypes: {
-      connectToStores: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.arrayOf(React.PropTypes.string),
-        React.PropTypes.object
-      ]),
+      connectToStores: getterMapType,
+      stores: getterMapType,
+      injectActions: getterMapType,
+      actions: getterMapType,
       flux: React.PropTypes.instanceOf(Flux),
       render: React.PropTypes.func,
       stateGetter: React.PropTypes.func,
+      actionGetter: React.PropTypes.func,
     },
   };
 
