@@ -8,7 +8,6 @@ SRC_JS = $(shell find src -name "*.js")
 LIB_JS = $(patsubst src/%.js,lib/%.js,$(SRC_JS))
 TEST_JS = $(shell find lib -name "*-test.js")
 
-BABEL_ARGS = --stage 0 --loose all
 MOCHA_ARGS = --harmony --require lib/test/init.js $(TEST_JS)
 
 # Build application
@@ -42,13 +41,13 @@ js: $(LIB_JS)
 
 $(LIB_JS): lib/%.js: src/%.js
 	mkdir -p $(dir $@)
-	$(BABEL_CMD) $< -o $@ $(BABEL_ARGS)
+	$(BABEL_CMD) $< -o $@
 
 fast-js:
-	$(BABEL_CMD) src -d lib $(BABEL_ARGS)
+	$(BABEL_CMD) src -d lib
 
 watch-js:
-	$(BABEL_CMD) src -d lib $(BABEL_ARGS) -w
+	$(BABEL_CMD) src -d lib -w
 
 browser: $(SRC_JS)
 	mkdir -p dist
