@@ -1,1 +1,1 @@
-module.exports = require('./lib/addons/react').connectToStores;
+module.exports = require('./lib/addons/react').connect;
