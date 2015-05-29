@@ -279,7 +279,7 @@ function defaultActionGetter(actions) {
 
 function defaultReduceActionGetter(actions) {
   return actions.reduce(
-    (result, _actions) => assign(result, _actions.getStateAsObject()),
+    (result, _actions) => assign(result, _actions.getActionsAsObject()),
     {}
   );
 }
