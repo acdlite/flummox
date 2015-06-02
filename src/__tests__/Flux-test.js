@@ -449,22 +449,6 @@ describe('Flux', () => {
       });
     });
 
-    it('warns if any store classes .serialize() returns a non-string', () => {
-      const flux = new Flux();
-      const warn = sinon.spy(console, 'warn');
-
-      flux.createStore('foo', createSerializableStore({}));
-      flux.serialize();
-
-      expect(warn.firstCall.args[0]).to.equal(
-        'The store with key \'foo\' was not serialized because the static '
-      + 'method `SerializableStore.serialize()` returned a non-string with '
-      + 'type \'object\'.'
-      );
-
-      console.warn.restore();
-    });
-
     it('warns and skips stores whose classes do not implement .deserialize()', () => {
       const flux = new Flux();
       const warn = sinon.spy(console, 'warn');

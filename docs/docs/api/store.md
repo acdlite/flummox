@@ -172,7 +172,9 @@ Static Methods
 
 ### serialize(state)
 
-If you use `Flux.serialize`, Flummox will try to call the static method `serialize` on all your stores. Flummox will pass the state object of the store to the method and expects a String
+If you use `Flux.serialize`, Flummox will try to call the static method `serialize` on all your stores. Flummox will pass the state object of the store to the method and leave it to you to return any custom serialization. Whatever you return will be bundled into an overall store object with store names as keys and whatever the various `serialize` methods return as values. This entire object is `stringified` and output in `Flux.serialize` method.
+
+If you don't have any reason for custom serialization, you can just `return state` and it will be stringified by `Flux.serialize`.
 
 ### deserialize(state)
 
