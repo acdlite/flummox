@@ -93,13 +93,22 @@ export default (React, PlainWrapperComponent) => {
     }
 
     render() {
-      const { children, render } = this.props;
+      const {
+        children,
+        render,
+        connectToStores,
+        stores,
+        injectActions,
+        actions,
+        stateGetter,
+        flux,
+        ...extraProps } = this.props;
 
       if (typeof render === 'function') {
         return render(
           this.state.storeState,
           this.state.actions,
-          this.getFlux()
+          extraProps
         );
       }
 
