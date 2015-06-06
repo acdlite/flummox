@@ -326,11 +326,9 @@ function getValues(object) {
   return values;
 }
 
-const Flummox = Flux;
-
-export {
+export default {
   Flux,
-  Flummox,
+  Flummox: Flux,
   Store,
   Actions,
 };

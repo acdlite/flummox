@@ -26,6 +26,10 @@ module.exports = {
     libraryTarget: 'var'
   },
 
+  externals: [{
+    "react/addons": "var React"
+  }],
+
   plugins: plugins,
 
   resolve: {
