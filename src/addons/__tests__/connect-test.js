@@ -23,7 +23,7 @@ class TestStore extends Store {
     };
   }
 
-  handleGetSomething(something) {
+  handleGetSomething(state, {body: something}) {
     this.setState({ something });
   }
 }

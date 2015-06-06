@@ -27,7 +27,7 @@ describe('FluxComponent', () => {
       };
     }
 
-    handleGetSomething(something) {
+    handleGetSomething(state, {body: something}) {
       this.setState({ something });
     }
   }

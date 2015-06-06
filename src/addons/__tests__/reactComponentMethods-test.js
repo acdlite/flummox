@@ -45,7 +45,7 @@ describe('fluxMixin', () => {
       };
     }
 
-    handleGetSomething(something) {
+    handleGetSomething(state, {body: something}) {
       this.setState({ something });
     }
   }
