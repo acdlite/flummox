@@ -73,7 +73,7 @@ export default (React, PlainWrapperComponent) => {
       );
     }
 
-    getChildProps() {
+    getExtraProps() {
       const {
         children,
         render,
@@ -85,30 +85,25 @@ export default (React, PlainWrapperComponent) => {
         flux,
         ...extraProps } = this.props;
 
+      return extraProps;
+    }
+
+    getChildProps() {
       return assign(
-        extraProps,
+        this.getExtraProps(),
         this.state.storeState,
         this.state.actions
       );
     }
 
     render() {
-      const {
-        children,
-        render,
-        connectToStores,
-        stores,
-        injectActions,
-        actions,
-        stateGetter,
-        flux,
-        ...extraProps } = this.props;
+      const {children, render} = this.props;
 
       if (typeof render === 'function') {
         return render(
           this.state.storeState,
           this.state.actions,
-          extraProps
+          this.getExtraProps()
         );
       }
 
