@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react/addons';
 
 import createFluxComponent from './FluxComponent';
 import createConnect from './connect';
