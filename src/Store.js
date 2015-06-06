@@ -212,33 +212,20 @@ export default class Store extends EventEmitter {
       }
     }
 
-    // Determine args to pass to handlers based on action type
-    let args;
-
-    switch (asyncType) {
-      case 'begin':
-        args = [payload];
-        break;
-      case 'failure':
-        args = [error, payload];
-        break;
-      default:
-        args = [body, payload];
-    }
-
     this._isHandlingDispatch = true;
     this._pendingState = this._assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
-      // Dispatch matched handlers
-      for (let actionHandler of matchedActionHandlers) {
-        actionHandler(...args);
-      }
-
-      // Dispatch custom matched handers
-      for (let actionHandler of customMatchedActionHandlers) {
-        actionHandler(payload);
+      const allHandlers = matchedActionHandlers.concat(customMatchedActionHandlers);
+      
+      // Dispatch all handlers
+      for (let actionHandler of allHandlers) {
+        const state = this._pendingState || this.state;
+        const transformedState = actionHandler(state, payload);
+        if (typeof transformedState === 'object') {
+          this.setState(transformedState);
+        }
       }
     } finally {
       let emit = false;
