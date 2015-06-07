@@ -596,6 +596,63 @@ describe('Store', () => {
 
   describe('action handlers', () => {
 
+    it('receive `body`, `payload` and `prevState` arguments when they accept 3 arguments', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      // using a function to inspect arguments
+      store.registerAll(function (body, payload, prevState) {
+        expect(arguments.length).to.equal(3);
+        expect(body).to.equal('foo');
+        expect(payload.body).to.equal('foo');
+        expect(prevState).to.equal(store._pendingState);
+      });
+
+      actions.foo('foo');
+    });
+
+    it('receive `payload` and `prevState` arguments when they accept 2 arguments', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      // using a function to inspect arguments
+      store.registerAll(function (payload, prevState) {
+        expect(arguments.length).to.equal(2);
+        expect(payload.body).to.equal('foo');
+        expect(prevState).to.equal(store._pendingState);
+      });
+
+      actions.foo('foo');
+    });
+
     it('can trigger a `setState` by returning an object', () => {
       class ExampleFlux extends Flux {
         constructor() {
@@ -614,9 +671,9 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll((state, {body}) => {
+      store.registerAll(({body}, prevState) => {
         return {
-          foo: body + state.foo
+          foo: body + prevState.foo
         };
       });
 
@@ -642,16 +699,16 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll((state, {body}) => {
+      store.registerAll(({body}, prevState) => {
         return {
-          foo: body + state.foo
+          foo: body + prevState.foo
         };
       });
 
-      store.registerAll((state, {body}) => {
-        expect(state.foo).to.equal('foobar');
+      store.registerAll(({body}, prevState) => {
+        expect(prevState.foo).to.equal('foobar');
         return {
-          foo: 'test' + state.foo
+          foo: 'test' + prevState.foo
         };
       });
 
@@ -677,21 +734,21 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll((state, {body}) => {
+      store.registerAll(({body}, prevState) => {
         return {
-          foo: state.foo + body
+          foo: prevState.foo + body
         };
       });
 
-      store.registerAll((state, {body}) => {
+      store.registerAll(({body}, prevState) => {
         return {
-          foo: state.foo + body
+          foo: prevState.foo + body
         };
       });
 
-      store.registerAll((state, {body}) => {
+      store.registerAll(({body}, prevState) => {
         return {
-          foo: state.foo + 42
+          foo: prevState.foo + 42
         };
       });
 

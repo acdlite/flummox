@@ -55,16 +55,14 @@ describe('Examples:', () => {
         this.state = {};
       }
 
-      handleNewMessage(state, {body: content}) {
-        console.log(content);
+      handleNewMessage({body: content}, state) {
         const id = this.messageCounter++;
-
-        this.setState({
+        return {
           [id]: {
             content,
             id,
-          },
-        });
+          }
+        };
       }
     }
 
