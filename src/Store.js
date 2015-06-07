@@ -9,6 +9,7 @@
 
 import EventEmitter from 'eventemitter3';
 import assign from 'object-assign';
+import isPlainObject from 'lodash/lang/isPlainObject';
 
 export default class Store extends EventEmitter {
 
@@ -225,7 +226,7 @@ export default class Store extends EventEmitter {
           actionHandler(payload, state) :
           actionHandler(body, payload, state);
 
-        if (typeof transformedState === 'object') {
+        if (isPlainObject(transformedState)) {
           this.setState(transformedState);
         }
       }

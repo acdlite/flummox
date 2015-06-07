@@ -681,6 +681,44 @@ describe('Store', () => {
       expect(store.state.foo).to.equal('foobar');
     });
 
+    it('do not trigger a `setState` when not returning an object', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const invalid = [
+        'testing',
+        [1, 2, 3],
+        /test/,
+        new Date(),
+        true,
+        false,
+        null
+      ];
+
+      invalid.forEach((invalidReturn) => {
+        store.registerAll(({body}, prevState) => {
+          return invalidReturn;
+        });
+      });
+
+      actions.foo('foo');
+      expect(store.state.foo).to.equal('bar');
+    });
+
     it('receive always the latest state object', () => {
       class ExampleFlux extends Flux {
         constructor() {
