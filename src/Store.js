@@ -218,11 +218,13 @@ export default class Store extends EventEmitter {
 
     try {
       const allHandlers = matchedActionHandlers.concat(customMatchedActionHandlers);
-      
       // Dispatch all handlers
       for (let actionHandler of allHandlers) {
-        const state = this._pendingState || this.state;
-        const transformedState = actionHandler(state, payload);
+        const state = this._pendingState;
+        const transformedState = actionHandler.length === 2 ?
+          actionHandler(payload, state) :
+          actionHandler(body, payload, state);
+
         if (typeof transformedState === 'object') {
           this.setState(transformedState);
         }
