@@ -5,7 +5,6 @@
  */
 
 import Store from './Store';
-import Actions from './Actions';
 import createActions from './createActions';
 import { Dispatcher } from 'flux';
 import EventEmitter from 'eventemitter3';
@@ -338,6 +337,5 @@ const Flummox = Flux;
 export {
   Flux,
   Flummox,
-  Store,
-  Actions,
+  Store
 };

@@ -1,4 +1,4 @@
-import { Flux, Store, Actions } from '../Flux';
+import { Flux, Store } from '../Flux';
 import sinon from 'sinon';
 
 function createSerializableStore(serializedState) {
@@ -107,12 +107,12 @@ describe('Flux', () => {
 
   describe('#createActions()', () => {
     it('throws if key already exists', () => {
-      class TestActions extends Actions {}
+      const TestActions = {};
 
       const flux = new Flux();
       flux.createActions('ExampleActions', TestActions);
 
-      expect(flux.createActions.bind(flux, 'ExampleActions', Actions)).to.throw(
+      expect(flux.createActions.bind(flux, 'ExampleActions', TestActions)).to.throw(
         'You\'ve attempted to create multiple actions with key ExampleActions. '
       + 'Keys must be unique.'
       );
@@ -170,8 +170,7 @@ describe('Flux', () => {
   describe('#removeActions()', () => {
     it('throws if key does not exist', () => {
       const flux = new Flux();
-      class TestActions extends Actions {
-      }
+      const TestActions = {};
 
       flux.createActions('TestActions', TestActions);
       expect(flux.removeActions.bind(flux, 'NonexistentActions')).to.throw(
@@ -181,11 +180,10 @@ describe('Flux', () => {
 
     it('deletes actions instance', () => {
       const flux = new Flux();
-      class TestActions extends Store {
-      }
+      const TestActions = {};
 
-      flux.createStore('TestActions', TestActions);
-      flux.removeStore('TestActions');
+      flux.createActions('TestActions', TestActions);
+      flux.removeActions('TestActions');
       expect(flux._actions.TestActions).to.be.undefined;
     });
   });

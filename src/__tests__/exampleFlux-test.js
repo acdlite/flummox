@@ -1,4 +1,4 @@
-import { Flummox, Store, Actions } from '../Flux';
+import { Flummox, Store } from '../Flux';
 
 describe('Examples:', () => {
 
