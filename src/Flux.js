@@ -21,6 +21,8 @@ export default class Flux extends EventEmitter {
 
     this._stores = {};
     this._actions = {};
+
+    this.performAction = ::this.performAction;
   }
 
   createStore(key, _Store, ...constructorArgs) {
@@ -78,7 +80,7 @@ export default class Flux extends EventEmitter {
       + `must be unique.`
       );
     } else {
-      const actions = createActions(::this.performAction, actionCreators);
+      const actions = createActions(this.performAction, actionCreators);
       this._actions[key] = actions;
       return actions;
     }
