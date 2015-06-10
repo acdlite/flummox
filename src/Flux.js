@@ -126,7 +126,7 @@ export default class Flux extends EventEmitter {
   }
 
   performAction(actionId, action, ...actionArgs) {
-    const body = action.apply(this, actionArgs);
+    const body = action.apply(null, actionArgs);
 
     const payload = {
       actionArgs
