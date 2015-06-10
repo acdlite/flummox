@@ -20,6 +20,7 @@ Tags:
   - Use `stores` and `actions` props interchangeably with `connectToStores` and `injectActions`.
   - connectToStores HoC now supports actions as well and is just called connect.
 - **Breaking Change**
+  - Removal of Actions class. Instead, pass a plain JavaScript object of functions.
   - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
   - Arguments sent to the `render` prop function of FluxComponent have been changed: `render(storeState, actions, flux)`. Notably, extra props added to FluxComponent are no longer combined with storeState, and `flux` is a separate parameter as well.
   - Changed interface to HoC to support actions.
