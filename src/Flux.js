@@ -131,8 +131,7 @@ export default class Flux extends EventEmitter {
     };
 
     if (isPromise(body)) {
-      const promise = body;
-      this.dispatchAsync(actionId, promise, payload);
+      this.dispatchAsync(actionId, body, payload);
     } else {
       if (typeof body !== 'undefined') {
         this.dispatch(actionId, body, payload);
