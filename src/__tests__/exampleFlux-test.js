@@ -8,20 +8,18 @@ describe('Examples:', () => {
   describe('Messages', () => {
 
     /**
-     * To create some actions, create a new class that extends from the base
-     * Actions class. Methods on the class's prototype will be converted into
-     * actions, each with its own action id.
+     * Actions are just a plain object collection of functions.
      *
-     * In this example, calling `newMessage` will fire the dispatcher, with
-     * a payload containing the passed message content. Easy!
+     * When added to a Flux instance, calling `newMessage` will fire the
+     * dispatcher, with a payload containing the passed message content. Easy!
      */
-    class MessageActions extends Actions {
+    const MessageActions = {
       newMessage(content) {
 
         // The return value from the action is sent to the dispatcher.
         return content;
       }
-    }
+    };
 
     /**
      * Now we need to a Store that will receive payloads from the dispatcher

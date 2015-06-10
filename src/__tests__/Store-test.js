@@ -1,4 +1,4 @@
-import { Store, Flux, Actions } from '../Flux';
+import { Store, Flux } from '../Flux';
 import sinon from 'sinon';
 
 describe('Store', () => {
@@ -88,17 +88,17 @@ describe('Store', () => {
     it('registers handlers for begin, success, and failure of async action', async function() {
       const error = new Error();
 
-      class ExampleActions extends Actions {
+      const ExampleActions = {
         async getFoo(message, _success = true) {
           if (!_success) throw error;
 
           return message + ' success';
-        }
+        },
 
         async getBar(message) {
           return message;
         }
-      }
+      };
 
       class ExampleFlux extends Flux {
         constructor() {
@@ -214,19 +214,19 @@ describe('Store', () => {
     it('registers for all successful async actions', async function() {
       const error = new Error();
 
-      class ExampleActions extends Actions {
+      const ExampleActions = {
         async getFoo(message, _success = true) {
           if (!_success) throw error;
 
           return message + ' success';
-        }
+        },
 
         async getBar(message, _success = true) {
           if (!_success) throw error;
 
           return message + ' success';
         }
-      }
+      };
 
       class ExampleFlux extends Flux {
         constructor() {
@@ -254,19 +254,19 @@ describe('Store', () => {
     it('registers generic handlers for begin, success, and failure of async action', async function() {
       const error = new Error();
 
-      class ExampleActions extends Actions {
+      const ExampleActions = {
         async getFoo(message, _success = true) {
           if (!_success) throw error;
 
           return message + ' success';
-        }
+        },
 
         async getBar(message, _success = true) {
           if (!_success) throw error;
 
           return message + ' success';
         }
-      }
+      };
 
       class ExampleFlux extends Flux {
         constructor() {

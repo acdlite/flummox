@@ -6,6 +6,7 @@
 
 import Store from './Store';
 import Actions from './Actions';
+import createActions from './createActions';
 import { Dispatcher } from 'flux';
 import EventEmitter from 'eventemitter3';
 import assign from 'object-assign';
@@ -71,39 +72,52 @@ export default class Flux extends EventEmitter {
     }
   }
 
-  createActions(key, _Actions, ...constructorArgs) {
-    if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
-      if (typeof _Actions === 'function') {
-        const className = getClassName(_Actions);
-
-        throw new Error(
-          `You've attempted to create actions from the class ${className}, which `
-        + `does not have the base Actions class in its prototype chain. Make `
-        + `sure you're using the \`extends\` keyword: \`class ${className} `
-        + `extends Actions { ... }\``
-        );
-      } else {
-        const properties = _Actions;
-        _Actions = class extends Actions {};
-        assign(_Actions.prototype, properties);
-      }
-    }
-
-    if (this._actions.hasOwnProperty(key) && this._actions[key]) {
+  createActions(key, actionCreators) {
+    if (this._actions[key]) {
       throw new Error(
         `You've attempted to create multiple actions with key ${key}. Keys `
       + `must be unique.`
       );
+    } else {
+      const actions = createActions(::this.performAction, actionCreators);
+      this._actions[key] = actions;
+      return actions;
     }
-
-    const actions = new _Actions(...constructorArgs);
-    actions.dispatch = this.dispatch.bind(this);
-    actions.dispatchAsync = this.dispatchAsync.bind(this);
-
-    this._actions[key] = actions;
-
-    return actions;
   }
+
+  // createActions(key, _Actions, ...constructorArgs) {
+  //   if (!(_Actions.prototype instanceof Actions) && _Actions !== Actions) {
+  //     if (typeof _Actions === 'function') {
+  //       const className = getClassName(_Actions);
+  //
+  //       throw new Error(
+  //         `You've attempted to create actions from the class ${className}, which `
+  //       + `does not have the base Actions class in its prototype chain. Make `
+  //       + `sure you're using the \`extends\` keyword: \`class ${className} `
+  //       + `extends Actions { ... }\``
+  //       );
+  //     } else {
+  //       const properties = _Actions;
+  //       _Actions = class extends Actions {};
+  //       assign(_Actions.prototype, properties);
+  //     }
+  //   }
+  //
+  //   if (this._actions.hasOwnProperty(key) && this._actions[key]) {
+  //     throw new Error(
+  //       `You've attempted to create multiple actions with key ${key}. Keys `
+  //     + `must be unique.`
+  //     );
+  //   }
+  //
+  //   const actions = new _Actions(...constructorArgs);
+  //   actions.dispatch = this.dispatch.bind(this);
+  //   actions.dispatchAsync = this.dispatchAsync.bind(this);
+  //
+  //   this._actions[key] = actions;
+  //
+  //   return actions;
+  // }
 
   getActions(key) {
     return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
@@ -114,7 +128,10 @@ export default class Flux extends EventEmitter {
 
     if (!actions) return;
 
-    return actions.getConstants();
+    return Object.keys(actions).reduce((result, methodName) => {
+      result[methodName] = actions[methodName]._id;
+      return result;
+    }, {});
   }
 
   removeActions(key) {
@@ -131,14 +148,34 @@ export default class Flux extends EventEmitter {
     let actionIds = [];
 
     for (let key in this._actions) {
-      if (!this._actions.hasOwnProperty(key)) continue;
+      const actionConstants = this.getActionIds(key);
 
-      const actionConstants = this._actions[key].getConstants();
+      if (!actionConstants) continue;
 
       actionIds = actionIds.concat(getValues(actionConstants));
     }
 
     return actionIds;
+  }
+
+  performAction(actionId, action, ...actionArgs) {
+    const body = action.apply(this, actionArgs);
+
+    const payload = {
+      actionArgs
+    };
+
+    if (isPromise(body)) {
+      const promise = body;
+      this.dispatchAsync(actionId, promise, payload);
+    } else {
+      if (typeof body !== 'undefined') {
+        this.dispatch(actionId, body, payload);
+      }
+    }
+
+    // Return original method's return value to caller
+    return body;
   }
 
   dispatch(actionId, body, payloadFields) {
@@ -324,6 +361,10 @@ function getValues(object) {
   }
 
   return values;
+}
+
+function isPromise(value) {
+  return value && typeof value.then === 'function';
 }
 
 const Flummox = Flux;

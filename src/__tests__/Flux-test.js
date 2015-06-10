@@ -118,19 +118,6 @@ describe('Flux', () => {
       );
     });
 
-    it('throws if Actions is a class without base Actions class in its prototype chain', () => {
-      const flux = new Flux();
-      class ForgotToExtendActions {}
-
-      expect(flux.createActions.bind(flux, 'Flux', ForgotToExtendActions))
-        .to.throw(
-          'You\'ve attempted to create actions from the class '
-        + 'ForgotToExtendActions, which does not have the base Actions class '
-        + 'in its prototype chain. Make sure you\'re using the `extends` '
-        + 'keyword: `class ForgotToExtendActions extends Actions { ... }`'
-      );
-    });
-
     it('accepts plain old JavaScript object', () => {
       const flux = new Flux();
 
@@ -144,37 +131,29 @@ describe('Flux', () => {
         }
       });
 
-      expect(flux.getActions('foobar')).to.be.an.instanceof(Actions);
       expect(flux.getActions('foobar').foo()).to.equal('bar');
       expect(flux.getActions('foobar').bar()).to.equal('baz');
     });
 
-    it('returns the created action\'s instance', () => {
-      class TestActions extends Actions {}
-
-      const flux = new Flux();
-      const actions = flux.createActions('TestActions', TestActions);
-      expect(actions).to.be.an.instanceOf(TestActions);
-    });
   });
 
   describe('#getActions()', () => {
-    class TestActions extends Actions {}
+    const TestActions = {};
 
     it('retrieves actions for key', () => {
       const flux = new Flux();
       flux.createActions('TestActions', TestActions);
 
-      expect(flux.getActions('TestActions')).to.be.an.instanceOf(Actions);
+      expect(flux.getActions('TestActions')).to.be.an.object;
       expect(flux.getActions('NonexistentActions')).to.be.undefined;
     });
 
   });
 
   describe('#getActionIds() / #getConstants()', () => {
-    class TestActions extends Actions {
+    const TestActions = {
       getFoo() {}
-    }
+    };
 
     it('retrives ids of actions for key', () => {
       const flux = new Flux();
@@ -212,15 +191,15 @@ describe('Flux', () => {
   });
 
   describe('#getAllActionIds() / #getAllConstants()', () => {
-    class TestFooActions extends Actions {
-      getFoo() {}
+    const TestFooActions = {
+      getFoo() {},
       getBar() {}
-    }
+    };
 
-    class TestBarActions extends Actions {
-      getFoo() {}
+    const TestBarActions = {
+      getFoo() {},
       getBar() {}
-    }
+    };
 
     it('retrives ids of all actions', () => {
       let flux = new Flux();
@@ -236,6 +215,93 @@ describe('Flux', () => {
       expect(flux.getAllConstants()).to.have.length(4);
     });
   });
+
+  describe('#performAction()', () => {
+    const testActions = {
+      getFoo() {
+        return { foo: 'bar' };
+      },
+
+      getBar() {
+        return { bar: 'baz' };
+      },
+
+      getBaz() {
+        return;
+      },
+
+      async asyncAction(returnValue) {
+        return returnValue;
+      },
+
+      badAsyncAction() {
+        return Promise.reject(new Error('some error'));
+      }
+    };
+
+    class TestActionsFlux extends Flux {
+      constructor() {
+        super();
+
+        this.testActions = this.createActions('test', testActions);
+      }
+    }
+
+    it('calls `dispatch()`', () => {
+      const flux = new TestActionsFlux();
+      const actions = flux.testActions;
+      const dispatch = sinon.stub(flux, 'dispatch');
+      actions.getFoo();
+      expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
+    });
+
+    it('sends async return value to Flux#dispatchAsync', async function() {
+      const flux = new TestActionsFlux();
+      const actions = flux.testActions;
+      const dispatch = sinon.stub(flux, 'dispatchAsync');
+
+      const response = actions.asyncAction('foobar');
+
+      expect(response.then).to.be.a('function');
+
+      await response;
+
+      expect(dispatch.firstCall.args[1]).to.be.an.instanceOf(Promise);
+    });
+
+    it('skips disptach if return value is undefined', () => {
+      const flux = new TestActionsFlux();
+      const actions = flux.testActions;
+      const dispatch = sinon.stub(flux, 'dispatch');
+
+      actions.getBaz();
+
+      expect(dispatch.called).to.be.false;
+    });
+
+    it('does not skip async dispatch, even if resolved value is undefined', async () => {
+      const flux = new TestActionsFlux();
+      const actions = flux.testActions;
+      const dispatchAsync = sinon.stub(flux, 'dispatchAsync');
+
+      await actions.asyncAction(undefined);
+
+      expect(dispatchAsync.called).to.be.true;
+
+    });
+
+    it('returns value from wrapped action', async function() {
+      const flux = new TestActionsFlux();
+      const actions = flux.testActions;
+
+      expect(actions.getFoo()).to.deep.equal({ foo: 'bar' });
+
+      await expect(actions.asyncAction('async result'))
+        .to.eventually.equal('async result');
+    });
+
+  });
+
 
   describe('#dispatch()', () => {
 
