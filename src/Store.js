@@ -222,9 +222,7 @@ export default class Store extends EventEmitter {
       // Dispatch all handlers
       for (let actionHandler of allHandlers) {
         const state = this._pendingState;
-        const transformedState = actionHandler.length === 2 ?
-          actionHandler(payload, state) :
-          actionHandler(body, payload, state);
+        const transformedState = actionHandler(body, payload, state);
 
         if (isPlainObject(transformedState)) {
           this.setState(transformedState);
