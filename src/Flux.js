@@ -21,6 +21,8 @@ export default class Flux extends EventEmitter {
 
     this._stores = {};
     this._actions = {};
+
+    this.performAction = ::this.performAction;
   }
 
   createStore(key, _Store, ...constructorArgs) {
@@ -78,7 +80,7 @@ export default class Flux extends EventEmitter {
       + `must be unique.`
       );
     } else {
-      const actions = createActions(::this.performAction, actionCreators);
+      const actions = createActions(this.performAction, actionCreators);
       this._actions[key] = actions;
       return actions;
     }
@@ -124,15 +126,14 @@ export default class Flux extends EventEmitter {
   }
 
   performAction(actionId, action, ...actionArgs) {
-    const body = action.apply(this, actionArgs);
+    const body = action.apply(null, actionArgs);
 
     const payload = {
       actionArgs
     };
 
     if (isPromise(body)) {
-      const promise = body;
-      this.dispatchAsync(actionId, promise, payload);
+      this.dispatchAsync(actionId, body, payload);
     } else {
       if (typeof body !== 'undefined') {
         this.dispatch(actionId, body, payload);
