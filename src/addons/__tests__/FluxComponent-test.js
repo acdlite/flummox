@@ -1,4 +1,4 @@
-import { Flummox, Store, Actions } from '../../Flux';
+import { Flummox, Store } from '../../Flux';
 import addContext from './addContext';
 
 import React from 'react/addons';
@@ -9,11 +9,11 @@ import sinon from 'sinon';
 
 describe('FluxComponent', () => {
 
-  class TestActions extends Actions {
+  const TestActions = {
     getSomething(something) {
       return something;
     }
-  }
+  };
 
   class TestStore extends Store {
     constructor(flux) {

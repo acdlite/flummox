@@ -1,4 +1,4 @@
-import { Flummox, Store, Actions } from '../../Flux';
+import { Flummox, Store } from '../../Flux';
 import addContext from './addContext';
 import sinon from 'sinon';
 
@@ -27,11 +27,11 @@ const fluxMixin = (...args) => ({
 
 describe('fluxMixin', () => {
 
-  class TestActions extends Actions {
+  const TestActions = {
     getSomething(something) {
       return something;
     }
-  }
+  };
 
   class TestStore extends Store {
     constructor(flux) {

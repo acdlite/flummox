@@ -1,15 +1,15 @@
 import { connect } from '../react';
 import addContext from './addContext';
-import { Actions, Store, Flummox } from '../../Flux';
+import { Store, Flummox } from '../../Flux';
 import React from 'react/addons';
 const { PropTypes } = React;
 const { TestUtils } = React.addons;
 
-class TestActions extends Actions {
+const TestActions = {
   getSomething(something) {
     return something;
   }
-}
+};
 
 class TestStore extends Store {
   constructor(flux) {
