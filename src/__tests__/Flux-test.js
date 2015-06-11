@@ -253,7 +253,7 @@ describe('Flux', () => {
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
-    it.only('sends async return value to Flux#dispatchAsync', async () => {
+    it('sends async return value to Flux#dispatchAsync', async () => {
       const flux = new TestActionsFlux();
       const actions = flux.testActions;
       const dispatch = sinon.stub(flux, 'dispatchAsync');
