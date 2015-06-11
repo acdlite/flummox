@@ -9,6 +9,7 @@
 
 import EventEmitter from 'eventemitter3';
 import assign from 'object-assign';
+import isPlainObject from 'lodash/lang/isPlainObject';
 
 export default class Store extends EventEmitter {
 
@@ -212,33 +213,20 @@ export default class Store extends EventEmitter {
       }
     }
 
-    // Determine args to pass to handlers based on action type
-    let args;
-
-    switch (asyncType) {
-      case 'begin':
-        args = [payload];
-        break;
-      case 'failure':
-        args = [error, payload];
-        break;
-      default:
-        args = [body, payload];
-    }
-
     this._isHandlingDispatch = true;
     this._pendingState = this._assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
     try {
-      // Dispatch matched handlers
-      for (let actionHandler of matchedActionHandlers) {
-        actionHandler(...args);
-      }
+      const allHandlers = matchedActionHandlers.concat(customMatchedActionHandlers);
+      // Dispatch all handlers
+      for (let actionHandler of allHandlers) {
+        const state = this._pendingState;
+        const transformedState = actionHandler(body, payload, state);
 
-      // Dispatch custom matched handers
-      for (let actionHandler of customMatchedActionHandlers) {
-        actionHandler(payload);
+        if (isPlainObject(transformedState)) {
+          this.setState(transformedState);
+        }
       }
     } finally {
       let emit = false;

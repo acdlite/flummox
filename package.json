@@ -43,6 +43,7 @@
   "dependencies": {
     "eventemitter3": "~0.1.6",
     "flux": "~2.0.1",
+    "lodash": "^3.9.3",
     "object-assign": "~2.0.0",
     "uniqueid": "~0.1.0"
   }

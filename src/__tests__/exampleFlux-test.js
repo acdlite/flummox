@@ -53,15 +53,14 @@ describe('Examples:', () => {
         this.state = {};
       }
 
-      handleNewMessage(content) {
+      handleNewMessage(content, payload, state) {
         const id = this.messageCounter++;
-
-        this.setState({
+        return {
           [id]: {
             content,
             id,
-          },
-        });
+          }
+        };
       }
     }
 

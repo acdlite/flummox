@@ -35,11 +35,11 @@ describe('Store', () => {
 
       actions.foo('do');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('do');
+      expect(handler.firstCall.args[1].body).to.equal('do');
 
       actions.foo('re');
       expect(handler.calledTwice).to.be.true;
-      expect(handler.secondCall.args[0]).to.equal('re');
+      expect(handler.secondCall.args[1].body).to.equal('re');
     });
 
     it('registers handler to respond to async action success', async () => {
@@ -65,11 +65,11 @@ describe('Store', () => {
 
       await actions.foo('do');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('do');
+      expect(handler.firstCall.args[1].body).to.equal('do');
 
       await actions.foo('re');
       expect(handler.calledTwice).to.be.true;
-      expect(handler.secondCall.args[0]).to.equal('re');
+      expect(handler.secondCall.args[1].body).to.equal('re');
     });
 
     it('ignores non-function handlers', () => {
@@ -117,7 +117,7 @@ describe('Store', () => {
 
       await actions.getBar('bar');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('bar');
+      expect(handler.firstCall.args[1].body).to.equal('bar');
 
       const begin = sinon.spy();
       const success = sinon.spy();
@@ -126,9 +126,9 @@ describe('Store', () => {
 
       await actions.getFoo('foo', true);
       expect(begin.calledOnce).to.be.true;
-      expect(begin.firstCall.args[0].async).to.equal('begin');
+      expect(begin.firstCall.args[1].async).to.equal('begin');
       expect(success.calledOnce).to.be.true;
-      expect(success.firstCall.args[0]).to.equal('foo success');
+      expect(success.firstCall.args[1].body).to.equal('foo success');
       expect(failure.called).to.be.false;
 
       await expect(actions.getFoo('bar', false)).to.be.rejected;
@@ -136,7 +136,7 @@ describe('Store', () => {
       expect(begin.calledTwice).to.be.true;
       expect(success.calledOnce).to.be.true;
       expect(failure.calledOnce).to.be.true;
-      expect(failure.firstCall.args[0]).to.equal(error);
+      expect(failure.firstCall.args[1].error).to.equal(error);
     });
 
     it('ignores non-function handlers', () => {
@@ -169,11 +169,11 @@ describe('Store', () => {
 
       actions.foo('do');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('do');
+      expect(handler.firstCall.args[1].body).to.equal('do');
 
       actions.foo('re');
       expect(handler.calledTwice).to.be.true;
-      expect(handler.secondCall.args[0]).to.equal('re');
+      expect(handler.secondCall.args[1].body).to.equal('re');
     });
 
     it('registers handler to respond to all async action successes', async () => {
@@ -199,11 +199,11 @@ describe('Store', () => {
 
       await actions.foo('do');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('do');
+      expect(handler.firstCall.args[1].body).to.equal('do');
 
       await actions.foo('re');
       expect(handler.calledTwice).to.be.true;
-      expect(handler.secondCall.args[0]).to.equal('re');
+      expect(handler.secondCall.args[1].body).to.equal('re');
     });
 
     it('ignores non-function handlers', () => {
@@ -245,7 +245,7 @@ describe('Store', () => {
 
       await actions.getBar('bar');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0]).to.equal('bar success');
+      expect(handler.firstCall.args[1].body).to.equal('bar success');
     });
 
   });
@@ -287,29 +287,29 @@ describe('Store', () => {
 
       await actions.getFoo('foo', true);
       expect(begin.calledOnce).to.be.true;
-      expect(begin.firstCall.args[0].async).to.equal('begin');
+      expect(begin.firstCall.args[1].async).to.equal('begin');
       expect(success.calledOnce).to.be.true;
-      expect(success.firstCall.args[0]).to.equal('foo success');
+      expect(success.firstCall.args[1].body).to.equal('foo success');
       expect(failure.called).to.be.false;
 
       await expect(actions.getFoo('bar', false)).to.be.rejected;
       expect(begin.calledTwice).to.be.true;
       expect(success.calledOnce).to.be.true;
       expect(failure.calledOnce).to.be.true;
-      expect(failure.firstCall.args[0]).to.equal(error);
+      expect(failure.firstCall.args[1].error).to.equal(error);
 
       await actions.getBar('foo', true);
       expect(begin.calledThrice).to.be.true;
-      expect(begin.thirdCall.args[0].async).to.equal('begin');
+      expect(begin.thirdCall.args[1].async).to.equal('begin');
       expect(success.calledTwice).to.be.true;
-      expect(success.secondCall.args[0]).to.equal('foo success');
+      expect(success.secondCall.args[1].body).to.equal('foo success');
       expect(failure.calledTwice).to.be.false;
 
       await expect(actions.getBar('bar', false)).to.be.rejected;
       expect(begin.callCount).to.equal(4);
       expect(success.calledTwice).to.be.true;
       expect(failure.calledTwice).to.be.true;
-      expect(failure.secondCall.args[0]).to.equal(error);
+      expect(failure.secondCall.args[1].error).to.equal(error);
     });
 
     it('ignores non-function handlers', () => {
@@ -345,7 +345,7 @@ describe('Store', () => {
 
       actions.foo('match!');
       expect(handler.calledOnce).to.be.true;
-      expect(handler.firstCall.args[0].body).to.equal('match!');
+      expect(handler.firstCall.args[1].body).to.equal('match!');
 
       actions.foo('not a match!');
       expect(handler.calledOnce).to.be.true;
@@ -592,6 +592,180 @@ describe('Store', () => {
       expect(listener.calledOnce).to.be.true;
       expect(store.state).to.deep.equal({ baz: 'foo' });
     });
+  });
+
+  describe('action handlers', () => {
+
+    it('receive `body`, `payload` and `prevState` arguments when they accept 3 arguments', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      // using a function to inspect arguments
+      store.registerAll(function (body, payload, prevState) {
+        expect(arguments.length).to.equal(3);
+        expect(body).to.equal('foo');
+        expect(payload.body).to.equal('foo');
+        expect(prevState).to.equal(store._pendingState);
+      });
+
+      actions.foo('foo');
+    });
+
+    it('can trigger a `setState` by returning an object', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      store.registerAll((body, payload, prevState) => {
+        return {
+          foo: body + prevState.foo
+        };
+      });
+
+      actions.foo('foo');
+      expect(store.state.foo).to.equal('foobar');
+    });
+
+    it('do not trigger a `setState` when not returning an object', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      const invalid = [
+        'testing',
+        [1, 2, 3],
+        /test/,
+        new Date(),
+        true,
+        false,
+        null
+      ];
+
+      invalid.forEach((invalidReturn) => {
+        store.registerAll((body, payload, prevState) => {
+          return invalidReturn;
+        });
+      });
+
+      actions.foo('foo');
+      expect(store.state.foo).to.equal('bar');
+    });
+
+    it('receive always the latest state object', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      store.registerAll((body, payload, prevState) => {
+        return {
+          foo: body + prevState.foo
+        };
+      });
+
+      store.registerAll((body, payload, prevState) => {
+        expect(prevState.foo).to.equal('foobar');
+        return {
+          foo: 'test' + prevState.foo
+        };
+      });
+
+      actions.foo('foo');
+      expect(store.state.foo).to.equal('testfoobar');
+    });
+
+    it('`setState` calls are additive', () => {
+      class ExampleFlux extends Flux {
+        constructor() {
+          super();
+          this.createActions('example', {
+            foo(something) {
+              return something;
+            }
+          });
+
+          this.createStore('example', ExampleStore);
+        }
+      }
+
+      const flux = new ExampleFlux();
+      const actions = flux.getActions('example');
+      const store = flux.getStore('example');
+
+      store.registerAll((body, payload, prevState) => {
+        return {
+          foo: prevState.foo + body
+        };
+      });
+
+      store.registerAll((body, payload, prevState) => {
+        return {
+          foo: prevState.foo + body
+        };
+      });
+
+      store.registerAll((body, payload, prevState) => {
+        return {
+          foo: prevState.foo + 42
+        };
+      });
+
+      actions.foo('foo');
+      expect(store.state.foo).to.equal('barfoofoo42');
+    });
+
   });
 
 });
