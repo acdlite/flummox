@@ -625,34 +625,6 @@ describe('Store', () => {
       actions.foo('foo');
     });
 
-    it('receive `payload` and `prevState` arguments when they accept 2 arguments', () => {
-      class ExampleFlux extends Flux {
-        constructor() {
-          super();
-          this.createActions('example', {
-            foo(something) {
-              return something;
-            }
-          });
-
-          this.createStore('example', ExampleStore);
-        }
-      }
-
-      const flux = new ExampleFlux();
-      const actions = flux.getActions('example');
-      const store = flux.getStore('example');
-
-      // using a function to inspect arguments
-      store.registerAll(function (payload, prevState) {
-        expect(arguments.length).to.equal(2);
-        expect(payload.body).to.equal('foo');
-        expect(prevState).to.equal(store._pendingState);
-      });
-
-      actions.foo('foo');
-    });
-
     it('can trigger a `setState` by returning an object', () => {
       class ExampleFlux extends Flux {
         constructor() {
@@ -671,7 +643,7 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         return {
           foo: body + prevState.foo
         };
@@ -710,7 +682,7 @@ describe('Store', () => {
       ];
 
       invalid.forEach((invalidReturn) => {
-        store.registerAll(({body}, prevState) => {
+        store.registerAll((body, payload, prevState) => {
           return invalidReturn;
         });
       });
@@ -737,13 +709,13 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         return {
           foo: body + prevState.foo
         };
       });
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         expect(prevState.foo).to.equal('foobar');
         return {
           foo: 'test' + prevState.foo
@@ -772,19 +744,19 @@ describe('Store', () => {
       const actions = flux.getActions('example');
       const store = flux.getStore('example');
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         return {
           foo: prevState.foo + body
         };
       });
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         return {
           foo: prevState.foo + body
         };
       });
 
-      store.registerAll(({body}, prevState) => {
+      store.registerAll((body, payload, prevState) => {
         return {
           foo: prevState.foo + 42
         };

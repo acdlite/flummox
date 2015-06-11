@@ -27,7 +27,7 @@ describe('FluxComponent', () => {
       };
     }
 
-    handleGetSomething({body: something}, state) {
+    handleGetSomething(something, payload, state) {
       return { something };
     }
   }

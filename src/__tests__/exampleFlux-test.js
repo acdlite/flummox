@@ -55,7 +55,7 @@ describe('Examples:', () => {
         this.state = {};
       }
 
-      handleNewMessage({body: content}, state) {
+      handleNewMessage(content, payload, state) {
         const id = this.messageCounter++;
         return {
           [id]: {
