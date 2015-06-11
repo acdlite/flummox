@@ -69,11 +69,15 @@ export default (React, PlainWrapperComponent) => {
     wrapChild = (child) => {
       return React.addons.cloneWithProps(
         child,
-        this.getChildProps()
+        assign(
+          this.getExtraProps(),
+          this.state.storeState,
+          this.state.actions
+        )
       );
     }
 
-    getChildProps() {
+    getExtraProps() {
       const {
         children,
         render,
@@ -85,21 +89,17 @@ export default (React, PlainWrapperComponent) => {
         flux,
         ...extraProps } = this.props;
 
-      return assign(
-        extraProps,
-        this.state.storeState,
-        this.state.actions
-      );
+      return extraProps;
     }
 
     render() {
-      const { children, render } = this.props;
+      const {children, render} = this.props;
 
       if (typeof render === 'function') {
         return render(
           this.state.storeState,
           this.state.actions,
-          this.getFlux()
+          this.getExtraProps()
         );
       }
 

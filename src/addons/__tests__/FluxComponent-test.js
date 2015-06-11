@@ -297,6 +297,30 @@ describe('FluxComponent', () => {
     expect(div.props.something).to.equal('something else');
   });
 
+  it('passes all additional props as third parameter to `render`', () => {
+    const flux = new Flux();
+
+    const tree = TestUtils.renderIntoDocument(
+      <FluxComponent
+        flux={flux}
+        stores="test"
+        some="prop"
+        another="one"
+        render={(props, actions, originalProps) =>
+          <div {...originalProps} original={originalProps} />
+        }
+      />
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    expect(div.props.some).to.equal('prop');
+    expect(div.props.another).to.equal('one');
+    expect(div.props.original).to.eql({
+      some: 'prop',
+      another: 'one'
+    });
+  });
+
   it('updates with render-time computed values in state getters on componentWillReceiveProps()', () => {
     const flux = new Flux();
 
