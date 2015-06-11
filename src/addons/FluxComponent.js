@@ -69,7 +69,11 @@ export default (React, PlainWrapperComponent) => {
     wrapChild = (child) => {
       return React.addons.cloneWithProps(
         child,
-        this.getChildProps()
+        assign(
+          this.getExtraProps(),
+          this.state.storeState,
+          this.state.actions
+        )
       );
     }
 
@@ -86,14 +90,6 @@ export default (React, PlainWrapperComponent) => {
         ...extraProps } = this.props;
 
       return extraProps;
-    }
-
-    getChildProps() {
-      return assign(
-        this.getExtraProps(),
-        this.state.storeState,
-        this.state.actions
-      );
     }
 
     render() {
