@@ -253,7 +253,7 @@ describe('Flux', () => {
       expect(dispatch.firstCall.args[1]).to.deep.equal({ foo: 'bar' });
     });
 
-    it('sends async return value to Flux#dispatchAsync', async () => {
+    it.only('sends async return value to Flux#dispatchAsync', async () => {
       const flux = new TestActionsFlux();
       const actions = flux.testActions;
       const dispatch = sinon.stub(flux, 'dispatchAsync');
@@ -264,7 +264,7 @@ describe('Flux', () => {
 
       await response;
 
-      expect(dispatch.firstCall.args[1]).to.be.an.instanceOf(Promise);
+      expect(dispatch.firstCall.args[1].then).to.be.a('function');
     });
 
     it('skips dispatch if return value is undefined', () => {
