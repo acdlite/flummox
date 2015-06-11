@@ -264,7 +264,7 @@ describe('Flux', () => {
 
       await response;
 
-      expect(dispatch.firstCall.args[1]).to.be.an.instanceOf(Promise);
+      expect(dispatch.firstCall.args[1].then).to.be.a('function');
     });
 
     it('skips dispatch if return value is undefined', () => {

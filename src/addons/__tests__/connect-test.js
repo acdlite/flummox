@@ -152,6 +152,104 @@ describe('connect (HoC)', () => {
     expect(div.props.fa()).to.equal('so');
   });
 
+  it('passes all actions as props, when passing a string', () => {
+    class Flux extends Flummox {
+      constructor() {
+        super();
+
+        this.createActions('A', {
+          do() {
+            return 're';
+          },
+
+          re() {
+            return 'mi';
+          }
+        });
+
+        this.createActions('B', {
+          mi() {
+            return 'fa';
+          },
+
+          fa() {
+            return 'so';
+          }
+        });
+      }
+    }
+
+    const flux = new Flux();
+
+    @connect({
+      actions: ['A']
+    })
+    class BaseComponent extends React.Component {
+      render() {
+        return <div {...this.props} />;
+      }
+    }
+
+    const tree = TestUtils.renderIntoDocument(
+      <BaseComponent flux={flux} />
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    expect(div.props.do()).to.equal('re');
+    expect(div.props.re()).to.equal('mi');
+  });
+
+  it('passes all actions as props, when passing an array', () => {
+    class Flux extends Flummox {
+      constructor() {
+        super();
+
+        this.createActions('A', {
+          do() {
+            return 're';
+          },
+
+          re() {
+            return 'mi';
+          }
+        });
+
+        this.createActions('B', {
+          mi() {
+            return 'fa';
+          },
+
+          fa() {
+            return 'so';
+          }
+        });
+      }
+    }
+
+    const flux = new Flux();
+
+    @connect({
+      actions: ['A', 'B']
+    })
+    class BaseComponent extends React.Component {
+      render() {
+        return <div {...this.props} />;
+      }
+    }
+
+    const tree = TestUtils.renderIntoDocument(
+      <BaseComponent flux={flux} />
+    );
+
+    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+    expect(div.props.do()).to.equal('re');
+    expect(div.props.re()).to.equal('mi');
+    expect(div.props.mi()).to.equal('fa');
+    expect(div.props.fa()).to.equal('so');
+  });
+
   it('syncs with store after state change', () => {
     const flux = new Flux();
 
