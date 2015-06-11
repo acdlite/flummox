@@ -19,6 +19,7 @@ Tags:
   - FluxComponent supports injecting actions as props, in the same vein as `connectToStores`.
   - Use `stores` and `actions` props interchangeably with `connectToStores` and `injectActions`.
   - connectToStores HoC now supports actions as well and is just called connect.
+  - Returning an object from a store handler now does an implicit state update by passing that object to `setState`. This lets you treat store handlers like reducer functions. To accommodate this usage, the previous state is passed as the final parameter (after the payload).
 - **Breaking Change**
   - Removal of Actions class. Instead, pass a plain JavaScript object of functions.
   - The arguments passed to async action handlers have been changed. The final argument passed to any action handler is the raw payload that is sent through the dispatcher. For example, "begin" handlers receive the payload as its sole argument.
