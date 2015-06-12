@@ -85,6 +85,7 @@ export default (React, PlainWrapperComponent) => {
         stores,
         injectActions,
         actions,
+        actionGetter,
         stateGetter,
         flux,
         ...extraProps } = this.props;

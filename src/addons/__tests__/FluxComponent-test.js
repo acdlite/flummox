@@ -205,6 +205,7 @@ describe('FluxComponent', () => {
   it('injects children with any extra props', () => {
     const flux = new Flux();
     const stateGetter = () => {};
+    const actionGetter = () => {};
 
     // Pass all possible PropTypes to ensure only extra props
     // are injected.
@@ -213,6 +214,7 @@ describe('FluxComponent', () => {
         flux={flux}
         stores="test"
         stateGetter={stateGetter}
+        actionGetter={actionGetter}
         extraProp="hello"
       >
         <div />
@@ -220,7 +222,6 @@ describe('FluxComponent', () => {
     );
 
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
     expect(div.props.extraProp).to.equal('hello');
     expect(Object.keys(div.props)).to.deep.equal(['extraProp']);
   });
