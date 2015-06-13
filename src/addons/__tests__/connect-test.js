@@ -182,7 +182,7 @@ describe('connect (HoC)', () => {
     const flux = new Flux();
 
     @connect({
-      actions: ['A']
+      actions: 'A'
     })
     class BaseComponent extends React.Component {
       render() {

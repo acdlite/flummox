@@ -280,7 +280,7 @@ function defaultReduceStateGetter(stores) {
 }
 
 function defaultActionGetter(actions) {
-  return actions.getActionsAsObject();
+  return actions;
 }
 
 function defaultReduceActionGetter(actions) {
