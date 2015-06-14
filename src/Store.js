@@ -152,9 +152,11 @@ export default class Store extends EventEmitter {
   }
 
   registerMatch(matcher, handler) {
+    const boundHandler = handler.bind(this);
+    boundHandler._isMatchHandler = true;
     this._matchHandlers.push({
       matcher,
-      handler: handler.bind(this)
+      handler: boundHandler
     });
   }
 
@@ -217,16 +219,36 @@ export default class Store extends EventEmitter {
     this._pendingState = this._assignState(undefined, this.state);
     this._emitChangeAfterHandlingDispatch = false;
 
+    let args;
+    let matchedArgs = customMatchedActionHandlers.length ?
+      [payload, this._pendingState] :
+      null;
+
+    switch (asyncType) {
+      case 'begin':
+        args = [payload, this._pendingState];
+        break;
+      case 'failure':
+        args = [error, payload, this._pendingState];
+        break;
+      default:
+        args = [body, payload, this._pendingState];
+    }
+
+    let argsStateIndex = args.length - 1;
+    let matchedArgsStateIndex = matchedArgs && (matchedArgs.length - 1);
+
     try {
       const allHandlers = matchedActionHandlers.concat(customMatchedActionHandlers);
       // Dispatch all handlers
       for (let actionHandler of allHandlers) {
-        const state = this._pendingState;
-        const transformedState = actionHandler(body, payload, state);
+        const handlerArgs = actionHandler._isMatchHandler ? matchedArgs : args;
+        const transformedState = actionHandler(...handlerArgs);
 
-        if (isPlainObject(transformedState)) {
-          this.setState(transformedState);
-        }
+        isPlainObject(transformedState) && this.setState(transformedState);
+
+        args[argsStateIndex] = this._pendingState;
+        matchedArgs && (matchedArgs[matchedArgsStateIndex] = this._pendingState);
       }
     } finally {
       let emit = false;
