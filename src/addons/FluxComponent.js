@@ -21,8 +21,6 @@
  * We don't need the flux prop this time because flux is already part of
  * the context.
  *
- * Additionally, immediate children are given a `flux` prop.
- *
  * The component has an optional prop `connectToStores`, which is passed to
  * `this.connectToStores` and used to set the initial state. The component's
  * state is injected as props to the child components.
@@ -41,8 +39,8 @@
  *
  * }
  *
- * ChildComponent in this example has prop `flux` containing the flux instance,
- * and props that sync with each of the state keys of fooStore.
+ * ChildComponent in this example has props that sync with each of the
+ * state keys of fooStore.
  */
 
 import createReactComponentMethods from './reactComponentMethods';
