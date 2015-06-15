@@ -50,6 +50,23 @@ describe('fluxMixin', () => {
     }
   }
 
+  class MoreStore extends Store {
+    constructor(flux) {
+      super();
+
+      const testActions = flux.getActions('test');
+      this.register(testActions.getSomething, this.handleGetSomething);
+
+      this.state = {
+        more: null
+      };
+    }
+
+    handleGetSomething(more, payload, state) {
+      return {more};
+    }
+  }
+
   class Flux extends Flummox {
     constructor() {
       super();
@@ -57,6 +74,7 @@ describe('fluxMixin', () => {
       this.createActions('test', TestActions);
       this.createStore('test', TestStore, this);
       this.createStore('test2', TestStore, this);
+      this.createStore('more', MoreStore, this);
     }
   }
 
@@ -412,7 +430,36 @@ describe('fluxMixin', () => {
       expect(store.listeners('change').length).to.equal(0);
     });
 
+    it('merges previous store state with new store state when a store emits a change', () => {
+      const flux = new Flux();
+
+      const component = TestUtils.renderIntoDocument(
+        <ComponentWithFluxMixin key="test" flux={flux} />
+      );
+
+      component.connectToStores({
+        test: (store) => ({something: store.getStateAsObject().something}),
+        more: (store) => ({more: store.getStateAsObject().more})
+      });
+
+      flux.getActions('test').getSomething('foobar');
+
+      const expectedState = {
+        storeState: {
+          something: 'foobar',
+          more: 'foobar'
+        }
+      };
+
+      expect(component.state).to.deep.equal(expectedState);
+
+      flux.getStore('test').emit('change');
+
+      expect(component.state).to.deep.equal(expectedState);
+    });
+
   });
+
 
   describe('#getStoreState', () => {
     it('gets combined state of connected stores', () => {
