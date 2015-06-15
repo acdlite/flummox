@@ -255,7 +255,7 @@ function createStoreListener(component, store, storeStateGetter) {
   return function() {
     const state = storeStateGetter(store, this.props);
     this.setState({
-      storeState: state
+      storeState: assign(this.state.storeState, state)
     });
   }.bind(component);
 }
