@@ -1,6 +1,10 @@
 Flummox
 =======
 
+### 4.0 will likely be the last major release. Use [Redux](https://github.com/gaearon/redux) instead. It's really great.
+
+I know churn can be frustrating but I feel it would be irresponsible for me to continue recommending Flummox when Redux exists and is a significant improvement over classical Flux. Flummox 4.0 will likely be the last major release.
+
 [![build status](https://img.shields.io/travis/acdlite/flummox.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
 [![npm downloads](https://img.shields.io/npm/dm/flummox.svg?style=flat-square)](https://www.npmjs.com/package/flummox)
