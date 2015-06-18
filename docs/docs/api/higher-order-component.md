@@ -78,7 +78,7 @@ connectToStores(SomeComponent,
   * the second param (props) contains the props passed to the wrapped component
   */
   ([postStore, userStore], props) => ({
-    posts: store.getPostForUser(userStore.getUserIdFromName(props.user.name))
+    posts: postStore.getPostForUser(userStore.getUserIdFromName(props.user.name))
   })
 );
 ```
