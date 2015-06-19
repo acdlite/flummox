@@ -62,7 +62,7 @@ expect(actions.createMessage('Hello world!')).to.eventually.deep.equal({
 Asynchronous actions
 --------------------
 
-Asynchronous actions are actions that return promises. Unlike synchronous actions, async actions fire the dispatcher twice: at the beginning and at the end of the action. Refer to the [Store API](store.md) for information on how to register handlers for asynchronous actions.
+Asynchronous actions are actions that return promises. Unlike synchronous actions, async actions may fire the dispatcher up to three times: at the beginning and end of the action, or upon failure. Refer to the [Store API](store.md) for information on how to register handlers for asynchronous actions.
 
 Methods
 -------
