@@ -5,7 +5,7 @@ Flummox
 
 I know churn can be frustrating but I feel it would be irresponsible for me to continue recommending Flummox when Redux exists and is a significant improvement over classical Flux. Flummox 4.0 will likely be the last major release.
 
-**Check out [redux-actions](https://github.com/acdlite/redux-actions) and [redux-promise](https://github.com/acdlite/redux-actions), which implement much of the convenience of Flummox as Redux extensions.**
+**Check out [redux-actions](https://github.com/acdlite/redux-actions) and [redux-promise](https://github.com/acdlite/redux-promise), which implement much of the convenience of Flummox as Redux extensions.**
 
 [![build status](https://img.shields.io/travis/acdlite/flummox.svg?style=flat-square)](https://travis-ci.org/acdlite/flummox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/acdlite/flummox.svg?style=flat-square)](https://codeclimate.com/github/acdlite/flummox)
