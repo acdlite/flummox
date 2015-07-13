@@ -98,16 +98,19 @@ export default React => {
 
      /**
       * Connect component to stores, get the combined initial state, and
-      * subscribe to future changes. There are three ways to call it. The
-      * simplest is to pass a single store key and, optionally, a state getter.
-      * The state getter is a function that takes the store as a parameter and
-      * returns the state that should be passed to the component's `setState()`.
-      * If no state getter is specified, the default getter is used, which simply
-      * returns the entire store state.
+      * subscribe to future changes.
+      * 
+      * There are three ways to call it.
+      * 
+      * The simplest is to pass a single store key and, optionally, a state
+      * getter. The state getter is a function that takes the store as a 
+      * parameter and returns the state that should be passed to the component's
+      * `setState()`. If no state getter is specified, the default getter is 
+      * used, which simply returns the entire store state.
       *
       * The second form accepts an array of store keys. With this form, the state
       * getter is called once with an array of store instances (in the same order
-      * as the store keys). the default getter performance a reduce on the entire
+      * as the store keys). the default getter performs a reduce on the entire
       * state for each store.
       *
       * The last form accepts an object of store keys mapped to state getters. As
@@ -116,8 +119,8 @@ export default React => {
       *
       * Returns the combined initial state of all specified stores.
       *
-      * This way you can write all the initialization and update logic in a single
-      * location, without having to mess with adding/removing listeners.
+      * With this you can write all the initialization and update logic in a
+      * single location, without having to mess with adding/removing listeners.
       *
       * @type {string|array|object} stateGetterMap - map of keys to getters
       * @returns {object} Combined initial state of stores
