@@ -93,7 +93,7 @@ Gets an actions instance by key.
 Actions getActionIds(string key)
 ```
 
-Gets action ids for the given actions key. Internally calls `Actions#getActionIds`.
+Gets action ids for the given actions key. Internally calls `Actions#getActions`.
 
 Also available as `getConstants()`.
 
