@@ -10,7 +10,7 @@ import fluxMixin from 'flummox/mixin';
 
 let MyComponent = React.createClass({
 
-  mixins[fluxMixin(['storeA', 'storeB'])],
+  mixins: [fluxMixin(['storeA', 'storeB'])],
 
   ...
 });
