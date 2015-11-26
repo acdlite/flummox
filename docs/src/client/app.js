@@ -33,7 +33,7 @@ router.run(async (Handler, state) => {
 
 // Intercept local route changes
 document.onclick = event => {
-  const { toElement: target, metaKey, ctrlKey, button} = event;
+  const { toElement: target } = event;
 
   if (!target) return;
 
@@ -41,8 +41,7 @@ document.onclick = event => {
 
   const href = target.getAttribute('href');
 
-  const openExternal = metaKey || ctrlKey || button === 1;
-  if (!href || openExternal) return;
+  if (!href) return;
 
   const resolvedHref = url.resolve(window.location.href, href);
   const { host, path } = url.parse(resolvedHref);
