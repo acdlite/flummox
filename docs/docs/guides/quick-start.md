@@ -179,6 +179,6 @@ class MessagesView extends React.Component {
 
 ```
 
-Read more in the [React integration guide](react-integration).
+Read more in the [React integration guide](react-integration.md).
 
 And there you go! I hope this guide was helpful.

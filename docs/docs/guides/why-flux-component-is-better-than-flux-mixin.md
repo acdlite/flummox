@@ -1,7 +1,7 @@
 Why FluxComponent > fluxMixin
 =============================
 
-In the [React integration guide](react-integration), I suggest that using [FluxComponent](/flummox/docs/api/fluxcomponent) is better than using [fluxMixin](/flummox/docs/api/fluxmixin), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
+In the [React integration guide](react-integration.md), I suggest that using [FluxComponent](../api/fluxcomponent.md) is better than using [fluxMixin](../api/fluxmixin.md), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
 
 My argument can be broken down into three basic points. Note that these aren't my original ideas, nor are they unique to Flummox — they are the "React Way":
 
