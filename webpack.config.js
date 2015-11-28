@@ -34,7 +34,7 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['babel-loader?stage=0&loose=all'], exclude: /node_modules/ }
+      { test: /\.js$/, loaders: ['babel?presets[]=react,presets[]=es2015-loose'], exclude: /node_modules/ }
     ]
   }
 };

@@ -84,10 +84,10 @@ class FluxComponent extends React.Component {
   }
 
   render() {
-    const { children, render } = this.props;
+    let { children, render: internalRender } = this.props;
 
-    if (typeof render === 'function') {
-      return render(this.getChildProps(), this.getFlux());
+    if (typeof internalRender === 'function') {
+      return internalRender(this.getChildProps(), this.getFlux());
     }
 
     if (!children) return null;
