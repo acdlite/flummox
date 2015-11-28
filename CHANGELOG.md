@@ -9,6 +9,14 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.6.2
+
+- **Internal**
+  - Added support for React `0.14.x`
+  - Update Babel to latest version
+  - Fixed failing build tests 
+  - README updates
+
 ## 3.5.2
 - **Bug Fix**
   - `registerAll(action, handler)` is effectively the same as `registerAllAsync(action, null, handler, null)` [@hugobessaa](https://github.com/hugobessaa)

@@ -16,7 +16,7 @@ $ npm install --save flummox
 
 ### Stable (3.x)
 
-Current stable Flummox' version with latest [React.js](https://facebook.github.io/react/index.html) support support is **3.6.x**. If you're happy enough with what you have in app right now then you can safely stay with this version. It will be maintained though we don't think that new features will be added.
+Current stable Flummox' version with latest [React.js](https://facebook.github.io/react/index.html) support is **3.6.x**. If you're happy enough with what you have in app right now then you can safely stay with this version. It will be maintained though we don't think that new features will be added.
 
 ### Never Released (4.x, thx Redux!)
 
