@@ -1,9 +1,9 @@
 import connectToStores from '../connectToStores';
 import addContext from './addContext';
 import { Actions, Store, Flummox } from '../../Flux';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 const { PropTypes } = React;
-const { TestUtils } = React.addons;
 
 class TestActions extends Actions {
   getSomething(something) {

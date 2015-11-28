@@ -88,13 +88,13 @@ var Flummox =
 
 	var _Actions4 = _interopRequireDefault(_Actions3);
 
-	var _flux = __webpack_require__(4);
+	var _flux = __webpack_require__(3);
 
-	var _eventemitter = __webpack_require__(3);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(4);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -457,11 +457,11 @@ var Flummox =
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _eventemitter = __webpack_require__(3);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(4);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -717,7 +717,7 @@ var Flummox =
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
-	var _uniqueid = __webpack_require__(16);
+	var _uniqueid = __webpack_require__(15);
 
 	var _uniqueid2 = _interopRequireDefault(_uniqueid);
 
@@ -848,6 +848,67 @@ var Flummox =
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(16)
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1082,67 +1143,6 @@ var Flummox =
 
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(15)
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1278,6 +1278,65 @@ var Flummox =
 
 /***/ },
 /* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+
+	var count = 0;
+
+	/**
+	 * Generate a unique ID.
+	 *
+	 * Optionally pass a prefix to prepend, a suffix to append, or a
+	 * multiplier to use on the ID.
+	 *
+	 * ```js
+	 * uniqueId(); //=> '25'
+	 *
+	 * uniqueId({prefix: 'apple_'});
+	 * //=> 'apple_10'
+	 *
+	 * uniqueId({suffix: '_orange'});
+	 * //=> '10_orange'
+	 *
+	 * uniqueId({multiplier: 5});
+	 * //=> 5, 10, 15, 20...
+	 * ```
+	 *
+	 * To reset the `id` to zero, do `id.reset()`.
+	 *
+	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
+	 * @return {String} The unique id.
+	 * @api public
+	 */
+
+	var id = module.exports = function (options) {
+	  options = options || {};
+
+	  var prefix = options.prefix;
+	  var suffix = options.suffix;
+
+	  var id = ++count * (options.multiplier || 1);
+
+	  if (prefix == null) {
+	    prefix = '';
+	  }
+
+	  if (suffix == null) {
+	    suffix = '';
+	  }
+
+	  return String(prefix) + id + String(suffix);
+	};
+
+
+	id.reset = function() {
+	  return count = 0;
+	};
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1533,65 +1592,6 @@ var Flummox =
 
 
 /***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-
-	var count = 0;
-
-	/**
-	 * Generate a unique ID.
-	 *
-	 * Optionally pass a prefix to prepend, a suffix to append, or a
-	 * multiplier to use on the ID.
-	 *
-	 * ```js
-	 * uniqueId(); //=> '25'
-	 *
-	 * uniqueId({prefix: 'apple_'});
-	 * //=> 'apple_10'
-	 *
-	 * uniqueId({suffix: '_orange'});
-	 * //=> '10_orange'
-	 *
-	 * uniqueId({multiplier: 5});
-	 * //=> 5, 10, 15, 20...
-	 * ```
-	 *
-	 * To reset the `id` to zero, do `id.reset()`.
-	 *
-	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
-	 * @return {String} The unique id.
-	 * @api public
-	 */
-
-	var id = module.exports = function (options) {
-	  options = options || {};
-
-	  var prefix = options.prefix;
-	  var suffix = options.suffix;
-
-	  var id = ++count * (options.multiplier || 1);
-
-	  if (prefix == null) {
-	    prefix = '';
-	  }
-
-	  if (suffix == null) {
-	    suffix = '';
-	  }
-
-	  return String(prefix) + id + String(suffix);
-	};
-
-
-	id.reset = function() {
-	  return count = 0;
-	};
-
-/***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1687,22 +1687,22 @@ var Flummox =
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(31);
+	__webpack_require__(33);
 	module.exports = __webpack_require__(30).Object.getPrototypeOf;
 
 /***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(32);
+	__webpack_require__(34);
 	module.exports = __webpack_require__(30).Object.keys;
 
 /***/ },
 /* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(33);
-	__webpack_require__(34);
+	var $ = __webpack_require__(31);
+	__webpack_require__(32);
 	module.exports = function getOwnPropertyNames(it){
 	  return $.getNames(it);
 	};
@@ -1711,7 +1711,7 @@ var Flummox =
 /* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(33);
+	var $ = __webpack_require__(31);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
@@ -1720,7 +1720,7 @@ var Flummox =
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(33);
+	var $ = __webpack_require__(31);
 	module.exports = function create(P, D){
 	  return $.create(P, D);
 	};
@@ -1751,32 +1751,6 @@ var Flummox =
 /* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// 19.1.2.9 Object.getPrototypeOf(O)
-	var toObject = __webpack_require__(38);
-
-	__webpack_require__(39)('getPrototypeOf', function($getPrototypeOf){
-	  return function getPrototypeOf(it){
-	    return $getPrototypeOf(toObject(it));
-	  };
-	});
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.14 Object.keys(O)
-	var toObject = __webpack_require__(38);
-
-	__webpack_require__(39)('keys', function($keys){
-	  return function keys(it){
-	    return $keys(toObject(it));
-	  };
-	});
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var $Object = Object;
 	module.exports = {
 	  create:     $Object.create,
@@ -1792,12 +1766,38 @@ var Flummox =
 	};
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 Object.getOwnPropertyNames(O)
-	__webpack_require__(39)('getOwnPropertyNames', function(){
-	  return __webpack_require__(40).get;
+	__webpack_require__(38)('getOwnPropertyNames', function(){
+	  return __webpack_require__(39).get;
+	});
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.9 Object.getPrototypeOf(O)
+	var toObject = __webpack_require__(40);
+
+	__webpack_require__(38)('getPrototypeOf', function($getPrototypeOf){
+	  return function getPrototypeOf(it){
+	    return $getPrototypeOf(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(40);
+
+	__webpack_require__(38)('keys', function($keys){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
 	});
 
 /***/ },
@@ -1814,7 +1814,7 @@ var Flummox =
 
 	'use strict';
 	// ECMAScript 6 symbols shim
-	var $              = __webpack_require__(33)
+	var $              = __webpack_require__(31)
 	  , global         = __webpack_require__(43)
 	  , has            = __webpack_require__(44)
 	  , DESCRIPTORS    = __webpack_require__(45)
@@ -1826,7 +1826,7 @@ var Flummox =
 	  , uid            = __webpack_require__(50)
 	  , wks            = __webpack_require__(51)
 	  , keyOf          = __webpack_require__(52)
-	  , $names         = __webpack_require__(40)
+	  , $names         = __webpack_require__(39)
 	  , enumKeys       = __webpack_require__(53)
 	  , isArray        = __webpack_require__(54)
 	  , anObject       = __webpack_require__(55)
@@ -2050,16 +2050,6 @@ var Flummox =
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(59);
-	module.exports = function(it){
-	  return Object(defined(it));
-	};
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// most Object methods by ES6 should accept primitives
 	var $export = __webpack_require__(41)
 	  , core    = __webpack_require__(30)
@@ -2072,12 +2062,12 @@ var Flummox =
 	};
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 	var toIObject = __webpack_require__(56)
-	  , getNames  = __webpack_require__(33).getNames
+	  , getNames  = __webpack_require__(31).getNames
 	  , toString  = {}.toString;
 
 	var windowNames = typeof window == 'object' && Object.getOwnPropertyNames
@@ -2094,6 +2084,16 @@ var Flummox =
 	module.exports.get = function getOwnPropertyNames(it){
 	  if(windowNames && toString.call(it) == '[object Window]')return getWindowNames(it);
 	  return getNames(toIObject(it));
+	};
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.13 ToObject(argument)
+	var defined = __webpack_require__(59);
+	module.exports = function(it){
+	  return Object(defined(it));
 	};
 
 /***/ },
@@ -2153,7 +2153,7 @@ var Flummox =
 
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
 	/* eslint-disable no-proto */
-	var getDesc  = __webpack_require__(33).getDesc
+	var getDesc  = __webpack_require__(31).getDesc
 	  , isObject = __webpack_require__(61)
 	  , anObject = __webpack_require__(55);
 	var check = function(O, proto){
@@ -2238,7 +2238,7 @@ var Flummox =
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(33).setDesc
+	var def = __webpack_require__(31).setDesc
 	  , has = __webpack_require__(44)
 	  , TAG = __webpack_require__(51)('toStringTag');
 
@@ -2272,7 +2272,7 @@ var Flummox =
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $         = __webpack_require__(33)
+	var $         = __webpack_require__(31)
 	  , toIObject = __webpack_require__(56);
 	module.exports = function(object, el){
 	  var O      = toIObject(object)
@@ -2288,7 +2288,7 @@ var Flummox =
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
-	var $ = __webpack_require__(33);
+	var $ = __webpack_require__(31);
 	module.exports = function(it){
 	  var keys       = $.getKeys(it)
 	    , getSymbols = $.getSymbols;
@@ -2399,7 +2399,7 @@ var Flummox =
 /* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $          = __webpack_require__(33)
+	var $          = __webpack_require__(31)
 	  , createDesc = __webpack_require__(57);
 	module.exports = __webpack_require__(45) ? function(object, key, value){
 	  return $.setDesc(object, key, createDesc(1, value));

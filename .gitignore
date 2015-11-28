@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+react-example
 
 # Runtime data
 pids

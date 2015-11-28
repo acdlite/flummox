@@ -40,7 +40,8 @@
     "istanbul": "0.3.7",
     "jsdom": "~4.0.5",
     "mocha": "2.2.1",
-    "react": "0.13.x",
+    "react": "^0.14.3",
+    "react-addons-test-utils": "^0.14.3",
     "sinon": "1.14.0",
     "source-map-support": "0.2.10",
     "webpack": "1.7.3"

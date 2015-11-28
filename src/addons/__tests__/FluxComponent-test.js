@@ -1,8 +1,8 @@
 import { Flummox, Store, Actions } from '../../Flux';
 import addContext from './addContext';
 
-import React from 'react/addons';
-const { TestUtils } = React.addons;
+import React from 'react';
+import TestUtils from 'react-addons-test-utils'
 
 import FluxComponent from '../FluxComponent';
 import sinon from 'sinon';

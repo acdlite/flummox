@@ -3,9 +3,9 @@ import { Flummox, Store, Actions } from '../../Flux';
 import addContext from './addContext';
 import sinon from 'sinon';
 
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils'
 const { PropTypes } = React;
-const { TestUtils } = React.addons;
 
 describe('fluxMixin', () => {
 
