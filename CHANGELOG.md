@@ -9,6 +9,15 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.6.4
+- **Internal**
+  - Remove deprecated React warnings from tests 
+
+## 3.6.3
+
+- **Bug Fix**
+  - Fix with requiring babel-runtime plugin
+
 ## 3.6.2
 
 - **Internal**

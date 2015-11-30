@@ -4,6 +4,7 @@ import addContext from './addContext';
 import sinon from 'sinon';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils'
 const { PropTypes } = React;
 
@@ -137,10 +138,10 @@ describe('fluxMixin', () => {
     });
 
     const container = document.createElement('div');
-    const component = React.render(<Component flux={flux} />, container);
+    const component = ReactDOM.render(<Component flux={flux} />, container);
     const listener = flux.getStore('test').listeners('change')[0];
 
-    React.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container);
 
     flux.getActions('test').getSomething('bar');
     listener();
@@ -269,13 +270,15 @@ describe('fluxMixin', () => {
         }
       });
 
-      const component = TestUtils.renderIntoDocument(
+      let component = TestUtils.renderIntoDocument(
         <Component key="test" flux={flux} foo="bar" />
       );
 
       expect(component.state.foo).to.equal('foo is bar');
 
-      component.setProps({ foo: 'baz' });
+      component = TestUtils.renderIntoDocument(
+        <Component key="test" flux={flux} foo="baz" />
+      );
 
       expect(component.state.foo).to.equal('foo is baz');
     });
@@ -372,13 +375,13 @@ describe('fluxMixin', () => {
       const flux = new Flux();
       const div = document.createElement('div');
 
-      const component = React.render(<ComponentWithFluxMixin flux={flux} />, div);
+      const component = ReactDOM.render(<ComponentWithFluxMixin flux={flux} />, div);
 
       const store = flux.getStore('test');
       component.connectToStores('test');
 
       expect(store.listeners('change').length).to.equal(1);
-      React.unmountComponentAtNode(div);
+      ReactDOM.unmountComponentAtNode(div);
       expect(store.listeners('change').length).to.equal(0);
     });
 

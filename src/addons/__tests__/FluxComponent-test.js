@@ -9,6 +9,14 @@ import sinon from 'sinon';
 
 describe('FluxComponent', () => {
 
+  class Inner extends React.Component {
+    render() {
+      return (
+        <div />
+      );
+    }
+  }
+
   class TestActions extends Actions {
     getSomething(something) {
       return something;
@@ -89,8 +97,16 @@ describe('FluxComponent', () => {
       render() {
         return (
           <FluxComponent connectToStores="test">
-            <div />
+            <InnerWithData />
           </FluxComponent>
+        );
+      }
+    }
+
+    class InnerWithData extends React.Component {
+      render() {
+        return (
+          <div data-something={this.props.something} />
         );
       }
     }
@@ -98,11 +114,10 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <TopView />
     );
-
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     actions.getSomething('something good');
-    expect(div.props.something).to.equal('something good');
+    expect(div.getAttribute('data-something')).to.equal('something good');
   });
 
   it('passes connectToStore prop to reactComponentMethod connectToStores()', () => {
@@ -137,13 +152,12 @@ describe('FluxComponent', () => {
 
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux}>
-        <div />
+        <Inner />
       </FluxComponent>
     );
 
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
-
-    expect(div.props.flux).to.equal(flux);
+    const inner = TestUtils.findRenderedComponentWithType(tree, Inner);
+    expect(inner.props.flux).to.equal(flux);
   });
 
   it('injects children with props corresponding to component state', () => {
@@ -152,16 +166,16 @@ describe('FluxComponent', () => {
 
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test">
-        <div />
+        <Inner />
       </FluxComponent>
     );
 
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const inner = TestUtils.findRenderedComponentWithType(tree, Inner);
 
     actions.getSomething('something good');
-    expect(div.props.something).to.equal('something good');
+    expect(inner.props.something).to.equal('something good');
     actions.getSomething('something else');
-    expect(div.props.something).to.equal('something else');
+    expect(inner.props.something).to.equal('something else');
   });
 
   it('injects children with any extra props', () => {
@@ -176,14 +190,14 @@ describe('FluxComponent', () => {
         connectToStores="test"
         stateGetter={stateGetter}
         extraProp="hello"
-        render={(props) => <div {...props} />}
+        render={(props) => <Inner {...props} />}
       />
     );
 
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const inner = TestUtils.findRenderedComponentWithType(tree, Inner);
 
-    expect(div.props.extraProp).to.equal('hello');
-    expect(Object.keys(div.props)).to.deep.equal(['flux', 'extraProp']);
+    expect(inner.props.extraProp).to.equal('hello');
+    expect(Object.keys(inner.props)).to.deep.equal(['flux', 'extraProp']);
   });
 
   it('wraps multiple children in span tag', () => {
@@ -191,15 +205,13 @@ describe('FluxComponent', () => {
 
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux}>
-        <div />
-        <div />
+        <Inner />
+        <Inner />
       </FluxComponent>
     );
 
-    const wrapper = TestUtils.findRenderedDOMComponentWithTag(tree, 'span');
-    const divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div');
-
-    expect(divs.length).to.equal(2);
+    const inners = TestUtils.scryRenderedComponentsWithType(tree, Inner);
+    expect(inners.length).to.equal(2);
   });
 
   it('does not wrap single child in span tag', () => {
@@ -223,17 +235,17 @@ describe('FluxComponent', () => {
     const tree = TestUtils.renderIntoDocument(
       <FluxComponent flux={flux} connectToStores="test">
         <FluxComponent>
-          <div />
+          <Inner />
         </FluxComponent>
       </FluxComponent>
     );
 
-    const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+    const inner = TestUtils.findRenderedComponentWithType(tree, Inner);
 
     actions.getSomething('something good');
-    expect(div.props.something).to.equal('something good');
+    expect(inner.props.something).to.equal('something good');
     actions.getSomething('something else');
-    expect(div.props.something).to.equal('something else');
+    expect(inner.props.something).to.equal('something else');
   });
 
   it('uses `render` prop for custom rendering, if it exists', () => {
@@ -245,7 +257,7 @@ describe('FluxComponent', () => {
         flux={flux}
         connectToStores="test"
         render={props =>
-          <div something={props.something} />
+          <div data-something={props.something} />
         }
       />
     );
@@ -253,9 +265,9 @@ describe('FluxComponent', () => {
     const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
 
     actions.getSomething('something good');
-    expect(div.props.something).to.equal('something good');
+    expect(div.getAttribute('data-something')).to.equal('something good');
     actions.getSomething('something else');
-    expect(div.props.something).to.equal('something else');
+    expect(div.getAttribute('data-something')).to.equal('something else');
   });
 
   it('updates with render-time computed values in state getters on componentWillReceiveProps()', () => {
@@ -279,7 +291,7 @@ describe('FluxComponent', () => {
                 yay: this.state.foo
               })
             }}
-            render={storeState => <div {...storeState} />}
+            render={storeState => <div data-yay={storeState.yay} />}
           />
         );
       }
@@ -288,9 +300,9 @@ describe('FluxComponent', () => {
     const owner = TestUtils.renderIntoDocument(<Owner />);
     const div = TestUtils.findRenderedDOMComponentWithTag(owner, 'div');
 
-    expect(div.props.yay).to.equal('bar');
+    expect(div.getAttribute('data-yay')).to.equal('bar');
     owner.setState({ foo: 'baz' });
-    expect(div.props.yay).to.equal('baz');
+    expect(div.getAttribute('data-yay')).to.equal('baz');
   });
 
 });
