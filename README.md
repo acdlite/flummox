@@ -16,13 +16,13 @@ $ npm install --save flummox
 
 ### Stable (3.x)
 
-Current stable Flummox' version with latest [React.js](https://facebook.github.io/react/index.html) support is **3.6.x**. If you're happy enough with what you have in app right now then you can safely stay with this version. It will be maintained though we don't think that new features will be added.
+Current stable Flummox's version with latest [React.js](https://facebook.github.io/react/index.html) support is **3.6.x**. If you're happy enough with what you have right now then **you can safely stay with this version**. It will be maintained but we don't think that new features will be added.
 
-### Never Released (4.x, thx Redux!)
+### Non-stable (4.x)
 
-Eventually 4.x should be the last major release but it never happened. If you want the latest features then use [Redux](https://github.com/gaearon/redux) instead. It's really great.
+**Eventually 4.x should be the last major release but it never happened**. If you want the latest features then use [Redux](https://github.com/gaearon/redux) instead. It's really great.
 
-We know that churn can be frustrating but we feel it would be irresponsible for us to continue recommending Flummox when Redux exists which is a significant improvement over classical Flux. 
+_We know that churn can be frustrating but we feel it would be irresponsible for us to continue recommending Flummox when Redux exists which is a significant improvement over classical Flux._
 
 **Check out [redux-actions](https://github.com/acdlite/redux-actions) and [redux-promise](https://github.com/acdlite/redux-promise), which implement much of the convenience of Flummox as Redux extensions.**
 
