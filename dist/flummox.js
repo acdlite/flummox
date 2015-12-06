@@ -47,11 +47,7 @@ var Flummox =
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.Actions = exports.Store = exports.Flummox = exports.Flux = undefined;
 
 	var _Store2 = __webpack_require__(1);
@@ -62,13 +58,13 @@ var Flummox =
 
 	var _Actions4 = _interopRequireDefault(_Actions3);
 
-	var _flux = __webpack_require__(4);
+	var _flux = __webpack_require__(3);
 
-	var _eventemitter = __webpack_require__(5);
+	var _eventemitter = __webpack_require__(4);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(3);
+	var _objectAssign = __webpack_require__(5);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -92,7 +88,7 @@ var Flummox =
 	  function Flux() {
 	    _classCallCheck(this, Flux);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Flux).call(this));
+	    var _this = _possibleConstructorReturn(this, _EventEmitter.call(this));
 
 	    _this.dispatcher = new _flux.Dispatcher();
 
@@ -101,276 +97,259 @@ var Flummox =
 	    return _this;
 	  }
 
-	  _createClass(Flux, [{
-	    key: 'createStore',
-	    value: function createStore(key, _Store) {
+	  Flux.prototype.createStore = function createStore(key, _Store) {
 
-	      if (!(_Store.prototype instanceof _Store3.default)) {
-	        var className = getClassName(_Store);
+	    if (!(_Store.prototype instanceof _Store3.default)) {
+	      var className = getClassName(_Store);
 
-	        throw new Error('You\'ve attempted to create a store from the class ' + className + ', which ' + 'does not have the base Store class in its prototype chain. Make sure ' + ('you\'re using the `extends` keyword: `class ' + className + ' extends ') + 'Store { ... }`');
-	      }
-
-	      if (this._stores.hasOwnProperty(key) && this._stores[key]) {
-	        throw new Error('You\'ve attempted to create multiple stores with key ' + key + '. Keys must ' + 'be unique.');
-	      }
-
-	      for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-	        constructorArgs[_key - 2] = arguments[_key];
-	      }
-
-	      var store = new (Function.prototype.bind.apply(_Store, [null].concat(constructorArgs)))();
-	      var token = this.dispatcher.register(store.handler.bind(store));
-
-	      store._waitFor = this.waitFor.bind(this);
-	      store._token = token;
-	      store._getAllActionIds = this.getAllActionIds.bind(this);
-
-	      this._stores[key] = store;
-
-	      return store;
+	      throw new Error('You\'ve attempted to create a store from the class ' + className + ', which ' + 'does not have the base Store class in its prototype chain. Make sure ' + ('you\'re using the `extends` keyword: `class ' + className + ' extends ') + 'Store { ... }`');
 	    }
-	  }, {
-	    key: 'getStore',
-	    value: function getStore(key) {
-	      return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
+
+	    if (this._stores.hasOwnProperty(key) && this._stores[key]) {
+	      throw new Error('You\'ve attempted to create multiple stores with key ' + key + '. Keys must ' + 'be unique.');
 	    }
-	  }, {
-	    key: 'removeStore',
-	    value: function removeStore(key) {
-	      if (this._stores.hasOwnProperty(key)) {
-	        this._stores[key].removeAllListeners();
-	        this.dispatcher.unregister(this._stores[key]._token);
-	        delete this._stores[key];
+
+	    for (var _len = arguments.length, constructorArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	      constructorArgs[_key - 2] = arguments[_key];
+	    }
+
+	    var store = new (Function.prototype.bind.apply(_Store, [null].concat(constructorArgs)))();
+	    var token = this.dispatcher.register(store.handler.bind(store));
+
+	    store._waitFor = this.waitFor.bind(this);
+	    store._token = token;
+	    store._getAllActionIds = this.getAllActionIds.bind(this);
+
+	    this._stores[key] = store;
+
+	    return store;
+	  };
+
+	  Flux.prototype.getStore = function getStore(key) {
+	    return this._stores.hasOwnProperty(key) ? this._stores[key] : undefined;
+	  };
+
+	  Flux.prototype.removeStore = function removeStore(key) {
+	    if (this._stores.hasOwnProperty(key)) {
+	      this._stores[key].removeAllListeners();
+	      this.dispatcher.unregister(this._stores[key]._token);
+	      delete this._stores[key];
+	    } else {
+	      throw new Error('You\'ve attempted to remove store with key ' + key + ' which does not exist.');
+	    }
+	  };
+
+	  Flux.prototype.createActions = function createActions(key, _Actions) {
+	    if (!(_Actions.prototype instanceof _Actions4.default) && _Actions !== _Actions4.default) {
+	      if (typeof _Actions === 'function') {
+	        var className = getClassName(_Actions);
+
+	        throw new Error('You\'ve attempted to create actions from the class ' + className + ', which ' + 'does not have the base Actions class in its prototype chain. Make ' + ('sure you\'re using the `extends` keyword: `class ' + className + ' ') + 'extends Actions { ... }`');
 	      } else {
-	        throw new Error('You\'ve attempted to remove store with key ' + key + ' which does not exist.');
+	        var properties = _Actions;
+	        _Actions = (function (_Actions2) {
+	          _inherits(_class, _Actions2);
+
+	          function _class() {
+	            _classCallCheck(this, _class);
+
+	            return _possibleConstructorReturn(this, _Actions2.apply(this, arguments));
+	          }
+
+	          return _class;
+	        })(_Actions4.default);
+	        (0, _objectAssign2.default)(_Actions.prototype, properties);
 	      }
 	    }
-	  }, {
-	    key: 'createActions',
-	    value: function createActions(key, _Actions) {
-	      if (!(_Actions.prototype instanceof _Actions4.default) && _Actions !== _Actions4.default) {
-	        if (typeof _Actions === 'function') {
-	          var className = getClassName(_Actions);
 
-	          throw new Error('You\'ve attempted to create actions from the class ' + className + ', which ' + 'does not have the base Actions class in its prototype chain. Make ' + ('sure you\'re using the `extends` keyword: `class ' + className + ' ') + 'extends Actions { ... }`');
-	        } else {
-	          var properties = _Actions;
-	          _Actions = (function (_Actions2) {
-	            _inherits(_class, _Actions2);
-
-	            function _class() {
-	              _classCallCheck(this, _class);
-
-	              return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
-	            }
-
-	            return _class;
-	          })(_Actions4.default);
-	          (0, _objectAssign2.default)(_Actions.prototype, properties);
-	        }
-	      }
-
-	      if (this._actions.hasOwnProperty(key) && this._actions[key]) {
-	        throw new Error('You\'ve attempted to create multiple actions with key ' + key + '. Keys ' + 'must be unique.');
-	      }
-
-	      for (var _len2 = arguments.length, constructorArgs = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-	        constructorArgs[_key2 - 2] = arguments[_key2];
-	      }
-
-	      var actions = new (Function.prototype.bind.apply(_Actions, [null].concat(constructorArgs)))();
-	      actions.dispatch = this.dispatch.bind(this);
-	      actions.dispatchAsync = this.dispatchAsync.bind(this);
-
-	      this._actions[key] = actions;
-
-	      return actions;
+	    if (this._actions.hasOwnProperty(key) && this._actions[key]) {
+	      throw new Error('You\'ve attempted to create multiple actions with key ' + key + '. Keys ' + 'must be unique.');
 	    }
-	  }, {
-	    key: 'getActions',
-	    value: function getActions(key) {
-	      return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
+
+	    for (var _len2 = arguments.length, constructorArgs = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+	      constructorArgs[_key2 - 2] = arguments[_key2];
 	    }
-	  }, {
-	    key: 'getActionIds',
-	    value: function getActionIds(key) {
-	      var actions = this.getActions(key);
 
-	      if (!actions) return;
+	    var actions = new (Function.prototype.bind.apply(_Actions, [null].concat(constructorArgs)))();
+	    actions.dispatch = this.dispatch.bind(this);
+	    actions.dispatchAsync = this.dispatchAsync.bind(this);
 
-	      return actions.getConstants();
+	    this._actions[key] = actions;
+
+	    return actions;
+	  };
+
+	  Flux.prototype.getActions = function getActions(key) {
+	    return this._actions.hasOwnProperty(key) ? this._actions[key] : undefined;
+	  };
+
+	  Flux.prototype.getActionIds = function getActionIds(key) {
+	    var actions = this.getActions(key);
+
+	    if (!actions) return;
+
+	    return actions.getConstants();
+	  };
+
+	  Flux.prototype.removeActions = function removeActions(key) {
+	    if (this._actions.hasOwnProperty(key)) {
+	      delete this._actions[key];
+	    } else {
+	      throw new Error('You\'ve attempted to remove actions with key ' + key + ' which does not exist.');
 	    }
-	  }, {
-	    key: 'removeActions',
-	    value: function removeActions(key) {
-	      if (this._actions.hasOwnProperty(key)) {
-	        delete this._actions[key];
-	      } else {
-	        throw new Error('You\'ve attempted to remove actions with key ' + key + ' which does not exist.');
-	      }
+	  };
+
+	  Flux.prototype.getAllActionIds = function getAllActionIds() {
+	    var actionIds = [];
+
+	    for (var key in this._actions) {
+	      if (!this._actions.hasOwnProperty(key)) continue;
+
+	      var actionConstants = this._actions[key].getConstants();
+
+	      actionIds = actionIds.concat(getValues(actionConstants));
 	    }
-	  }, {
-	    key: 'getAllActionIds',
-	    value: function getAllActionIds() {
-	      var actionIds = [];
 
-	      for (var key in this._actions) {
-	        if (!this._actions.hasOwnProperty(key)) continue;
+	    return actionIds;
+	  };
 
-	        var actionConstants = this._actions[key].getConstants();
+	  Flux.prototype.dispatch = function dispatch(actionId, body) {
+	    this._dispatch({ actionId: actionId, body: body });
+	  };
 
-	        actionIds = actionIds.concat(getValues(actionConstants));
-	      }
+	  Flux.prototype.dispatchAsync = function dispatchAsync(actionId, promise, actionArgs) {
+	    var _this3 = this;
 
-	      return actionIds;
-	    }
-	  }, {
-	    key: 'dispatch',
-	    value: function dispatch(actionId, body) {
-	      this._dispatch({ actionId: actionId, body: body });
-	    }
-	  }, {
-	    key: 'dispatchAsync',
-	    value: function dispatchAsync(actionId, promise, actionArgs) {
-	      var _this3 = this;
+	    var payload = {
+	      actionId: actionId,
+	      async: 'begin'
+	    };
 
-	      var payload = {
+	    if (actionArgs) payload.actionArgs = actionArgs;
+
+	    this._dispatch(payload);
+
+	    return promise.then(function (body) {
+	      _this3._dispatch({
 	        actionId: actionId,
-	        async: 'begin'
-	      };
-
-	      if (actionArgs) payload.actionArgs = actionArgs;
-
-	      this._dispatch(payload);
-
-	      return promise.then(function (body) {
-	        _this3._dispatch({
-	          actionId: actionId,
-	          body: body,
-	          async: 'success'
-	        });
-
-	        return body;
-	      }, function (error) {
-	        _this3._dispatch({
-	          actionId: actionId,
-	          error: error,
-	          async: 'failure'
-	        });
-	      }).catch(function (error) {
-	        _this3.emit('error', error);
-
-	        throw error;
+	        body: body,
+	        async: 'success'
 	      });
+
+	      return body;
+	    }, function (error) {
+	      _this3._dispatch({
+	        actionId: actionId,
+	        error: error,
+	        async: 'failure'
+	      });
+	    }).catch(function (error) {
+	      _this3.emit('error', error);
+
+	      throw error;
+	    });
+	  };
+
+	  Flux.prototype._dispatch = function _dispatch(payload) {
+	    this.dispatcher.dispatch(payload);
+	    this.emit('dispatch', payload);
+	  };
+
+	  Flux.prototype.waitFor = function waitFor(tokensOrStores) {
+
+	    if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
+
+	    var ensureIsToken = function ensureIsToken(tokenOrStore) {
+	      return tokenOrStore instanceof _Store3.default ? tokenOrStore._token : tokenOrStore;
+	    };
+
+	    var tokens = tokensOrStores.map(ensureIsToken);
+
+	    this.dispatcher.waitFor(tokens);
+	  };
+
+	  Flux.prototype.removeAllStoreListeners = function removeAllStoreListeners(event) {
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
+
+	      var store = this._stores[key];
+
+	      store.removeAllListeners(event);
 	    }
-	  }, {
-	    key: '_dispatch',
-	    value: function _dispatch(payload) {
-	      this.dispatcher.dispatch(payload);
-	      this.emit('dispatch', payload);
-	    }
-	  }, {
-	    key: 'waitFor',
-	    value: function waitFor(tokensOrStores) {
+	  };
 
-	      if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
+	  Flux.prototype.serialize = function serialize() {
+	    var stateTree = {};
 
-	      var ensureIsToken = function ensureIsToken(tokenOrStore) {
-	        return tokenOrStore instanceof _Store3.default ? tokenOrStore._token : tokenOrStore;
-	      };
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
 
-	      var tokens = tokensOrStores.map(ensureIsToken);
+	      var store = this._stores[key];
 
-	      this.dispatcher.waitFor(tokens);
-	    }
-	  }, {
-	    key: 'removeAllStoreListeners',
-	    value: function removeAllStoreListeners(event) {
-	      for (var key in this._stores) {
-	        if (!this._stores.hasOwnProperty(key)) continue;
+	      var _serialize = store.constructor.serialize;
 
-	        var store = this._stores[key];
+	      if (typeof _serialize !== 'function') continue;
 
-	        store.removeAllListeners(event);
-	      }
-	    }
-	  }, {
-	    key: 'serialize',
-	    value: function serialize() {
-	      var stateTree = {};
+	      var serializedStoreState = _serialize(store.state);
 
-	      for (var key in this._stores) {
-	        if (!this._stores.hasOwnProperty(key)) continue;
-
-	        var store = this._stores[key];
-
-	        var _serialize = store.constructor.serialize;
-
-	        if (typeof _serialize !== 'function') continue;
-
-	        var serializedStoreState = _serialize(store.state);
-
-	        if (typeof serializedStoreState !== 'string') {
-	          var className = store.constructor.name;
-
-	          if ((undefined) !== 'production') {
-	            console.warn('The store with key \'' + key + '\' was not serialized because the static ' + ('method `' + className + '.serialize()` returned a non-string with type ') + ('\'' + (typeof serializedStoreState === 'undefined' ? 'undefined' : _typeof(serializedStoreState)) + '\'.'));
-	          }
-	        }
-
-	        stateTree[key] = serializedStoreState;
-
-	        if (typeof store.constructor.deserialize !== 'function') {
-	          var className = store.constructor.name;
-
-	          if ((undefined) !== 'production') {
-	            console.warn('The class `' + className + '` has a `serialize()` method, but no ' + 'corresponding `deserialize()` method.');
-	          }
-	        }
-	      }
-
-	      return JSON.stringify(stateTree);
-	    }
-	  }, {
-	    key: 'deserialize',
-	    value: function deserialize(serializedState) {
-	      var stateMap = undefined;
-
-	      try {
-	        stateMap = JSON.parse(serializedState);
-	      } catch (error) {
-	        var className = this.constructor.name;
+	      if (typeof serializedStoreState !== 'string') {
+	        var className = store.constructor.name;
 
 	        if ((undefined) !== 'production') {
-	          throw new Error('Invalid value passed to `' + className + '#deserialize()`: ' + ('' + serializedState));
+	          console.warn('The store with key \'' + key + '\' was not serialized because the static ' + ('method `' + className + '.serialize()` returned a non-string with type ') + ('\'' + (typeof serializedStoreState === 'undefined' ? 'undefined' : _typeof(serializedStoreState)) + '\'.'));
 	        }
 	      }
 
-	      for (var key in this._stores) {
-	        if (!this._stores.hasOwnProperty(key)) continue;
+	      stateTree[key] = serializedStoreState;
 
-	        var store = this._stores[key];
+	      if (typeof store.constructor.deserialize !== 'function') {
+	        var className = store.constructor.name;
 
-	        var _deserialize = store.constructor.deserialize;
-
-	        if (typeof _deserialize !== 'function') continue;
-
-	        var storeStateString = stateMap[key];
-	        var storeState = _deserialize(storeStateString);
-
-	        store.replaceState(storeState);
-
-	        if (typeof store.constructor.serialize !== 'function') {
-	          var className = store.constructor.name;
-
-	          if ((undefined) !== 'production') {
-	            console.warn('The class `' + className + '` has a `deserialize()` method, but no ' + 'corresponding `serialize()` method.');
-	          }
+	        if ((undefined) !== 'production') {
+	          console.warn('The class `' + className + '` has a `serialize()` method, but no ' + 'corresponding `deserialize()` method.');
 	        }
 	      }
 	    }
-	  }]);
+
+	    return JSON.stringify(stateTree);
+	  };
+
+	  Flux.prototype.deserialize = function deserialize(serializedState) {
+	    var stateMap = undefined;
+
+	    try {
+	      stateMap = JSON.parse(serializedState);
+	    } catch (error) {
+	      var className = this.constructor.name;
+
+	      if ((undefined) !== 'production') {
+	        throw new Error('Invalid value passed to `' + className + '#deserialize()`: ' + ('' + serializedState));
+	      }
+	    }
+
+	    for (var key in this._stores) {
+	      if (!this._stores.hasOwnProperty(key)) continue;
+
+	      var store = this._stores[key];
+
+	      var _deserialize = store.constructor.deserialize;
+
+	      if (typeof _deserialize !== 'function') continue;
+
+	      var storeStateString = stateMap[key];
+	      var storeState = _deserialize(storeStateString);
+
+	      store.replaceState(storeState);
+
+	      if (typeof store.constructor.serialize !== 'function') {
+	        var className = store.constructor.name;
+
+	        if ((undefined) !== 'production') {
+	          console.warn('The class `' + className + '` has a `deserialize()` method, but no ' + 'corresponding `serialize()` method.');
+	        }
+	      }
+	    }
+	  };
 
 	  return Flux;
 	})(_eventemitter2.default);
@@ -412,17 +391,13 @@ var Flummox =
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	exports.__esModule = true;
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _eventemitter = __webpack_require__(5);
+	var _eventemitter = __webpack_require__(4);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(3);
+	var _objectAssign = __webpack_require__(5);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -452,7 +427,7 @@ var Flummox =
 	  function Store() {
 	    _classCallCheck(this, Store);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Store).call(this));
+	    var _this = _possibleConstructorReturn(this, _EventEmitter.call(this));
 
 	    _this.state = null;
 
@@ -467,190 +442,173 @@ var Flummox =
 	    return _this;
 	  }
 
-	  _createClass(Store, [{
-	    key: 'setState',
-	    value: function setState(newState) {
-	      // Do a transactional state update if a function is passed
-	      if (typeof newState === 'function') {
-	        var prevState = this._isHandlingDispatch ? this._pendingState : this.state;
+	  Store.prototype.setState = function setState(newState) {
+	    // Do a transactional state update if a function is passed
+	    if (typeof newState === 'function') {
+	      var prevState = this._isHandlingDispatch ? this._pendingState : this.state;
 
-	        newState = newState(prevState);
-	      }
+	      newState = newState(prevState);
+	    }
 
-	      if (this._isHandlingDispatch) {
-	        this._pendingState = this._assignState(this._pendingState, newState);
-	        this._emitChangeAfterHandlingDispatch = true;
+	    if (this._isHandlingDispatch) {
+	      this._pendingState = this._assignState(this._pendingState, newState);
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.state = this._assignState(this.state, newState);
+	      this.emit('change');
+	    }
+	  };
+
+	  Store.prototype.replaceState = function replaceState(newState) {
+	    if (this._isHandlingDispatch) {
+	      this._pendingState = this._assignState(undefined, newState);
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.state = this._assignState(undefined, newState);
+	      this.emit('change');
+	    }
+	  };
+
+	  Store.prototype.getStateAsObject = function getStateAsObject() {
+	    return this.state;
+	  };
+
+	  Store.assignState = function assignState(oldState, newState) {
+	    return (0, _objectAssign2.default)({}, oldState, newState);
+	  };
+
+	  Store.prototype._assignState = function _assignState() {
+	    return (this.constructor.assignState || Store.assignState).apply(undefined, arguments);
+	  };
+
+	  Store.prototype.forceUpdate = function forceUpdate() {
+	    if (this._isHandlingDispatch) {
+	      this._emitChangeAfterHandlingDispatch = true;
+	    } else {
+	      this.emit('change');
+	    }
+	  };
+
+	  Store.prototype.register = function register(actionId, handler) {
+	    actionId = ensureActionId(actionId);
+
+	    if (typeof handler !== 'function') return;
+
+	    this._handlers[actionId] = handler.bind(this);
+	  };
+
+	  Store.prototype.registerAsync = function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
+	    actionId = ensureActionId(actionId);
+
+	    var asyncHandlers = this._bindAsyncHandlers({
+	      begin: beginHandler,
+	      success: successHandler,
+	      failure: failureHandler
+	    });
+
+	    this._asyncHandlers[actionId] = asyncHandlers;
+	  };
+
+	  Store.prototype.registerAll = function registerAll(handler) {
+	    if (typeof handler !== 'function') return;
+
+	    this._catchAllHandlers.push(handler.bind(this));
+	  };
+
+	  Store.prototype.registerAllAsync = function registerAllAsync(beginHandler, successHandler, failureHandler) {
+	    var _this2 = this;
+
+	    var asyncHandlers = this._bindAsyncHandlers({
+	      begin: beginHandler,
+	      success: successHandler,
+	      failure: failureHandler
+	    });
+
+	    Object.keys(asyncHandlers).forEach(function (key) {
+	      _this2._catchAllAsyncHandlers[key].push(asyncHandlers[key]);
+	    });
+	  };
+
+	  Store.prototype._bindAsyncHandlers = function _bindAsyncHandlers(asyncHandlers) {
+	    for (var key in asyncHandlers) {
+	      if (!asyncHandlers.hasOwnProperty(key)) continue;
+
+	      var handler = asyncHandlers[key];
+
+	      if (typeof handler === 'function') {
+	        asyncHandlers[key] = handler.bind(this);
 	      } else {
-	        this.state = this._assignState(this.state, newState);
+	        delete asyncHandlers[key];
+	      }
+	    }
+
+	    return asyncHandlers;
+	  };
+
+	  Store.prototype.waitFor = function waitFor(tokensOrStores) {
+	    this._waitFor(tokensOrStores);
+	  };
+
+	  Store.prototype.handler = function handler(payload) {
+	    var body = payload.body;
+	    var actionId = payload.actionId;
+	    var _async = payload['async'];
+	    var actionArgs = payload.actionArgs;
+	    var error = payload.error;
+
+	    var _allHandlers = this._catchAllHandlers;
+	    var _handler = this._handlers[actionId];
+
+	    var _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
+	    var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
+
+	    if (_async) {
+	      var beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
+
+	      switch (_async) {
+	        case 'begin':
+	          this._performHandler(beginOrFailureHandlers, actionArgs);
+	          return;
+	        case 'failure':
+	          this._performHandler(beginOrFailureHandlers, [error]);
+	          return;
+	        case 'success':
+	          this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler].concat(_asyncHandler && [] || _allHandlers)), [body]);
+	          return;
+	        default:
+	          return;
+	      }
+	    }
+
+	    this._performHandler(_allHandlers.concat([_handler]), [body]);
+	  };
+
+	  Store.prototype._performHandler = function _performHandler(_handlers, args) {
+	    this._isHandlingDispatch = true;
+	    this._pendingState = this._assignState(undefined, this.state);
+	    this._emitChangeAfterHandlingDispatch = false;
+
+	    try {
+	      this._performHandlers(_handlers, args);
+	    } finally {
+	      if (this._emitChangeAfterHandlingDispatch) {
+	        this.state = this._pendingState;
 	        this.emit('change');
 	      }
-	    }
-	  }, {
-	    key: 'replaceState',
-	    value: function replaceState(newState) {
-	      if (this._isHandlingDispatch) {
-	        this._pendingState = this._assignState(undefined, newState);
-	        this._emitChangeAfterHandlingDispatch = true;
-	      } else {
-	        this.state = this._assignState(undefined, newState);
-	        this.emit('change');
-	      }
-	    }
-	  }, {
-	    key: 'getStateAsObject',
-	    value: function getStateAsObject() {
-	      return this.state;
-	    }
-	  }, {
-	    key: '_assignState',
-	    value: function _assignState() {
-	      return (this.constructor.assignState || Store.assignState).apply(undefined, arguments);
-	    }
-	  }, {
-	    key: 'forceUpdate',
-	    value: function forceUpdate() {
-	      if (this._isHandlingDispatch) {
-	        this._emitChangeAfterHandlingDispatch = true;
-	      } else {
-	        this.emit('change');
-	      }
-	    }
-	  }, {
-	    key: 'register',
-	    value: function register(actionId, handler) {
-	      actionId = ensureActionId(actionId);
 
-	      if (typeof handler !== 'function') return;
-
-	      this._handlers[actionId] = handler.bind(this);
-	    }
-	  }, {
-	    key: 'registerAsync',
-	    value: function registerAsync(actionId, beginHandler, successHandler, failureHandler) {
-	      actionId = ensureActionId(actionId);
-
-	      var asyncHandlers = this._bindAsyncHandlers({
-	        begin: beginHandler,
-	        success: successHandler,
-	        failure: failureHandler
-	      });
-
-	      this._asyncHandlers[actionId] = asyncHandlers;
-	    }
-	  }, {
-	    key: 'registerAll',
-	    value: function registerAll(handler) {
-	      if (typeof handler !== 'function') return;
-
-	      this._catchAllHandlers.push(handler.bind(this));
-	    }
-	  }, {
-	    key: 'registerAllAsync',
-	    value: function registerAllAsync(beginHandler, successHandler, failureHandler) {
-	      var _this2 = this;
-
-	      var asyncHandlers = this._bindAsyncHandlers({
-	        begin: beginHandler,
-	        success: successHandler,
-	        failure: failureHandler
-	      });
-
-	      Object.keys(asyncHandlers).forEach(function (key) {
-	        _this2._catchAllAsyncHandlers[key].push(asyncHandlers[key]);
-	      });
-	    }
-	  }, {
-	    key: '_bindAsyncHandlers',
-	    value: function _bindAsyncHandlers(asyncHandlers) {
-	      for (var key in asyncHandlers) {
-	        if (!asyncHandlers.hasOwnProperty(key)) continue;
-
-	        var handler = asyncHandlers[key];
-
-	        if (typeof handler === 'function') {
-	          asyncHandlers[key] = handler.bind(this);
-	        } else {
-	          delete asyncHandlers[key];
-	        }
-	      }
-
-	      return asyncHandlers;
-	    }
-	  }, {
-	    key: 'waitFor',
-	    value: function waitFor(tokensOrStores) {
-	      this._waitFor(tokensOrStores);
-	    }
-	  }, {
-	    key: 'handler',
-	    value: function handler(payload) {
-	      var body = payload.body;
-	      var actionId = payload.actionId;
-	      var _async = payload['async'];
-	      var actionArgs = payload.actionArgs;
-	      var error = payload.error;
-
-	      var _allHandlers = this._catchAllHandlers;
-	      var _handler = this._handlers[actionId];
-
-	      var _allAsyncHandlers = this._catchAllAsyncHandlers[_async];
-	      var _asyncHandler = this._asyncHandlers[actionId] && this._asyncHandlers[actionId][_async];
-
-	      if (_async) {
-	        var beginOrFailureHandlers = _allAsyncHandlers.concat([_asyncHandler]);
-
-	        switch (_async) {
-	          case 'begin':
-	            this._performHandler(beginOrFailureHandlers, actionArgs);
-	            return;
-	          case 'failure':
-	            this._performHandler(beginOrFailureHandlers, [error]);
-	            return;
-	          case 'success':
-	            this._performHandler(_allAsyncHandlers.concat([_asyncHandler || _handler].concat(_asyncHandler && [] || _allHandlers)), [body]);
-	            return;
-	          default:
-	            return;
-	        }
-	      }
-
-	      this._performHandler(_allHandlers.concat([_handler]), [body]);
-	    }
-	  }, {
-	    key: '_performHandler',
-	    value: function _performHandler(_handlers, args) {
-	      this._isHandlingDispatch = true;
-	      this._pendingState = this._assignState(undefined, this.state);
+	      this._isHandlingDispatch = false;
+	      this._pendingState = undefined;
 	      this._emitChangeAfterHandlingDispatch = false;
-
-	      try {
-	        this._performHandlers(_handlers, args);
-	      } finally {
-	        if (this._emitChangeAfterHandlingDispatch) {
-	          this.state = this._pendingState;
-	          this.emit('change');
-	        }
-
-	        this._isHandlingDispatch = false;
-	        this._pendingState = undefined;
-	        this._emitChangeAfterHandlingDispatch = false;
-	      }
 	    }
-	  }, {
-	    key: '_performHandlers',
-	    value: function _performHandlers(_handlers, args) {
-	      var _this3 = this;
+	  };
 
-	      _handlers.forEach(function (_handler) {
-	        return typeof _handler === 'function' && _handler.apply(_this3, args);
-	      });
-	    }
-	  }], [{
-	    key: 'assignState',
-	    value: function assignState(oldState, newState) {
-	      return (0, _objectAssign2.default)({}, oldState, newState);
-	    }
-	  }]);
+	  Store.prototype._performHandlers = function _performHandlers(_handlers, args) {
+	    var _this3 = this;
+
+	    _handlers.forEach(function (_handler) {
+	      return typeof _handler === 'function' && _handler.apply(_this3, args);
+	    });
+	  };
 
 	  return Store;
 	})(_eventemitter2.default);
@@ -667,23 +625,7 @@ var Flummox =
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * Actions
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * Instances of the Actions class represent a set of actions. (In Flux parlance,
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * these might be more accurately denoted as Action Creators, while Action
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * refers to the payload sent to the dispatcher, but this is... confusing. We
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * will use Action to mean the function you call to trigger a dispatch.)
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * Create actions by extending from the base Actions class and adding methods.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * All methods on the prototype (except the constructor) will be
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * converted into actions. The return value of an action is used as the body
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * of the payload sent to the dispatcher.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 
 	var _uniqueid = __webpack_require__(6);
 
@@ -691,7 +633,19 @@ var Flummox =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /**
+	                                                                                                                                                           * Actions
+	                                                                                                                                                           *
+	                                                                                                                                                           * Instances of the Actions class represent a set of actions. (In Flux parlance,
+	                                                                                                                                                           * these might be more accurately denoted as Action Creators, while Action
+	                                                                                                                                                           * refers to the payload sent to the dispatcher, but this is... confusing. We
+	                                                                                                                                                           * will use Action to mean the function you call to trigger a dispatch.)
+	                                                                                                                                                           *
+	                                                                                                                                                           * Create actions by extending from the base Actions class and adding methods.
+	                                                                                                                                                           * All methods on the prototype (except the constructor) will be
+	                                                                                                                                                           * converted into actions. The return value of an action is used as the body
+	                                                                                                                                                           * of the payload sent to the dispatcher.
+	                                                                                                                                                           */
 
 	var Actions = (function () {
 	  function Actions() {
@@ -708,93 +662,84 @@ var Flummox =
 	    this.getConstants = this.getActionIds;
 	  }
 
-	  _createClass(Actions, [{
-	    key: 'getActionIds',
-	    value: function getActionIds() {
-	      var _this = this;
+	  Actions.prototype.getActionIds = function getActionIds() {
+	    var _this = this;
 
-	      return this._getActionMethodNames().reduce(function (result, actionName) {
-	        result[actionName] = _this[actionName]._id;
-	        return result;
-	      }, {});
-	    }
-	  }, {
-	    key: '_getActionMethodNames',
-	    value: function _getActionMethodNames(instance) {
-	      var _this2 = this;
+	    return this._getActionMethodNames().reduce(function (result, actionName) {
+	      result[actionName] = _this[actionName]._id;
+	      return result;
+	    }, {});
+	  };
 
-	      return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
-	        return name !== 'constructor' && typeof _this2[name] === 'function';
-	      });
-	    }
-	  }, {
-	    key: '_wrapAction',
-	    value: function _wrapAction(methodName) {
-	      var _this3 = this;
+	  Actions.prototype._getActionMethodNames = function _getActionMethodNames(instance) {
+	    var _this2 = this;
 
-	      var originalMethod = this[methodName];
-	      var actionId = this._createActionId(methodName);
+	    return Object.getOwnPropertyNames(this.constructor.prototype).filter(function (name) {
+	      return name !== 'constructor' && typeof _this2[name] === 'function';
+	    });
+	  };
 
-	      var action = function action() {
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
+	  Actions.prototype._wrapAction = function _wrapAction(methodName) {
+	    var _this3 = this;
 
-	        var body = originalMethod.apply(_this3, args);
+	    var originalMethod = this[methodName];
+	    var actionId = this._createActionId(methodName);
 
-	        if (isPromise(body)) {
-	          var promise = body;
-	          _this3._dispatchAsync(actionId, promise, args, methodName);
-	        } else {
-	          _this3._dispatch(actionId, body, args, methodName);
-	        }
-
-	        // Return original method's return value to caller
-	        return body;
-	      };
-
-	      action._id = actionId;
-
-	      this[methodName] = action;
-	    }
-
-	    /**
-	     * Create unique string constant for an action method, using
-	     * @param {string} methodName - Name of the action method
-	     */
-
-	  }, {
-	    key: '_createActionId',
-	    value: function _createActionId(methodName) {
-	      return this._baseId + '-' + methodName;
-	    }
-	  }, {
-	    key: '_dispatch',
-	    value: function _dispatch(actionId, body, args, methodName) {
-	      if (typeof this.dispatch === 'function') {
-	        if (typeof body !== 'undefined') {
-	          this.dispatch(actionId, body, args);
-	        }
-	      } else {
-	        if ((undefined) !== 'production') {
-	          console.warn('You\'ve attempted to perform the action ' + (this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
-	        }
+	    var action = function action() {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
 	      }
 
+	      var body = originalMethod.apply(_this3, args);
+
+	      if (isPromise(body)) {
+	        var promise = body;
+	        _this3._dispatchAsync(actionId, promise, args, methodName);
+	      } else {
+	        _this3._dispatch(actionId, body, args, methodName);
+	      }
+
+	      // Return original method's return value to caller
 	      return body;
-	    }
-	  }, {
-	    key: '_dispatchAsync',
-	    value: function _dispatchAsync(actionId, promise, args, methodName) {
-	      if (typeof this.dispatchAsync === 'function') {
-	        this.dispatchAsync(actionId, promise, args);
-	      } else {
-	        if ((undefined) !== 'production') {
-	          console.warn('You\'ve attempted to perform the asynchronous action ' + (this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
-	        }
+	    };
+
+	    action._id = actionId;
+
+	    this[methodName] = action;
+	  };
+
+	  /**
+	   * Create unique string constant for an action method, using
+	   * @param {string} methodName - Name of the action method
+	   */
+
+	  Actions.prototype._createActionId = function _createActionId(methodName) {
+	    return this._baseId + '-' + methodName;
+	  };
+
+	  Actions.prototype._dispatch = function _dispatch(actionId, body, args, methodName) {
+	    if (typeof this.dispatch === 'function') {
+	      if (typeof body !== 'undefined') {
+	        this.dispatch(actionId, body, args);
+	      }
+	    } else {
+	      if ((undefined) !== 'production') {
+	        console.warn('You\'ve attempted to perform the action ' + (this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
 	      }
 	    }
-	  }]);
+
+	    return body;
+	  };
+
+	  Actions.prototype._dispatchAsync = function _dispatchAsync(actionId, promise, args, methodName) {
+	    if (typeof this.dispatchAsync === 'function') {
+	      this.dispatchAsync(actionId, promise, args);
+	    } else {
+	      if ((undefined) !== 'production') {
+	        console.warn('You\'ve attempted to perform the asynchronous action ' + (this.constructor.name + '#' + methodName + ', but it hasn\'t been added ') + 'to a Flux instance.');
+	      }
+	    }
+	  };
 
 	  return Actions;
 	})();
@@ -807,51 +752,6 @@ var Flummox =
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -867,7 +767,7 @@ var Flummox =
 
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1099,6 +999,51 @@ var Flummox =
 	// Expose the module.
 	//
 	module.exports = EventEmitter;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
 
 
 /***/ },
