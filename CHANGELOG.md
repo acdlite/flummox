@@ -9,6 +9,10 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.6.7
+- **Internal**
+  - Add missed webpack loader preset for browser dist
+
 ## 3.6.6
 - **Internal**
   - Update babel modules to fix issue with async/await in loose mode (https://github.com/acdlite/flummox/issues/271)
