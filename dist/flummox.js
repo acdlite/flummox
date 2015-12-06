@@ -58,17 +58,17 @@ var Flummox =
 
 	var _Actions4 = _interopRequireDefault(_Actions3);
 
-	var _flux = __webpack_require__(3);
+	var _flux = __webpack_require__(4);
 
-	var _eventemitter = __webpack_require__(4);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(3);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
@@ -99,7 +99,7 @@ var Flummox =
 
 	  Flux.prototype.createStore = function createStore(key, _Store) {
 
-	    if (!(_Store.prototype instanceof _Store3.default)) {
+	    if (!(_Store.prototype instanceof _Store3['default'])) {
 	      var className = getClassName(_Store);
 
 	      throw new Error('You\'ve attempted to create a store from the class ' + className + ', which ' + 'does not have the base Store class in its prototype chain. Make sure ' + ('you\'re using the `extends` keyword: `class ' + className + ' extends ') + 'Store { ... }`');
@@ -140,7 +140,7 @@ var Flummox =
 	  };
 
 	  Flux.prototype.createActions = function createActions(key, _Actions) {
-	    if (!(_Actions.prototype instanceof _Actions4.default) && _Actions !== _Actions4.default) {
+	    if (!(_Actions.prototype instanceof _Actions4['default']) && _Actions !== _Actions4['default']) {
 	      if (typeof _Actions === 'function') {
 	        var className = getClassName(_Actions);
 
@@ -157,7 +157,7 @@ var Flummox =
 	          }
 
 	          return _class;
-	        })(_Actions4.default);
+	        })(_Actions4['default']);
 	        (0, _objectAssign2.default)(_Actions.prototype, properties);
 	      }
 	    }
@@ -243,7 +243,7 @@ var Flummox =
 	        error: error,
 	        async: 'failure'
 	      });
-	    }).catch(function (error) {
+	    })['catch'](function (error) {
 	      _this3.emit('error', error);
 
 	      throw error;
@@ -260,7 +260,7 @@ var Flummox =
 	    if (!Array.isArray(tokensOrStores)) tokensOrStores = [tokensOrStores];
 
 	    var ensureIsToken = function ensureIsToken(tokenOrStore) {
-	      return tokenOrStore instanceof _Store3.default ? tokenOrStore._token : tokenOrStore;
+	      return tokenOrStore instanceof _Store3['default'] ? tokenOrStore._token : tokenOrStore;
 	    };
 
 	    var tokens = tokensOrStores.map(ensureIsToken);
@@ -382,8 +382,8 @@ var Flummox =
 
 	exports.Flux = Flux;
 	exports.Flummox = Flummox;
-	exports.Store = _Store3.default;
-	exports.Actions = _Actions4.default;
+	exports.Store = _Store3['default'];
+	exports.Actions = _Actions4['default'];
 
 /***/ },
 /* 1 */
@@ -393,15 +393,15 @@ var Flummox =
 
 	exports.__esModule = true;
 
-	var _eventemitter = __webpack_require__(4);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(3);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -631,7 +631,7 @@ var Flummox =
 
 	var _uniqueid2 = _interopRequireDefault(_uniqueid);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /**
 	                                                                                                                                                           * Actions
@@ -754,6 +754,51 @@ var Flummox =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
 	 * Copyright (c) 2014-2015, Facebook, Inc.
 	 * All rights reserved.
@@ -767,7 +812,7 @@ var Flummox =
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -999,51 +1044,6 @@ var Flummox =
 	// Expose the module.
 	//
 	module.exports = EventEmitter;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
 
 
 /***/ },

@@ -9,6 +9,11 @@ Tags:
 - [Internal]
 - [Polish]
 
+## 3.6.6
+- **Internal**
+  - Update babel modules to fix issue with async/await in loose mode (https://github.com/acdlite/flummox/issues/271)
+  - Add babel transformations to support IE8 (https://github.com/acdlite/flummox/issues/272) 
+
 ## 3.6.4
 - **Internal**
   - Remove deprecated React warnings from tests 

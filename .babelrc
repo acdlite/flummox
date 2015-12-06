@@ -3,5 +3,9 @@
     "es2015-loose",
     "react",
     "stage-0"
+  ],
+  "plugins": [
+    "transform-es3-member-expression-literals",
+    "transform-es3-property-literals"
   ]
 }
