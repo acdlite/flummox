@@ -58,13 +58,13 @@ var Flummox =
 
 	var _Actions4 = _interopRequireDefault(_Actions3);
 
-	var _flux = __webpack_require__(4);
+	var _flux = __webpack_require__(3);
 
-	var _eventemitter = __webpack_require__(5);
+	var _eventemitter = __webpack_require__(4);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(3);
+	var _objectAssign = __webpack_require__(5);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -393,11 +393,11 @@ var Flummox =
 
 	exports.__esModule = true;
 
-	var _eventemitter = __webpack_require__(5);
+	var _eventemitter = __webpack_require__(4);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(3);
+	var _objectAssign = __webpack_require__(5);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -627,7 +627,7 @@ var Flummox =
 
 	exports.__esModule = true;
 
-	var _uniqueid = __webpack_require__(6);
+	var _uniqueid = __webpack_require__(7);
 
 	var _uniqueid2 = _interopRequireDefault(_uniqueid);
 
@@ -754,51 +754,6 @@ var Flummox =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/**
 	 * Copyright (c) 2014-2015, Facebook, Inc.
 	 * All rights reserved.
@@ -808,11 +763,11 @@ var Flummox =
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(7)
+	module.exports.Dispatcher = __webpack_require__(6)
 
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1047,66 +1002,52 @@ var Flummox =
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* eslint-disable no-unused-vars */
 	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
 
-	var count = 0;
+		return Object(val);
+	}
 
-	/**
-	 * Generate a unique ID.
-	 *
-	 * Optionally pass a prefix to prepend, a suffix to append, or a
-	 * multiplier to use on the ID.
-	 *
-	 * ```js
-	 * uniqueId(); //=> '25'
-	 *
-	 * uniqueId({prefix: 'apple_'});
-	 * //=> 'apple_10'
-	 *
-	 * uniqueId({suffix: '_orange'});
-	 * //=> '10_orange'
-	 *
-	 * uniqueId({multiplier: 5});
-	 * //=> 5, 10, 15, 20...
-	 * ```
-	 *
-	 * To reset the `id` to zero, do `id.reset()`.
-	 *
-	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
-	 * @return {String} The unique id.
-	 * @api public
-	 */
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
 
-	var id = module.exports = function (options) {
-	  options = options || {};
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
 
-	  var prefix = options.prefix;
-	  var suffix = options.suffix;
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
 
-	  var id = ++count * (options.multiplier || 1);
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
 
-	  if (prefix == null) {
-	    prefix = '';
-	  }
-
-	  if (suffix == null) {
-	    suffix = '';
-	  }
-
-	  return String(prefix) + id + String(suffix);
+		return to;
 	};
 
-
-	id.reset = function() {
-	  return count = 0;
-	};
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1360,6 +1301,65 @@ var Flummox =
 
 	module.exports = Dispatcher;
 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+
+	var count = 0;
+
+	/**
+	 * Generate a unique ID.
+	 *
+	 * Optionally pass a prefix to prepend, a suffix to append, or a
+	 * multiplier to use on the ID.
+	 *
+	 * ```js
+	 * uniqueId(); //=> '25'
+	 *
+	 * uniqueId({prefix: 'apple_'});
+	 * //=> 'apple_10'
+	 *
+	 * uniqueId({suffix: '_orange'});
+	 * //=> '10_orange'
+	 *
+	 * uniqueId({multiplier: 5});
+	 * //=> 5, 10, 15, 20...
+	 * ```
+	 *
+	 * To reset the `id` to zero, do `id.reset()`.
+	 *
+	 * @param  {Object} `options` Optionally pass a `prefix`, `suffix` and/or `multiplier.
+	 * @return {String} The unique id.
+	 * @api public
+	 */
+
+	var id = module.exports = function (options) {
+	  options = options || {};
+
+	  var prefix = options.prefix;
+	  var suffix = options.suffix;
+
+	  var id = ++count * (options.multiplier || 1);
+
+	  if (prefix == null) {
+	    prefix = '';
+	  }
+
+	  if (suffix == null) {
+	    suffix = '';
+	  }
+
+	  return String(prefix) + id + String(suffix);
+	};
+
+
+	id.reset = function() {
+	  return count = 0;
+	};
 
 /***/ },
 /* 8 */

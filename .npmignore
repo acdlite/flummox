@@ -2,11 +2,9 @@
 /docs
 /lib/__tests__
 /lib/addons/__tests__
-/lib/addons/TestUtils.js
 /lib/test
 /src
 .eslintrc
 .travis.yml
 Makefile
 webpack.config.js
-test-utils.js
