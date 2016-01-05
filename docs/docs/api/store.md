@@ -81,6 +81,16 @@ You can register using either the action id or the action itself.
 
 **Usage note**: `register()` works for both async and sync actions. In the case of async actions, it receives the resolved value of the promise returned by the action.
 
+### registerAll
+
+```js
+registerAll(function handler)
+```
+
+Register a handler for all actions. The handler will be automatically bound to the store instance.
+
+***Usage note***: `registerAll()` works for both async and sync actions. In the case of async actions, it receives the resolved value of the promise returned by the action. If a handler is registered through `registerAllAsync()`, the handler registered by `registerAll()` isn't called in async actions.
+
 ### registerAsync
 
 ```js
@@ -100,6 +110,26 @@ This makes it easy perform to perform optimistic UI updates.
 If any of the passed handlers are not functions, they are ignored.
 
 **Usage note**: `registerAsync(null, handler, null)` is functionally equivalent to `register(handler)`. If you don't need to respond to the beginning of an async action or respond to errors, then just use `register()`.
+
+### registerAllAsync
+
+```js
+registerAllAsync([function begin, function success, function failure])
+```
+
+A register handler specifically for all asynchronous actions.
+
+- `beginHandler` is called at the beginning of an asynchronous action. It receives same arguments that were passed to the action.
+
+- `successHandler` works the same as if you registered an async action with `register()`: it is called if and when an asynchronous action resolves. It receives the resolved value of the promise returned by the action.
+
+- `failureHandler` is called if and when an asynchronous action is rejected. It receives the rejected value of the promise returned by the action (by convention, an error object).
+
+This makes it easy perform to perform optimistic UI updates.
+
+If any of the passed handlers are not functions, they are ignored.
+
+**Usage note**: `registerAllAsync(null, handler, null)` is functionally equivalent to `registerAll(handler)`. If you don't need to respond to the beginning of async actions or respond to errors, then just use `registerAll()`.
 
 ### setState
 
