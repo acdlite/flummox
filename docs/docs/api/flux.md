@@ -10,6 +10,7 @@ class Flux extends Flummox {
 
     // Create actions first so our store can reference them in
     // its constructor
+    // Like createStore, extra arguments are sent to the action's constructor.
     this.createActions('messages', MessageActions);
 
     // Extra arguments are sent to the store's constructor. Here, we're
