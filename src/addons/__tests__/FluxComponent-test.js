@@ -3,6 +3,7 @@ import addContext from './addContext';
 
 import React from 'react';
 import TestUtils from 'react-addons-test-utils'
+import PropTypes from 'prop-types'
 
 import FluxComponent from '../FluxComponent';
 import sinon from 'sinon';
@@ -56,7 +57,7 @@ describe('FluxComponent', () => {
     const ContextComponent = addContext(
       FluxComponent,
       { flux },
-      { flux: React.PropTypes.instanceOf(Flummox) }
+      { flux: PropTypes.instanceOf(Flummox) }
     );
 
     const tree = TestUtils.renderIntoDocument(<ContextComponent />);

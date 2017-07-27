@@ -22,7 +22,7 @@
  * });
  */
 
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types'
 import { Flux } from '../Flux';
 import { instanceMethods, staticProperties } from './reactComponentMethods';
 import assign from 'object-assign';

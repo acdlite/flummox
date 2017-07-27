@@ -50,6 +50,8 @@ var Flummox =
 	exports.__esModule = true;
 	exports.Actions = exports.Store = exports.Flummox = exports.Flux = undefined;
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _Store2 = __webpack_require__(1);
 
 	var _Store3 = _interopRequireDefault(_Store2);
@@ -60,17 +62,15 @@ var Flummox =
 
 	var _flux = __webpack_require__(3);
 
-	var _eventemitter = __webpack_require__(4);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(4);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -82,7 +82,7 @@ var Flummox =
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * The main Flux class.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
-	var Flux = (function (_EventEmitter) {
+	var Flux = function (_EventEmitter) {
 	  _inherits(Flux, _EventEmitter);
 
 	  function Flux() {
@@ -147,18 +147,18 @@ var Flummox =
 	        throw new Error('You\'ve attempted to create actions from the class ' + className + ', which ' + 'does not have the base Actions class in its prototype chain. Make ' + ('sure you\'re using the `extends` keyword: `class ' + className + ' ') + 'extends Actions { ... }`');
 	      } else {
 	        var properties = _Actions;
-	        _Actions = (function (_Actions2) {
-	          _inherits(_class, _Actions2);
+	        _Actions = function (_Actions2) {
+	          _inherits(_Actions, _Actions2);
 
-	          function _class() {
-	            _classCallCheck(this, _class);
+	          function _Actions() {
+	            _classCallCheck(this, _Actions);
 
 	            return _possibleConstructorReturn(this, _Actions2.apply(this, arguments));
 	          }
 
-	          return _class;
-	        })(_Actions4['default']);
-	        (0, _objectAssign2.default)(_Actions.prototype, properties);
+	          return _Actions;
+	        }(_Actions4['default']);
+	        (0, _objectAssign2['default'])(_Actions.prototype, properties);
 	      }
 	    }
 
@@ -286,11 +286,11 @@ var Flummox =
 
 	      var store = this._stores[key];
 
-	      var _serialize = store.constructor.serialize;
+	      var serialize = store.constructor.serialize;
 
-	      if (typeof _serialize !== 'function') continue;
+	      if (typeof serialize !== 'function') continue;
 
-	      var serializedStoreState = _serialize(store.state);
+	      var serializedStoreState = serialize(store.state);
 
 	      if (typeof serializedStoreState !== 'string') {
 	        var className = store.constructor.name;
@@ -303,10 +303,10 @@ var Flummox =
 	      stateTree[key] = serializedStoreState;
 
 	      if (typeof store.constructor.deserialize !== 'function') {
-	        var className = store.constructor.name;
+	        var _className = store.constructor.name;
 
 	        if ((undefined) !== 'production') {
-	          console.warn('The class `' + className + '` has a `serialize()` method, but no ' + 'corresponding `deserialize()` method.');
+	          console.warn('The class `' + _className + '` has a `serialize()` method, but no ' + 'corresponding `deserialize()` method.');
 	        }
 	      }
 	    }
@@ -315,7 +315,7 @@ var Flummox =
 	  };
 
 	  Flux.prototype.deserialize = function deserialize(serializedState) {
-	    var stateMap = undefined;
+	    var stateMap = void 0;
 
 	    try {
 	      stateMap = JSON.parse(serializedState);
@@ -332,31 +332,32 @@ var Flummox =
 
 	      var store = this._stores[key];
 
-	      var _deserialize = store.constructor.deserialize;
+	      var deserialize = store.constructor.deserialize;
 
-	      if (typeof _deserialize !== 'function') continue;
+	      if (typeof deserialize !== 'function') continue;
 
 	      var storeStateString = stateMap[key];
-	      var storeState = _deserialize(storeStateString);
+	      var storeState = deserialize(storeStateString);
 
 	      store.replaceState(storeState);
 
 	      if (typeof store.constructor.serialize !== 'function') {
-	        var className = store.constructor.name;
+	        var _className2 = store.constructor.name;
 
 	        if ((undefined) !== 'production') {
-	          console.warn('The class `' + className + '` has a `deserialize()` method, but no ' + 'corresponding `serialize()` method.');
+	          console.warn('The class `' + _className2 + '` has a `deserialize()` method, but no ' + 'corresponding `serialize()` method.');
 	        }
 	      }
 	    }
 	  };
 
 	  return Flux;
-	})(_eventemitter2.default);
+	}(_eventemitter2['default']);
 
 	// Aliases
 
-	exports.default = Flux;
+
+	exports['default'] = Flux;
 	Flux.prototype.getConstants = Flux.prototype.getActionIds;
 	Flux.prototype.getAllConstants = Flux.prototype.getAllActionIds;
 	Flux.prototype.dehydrate = Flux.prototype.serialize;
@@ -393,11 +394,11 @@ var Flummox =
 
 	exports.__esModule = true;
 
-	var _eventemitter = __webpack_require__(4);
+	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(5);
+	var _objectAssign = __webpack_require__(4);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -416,14 +417,13 @@ var Flummox =
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * from the outside world is via the dispatcher.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
-	var Store = (function (_EventEmitter) {
+	var Store = function (_EventEmitter) {
 	  _inherits(Store, _EventEmitter);
 
 	  /**
 	   * Stores are initialized with a reference
 	   * @type {Object}
 	   */
-
 	  function Store() {
 	    _classCallCheck(this, Store);
 
@@ -474,7 +474,7 @@ var Flummox =
 	  };
 
 	  Store.assignState = function assignState(oldState, newState) {
-	    return (0, _objectAssign2.default)({}, oldState, newState);
+	    return (0, _objectAssign2['default'])({}, oldState, newState);
 	  };
 
 	  Store.prototype._assignState = function _assignState() {
@@ -550,11 +550,12 @@ var Flummox =
 	  };
 
 	  Store.prototype.handler = function handler(payload) {
-	    var body = payload.body;
-	    var actionId = payload.actionId;
-	    var _async = payload['async'];
-	    var actionArgs = payload.actionArgs;
-	    var error = payload.error;
+	    var body = payload.body,
+	        actionId = payload.actionId,
+	        _async = payload['async'],
+	        actionArgs = payload.actionArgs,
+	        error = payload.error;
+
 
 	    var _allHandlers = this._catchAllHandlers;
 	    var _handler = this._handlers[actionId];
@@ -611,9 +612,10 @@ var Flummox =
 	  };
 
 	  return Store;
-	})(_eventemitter2.default);
+	}(_eventemitter2['default']);
 
-	exports.default = Store;
+	exports['default'] = Store;
+
 
 	function ensureActionId(actionOrActionId) {
 	  return typeof actionOrActionId === 'function' ? actionOrActionId._id : actionOrActionId;
@@ -647,11 +649,11 @@ var Flummox =
 	                                                                                                                                                           * of the payload sent to the dispatcher.
 	                                                                                                                                                           */
 
-	var Actions = (function () {
+	var Actions = function () {
 	  function Actions() {
 	    _classCallCheck(this, Actions);
 
-	    this._baseId = (0, _uniqueid2.default)();
+	    this._baseId = (0, _uniqueid2['default'])();
 
 	    var methodNames = this._getActionMethodNames();
 	    for (var i = 0; i < methodNames.length; i++) {
@@ -713,6 +715,7 @@ var Flummox =
 	   * @param {string} methodName - Name of the action method
 	   */
 
+
 	  Actions.prototype._createActionId = function _createActionId(methodName) {
 	    return this._baseId + '-' + methodName;
 	  };
@@ -742,9 +745,10 @@ var Flummox =
 	  };
 
 	  return Actions;
-	})();
+	}();
 
-	exports.default = Actions;
+	exports['default'] = Actions;
+
 
 	function isPromise(value) {
 	  return value && typeof value.then === 'function';
@@ -768,6 +772,102 @@ var Flummox =
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
+	'use strict';
+	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	function shouldUseNative() {
+		try {
+			if (!Object.assign) {
+				return false;
+			}
+
+			// Detect buggy property enumeration order in older V8 versions.
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			test1[5] = 'de';
+			if (Object.getOwnPropertyNames(test1)[0] === '5') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test2 = {};
+			for (var i = 0; i < 10; i++) {
+				test2['_' + String.fromCharCode(i)] = i;
+			}
+			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+				return test2[n];
+			});
+			if (order2.join('') !== '0123456789') {
+				return false;
+			}
+
+			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+			var test3 = {};
+			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+				test3[letter] = letter;
+			});
+			if (Object.keys(Object.assign({}, test3)).join('') !==
+					'abcdefghijklmnopqrst') {
+				return false;
+			}
+
+			return true;
+		} catch (err) {
+			// We don't expect any of the above to throw, but better to be safe.
+			return false;
+		}
+	}
+
+	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -999,51 +1099,6 @@ var Flummox =
 	// Expose the module.
 	//
 	module.exports = EventEmitter;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* eslint-disable no-unused-vars */
-	'use strict';
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
 
 
 /***/ },
