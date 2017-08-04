@@ -60,13 +60,13 @@ var Flummox =
 
 	var _Actions4 = _interopRequireDefault(_Actions3);
 
-	var _flux = __webpack_require__(3);
+	var _flux = __webpack_require__(4);
 
 	var _eventemitter = __webpack_require__(5);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(4);
+	var _objectAssign = __webpack_require__(3);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -398,7 +398,7 @@ var Flummox =
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
-	var _objectAssign = __webpack_require__(4);
+	var _objectAssign = __webpack_require__(3);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -758,22 +758,6 @@ var Flummox =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	module.exports.Dispatcher = __webpack_require__(6)
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/*
 	object-assign
 	(c) Sindre Sorhus
@@ -864,6 +848,22 @@ var Flummox =
 
 		return to;
 	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(6)
 
 
 /***/ },
