@@ -28,9 +28,9 @@ Features
 - Tiny. **~3.8kb (compressed and gzipped)**.
 - The dispatcher and constants are implementation details — no need to interact with them unless you want to.
 - Async actions [made simple with promises](flummox/docs/api/actions#asynchronous-actions). Pairs well with async-await, or your favorite promise library.
-- Easy [integration with React](flummox/docs/guides/react-integration) via fluxMixin and FluxComponent.
+- Easy [integration with React](flummox/docs/guides/react-integration) via connectToStores HoC and FluxComponent.
 - Support for [plain JavaScript class components](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html) in React 0.13.
-- Serialization/deserialization of stores, for faster page loads.
+- Serialization/de-serialization of stores, for faster page loads.
 - Centralized [debugging](flummox/docs/api/flux).
 - "It's Just JavaScript" — supports CoffeeScript, TypeScript, and any other compile-to-JS language.
 
@@ -140,29 +140,64 @@ app.get("/", function(req, res) {
 });
 ```
 
-Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and deserialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
+Flummox also gives you the ability to serialize the initial state of your application on the server, send it down to the client as a string, and de-serialize it before the initial render. While not required for isomorphism, it helps make the initial page load snappy by reducing unnecessary AJAX requests to the server.
 
 React integration
 -----------------
 
-Integrating Flummox with React is really easy. You can do it the long way by manually adding and removing event listeners, but that leads to a lot of boilerplate. Use FluxComponent and/or fluxMixin to subscribe to store changes.
+Integrating Flummox with React is really easy. You can do it the long way by manually adding and removing event listeners, but that leads to a lot of boilerplate. Use connectToStores HoC and/or FluxComponent to subscribe to store changes.
 
 Here's a basic example:
 
 ```js
-import React from 'react';
+/* App's Root Component */
+
+import { AppFlux } from 'AppFlux';
+import connectToStores from 'flummox/connect';
 import FluxComponent from 'flummox/component';
 
-class OuterComponent extends React.Component {
+const flux = new AppFlux(); // create a flux instance for your app
+
+React.render(
+  <FluxComponent flux={flux}> // inject flux instance into all children components context
+    <MessagesView />
+  </FluxComponent>,
+  document.getElementById('app')
+);
+
+
+
+/* MessagesView Component */
+
+class MessagesView extends React.Component {
+
   render() {
+    let messageList = this.props.messages.map( message => {(
+                        <li>
+                          <Message author={message.author} body={message.body} key={message.id} />
+                        </li>
+                      )});
     return (
-      // Pass an array of store keys, or a map of keys to state getters
-      <FluxComponent connectToStores={['storeA', 'storeB']}>
-        <InnerComponent />
-      </FluxComponent>
+      <ul className="message-list">
+        {messageList}
+      </ul>
     );
   }
 }
+
+/* Wrap your Component with 'connectToStores' HoC
+ * connectToStores connects to 'messages' store
+ * connectToStores injects 'messages' store state into wrapped component(s) props
+ * MessagesView is injected with a `messages` prop
+ */
+MessagesView = connectToStores(MessagesView, {
+  messages: store => ({
+    messages: store.getMessages()
+  })
+});
+
+export default MessagesView; // export the Wrapped Component
+
 ```
 
 You can subscribe to subsets of store state using custom state getters. Read all about it in the [React integration guide](flummox/docs/guides/react-integration).

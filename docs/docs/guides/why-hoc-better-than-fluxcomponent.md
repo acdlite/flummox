@@ -1,14 +1,9 @@
-
-
-This is an Archived Doc. The current best way to connect to store data is via the *connectToStores HoC*
-
-Please read the current version of this Doc here: [why connectToStores HoC is preferred](why-hoc-better-than-fluxcomponent).
-
-
-Why FluxComponent > fluxMixin
+Why connectToStores HoC > FluxComponent > fluxMixin
 =============================
 
-In the [React integration guide](react-integration), I suggest that using [FluxComponent](/flummox/docs/api/fluxcomponent) is better than using [fluxMixin](/flummox/docs/api/fluxmixin), even though they do essentially the same thing. A few people have told me they like the mixin form more, so allow me to explain.
+**TLDR;** Mixins are an escape hatch to work around re-usability limitations in the system. It’s not idiomatic React. Making composition easier is a higher priority than making arbitrary mixins work.[(source)](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)
+
+In the [React integration guide](react-integration), I suggest that using [connectToStores HoC](/flummox/docs/api/higher-order-component) is better than using [fluxMixin](/flummox/docs/api/fluxmixin) or [FluxComponent](/flummox/docs/api/fluxcomponent) alone, even though they do essentially the same thing. A few people have told me they like the mixin/FluxCompoent form more, so allow me to explain.
 
 My argument can be broken down into three basic points. Note that these aren't my original ideas, nor are they unique to Flummox — they are the "React Way":
 
@@ -23,6 +18,10 @@ This is a no brainer. Remember the days before React, when you had to write one 
 
 You might feel like fluxMixin and FluxComponent are equally declarative. They do have similar interfaces: a single argument/prop, that does (almost) the same thing. Still, as nice as fluxMixin's interface is, there's no beating a component in terms of clarity. A good rule of thumb in React is that everything that can be expressed as a component, should be.
 
+The same logic goes for the currently recommended way to subscribe to store state from the components; the **connectToStores HoC**. Using a High order Component to do this enables you to declaratively describe your component's data requirements and use that data in that same context. This co-location of functionality/render logic and data requirements makes your component's behavior contained and very clear.
+
+if you want to know more about Imperative vs declarative programming, (here's a great article by Phillip Roberts)[http://latentflip.com/imperative-vs-declarative/]
+
 
 Composition > inheritance
 -------------------------
@@ -31,7 +30,7 @@ React has a very clear opinion on composition vs. inheritance: composition wins.
 
 Components make your code easy to reason about. If you stick to the basics of using components and props in your React app, you don't have to guess where data is coming from. The answer is always *from the owner*.
 
-However, when you use fluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
+However, when you use fluxMixin, you're introducing data into your component that comes not from the owner, but from an external source — your stores. (This is also true of connectToStores HoC and FluxComponent, but to a lesser extent, as we'll see later.) This can easily lead to trouble.
 
 For instance, here's a component that renders a single blog post, based on the id of the post.
 
@@ -130,6 +129,8 @@ Wouldn't it be great if there were a shortcut for this pattern — a convenient 
 Yep! It's called FluxComponent.
 
 ```js
+import FluxComponent from 'flummox/component';
+
 class BlogPostPage extends React.Component {
   render() {
     <div>
@@ -150,31 +151,46 @@ class BlogPostPage extends React.Component {
 }
 ```
 
-The state fetched by `connectToStores()` is transferred to the children of FluxComponent. If this auto-magic prop passing feels weird, or if you want direct control over rendering, you can pass a custom render function instead:
+The state fetched by `connectToStores()` is transferred to **the children of FluxComponent.** This solves our later problem, but wouldn't it be nice to just have the component that needs the data ask for it instead of its parent?.
+
+Flummox provides a higher order component that does just that, it's called connectToStores.
 
 ```js
-class BlogPostPage React.Component {
+import connectToStores from 'flummox/connect';
+
+class BlogPostPage extends React.Component {
   render() {
     <div>
       <SiteNavigation />
       <MainContentArea>
-        <FluxComponent
-          connectToStores={{
-            posts: (store, props) => ({
-              post: store.getPost(props.postId),
-            })
-          }}
-          render={storeState => {
-            // render whatever you want
-            return <BlogPost {...storeState} />;
-          }}
-        />
+        <BlogPost postId={somePostId} />
       </MainContentArea>
       <SiteSidebar />
       <SiteFooter />
     </div>
   }
 }
+
+class BlogPost extends React.Component {
+  render() {
+    <article>
+      <h1>{this.props.post.title}</h1>
+      <div>{this.props.post.content}</div>
+    </article>
+  }
+}
+
+/*
+ * Here we Wrap the BlogPost component w/ the HoC
+ * An co-locate it's data requirements declaratively
+ * while mantaining composability
+ */
+BlogPost = connectToStores(BlogPost, {
+  posts: (store, props) => ({
+    post: store.getPost(props.postId),
+  })
+});
+
 ```
 
 Do what's right
@@ -182,6 +198,6 @@ Do what's right
 
 If I'm leaving you unconvinced, just do what you feel is right. I think components are generally preferable to mixins, but as with any rule, there are exceptions. For instance, [React Tween State](https://github.com/chenglou/react-tween-state) is a great project that wouldn't make sense as a component.
 
-Either way, both fluxMixin and FluxComponent are available for you to use, and both are pretty great :)
+Either way, fluxMixin, connectToStores HoC and FluxComponent are available for you to use, and both are pretty great :)
 
 If you have any suggestions for how they could be improved, please let me know by submitting an issue.

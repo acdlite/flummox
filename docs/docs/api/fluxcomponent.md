@@ -7,32 +7,33 @@ Access the Flux instance and subscribe to store updates. Refer to the [React int
 
 
 ```js
+import FluxComponent from 'flummox/component';
+
 <FluxComponent connectToStores={{
-  posts: store => ({
-    post: store.getPost(this.props.post.id),
+  posts: (store, props) => ({
+    post: store.getPost(props.post.id),
   }),
-  comments: store => ({
-    comments: store.getCommentsForPost(this.props.post.id),
+  comments: (store, props) => ({
+    comments: store.getCommentsForPost(props.post.id),
   })
 }}>
   <InnerComponent />
 </FluxComponent>
 ```
 
-In general, [it's recommended to use FluxComponent instead of fluxMixin](../guides/why-flux-component-is-better-than-flux-mixin.md).
+In general, [it's recommended to use *connectToStores HoC* + FluxComponent instead of fluxMixin or just FluxComponent by itself](../guides/why-hoc-better-than-fluxcomponent.md).
 
 State getters
 -------------
 
-The `stateGetter` prop can be used to control how state from stores are transformed into props:
+The `stateGetter` prop can be used to control how state from stores are transformed into props. For example in some situations the data retrieved from one store depends on the state from another, you can use an array of store keys with a custom state getter to ensure the components state is updated when either store changes:
 
 ```js
 <FluxComponent
-  connectToStores={['posts', 'session']}
-  stateGetter={([postStore, sessionStore]) => ({
-    posts: store.getPostForUser(sessionStore.getCurrentUserId())
-  })}
-}}>
+  connectToStores={['posts', 'user']}
+  stateGetter={([postStore, userStore], props) => ({
+    posts: store.getPostForUser(userStore.getUserIdFromName(props.user.name))
+  })}>
   <InnerComponent />
 </FluxComponent>
 ```
@@ -60,8 +61,8 @@ With FluxComponent, state from your stores is automatically passed as props to i
 ```js
 // Using children
 <FluxComponent connectToStores={{
-  posts: store => ({
-    post: store.getPost(this.props.postId),
+  posts: (store, props) => ({
+    post: store.getPost(props.postId),
   })
 }}>
   <InnerComponent />
@@ -70,8 +71,8 @@ With FluxComponent, state from your stores is automatically passed as props to i
 // Using custom `render` function
 <FluxComponent
   connectToStores={{
-    posts: store => ({
-      post: store.getPost(this.props.postId),
+    posts: (store, props) => ({
+      post: store.getPost(props.postId),
     })
   }}
   render={storeState => {
