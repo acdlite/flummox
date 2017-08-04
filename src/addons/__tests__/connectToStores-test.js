@@ -3,7 +3,7 @@ import addContext from './addContext';
 import { Actions, Store, Flummox } from '../../Flux';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-const { PropTypes } = React;
+import PropTypes from 'prop-types'
 
 class TestActions extends Actions {
   getSomething(something) {
@@ -53,7 +53,7 @@ describe('connectToStores (HoC)', () => {
     const ContextComponent = addContext(
       ConnectedComponent,
       { flux },
-      { flux: React.PropTypes.instanceOf(Flummox) }
+      { flux: PropTypes.instanceOf(Flummox) }
     );
 
     const tree = TestUtils.renderIntoDocument(

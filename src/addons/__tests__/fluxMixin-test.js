@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils'
-const { PropTypes } = React;
+import PropTypes from 'prop-types'
 
 describe('fluxMixin', () => {
 
@@ -58,7 +58,7 @@ describe('fluxMixin', () => {
     const ContextComponent = addContext(
       ComponentWithFluxMixin,
       { flux },
-      { flux: React.PropTypes.instanceOf(Flummox) }
+      { flux: PropTypes.instanceOf(Flummox) }
     );
 
     const tree = TestUtils.renderIntoDocument(

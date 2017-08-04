@@ -11,7 +11,8 @@
  * of `connectToStores` for details.
  */
 
-import { default as React, PropTypes } from 'react';
+import { default as React } from 'react';
+import PropTypes from 'prop-types';
 import { Flux } from '../Flux';
 import assign from 'object-assign';
 
@@ -175,8 +176,8 @@ const staticProperties = {
       PropTypes.object
     ]),
     flux: PropTypes.instanceOf(Flux),
-    render: React.PropTypes.func,
-    stateGetter: React.PropTypes.func,
+    render: PropTypes.func,
+    stateGetter: PropTypes.func,
   },
 };
 

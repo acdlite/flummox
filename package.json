@@ -55,6 +55,7 @@
     "eventemitter3": "~0.1.6",
     "flux": "~2.0.1",
     "object-assign": "^4.0.1",
+    "prop-types": "^15.5.10",
     "uniqueid": "~0.1.0"
   }
 }
