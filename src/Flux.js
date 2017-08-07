@@ -221,21 +221,9 @@ export default class Flux extends EventEmitter {
 
       if (typeof serialize !== 'function') continue;
 
-      const serializedStoreState = serialize(store.state);
+      const storeState = serialize(store.state);
 
-      if (typeof serializedStoreState !== 'string') {
-        const className = store.constructor.name;
-
-        if (process.env.NODE_ENV !== 'production') {
-          console.warn(
-            `The store with key '${key}' was not serialized because the static `
-          + `method \`${className}.serialize()\` returned a non-string with type `
-          + `'${typeof serializedStoreState}'.`
-          );
-        }
-      }
-
-      stateTree[key] = serializedStoreState;
+      stateTree[key] = storeState;
 
       if (typeof store.constructor.deserialize !== 'function') {
         const className = store.constructor.name;
