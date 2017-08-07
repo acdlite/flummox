@@ -1,4 +1,6 @@
+import sinon from 'sinon';
 import { Flummox, Store, Actions } from '../Flux';
+import * as TestUtils from '../addons/TestUtils';
 
 describe('Examples:', () => {
 
@@ -107,6 +109,16 @@ describe('Examples:', () => {
           id: 0,
         },
       });
+    });
+
+    it('simulates action to create message', () => {
+      let flux = new Flux();
+      let messageStore = flux.getStore('messages');
+      let spy = sinon.spy(messageStore, 'handleNewMessage');
+
+      TestUtils.simulateAction(messageStore, 'newMessage', 'Hello, world!');
+      expect(spy.callCount).to.equal(1);
+      expect(spy.calledWith('Hello, world!')).to.be.true;
     });
   });
 
